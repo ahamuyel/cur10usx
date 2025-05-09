@@ -1,0 +1,40 @@
+* {
+    margin: 0;
+    box-sizing: border-box;
+    padding: 0;
+}
+
+body {
+    display: flex;
+    margin: 0.3rem;
+    flex: 1 1 100vw;
+    flex-wrap: wrap;
+}
+
+header, nav, main, aside, footer {
+    display: flex;
+    margin: 0.3rem;
+    /* flex: 1 1 100vw; */
+    background: #7cd1c6;
+}
+
+header {
+    flex: 1 1 100vw;
+    height: 100px;
+}
+
+nav {
+    flex: 1 1 200px;
+}
+
+main {
+    flex: 20 1 500px;
+    height: calc(100vw - 224px);
+}
+aside {
+    flex: 1 1 200px;
+}
+footer {
+    flex: 1 1 100vw;
+    height: 100px;
+}
