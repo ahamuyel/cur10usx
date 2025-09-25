@@ -19,7 +19,10 @@ const Hero = ({ title = "Transforme Seu Negócio com Tecnologia", description = 
           <HeroText description={description} />
           <HeroCTA ctaText={ctaText} ctaHref={ctaHref} />
         </div>
-        <HeroGraphic />
+        <div>
+          <HeroGraphic />
+          {/* <HeroGraphic /> */}
+        </div>
       </div>
     </section>
   );
@@ -58,7 +61,7 @@ const HeroGraphic = () => (
     <div className="absolute w-4 h-4 bg-accent rounded-full top-1/4 left-1/4 animate-fade-in"></div>
     <div className="absolute w-4 h-4 bg-accent rounded-full top-3/4 right-1/4 animate-fade-in delay-200"></div>
     <div className="absolute w-4 h-4 bg-accent-dark rounded-full top-1/2 left-1/2 animate-pulse"></div>
-    {/* Padrão geométrico inspirado em arte africana */}
+    {/* Padrão geométrico inspirado em arte africana - vamos melhorar depois*/}
     <div className="absolute w-8 h-8 border-2 border-accent top-1/3 left-1/3 transform rotate-45 animate-rotate-slow"></div>
     <div className="absolute w-12 h-12 border-2 border-accent-dark top-2/3 right-1/3 transform -rotate-45 animate-rotate-slow delay-100"></div>
   </div>

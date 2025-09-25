@@ -64,7 +64,7 @@ body {
   position: absolute;
 }
 
-/* Novas animações para HeroGraphic */
+/* Animações para HeroGraphic */
 @keyframes fade-in {
   0% { opacity: 0; }
   100% { opacity: 1; }
@@ -75,7 +75,7 @@ body {
   100% { transform: translateX(100%); }
 }
 
-@keyframes rotate-slow {
+@keyframes rotate-slow { 
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }

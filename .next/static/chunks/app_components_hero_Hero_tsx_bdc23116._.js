@@ -50,7 +50,13 @@ const Hero = (param)=>{
                     lineNumber: 17,
                     columnNumber: 9
                 }, ("TURBOPACK compile-time value", void 0)),
-                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(HeroGraphic, {}, void 0, false, {
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(HeroGraphic, {}, void 0, false, {
+                        fileName: "[project]/app/components/hero/Hero.tsx",
+                        lineNumber: 23,
+                        columnNumber: 11
+                    }, ("TURBOPACK compile-time value", void 0))
+                }, void 0, false, {
                     fileName: "[project]/app/components/hero/Hero.tsx",
                     lineNumber: 22,
                     columnNumber: 9
@@ -76,7 +82,7 @@ const HeroTitle = (param)=>{
         children: title
     }, void 0, false, {
         fileName: "[project]/app/components/hero/Hero.tsx",
-        lineNumber: 30,
+        lineNumber: 33,
         columnNumber: 3
     }, ("TURBOPACK compile-time value", void 0));
 };
@@ -89,7 +95,7 @@ const HeroText = (param)=>{
         children: description
     }, void 0, false, {
         fileName: "[project]/app/components/hero/Hero.tsx",
-        lineNumber: 37,
+        lineNumber: 40,
         columnNumber: 3
     }, ("TURBOPACK compile-time value", void 0));
 };
@@ -103,7 +109,7 @@ const HeroCTA = (param)=>{
         children: ctaText
     }, void 0, false, {
         fileName: "[project]/app/components/hero/Hero.tsx",
-        lineNumber: 44,
+        lineNumber: 47,
         columnNumber: 3
     }, ("TURBOPACK compile-time value", void 0));
 };
@@ -116,48 +122,48 @@ const HeroGraphic = ()=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$pro
                 className: "absolute w-full h-px bg-accent-dark top-1/2 left-0 transform -translate-y-1/2 animate-slide"
             }, void 0, false, {
                 fileName: "[project]/app/components/hero/Hero.tsx",
-                lineNumber: 56,
+                lineNumber: 59,
                 columnNumber: 5
             }, ("TURBOPACK compile-time value", void 0)),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "absolute w-4 h-4 bg-accent rounded-full top-1/4 left-1/4 animate-fade-in"
             }, void 0, false, {
                 fileName: "[project]/app/components/hero/Hero.tsx",
-                lineNumber: 58,
+                lineNumber: 61,
                 columnNumber: 5
             }, ("TURBOPACK compile-time value", void 0)),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "absolute w-4 h-4 bg-accent rounded-full top-3/4 right-1/4 animate-fade-in delay-200"
             }, void 0, false, {
                 fileName: "[project]/app/components/hero/Hero.tsx",
-                lineNumber: 59,
+                lineNumber: 62,
                 columnNumber: 5
             }, ("TURBOPACK compile-time value", void 0)),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "absolute w-4 h-4 bg-accent-dark rounded-full top-1/2 left-1/2 animate-pulse"
             }, void 0, false, {
                 fileName: "[project]/app/components/hero/Hero.tsx",
-                lineNumber: 60,
+                lineNumber: 63,
                 columnNumber: 5
             }, ("TURBOPACK compile-time value", void 0)),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "absolute w-8 h-8 border-2 border-accent top-1/3 left-1/3 transform rotate-45 animate-rotate-slow"
             }, void 0, false, {
                 fileName: "[project]/app/components/hero/Hero.tsx",
-                lineNumber: 62,
+                lineNumber: 65,
                 columnNumber: 5
             }, ("TURBOPACK compile-time value", void 0)),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "absolute w-12 h-12 border-2 border-accent-dark top-2/3 right-1/3 transform -rotate-45 animate-rotate-slow delay-100"
             }, void 0, false, {
                 fileName: "[project]/app/components/hero/Hero.tsx",
-                lineNumber: 63,
+                lineNumber: 66,
                 columnNumber: 5
             }, ("TURBOPACK compile-time value", void 0))
         ]
     }, void 0, true, {
         fileName: "[project]/app/components/hero/Hero.tsx",
-        lineNumber: 54,
+        lineNumber: 57,
         columnNumber: 3
     }, ("TURBOPACK compile-time value", void 0));
 _c4 = HeroGraphic;

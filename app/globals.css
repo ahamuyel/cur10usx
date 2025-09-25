@@ -16,7 +16,7 @@
   --font-family-base: 'Poppins', sans-serif; /* Fonte principal */
   --font-size-base: 16px;
   --padding-base: 1rem;
-  --border-radius: 0.375rem; /* Mesma arredondamento do Tailwind 'rounded-md' */
+  /* --border-radius: 0.375rem; Mesma arredondamento do Tailwind 'rounded-md' */
 }
 
 @media (prefers-color-scheme: dark) {
