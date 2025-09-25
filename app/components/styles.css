@@ -1,0 +1,86 @@
+/* Estilização customizada para componentes */
+body {
+  font-family: var(--font-family-base);
+}
+
+.logo-text{
+    font-size: 1.3rem;
+}
+
+.logo-text-1{
+    color: var(--accent);
+    font-weight: 500;
+}
+
+.logo-text-2{
+    color: var(--text);
+}
+
+.nav-link {
+  font-family: var(--font-family-base);
+  font-weight: 500; /* Peso médio para links */
+}
+
+.nav-link:hover {
+  color: var(--accent-dark);
+}
+
+.cta-button {
+  border: solid var(--accent);
+  color: #f19a9a;
+  font-family: var(--font-family-base);
+  font-weight: 500;
+}
+
+.cta-button:hover {
+  background-color: var(--accent);
+  color: white;
+}
+
+.mobile-menu {
+  opacity: 1;
+  background-color: var(--background);
+}
+
+/* Estilização para Hero */
+.hero-title {
+  font-family: var(--font-family-base);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.hero-text {
+  font-family: var(--font-family-base);
+  font-weight: 400;
+  color: var(--text);
+}
+
+.hero-graphic {
+  position: relative;
+  animation: float 4s ease-in-out infinite;
+}
+
+.hero-graphic div {
+  position: absolute;
+}
+
+/* Novas animações para HeroGraphic */
+@keyframes fade-in {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes slide {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes rotate-slow {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}

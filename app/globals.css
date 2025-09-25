@@ -1,0 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap');
+
+@import "tailwindcss";
+
+:root {
+  /* Paleta de cores primária */
+  --background: #ededed;
+  --foreground: #1e1e27; 
+  --primary-dark: #28242a;
+  --accent: #df0139; 
+  --accent-dark: #b7012e;
+  --text: #332424;
+  --secondary: #28242a;
+
+  /* Propriedades reutilizáveis */
+  --font-family-base: 'Poppins', sans-serif; /* Fonte principal */
+  --font-size-base: 16px;
+  --padding-base: 1rem;
+  --border-radius: 0.375rem; /* Mesma arredondamento do Tailwind 'rounded-md' */
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: var(--foreground);
+    --foreground: var(--background);
+  }
+}
+
+body {
+  background: var(--background);
+  color: #1e1e27;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Suporte para temas alternativos (exemplo: tema claro) */
+[data-theme="light"] {
+  --background: #e2e2e2;
+  --foreground: #28242a; 
+  --primary-dark: #d1d1d1;
+  --accent: #df0139;
+  --accent-dark: #b7012e;
+  --text: #1e1e27;
+  --secondary: #ffffff;
+}
