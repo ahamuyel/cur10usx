@@ -1,0 +1,34 @@
+/* Estilização customizada para componentes */
+body {
+  font-family: var(--font-family-base);
+}
+
+.logo-text {
+  font-family: var(--font-family-base);
+  font-weight: 700; /* Peso mais forte para o logo */
+  color: var(--accent);
+}
+
+.nav-link {
+  font-family: var(--font-family-base);
+  font-weight: 500; /* Peso médio para links */
+}
+
+.nav-link:hover {
+  color: var(--accent-dark);
+}
+
+.cta-button {
+  border: solid var(--accent);
+  color: var(--text);
+  font-family: var(--font-family-base);
+  font-weight: 500;
+}
+
+.cta-button:hover {
+  background-color: var(--accent-dark);
+}
+
+.mobile-menu {
+  background-color: var(--background);
+}
