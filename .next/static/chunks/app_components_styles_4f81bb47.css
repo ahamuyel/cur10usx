@@ -26,9 +26,10 @@ body {
 }
 
 .cta-button {
-  border: solid var(--accent);
-  color: #f19a9a;
+  border: solid var(--accent) 2px;
+  color: var(--text);
   font-family: var(--font-family-base);
+  border-radius: 0%;
   font-weight: 500;
 }
 
@@ -44,18 +45,16 @@ body {
 
 .hero-title {
   font-family: var(--font-family-base);
-  font-weight: 700;
+  font-weight: 400;
   line-height: 1.2;
 }
 
 .hero-text {
-  font-family: var(--font-family-base);
   color: var(--text);
-  font-weight: 400;
 }
 
 .hero-graphic {
-  animation: 4s ease-in-out infinite float;
+  animation: 2s ease-in-out infinite float;
   position: relative;
 }
 

@@ -26,8 +26,9 @@ body {
 }
 
 .cta-button {
-  border: solid var(--accent);
-  color: #f19a9a;
+  border-radius: 0%;
+  border: solid var(--accent) 2px;
+  color: var(--text);
   font-family: var(--font-family-base);
   font-weight: 500;
 }
@@ -45,19 +46,18 @@ body {
 /* Estilização para Hero */
 .hero-title {
   font-family: var(--font-family-base);
-  font-weight: 700;
+  font-weight: 400;
   line-height: 1.2;
 }
 
 .hero-text {
-  font-family: var(--font-family-base);
-  font-weight: 400;
+  /* font-family: var(--font-family-base); */
   color: var(--text);
 }
 
 .hero-graphic {
   position: relative;
-  animation: float 4s ease-in-out infinite;
+  animation: float 2s ease-in-out infinite;
 }
 
 .hero-graphic div {
