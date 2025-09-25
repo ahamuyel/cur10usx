@@ -23,7 +23,7 @@ const NavLinks: React.FC<NavLinksProps> = ({ isMobile }) => {
       {links.map((link) => (
         <Link
           key={link.href}
-          href={link.href}
+          href={link.href} 
           className="text-text hover:text-accent transition-colors nav-link"
         >
           {link.label}
