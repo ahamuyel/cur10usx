@@ -4,14 +4,8 @@ import { useState } from "react";
 import Logo from "./Logo";
 import NavLinks from "./NavLinks";
 import MobileMenu from "./MobileMenu";
+import CTAButton from "./CTAButton";
 import "../styles.css";
-
-// Definindo interfaces para os props dos componentes
-
-interface CTAButtonProps {
-  className?: string;
-  onClick?: () => void;
-}
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -49,15 +43,5 @@ const Navbar = () => {
   );
 };
 
-// Componente CTAButton
-const CTAButton: React.FC<CTAButtonProps> = ({ className = "", onClick }) => (
-  <Link
-    href="#contact"
-    className={`${className} text-text px-4 py-2 rounded-md font-semibold hover:bg-accent-dark transition-colors cta-button`}
-    onClick={onClick}
-  >
-    Solicitar Orçamento
-  </Link>
-);
 
 export default Navbar;

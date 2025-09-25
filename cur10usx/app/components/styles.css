@@ -20,13 +20,14 @@ body {
 
 .cta-button {
   border: solid var(--accent);
-  color: var(--text);
+  color: #f19a9a;
   font-family: var(--font-family-base);
   font-weight: 500;
 }
 
 .cta-button:hover {
-  background-color: var(--accent-dark);
+  background-color: var(--accent);
+  color: white;
 }
 
 .mobile-menu {
