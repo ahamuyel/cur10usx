@@ -1,0 +1,30 @@
+# Dependências
+node_modules/
+*.log
+
+# Build
+.next/
+out/
+build/
+
+# Configs locais
+.env
+.env.local
+.env.development
+.env.production
+
+# IDEs e editores
+.vscode/
+*.swp
+*.swo
+
+# macOS
+.DS_Store
+
+# Linux
+*.lock
+
+# Outros
+*.tgz
+npm-debug.log*
+yarn-error.log*
