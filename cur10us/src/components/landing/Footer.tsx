@@ -8,12 +8,12 @@ export default function Footer({ branding }: { branding: PlatformBranding }) {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-10">
           <div className="lg:col-span-1">
             <div className="flex items-center gap-2.5 mb-4">
-              <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-warm-600 to-warm-700 flex items-center justify-center shadow-lg shadow-black/10">
+              <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-growth-500 to-growth-600 flex items-center justify-center shadow-lg shadow-black/10">
                 <span className="text-white font-bold text-xs">CX</span>
               </div>
               <span className="text-xl font-bold tracking-tight">
                 <span className="text-warm-900 dark:text-warm-100">Cur10us</span>
-                <span className="text-warm-900 dark:text-warm-100">X</span>
+                <span className="text-growth-600 dark:text-growth-400">X</span>
               </span>
             </div>
             <p className="text-sm text-warm-500 dark:text-warm-400 leading-relaxed max-w-xs">

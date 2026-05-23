@@ -50,33 +50,29 @@ const statItems = [
     key: "schools" as const,
     icon: School,
     label: "Escolas registadas",
-    bg: "bg-warm-600",
-    cardBg: "bg-warm-100 dark:bg-warm-900/20",
-    ring: "ring-warm-200 dark:ring-warm-800/20",
+    bg: "bg-growth-100 dark:bg-growth-900/30",
+    iconColor: "text-growth-600 dark:text-growth-400",
   },
   {
     key: "students" as const,
     icon: Users,
     label: "Alunos na plataforma",
-    bg: "bg-warm-500",
-    cardBg: "bg-warm-100 dark:bg-warm-900/20",
-    ring: "ring-warm-200 dark:ring-warm-800/20",
+    bg: "bg-sun-100 dark:bg-sun-900/30",
+    iconColor: "text-sun-600 dark:text-sun-400",
   },
   {
     key: "teachers" as const,
     icon: GraduationCap,
     label: "Professores activos",
-    bg: "bg-warm-600",
-    cardBg: "bg-warm-100 dark:bg-warm-900/20",
-    ring: "ring-warm-200 dark:ring-warm-800/20",
+    bg: "bg-growth-100 dark:bg-growth-900/30",
+    iconColor: "text-growth-600 dark:text-growth-400",
   },
   {
     key: "classes" as const,
     icon: BookOpen,
     label: "Turmas criadas",
-    bg: "bg-warm-500",
-    cardBg: "bg-warm-100 dark:bg-warm-900/20",
-    ring: "ring-warm-200 dark:ring-warm-800/20",
+    bg: "bg-sun-100 dark:bg-sun-900/30",
+    iconColor: "text-sun-600 dark:text-sun-400",
   },
 ]
 
@@ -90,15 +86,13 @@ export default function StatsSection(props: Props) {
             const value = props[stat.key]
             return (
               <AnimateOnScroll key={stat.key}>
-                <div
-                  className={`relative flex flex-col items-center py-8 px-4 rounded-2xl ${stat.cardBg} ring-1 ${stat.ring} transition-all duration-300 hover:shadow-lg hover:scale-[1.02] card-base border-0`}
-                >
-                  <div className={`w-10 h-10 rounded-xl ${stat.bg} flex items-center justify-center mb-3 shadow-md`}>
-                    <Icon className="w-4 h-4 text-white" />
+                <div className="card-base flex flex-col items-center py-8 px-4">
+                  <div className={`w-10 h-10 ${stat.bg} border border-brand-200 dark:border-brand-700 flex items-center justify-center mb-3`}>
+                    <Icon className={`w-4 h-4 ${stat.iconColor}`} />
                   </div>
                   <span className="text-3xl sm:text-4xl font-bold text-warm-900 dark:text-warm-100 tabular-nums">
                     <AnimatedCounter target={value} />
-                    {value > 0 && <span className="text-xl text-warm-600">+</span>}
+                    {value > 0 && <span className="text-xl text-growth-500">+</span>}
                   </span>
                   <span className="text-xs sm:text-sm text-warm-500 dark:text-warm-400 mt-1.5 text-center font-medium">
                     {stat.label}

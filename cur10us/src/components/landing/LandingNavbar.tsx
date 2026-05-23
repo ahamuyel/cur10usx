@@ -37,13 +37,13 @@ export default function LandingNavbar({ branding }: { branding: PlatformBranding
         <Link href="/" className="flex items-center gap-2.5 group">
           <motion.div
             whileHover={{ scale: 1.05 }}
-            className="w-9 h-9 rounded-xl bg-gradient-to-br from-warm-600 to-warm-700 flex items-center justify-center shadow-lg shadow-black/10 group-hover:shadow-black/20 transition-shadow duration-300"
+            className="w-9 h-9 bg-gradient-to-br from-growth-500 to-growth-700 flex items-center justify-center shadow-lg shadow-black/10 group-hover:shadow-black/20 transition-shadow duration-300"
           >
             <span className="text-white font-bold text-sm">CX</span>
           </motion.div>
           <span className="text-xl font-bold tracking-tight">
             <span className="text-warm-900 dark:text-warm-100">Cur10us</span>
-            <span className="text-warm-900 dark:text-warm-100">X</span>
+            <span className="text-growth-600 dark:text-growth-400">X</span>
           </span>
         </Link>
 
@@ -52,7 +52,7 @@ export default function LandingNavbar({ branding }: { branding: PlatformBranding
             <a
               key={link.href}
               href={link.href}
-              className="relative text-sm text-warm-500 dark:text-warm-400 hover:text-warm-900 dark:hover:text-warm-100 transition-colors duration-200 px-3 py-2 rounded-lg hover:bg-warm-100/50 dark:hover:bg-warm-800/50"
+              className="relative text-sm text-warm-500 dark:text-warm-400 hover:text-warm-900 dark:hover:text-warm-100 transition-colors duration-200 px-3 py-2 hover:bg-warm-100/50 dark:hover:bg-warm-800/50"
             >
               {link.label}
             </a>
@@ -62,7 +62,7 @@ export default function LandingNavbar({ branding }: { branding: PlatformBranding
         <div className="flex items-center gap-2">
           <button
             onClick={toggleTheme}
-            className="p-2 rounded-xl text-warm-500 dark:text-warm-400 hover:text-warm-900 dark:hover:text-warm-100 hover:bg-warm-100/50 dark:hover:bg-warm-800/50 transition-all duration-200"
+            className="p-2 text-warm-500 dark:text-warm-400 hover:text-warm-900 dark:hover:text-warm-100 hover:bg-warm-100/50 dark:hover:bg-warm-800/50 transition-all duration-200"
             aria-label="Alternar tema"
           >
             <motion.div
@@ -85,20 +85,20 @@ export default function LandingNavbar({ branding }: { branding: PlatformBranding
 
           <Link
             href="/signup"
-            className="hidden sm:inline-block text-sm text-warm-600 dark:text-warm-400 hover:text-warm-900 dark:hover:text-warm-100 transition-colors duration-200 px-4 py-2 rounded-lg hover:bg-warm-100/50 dark:hover:bg-warm-800/50"
+            className="hidden sm:inline-block text-sm text-warm-600 dark:text-warm-400 hover:text-warm-900 dark:hover:text-warm-100 transition-colors duration-200 px-4 py-2 hover:bg-warm-100/50 dark:hover:bg-warm-800/50"
           >
             Criar conta
           </Link>
           <Link
             href="/signin"
-            className="px-5 py-2.5 text-sm rounded-xl bg-warm-200 text-warm-950 font-medium hover:bg-warm-300 shadow-lg shadow-black/10 hover:shadow-black/20 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+            className="px-5 py-2.5 text-sm bg-growth-600 text-white font-medium hover:bg-growth-700 shadow-lg shadow-black/10 hover:shadow-black/20 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
           >
             Entrar
           </Link>
 
           <button
             onClick={() => setOpen(!open)}
-            className="md:hidden p-2 rounded-xl text-warm-600 dark:text-warm-400 hover:bg-warm-100 dark:hover:bg-warm-800 transition-all duration-200"
+            className="md:hidden p-2 text-warm-600 dark:text-warm-400 hover:bg-warm-100 dark:hover:bg-warm-800 transition-all duration-200"
             aria-label="Abrir menu"
           >
             {open ? <X size={20} /> : <Menu size={20} />}
@@ -121,7 +121,7 @@ export default function LandingNavbar({ branding }: { branding: PlatformBranding
                   key={link.href}
                   href={link.href}
                   onClick={() => setOpen(false)}
-                  className="block text-sm text-warm-600 dark:text-warm-400 hover:text-warm-900 dark:hover:text-warm-100 transition-colors duration-200 py-2.5 px-3 rounded-lg hover:bg-warm-100/50 dark:hover:bg-warm-800/50"
+                  className="block text-sm text-warm-600 dark:text-warm-400 hover:text-warm-900 dark:hover:text-warm-100 transition-colors duration-200 py-2.5 px-3 hover:bg-warm-100/50 dark:hover:bg-warm-800/50"
                 >
                   {link.label}
                 </a>
@@ -130,14 +130,14 @@ export default function LandingNavbar({ branding }: { branding: PlatformBranding
                 <Link
                   href="/signin"
                   onClick={() => setOpen(false)}
-                  className="text-sm text-warm-600 dark:text-warm-400 font-medium py-2.5 px-3 rounded-lg hover:bg-warm-100 dark:hover:bg-warm-900/50 transition-colors duration-200"
+                  className="text-sm text-warm-600 dark:text-warm-400 font-medium py-2.5 px-3 hover:bg-warm-100 dark:hover:bg-warm-900/50 transition-colors duration-200"
                 >
                   Entrar
                 </Link>
                 <Link
                   href="/signup"
                   onClick={() => setOpen(false)}
-                  className="text-sm text-warm-600 dark:text-warm-400 font-medium py-2.5 px-3 rounded-lg hover:bg-warm-100/50 dark:hover:bg-warm-800/50 transition-colors duration-200"
+                  className="text-sm text-warm-600 dark:text-warm-400 font-medium py-2.5 px-3 hover:bg-warm-100/50 dark:hover:bg-warm-800/50 transition-colors duration-200"
                 >
                   Criar conta
                 </Link>

@@ -10,56 +10,66 @@ import {
   Calendar,
   BarChart3,
 } from "lucide-react"
+import { motion } from "framer-motion"
 import { StaggerContainer, StaggerItem } from "./AnimateOnScroll"
+import Carousel from "./Carousel"
 
 const features = [
   {
     icon: LayoutDashboard,
     title: "Dashboards intuitivos",
-    description: "Visão geral em tempo real com métricas claras para cada perfil.",
-    bg: "bg-warm-600",
+    description: "Visão geral em tempo real com métricas claras para cada perfil da escola.",
+    bg: "bg-growth-100 dark:bg-growth-900/30",
+    iconColor: "text-growth-600 dark:text-growth-400",
   },
   {
     icon: Users,
     title: "Gestão de alunos",
     description: "Matrículas, perfis, turmas e acompanhamento individual completo.",
-    bg: "bg-warm-500",
+    bg: "bg-sun-100 dark:bg-sun-900/30",
+    iconColor: "text-sun-600 dark:text-sun-400",
   },
   {
     icon: ClipboardCheck,
     title: "Controlo de assiduidade",
     description: "Registo de presenças por aula ou dia, com relatórios automáticos.",
-    bg: "bg-warm-600",
+    bg: "bg-growth-100 dark:bg-growth-900/30",
+    iconColor: "text-growth-600 dark:text-growth-400",
   },
   {
     icon: GraduationCap,
     title: "Notas e avaliações",
     description: "Lançamento de notas com médias automáticas por trimestre e exame.",
-    bg: "bg-warm-500",
+    bg: "bg-sun-100 dark:bg-sun-900/30",
+    iconColor: "text-sun-600 dark:text-sun-400",
   },
   {
     icon: MessageSquare,
     title: "Comunicação interna",
     description: "Avisos, mensagens e notificações para toda a comunidade escolar.",
-    bg: "bg-warm-600",
+    bg: "bg-growth-100 dark:bg-growth-900/30",
+    iconColor: "text-growth-600 dark:text-growth-400",
   },
   {
     icon: FileText,
     title: "Candidaturas online",
     description: "Formulário público de matrícula com acompanhamento de estado.",
-    bg: "bg-warm-500",
+    bg: "bg-sun-100 dark:bg-sun-900/30",
+    iconColor: "text-sun-600 dark:text-sun-400",
   },
   {
     icon: Calendar,
     title: "Calendário e horários",
     description: "Horários de aulas, exames e eventos escolares num só lugar.",
-    bg: "bg-warm-600",
+    bg: "bg-growth-100 dark:bg-growth-900/30",
+    iconColor: "text-growth-600 dark:text-growth-400",
   },
   {
     icon: BarChart3,
     title: "Relatórios detalhados",
     description: "Análises de desempenho, frequência e evolução institucional.",
-    bg: "bg-warm-500",
+    bg: "bg-sun-100 dark:bg-sun-900/30",
+    iconColor: "text-sun-600 dark:text-sun-400",
   },
 ]
 
@@ -69,7 +79,7 @@ export default function FeaturesSection() {
       <div className="max-w-7xl mx-auto">
         <StaggerContainer className="text-center mb-14" staggerDelay={0.03}>
           <StaggerItem>
-            <span className="inline-flex items-center gap-2 text-sm font-medium text-warm-600 dark:text-warm-400 bg-warm-100 dark:bg-warm-900/30 px-4 py-1.5 rounded-full border border-warm-200/50 dark:border-warm-800/30 mb-5">
+            <span className="inline-flex items-center gap-2 text-sm font-medium text-growth-600 dark:text-growth-400 bg-growth-50 dark:bg-growth-950/30 px-4 py-1.5 border border-growth-200/50 dark:border-growth-800/30 mb-5">
               A solução completa
             </span>
           </StaggerItem>
@@ -89,29 +99,33 @@ export default function FeaturesSection() {
           </StaggerItem>
         </StaggerContainer>
 
-        <StaggerContainer
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5"
-          staggerDelay={0.04}
+        <Carousel
+          className="max-w-7xl mx-auto"
+          itemWidth="min-w-[280px] w-[85vw] sm:min-w-[300px] sm:w-[45vw] lg:min-w-[260px] lg:w-[22vw]"
+          autoPlay
+          interval={5000}
         >
           {features.map((item) => {
             const Icon = item.icon
             return (
-              <StaggerItem key={item.title}>
-                <div className="card-base p-6 h-full relative">
-                  <div className={`w-10 h-10 rounded-xl ${item.bg} flex items-center justify-center mb-3.5 shadow-md`}>
-                    <Icon className="w-4 h-4 text-white" />
-                  </div>
-                  <h3 className="font-semibold text-base text-warm-900 dark:text-warm-100 mb-1.5">
-                    {item.title}
-                  </h3>
-                  <p className="text-sm text-warm-500 dark:text-warm-400 leading-relaxed">
-                    {item.description}
-                  </p>
+              <motion.div
+                key={item.title}
+                whileHover={{ y: -4 }}
+                className="card-base p-6 h-full group"
+              >
+                <div className={`w-11 h-11 ${item.bg} border border-brand-200 dark:border-brand-700 flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110`}>
+                  <Icon className={`w-5 h-5 ${item.iconColor}`} />
                 </div>
-              </StaggerItem>
+                <h3 className="font-bold text-base text-warm-900 dark:text-warm-100 mb-2">
+                  {item.title}
+                </h3>
+                <p className="text-sm text-warm-500 dark:text-warm-400 leading-relaxed">
+                  {item.description}
+                </p>
+              </motion.div>
             )
           })}
-        </StaggerContainer>
+        </Carousel>
       </div>
     </section>
   )
