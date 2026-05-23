@@ -11,6 +11,7 @@ const eslintConfig = defineConfig([
     "build/**",
     "next-env.d.ts",
     "prisma/**",
+    "ws-server.js",
   ]),
   {
     rules: {
@@ -18,7 +19,9 @@ const eslintConfig = defineConfig([
       "@next/next/no-img-element":                 "warn",
       "react-hooks/exhaustive-deps":               "warn",
       "react-hooks/set-state-in-effect":           "warn",
-      "react-hooks/purity":                        "warn",
+      // React Compiler (experimental) — false positives in regular async functions
+      "react-hooks/purity":                        "off",
+      "react-hooks/refs":                          "warn",
     },
   },
 ]);

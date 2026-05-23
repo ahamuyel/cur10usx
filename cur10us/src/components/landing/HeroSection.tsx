@@ -1,5 +1,8 @@
+"use client"
+
 import Link from "next/link"
-import { ArrowRight, Sparkles, GraduationCap, Users, Calendar, BarChart3 } from "lucide-react"
+import { GraduationCap, Users, BarChart3, ArrowRight } from "lucide-react"
+import { motion } from "framer-motion"
 import type { PlatformBranding } from "@/types/landing"
 
 type Props = {
@@ -7,140 +10,169 @@ type Props = {
   schools: { name: string }[]
 }
 
+const springEasing = [0.16, 1, 0.3, 1] as const
+
+const container = {
+  hidden: {},
+  visible: {
+    transition: { staggerChildren: 0.1, delayChildren: 0.2 },
+  },
+}
+
+const item = {
+  hidden: { opacity: 0, y: 24 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: springEasing },
+  },
+}
+
 export default function HeroSection({ branding, schools }: Props) {
   return (
-    <section className="relative overflow-hidden min-h-[90vh] flex items-center">
-      {/* Gradient mesh background */}
+    <section className="relative min-h-screen flex items-center overflow-hidden">
       <div className="absolute inset-0 -z-10">
-        <div className="absolute top-[-30%] left-[-15%] w-[700px] h-[700px] rounded-full bg-indigo-400/20 dark:bg-indigo-600/10 blur-[120px] animate-pulse" />
-        <div className="absolute bottom-[-30%] right-[-15%] w-[600px] h-[600px] rounded-full bg-violet-400/20 dark:bg-violet-600/10 blur-[120px] animate-pulse [animation-delay:1s]" />
-        <div className="absolute top-[20%] right-[10%] w-[400px] h-[400px] rounded-full bg-cyan-400/10 dark:bg-cyan-600/5 blur-[100px] animate-pulse [animation-delay:2s]" />
-        <div className="absolute bottom-[20%] left-[15%] w-[300px] h-[300px] rounded-full bg-emerald-400/10 dark:bg-emerald-600/5 blur-[100px] animate-pulse [animation-delay:3s]" />
-        {/* Grid pattern */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(99,102,241,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(99,102,241,0.03)_1px,transparent_1px)] bg-[size:64px_64px] dark:bg-[linear-gradient(rgba(99,102,241,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(99,102,241,0.05)_1px,transparent_1px)]" />
+        <div className="absolute inset-0 bg-gradient-to-br from-warm-950 via-warm-900 to-warm-950 dark:from-warm-950 dark:via-warm-900 dark:to-warm-950 transition-opacity duration-700" />
+        <div className="absolute top-[-15%] left-[-8%] w-[700px] h-[700px] rounded-full bg-warm-500/15 dark:bg-warm-500/10 blur-[120px]" />
+        <div className="absolute bottom-[-15%] right-[-8%] w-[600px] h-[600px] rounded-full bg-warm-400/10 dark:bg-warm-400/8 blur-[120px]" />
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.015)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.015)_1px,transparent_1px)] dark:bg-[linear-gradient(rgba(255,255,255,0.01)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.01)_1px,transparent_1px)] bg-[size:64px_64px]" />
       </div>
 
-      <div className="w-full max-w-6xl mx-auto px-6 pt-20 pb-24">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
-          {/* Left: Copy */}
-          <div className="flex flex-col gap-8">
-            <span className="inline-flex items-center gap-2 text-sm font-medium text-indigo-600 dark:text-indigo-400 bg-indigo-50/80 dark:bg-indigo-950/50 px-4 py-2 rounded-full border border-indigo-200/50 dark:border-indigo-800/50 w-fit backdrop-blur-sm">
-              <Sparkles className="w-4 h-4" />
-              Plataforma de Gestão Escolar para Angola
-            </span>
+      <div className="w-full max-w-7xl mx-auto px-6 pt-32 pb-24">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          <motion.div
+            variants={container}
+            initial="hidden"
+            animate="visible"
+            className="flex flex-col gap-6"
+          >
+            <motion.span
+              variants={item}
+              className="inline-flex items-center gap-2 text-sm font-medium text-warm-300 bg-warm-500/10 px-4 py-1.5 rounded-full border border-warm-500/20 w-fit"
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-warm-400 animate-pulse" />
+              Plataforma de gestão escolar
+            </motion.span>
 
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.1]">
-              A sua escola,
+            <motion.h1
+              variants={item}
+              className="text-4xl sm:text-5xl lg:text-7xl xl:text-8xl font-bold tracking-tight leading-[0.92] text-white"
+            >
+              A educação
               <br />
-              mais{" "}
-              <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-purple-600 dark:from-indigo-400 dark:via-violet-400 dark:to-purple-400 bg-clip-text text-transparent">
-                organizada
+              <span className="text-white">
+                africana
               </span>
-            </h1>
+              <br />
+              do futuro
+            </motion.h1>
 
-            <p className="text-lg sm:text-xl text-zinc-500 dark:text-zinc-400 max-w-lg leading-relaxed">
-              {branding.description ||
-                "Centralize a gestão de alunos, professores, notas e comunicação numa única plataforma moderna."}
-            </p>
+            <motion.p
+              variants={item}
+              className="text-base sm:text-lg text-warm-400 dark:text-warm-400 max-w-lg leading-relaxed"
+            >
+              Centraliza a gestão de alunos, professores, notas e comunicação
+              numa plataforma moderna, pensada para Angola.
+            </motion.p>
 
-            <div className="flex gap-3 flex-wrap">
+            <motion.div variants={item} className="flex gap-3 flex-wrap pt-2">
               <Link
                 href="/signin"
-                className="group inline-flex items-center gap-2.5 px-7 py-3.5 rounded-2xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-semibold hover:from-indigo-700 hover:to-violet-700 shadow-xl shadow-indigo-600/25 hover:shadow-indigo-600/40 transition-all hover:scale-[1.02] active:scale-[0.98]"
+                className="group inline-flex items-center gap-2.5 px-7 py-3.5 rounded-xl bg-warm-200 text-warm-950 font-bold hover:bg-warm-300 shadow-xl shadow-black/20 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
               >
                 Começar agora
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />
               </Link>
               <Link
                 href="/registar-escola"
-                className="px-7 py-3.5 rounded-2xl border border-zinc-200 dark:border-zinc-700 hover:border-zinc-300 dark:hover:border-zinc-600 hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-all font-semibold hover:scale-[1.02] active:scale-[0.98]"
+                className="px-7 py-3.5 rounded-xl border border-warm-700 text-warm-300 hover:bg-white/5 hover:border-warm-500 transition-all duration-300 font-semibold hover:scale-[1.02] active:scale-[0.98]"
               >
                 Registar escola
               </Link>
-            </div>
+            </motion.div>
 
-            {/* Social proof */}
-            <div className="flex items-center gap-4 pt-2">
-              <div className="flex -space-x-2">
-                {schools.length > 0
-                  ? schools.map((school, i) => {
-                    const colors = ["bg-indigo-500", "bg-violet-500", "bg-cyan-500", "bg-emerald-500"]
+            {schools.length > 0 && (
+              <motion.div variants={item} className="flex items-center gap-4 pt-1">
+                <div className="flex -space-x-2">
+                  {schools.slice(0, 4).map((school, i) => {
+                    const colors = ["bg-warm-500", "bg-warm-400", "bg-warm-600", "bg-warm-300"]
                     const initials = school.name.split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase()
                     return (
-                      <div key={i} className={`w-8 h-8 rounded-full ${colors[i % colors.length]} border-2 border-white dark:border-zinc-950 flex items-center justify-center`}>
+                      <div
+                        key={i}
+                        className={`w-8 h-8 rounded-full ${colors[i]} border-2 border-warm-950 flex items-center justify-center`}
+                      >
                         <span className="text-[10px] font-bold text-white">{initials}</span>
                       </div>
                     )
-                  })
-                  : ["bg-indigo-500", "bg-violet-500", "bg-cyan-500", "bg-emerald-500"].map((color, i) => (
-                    <div key={i} className={`w-8 h-8 rounded-full ${color} border-2 border-white dark:border-zinc-950`} />
-                  ))
-                }
-              </div>
-              <p className="text-sm text-zinc-500 dark:text-zinc-400">
-                Escolas em Angola já utilizam o{" "}
-                <span className="font-semibold text-zinc-700 dark:text-zinc-300">{branding.name}</span>
-              </p>
-            </div>
-          </div>
+                  })}
+                </div>
+                <p className="text-sm text-warm-500 dark:text-warm-500">
+                  Escolas em Angola já utilizam o{" "}
+                  <span className="font-semibold text-warm-200 dark:text-warm-200">{branding.name}</span>
+                </p>
+              </motion.div>
+            )}
+          </motion.div>
 
-          {/* Right: Dashboard mockup */}
-          <div className="relative hidden lg:block">
-            <div className="relative">
-              {/* Main card */}
-              <div className="rounded-3xl border border-zinc-200/60 dark:border-zinc-800/60 bg-white/60 dark:bg-zinc-900/60 backdrop-blur-xl shadow-2xl shadow-zinc-900/10 dark:shadow-black/30 p-6 space-y-5">
-                {/* Top bar */}
+          <motion.div
+            initial={{ opacity: 0, x: 60 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+            className="relative hidden lg:block"
+          >
+            <motion.div
+              animate={{ y: [0, -6, 0] }}
+              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+              className="relative"
+            >
+              <div className="rounded-2xl border border-white/10 dark:border-white/10 bg-white/[0.05] dark:bg-white/[0.04] backdrop-blur-2xl shadow-2xl shadow-black/40 p-5 space-y-4">
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-500 flex items-center justify-center">
-                      <GraduationCap className="w-5 h-5 text-white" />
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-warm-500 to-warm-700 flex items-center justify-center">
+                      <GraduationCap className="w-4 h-4 text-white" />
                     </div>
                     <div>
-                      <div className="text-sm font-semibold">Dashboard Escolar</div>
-                      <div className="text-xs text-zinc-400">Visão geral</div>
+                      <div className="text-sm font-semibold text-white">Dashboard Escolar</div>
+                      <div className="text-[11px] text-warm-400">Visão geral</div>
                     </div>
                   </div>
                   <div className="flex gap-1.5">
-                    <div className="w-3 h-3 rounded-full bg-red-400/80" />
-                    <div className="w-3 h-3 rounded-full bg-amber-400/80" />
-                    <div className="w-3 h-3 rounded-full bg-emerald-400/80" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-red-400/50" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-warm-400/50" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-warm-300/50" />
                   </div>
                 </div>
 
-                {/* Stats row */}
-                <div className="grid grid-cols-3 gap-3">
+                <div className="grid grid-cols-3 gap-2.5">
                   {[
-                    { label: "Alunos", value: "1.247", icon: Users, color: "from-indigo-500 to-indigo-600" },
-                    { label: "Professores", value: "86", icon: GraduationCap, color: "from-violet-500 to-violet-600" },
-                    { label: "Turmas", value: "42", icon: Calendar, color: "from-cyan-500 to-cyan-600" },
+                    { label: "Alunos", value: "1.247", icon: Users, bg: "bg-warm-500" },
+                    { label: "Professores", value: "86", icon: GraduationCap, bg: "bg-warm-400" },
+                    { label: "Turmas", value: "42", icon: BarChart3, bg: "bg-warm-500" },
                   ].map((stat) => {
                     const Icon = stat.icon
                     return (
-                      <div
-                        key={stat.label}
-                        className="rounded-xl bg-zinc-50 dark:bg-zinc-800/50 p-3.5 space-y-2"
-                      >
-                        <div className={`w-7 h-7 rounded-lg bg-gradient-to-br ${stat.color} flex items-center justify-center`}>
-                          <Icon className="w-3.5 h-3.5 text-white" />
+                      <div key={stat.label} className="rounded-lg bg-white/[0.05] dark:bg-white/[0.04] p-3 space-y-1.5 border border-white/10 dark:border-white/5">
+                        <div className={`w-6 h-6 rounded-md ${stat.bg} flex items-center justify-center`}>
+                          <Icon className="w-3 h-3 text-white" />
                         </div>
-                        <div className="text-lg font-bold">{stat.value}</div>
-                        <div className="text-[11px] text-zinc-400">{stat.label}</div>
+                        <div className="text-base font-bold text-white">{stat.value}</div>
+                        <div className="text-[10px] text-warm-400">{stat.label}</div>
                       </div>
                     )
                   })}
                 </div>
 
-                {/* Chart mock */}
-                <div className="rounded-xl bg-zinc-50 dark:bg-zinc-800/50 p-4">
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-xs font-medium text-zinc-500">Desempenho mensal</span>
-                    <BarChart3 className="w-4 h-4 text-zinc-400" />
+                <div className="rounded-lg bg-white/[0.05] dark:bg-white/[0.04] p-3.5 border border-white/10 dark:border-white/5">
+                  <div className="flex items-center justify-between mb-2.5">
+                    <span className="text-[11px] font-medium text-warm-400">Desempenho mensal</span>
+                    <BarChart3 className="w-3.5 h-3.5 text-warm-500" />
                   </div>
-                  <div className="flex items-end gap-2 h-24">
+                  <div className="flex items-end gap-1.5 h-16">
                     {[40, 65, 45, 80, 55, 90, 70, 85, 60, 95, 75, 88].map((h, i) => (
                       <div
                         key={i}
-                        className="flex-1 rounded-t-md bg-gradient-to-t from-indigo-500 to-violet-400 dark:from-indigo-600 dark:to-violet-500 opacity-80"
+                        className="flex-1 rounded-t-sm bg-gradient-to-t from-warm-500/70 to-warm-300/70"
                         style={{ height: `${h}%` }}
                       />
                     ))}
@@ -148,33 +180,61 @@ export default function HeroSection({ branding, schools }: Props) {
                 </div>
               </div>
 
-              {/* Floating notification card */}
-              <div className="absolute -bottom-6 -left-8 rounded-2xl border border-zinc-200/60 dark:border-zinc-800/60 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl shadow-xl p-4 flex items-center gap-3 animate-bounce [animation-duration:3s]">
-                <div className="w-9 h-9 rounded-xl bg-emerald-100 dark:bg-emerald-950 flex items-center justify-center">
-                  <svg className="w-5 h-5 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <motion.div
+                animate={{ x: [0, 6, 0], y: [0, -3, 0] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                className="absolute -bottom-4 -left-5 rounded-xl border border-white/10 bg-white/[0.08] dark:bg-white/[0.06] backdrop-blur-xl shadow-xl p-3.5 flex items-center gap-2.5"
+              >
+                <div className="w-8 h-8 rounded-lg bg-warm-500/20 flex items-center justify-center">
+                  <svg className="w-4 h-4 text-warm-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
                 <div>
-                  <div className="text-xs font-semibold">Notas lançadas</div>
-                  <div className="text-[11px] text-zinc-400">Turma 10A - Matemática</div>
+                  <div className="text-xs font-semibold text-white">Notas lançadas</div>
+                  <div className="text-[10px] text-warm-400">Turma 10A — Matemática</div>
                 </div>
-              </div>
+              </motion.div>
 
-              {/* Floating user card */}
-              <div className="absolute -top-4 -right-6 rounded-2xl border border-zinc-200/60 dark:border-zinc-800/60 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl shadow-xl p-4 flex items-center gap-3 animate-bounce [animation-duration:4s] [animation-delay:1s]">
-                <div className="w-9 h-9 rounded-xl bg-violet-100 dark:bg-violet-950 flex items-center justify-center">
-                  <Users className="w-4 h-4 text-violet-600 dark:text-violet-400" />
+              <motion.div
+                animate={{ x: [0, -5, 0], y: [0, 4, 0] }}
+                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                className="absolute -top-3 -right-4 rounded-xl border border-white/10 bg-white/[0.08] dark:bg-white/[0.06] backdrop-blur-xl shadow-xl p-3.5 flex items-center gap-2.5"
+              >
+                <div className="w-8 h-8 rounded-lg bg-warm-400/20 flex items-center justify-center">
+                  <Users className="w-4 h-4 text-warm-300" />
                 </div>
                 <div>
-                  <div className="text-xs font-semibold">+12 alunos</div>
-                  <div className="text-[11px] text-zinc-400">Matriculados hoje</div>
+                  <div className="text-xs font-semibold text-white">+12 alunos</div>
+                  <div className="text-[10px] text-warm-400">Matriculados hoje</div>
                 </div>
-              </div>
-            </div>
-          </div>
+              </motion.div>
+            </motion.div>
+          </motion.div>
         </div>
       </div>
+
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1, delay: 1.5 }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2"
+      >
+        <motion.div
+          animate={{ y: [0, 5, 0] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          className="flex flex-col items-center gap-1.5 text-warm-500"
+        >
+          <span className="text-[10px] font-medium tracking-[0.2em] uppercase">Scroll</span>
+          <div className="w-4 h-7 rounded-full border border-warm-600 flex justify-center p-1">
+            <motion.div
+              animate={{ y: [0, 6, 0] }}
+              transition={{ duration: 1.5, repeat: Infinity }}
+              className="w-1 h-1 rounded-full bg-warm-400"
+            />
+          </div>
+        </motion.div>
+      </motion.div>
     </section>
   )
 }
