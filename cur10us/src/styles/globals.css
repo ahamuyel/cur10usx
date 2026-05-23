@@ -8,19 +8,19 @@
   --color-background: var(--color-background);
   --color-foreground: var(--color-foreground);
 
-  /* Brand palette */
-  --color-brand-50: #f5f3ff;
-  --color-brand-100: #ede9fe;
-  --color-brand-200: #ddd6fe;
-  --color-brand-300: #c4b5fd;
-  --color-brand-400: #a78bfa;
-  --color-brand-500: #8b5cf6;
-  --color-brand-600: #7c3aed;
-  --color-brand-700: #6d28d9;
-  --color-brand-800: #5b21b6;
-  --color-brand-900: #4c1d95;
+  /* Brand palette — unified warm neutral (same as warm) */
+  --color-brand-50: #fafaf9;
+  --color-brand-100: #f5f5f4;
+  --color-brand-200: #e7e5e4;
+  --color-brand-300: #d6d3d1;
+  --color-brand-400: #a8a29e;
+  --color-brand-500: #78716c;
+  --color-brand-600: #57534e;
+  --color-brand-700: #44403c;
+  --color-brand-800: #292524;
+  --color-brand-900: #1c1917;
 
-  /* Warm accent — African sun */
+  /* Sun accent — amber (African sun, warmth, knowledge) */
   --color-sun-50: #fffbeb;
   --color-sun-100: #fef3c7;
   --color-sun-200: #fde68a;
@@ -32,7 +32,7 @@
   --color-sun-800: #92400e;
   --color-sun-900: #78350f;
 
-  /* Fresh accent */
+  /* Growth accent — teal (education, modern tech, trust) */
   --color-growth-50: #f0fdfa;
   --color-growth-100: #ccfbf1;
   --color-growth-200: #99f6e4;
@@ -96,14 +96,14 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  --color-background: #fafaf9;
+  --color-background: #f5f5f4;
   --color-foreground: #1c1917;
 
-  --school-primary: #57534e;
-  --school-primary-light: #f5f5f4;
-  --school-primary-dark: #44403c;
-  --school-secondary: #78716c;
-  --school-secondary-light: #fafaf9;
+  --school-primary: #0d9488;
+  --school-primary-light: #f0fdfa;
+  --school-primary-dark: #0f766e;
+  --school-secondary: #f59e0b;
+  --school-secondary-light: #fffbeb;
 
   --school-font-family: 'Inter', sans-serif;
   --school-font-size-base: 16px;
@@ -125,7 +125,7 @@
   --school-spacing: 1;
   --school-card-radius: 0.75rem;
   --school-card-bg: #ffffff;
-  --school-card-border: 1px solid #e7e5e4;
+  --school-card-border: 1px solid var(--color-brand-200);
   --school-card-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --school-button-radius: 0.5rem;
   --school-button-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
@@ -135,46 +135,6 @@
   --section-bg: #fafaf9;
   --section-fg: #1c1917;
 
-  --color-brand-50: #fafaf9;
-  --color-brand-100: #f5f5f4;
-  --color-brand-200: #e7e5e4;
-  --color-brand-300: #d6d3d1;
-  --color-brand-400: #a8a29e;
-  --color-brand-500: #78716c;
-  --color-brand-600: #57534e;
-  --color-brand-700: #44403c;
-  --color-brand-800: #292524;
-  --color-brand-900: #1c1917;
-  --color-sun-50: #fafaf9;
-  --color-sun-100: #f5f5f4;
-  --color-sun-200: #e7e5e4;
-  --color-sun-300: #d6d3d1;
-  --color-sun-400: #a8a29e;
-  --color-sun-500: #78716c;
-  --color-sun-600: #57534e;
-  --color-sun-700: #44403c;
-  --color-sun-800: #292524;
-  --color-sun-900: #1c1917;
-  --color-growth-50: #fafaf9;
-  --color-growth-100: #f5f5f4;
-  --color-growth-200: #e7e5e4;
-  --color-growth-300: #d6d3d1;
-  --color-growth-400: #a8a29e;
-  --color-growth-500: #78716c;
-  --color-growth-600: #57534e;
-  --color-growth-700: #44403c;
-  --color-growth-800: #292524;
-  --color-growth-900: #1c1917;
-  --color-rose-50: #fafaf9;
-  --color-rose-100: #f5f5f4;
-  --color-rose-200: #e7e5e4;
-  --color-rose-300: #d6d3d1;
-  --color-rose-400: #a8a29e;
-  --color-rose-500: #78716c;
-  --color-rose-600: #57534e;
-  --color-rose-700: #44403c;
-  --color-rose-800: #292524;
-  --color-rose-900: #1c1917;
 }
 
 .dark {
@@ -204,14 +164,23 @@ body {
 /* Unified card system */
 .card-base {
   background-color: var(--school-card-bg);
-  border: var(--school-card-border);
-  border-radius: 1rem;
+  border: 1px solid var(--color-brand-200);
+  border-radius: 0;
   transition: background-color 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+.dark .card-base {
+  border-color: var(--color-brand-700);
+}
+
 .card-base:hover {
+  border-color: var(--color-growth-300);
   box-shadow: var(--school-shadow-lg);
   transform: translateY(-2px);
+}
+
+.dark .card-base:hover {
+  border-color: var(--color-growth-500);
 }
 
 /* Section spacing system */

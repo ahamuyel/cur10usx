@@ -8,9 +8,9 @@ export default function CTASection() {
   return (
     <section className="section-padding px-6 relative overflow-hidden">
       <div className="absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-gradient-to-b from-warm-950 to-warm-950 dark:from-warm-950 dark:to-warm-950 transition-opacity duration-700" />
-        <div className="absolute top-[-20%] left-[-10%] w-[500px] h-[500px] rounded-full bg-warm-500/8 blur-[120px]" />
-        <div className="absolute bottom-[-20%] right-[-10%] w-[500px] h-[500px] rounded-full bg-warm-500/8 blur-[120px]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-warm-950 to-warm-950" />
+        <div className="absolute top-[-20%] left-[-10%] w-[500px] h-[500px] rounded-full bg-growth-500/8 blur-[120px]" />
+        <div className="absolute bottom-[-20%] right-[-10%] w-[500px] h-[500px] rounded-full bg-sun-500/8 blur-[120px]" />
       </div>
 
       <div className="max-w-4xl mx-auto">
@@ -19,11 +19,11 @@ export default function CTASection() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
           viewport={{ once: true }}
-          className="relative rounded-2xl bg-warm-800 p-10 sm:p-14 text-center overflow-hidden border border-white/10"
+          className="relative bg-gradient-to-br from-warm-900 to-warm-950 p-10 sm:p-14 text-center overflow-hidden border border-white/10"
         >
           <div className="absolute inset-0">
-            <div className="absolute top-[-50%] left-[-20%] w-[400px] h-[400px] rounded-full bg-warm-500/8 blur-3xl" />
-            <div className="absolute bottom-[-50%] right-[-20%] w-[400px] h-[400px] rounded-full bg-warm-400/8 blur-3xl" />
+            <div className="absolute top-[-50%] left-[-20%] w-[400px] h-[400px] rounded-full bg-growth-500/10 blur-3xl" />
+            <div className="absolute bottom-[-50%] right-[-20%] w-[400px] h-[400px] rounded-full bg-sun-400/10 blur-3xl" />
           </div>
 
           <div className="relative z-10">
@@ -32,7 +32,7 @@ export default function CTASection() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
               viewport={{ once: true }}
-              className="inline-flex items-center gap-2 text-sm font-medium text-warm-300 bg-warm-500/10 px-4 py-1.5 rounded-full mb-6 border border-warm-500/20"
+              className="inline-flex items-center gap-2 text-sm font-medium text-sun-400 bg-sun-500/10 px-4 py-1.5 mb-6 border border-sun-500/20"
             >
               <Sparkles className="w-4 h-4" />
               Comece hoje mesmo
@@ -69,14 +69,14 @@ export default function CTASection() {
             >
               <Link
                 href="/signin"
-                className="group inline-flex items-center gap-2.5 px-7 py-3.5 rounded-xl bg-warm-200 text-warm-950 font-bold hover:bg-warm-300 shadow-xl shadow-black/10 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+                className="group inline-flex items-center gap-2.5 px-7 py-3.5 bg-growth-600 text-white font-bold hover:bg-growth-700 shadow-xl shadow-growth-600/20 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
               >
                 Entrar na plataforma
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />
               </Link>
               <Link
                 href="/registar-escola"
-                className="px-7 py-3.5 rounded-xl border-2 border-white/20 text-white hover:bg-white/10 hover:border-white/30 transition-all duration-300 font-bold hover:scale-[1.02] active:scale-[0.98]"
+                className="px-7 py-3.5 border-2 border-white/20 text-white hover:bg-white/10 hover:border-white/30 transition-all duration-300 font-bold hover:scale-[1.02] active:scale-[0.98]"
               >
                 Registar escola
               </Link>

@@ -8,25 +8,29 @@ const highlights = [
     icon: Trophy,
     title: "Gamificação inteligente",
     description: "Conquistas e rankings que motivam os alunos a superarem-se.",
-    bg: "bg-warm-600",
+    bg: "bg-growth-100 dark:bg-growth-900/30",
+    iconColor: "text-growth-600 dark:text-growth-400",
   },
   {
     icon: Target,
     title: "Metas personalizadas",
     description: "Cada aluno define objetivos e acompanha a evolução em tempo real.",
-    bg: "bg-warm-500",
+    bg: "bg-sun-100 dark:bg-sun-900/30",
+    iconColor: "text-sun-600 dark:text-sun-400",
   },
   {
     icon: Zap,
     title: "Feedback imediato",
     description: "Resultados disponíveis logo após a correção, com recomendações.",
-    bg: "bg-warm-600",
+    bg: "bg-growth-100 dark:bg-growth-900/30",
+    iconColor: "text-growth-600 dark:text-growth-400",
   },
   {
     icon: TrendingUp,
     title: "Evolução visual",
     description: "Gráficos claros do progresso ao longo do ano, disciplina por disciplina.",
-    bg: "bg-warm-500",
+    bg: "bg-sun-100 dark:bg-sun-900/30",
+    iconColor: "text-sun-600 dark:text-sun-400",
   },
 ]
 
@@ -44,9 +48,9 @@ export default function StudentExperienceSection() {
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           <AnimateOnScroll direction="left" className="order-2 lg:order-1">
             <div className="relative">
-              <div className="rounded-2xl bg-warm-100/50 dark:bg-warm-900/30 border border-warm-200/50 dark:border-warm-800/50 p-5">
+              <div className="bg-warm-100/50 dark:bg-warm-900/30 border border-warm-200/50 dark:border-warm-800/50 p-5">
                 <div className="flex items-center gap-2.5 mb-5">
-                  <div className="w-9 h-9 rounded-lg bg-warm-600 flex items-center justify-center">
+                  <div className="w-9 h-9 bg-gradient-to-br from-growth-500 to-growth-600 flex items-center justify-center">
                     <Trophy className="w-4 h-4 text-white" />
                   </div>
                   <div>
@@ -64,23 +68,23 @@ export default function StudentExperienceSection() {
                   ].map((subject) => (
                     <div
                       key={subject.name}
-                      className="flex items-center justify-between p-2.5 rounded-lg bg-white/50 dark:bg-warm-900/50 border border-warm-200 dark:border-warm-800/50"
+                      className="flex items-center justify-between p-2.5 bg-white/50 dark:bg-warm-900/50 border border-warm-200 dark:border-warm-800/50"
                     >
                       <span className="text-sm text-warm-700 dark:text-warm-300">{subject.name}</span>
                       <div className="flex items-center gap-1.5">
                         <span className="text-sm font-bold text-warm-900 dark:text-warm-100">{subject.grade}/20</span>
-                        <CheckCircle className="w-3.5 h-3.5 text-warm-500" />
+                        <CheckCircle className="w-3.5 h-3.5 text-growth-500" />
                       </div>
                     </div>
                   ))}
                 </div>
 
-                <div className="flex items-center justify-between p-3.5 rounded-xl bg-warm-100/80 dark:bg-warm-800/30 border border-warm-200/50 dark:border-warm-800/50">
+                <div className="flex items-center justify-between p-3.5 bg-gradient-to-r from-growth-50 to-sun-50 dark:from-growth-950/30 dark:to-sun-950/30 border border-growth-200/50 dark:border-growth-800/30">
                   <div>
                     <div className="text-[11px] text-warm-500 dark:text-warm-400">Média Geral</div>
-                    <div className="text-xl font-bold text-warm-900 dark:text-white">15.7</div>
+                    <div className="text-xl font-bold text-growth-700 dark:text-growth-300">15.7</div>
                   </div>
-                  <div className="flex items-center gap-1.5 text-xs text-warm-600 dark:text-warm-400 font-medium">
+                  <div className="flex items-center gap-1.5 text-xs text-growth-600 dark:text-growth-400 font-medium">
                     <TrendingUp className="w-3.5 h-3.5" />
                     +8% este trimestre
                   </div>
@@ -91,7 +95,7 @@ export default function StudentExperienceSection() {
 
           <AnimateOnScroll direction="right" className="order-1 lg:order-2">
             <div className="flex flex-col gap-5">
-              <span className="inline-flex items-center gap-2 text-sm font-medium text-warm-600 dark:text-warm-400 bg-warm-100 dark:bg-warm-900/30 px-4 py-1.5 rounded-full border border-warm-200/50 dark:border-warm-800/30 w-fit">
+              <span className="inline-flex items-center gap-2 text-sm font-medium text-growth-600 dark:text-growth-400 bg-growth-50 dark:bg-growth-950/30 px-4 py-1.5 border border-growth-200/50 dark:border-growth-800/30 w-fit">
                 Experiência do estudante
               </span>
 
@@ -112,12 +116,9 @@ export default function StudentExperienceSection() {
                 {highlights.map((item) => {
                   const Icon = item.icon
                   return (
-                    <div
-                      key={item.title}
-                      className="group p-4 rounded-xl bg-white dark:bg-warm-900/50 border border-warm-200 dark:border-warm-800/50 hover:border-warm-200/50 dark:hover:border-warm-800/30 transition-all duration-300 hover:shadow-md hover:-translate-y-0.5"
-                    >
-                      <div className={`w-8 h-8 rounded-lg ${item.bg} flex items-center justify-center mb-2.5 group-hover:scale-110 transition-transform duration-300`}>
-                        <Icon className="w-4 h-4 text-white" />
+                    <div key={item.title} className="card-base p-4">
+                      <div className={`w-9 h-9 ${item.bg} border border-brand-200 dark:border-brand-700 flex items-center justify-center mb-2.5`}>
+                        <Icon className={`w-4.5 h-4.5 ${item.iconColor}`} />
                       </div>
                       <h3 className="font-semibold text-sm text-warm-900 dark:text-warm-100 mb-1">
                         {item.title}
@@ -133,7 +134,7 @@ export default function StudentExperienceSection() {
               <div className="flex flex-wrap gap-x-5 gap-y-1.5">
                 {benefits.map((benefit) => (
                   <div key={benefit} className="flex items-center gap-1.5 text-sm text-warm-600 dark:text-warm-400">
-                    <CheckCircle className="w-3.5 h-3.5 text-warm-500 shrink-0" />
+                    <CheckCircle className="w-3.5 h-3.5 text-growth-500 shrink-0" />
                     {benefit}
                   </div>
                 ))}
