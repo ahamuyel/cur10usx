@@ -1,51 +1,88 @@
+"use client"
+
 import Link from "next/link"
 import { ArrowRight, Sparkles } from "lucide-react"
+import { motion } from "framer-motion"
 
 export default function CTASection() {
   return (
-    <section className="py-28 px-6 relative overflow-hidden">
-      <div className="max-w-4xl mx-auto relative">
-        {/* Background card */}
-        <div className="relative rounded-[2rem] bg-gradient-to-br from-indigo-600 via-violet-600 to-purple-700 p-12 sm:p-16 text-center overflow-hidden">
-          {/* Decorative elements */}
+    <section className="section-padding px-6 relative overflow-hidden">
+      <div className="absolute inset-0 -z-10">
+        <div className="absolute inset-0 bg-gradient-to-b from-warm-950 to-warm-950 dark:from-warm-950 dark:to-warm-950 transition-opacity duration-700" />
+        <div className="absolute top-[-20%] left-[-10%] w-[500px] h-[500px] rounded-full bg-warm-500/8 blur-[120px]" />
+        <div className="absolute bottom-[-20%] right-[-10%] w-[500px] h-[500px] rounded-full bg-warm-500/8 blur-[120px]" />
+      </div>
+
+      <div className="max-w-4xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          viewport={{ once: true }}
+          className="relative rounded-2xl bg-warm-800 p-10 sm:p-14 text-center overflow-hidden border border-white/10"
+        >
           <div className="absolute inset-0">
-            <div className="absolute top-[-50%] left-[-20%] w-[500px] h-[500px] rounded-full bg-white/10 blur-3xl" />
-            <div className="absolute bottom-[-50%] right-[-20%] w-[400px] h-[400px] rounded-full bg-white/5 blur-3xl" />
-            <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:48px_48px]" />
+            <div className="absolute top-[-50%] left-[-20%] w-[400px] h-[400px] rounded-full bg-warm-500/8 blur-3xl" />
+            <div className="absolute bottom-[-50%] right-[-20%] w-[400px] h-[400px] rounded-full bg-warm-400/8 blur-3xl" />
           </div>
 
           <div className="relative z-10">
-            <div className="inline-flex items-center gap-2 text-sm font-medium text-indigo-200 bg-white/10 px-4 py-1.5 rounded-full mb-8 backdrop-blur-sm">
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              viewport={{ once: true }}
+              className="inline-flex items-center gap-2 text-sm font-medium text-warm-300 bg-warm-500/10 px-4 py-1.5 rounded-full mb-6 border border-warm-500/20"
+            >
               <Sparkles className="w-4 h-4" />
               Comece hoje mesmo
-            </div>
+            </motion.div>
 
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-5 text-white tracking-tight leading-tight">
-              Pronto para transformar
+            <motion.h2
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              viewport={{ once: true }}
+              className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 text-white tracking-tight leading-tight"
+            >
+              Pronto para fazer parte
               <br />
-              a gestão da sua escola?
-            </h2>
-            <p className="text-indigo-100 mb-10 max-w-lg mx-auto text-lg leading-relaxed">
-              Registe a sua escola e comece a gerir alunos, professores e resultados de forma moderna e eficiente.
-            </p>
+              do futuro da educação?
+            </motion.h2>
 
-            <div className="flex gap-4 flex-wrap justify-center">
+            <motion.p
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              viewport={{ once: true }}
+              className="text-warm-400 mb-8 max-w-md mx-auto text-base leading-relaxed"
+            >
+              Registe a sua escola e comece a transformar a gestão académica com a plataforma mais moderna de Angola.
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              viewport={{ once: true }}
+              className="flex gap-3 flex-wrap justify-center"
+            >
               <Link
                 href="/signin"
-                className="group inline-flex items-center gap-2.5 px-8 py-4 rounded-2xl bg-white text-indigo-700 font-bold hover:bg-indigo-50 shadow-xl shadow-black/20 transition-all hover:scale-[1.03] active:scale-[0.98]"
+                className="group inline-flex items-center gap-2.5 px-7 py-3.5 rounded-xl bg-warm-200 text-warm-950 font-bold hover:bg-warm-300 shadow-xl shadow-black/10 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
               >
                 Entrar na plataforma
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />
               </Link>
               <Link
                 href="/registar-escola"
-                className="px-8 py-4 rounded-2xl border-2 border-white/30 text-white hover:bg-white/10 transition-all font-bold hover:scale-[1.03] active:scale-[0.98] backdrop-blur-sm"
+                className="px-7 py-3.5 rounded-xl border-2 border-white/20 text-white hover:bg-white/10 hover:border-white/30 transition-all duration-300 font-bold hover:scale-[1.02] active:scale-[0.98]"
               >
                 Registar escola
               </Link>
-            </div>
+            </motion.div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   )

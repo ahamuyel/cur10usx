@@ -2,13 +2,12 @@
 
 import { Suspense } from "react";
 import { useEffect, useState } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { CheckCircle, XCircle, Loader2, Mail } from "lucide-react";
 import Link from "next/link";
 import { csrfPost } from "@/lib/csrf-client";
 
 function VerifyEmailContent() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
   const justRegistered = searchParams.get("justRegistered");
