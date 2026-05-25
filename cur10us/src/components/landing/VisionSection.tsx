@@ -41,7 +41,7 @@ export default function VisionSection() {
       <div className="max-w-7xl mx-auto">
         <AnimateOnScroll>
           <div className="text-center mb-14">
-            <span className="inline-flex items-center gap-2 text-sm font-medium text-sun-400 bg-sun-500/10 px-4 py-1.5 border border-sun-500/20 mb-5">
+            <span className="inline-flex items-center gap-2 text-sm font-medium text-sun-400 bg-sun-500/10 px-4 py-1.5 border border-sun-500/20 mb-5 rounded-full">
               <Quote className="w-4 h-4" />
               A nossa visão
             </span>
@@ -64,8 +64,8 @@ export default function VisionSection() {
             const Icon = value.icon
             return (
               <AnimateOnScroll key={value.title} delay={80}>
-                <div className="group text-center p-6 bg-white/[0.03] border border-white/10 hover:bg-white/[0.06] hover:border-white/20 transition-all duration-500">
-                  <div className={`w-12 h-12 ${value.bg} border border-white/10 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
+                <div className="group text-center p-6 bg-white/[0.03] border border-white/10 hover:bg-white/[0.06] hover:border-white/20 transition-all duration-500 rounded-xl">
+                  <div className={`w-12 h-12 ${value.bg} border border-white/10 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg rounded-xl`}>
                     <Icon className={`w-5 h-5 ${value.iconColor}`} />
                   </div>
                   <h3 className="text-lg font-bold text-white mb-2">{value.title}</h3>
@@ -82,7 +82,7 @@ export default function VisionSection() {
             whileInView={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
             viewport={{ once: true }}
-            className="relative bg-gradient-to-br from-warm-800/20 via-warm-900/20 to-warm-800/20 border border-white/10 p-10 md:p-12 text-center overflow-hidden"
+            className="relative bg-gradient-to-br from-warm-800/20 via-warm-900/20 to-warm-800/20 border border-white/10 p-10 md:p-12 text-center overflow-hidden rounded-2xl"
           >
             <div className="absolute inset-0">
               <div className="absolute top-[-30%] left-[-10%] w-[300px] h-[300px] rounded-full bg-growth-500/10 blur-[80px]" />
@@ -95,7 +95,7 @@ export default function VisionSection() {
                 africano descubra o seu potencial e transforme o seu futuro.&rdquo;
               </blockquote>
               <div className="mt-7 flex items-center justify-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-growth-500 to-growth-600 flex items-center justify-center shadow-lg">
+                <div className="w-10 h-10 bg-gradient-to-br from-growth-500 to-growth-600 flex items-center justify-center shadow-lg rounded-lg">
                   <span className="text-white font-bold text-xs">CX</span>
                 </div>
                 <div className="text-left">

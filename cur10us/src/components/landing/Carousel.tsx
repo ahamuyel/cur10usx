@@ -13,6 +13,26 @@ type Props = {
   interval?: number
 }
 
+const springEasing = [0.16, 1, 0.3, 1] as const
+
+function animateScroll(el: HTMLElement, from: number, to: number, duration: number) {
+  const start = performance.now()
+  return new Promise<void>((resolve) => {
+    function tick(now: number) {
+      const elapsed = now - start
+      const progress = Math.min(elapsed / duration, 1)
+      const t = 1 - Math.pow(1 - progress, 3)
+      el.scrollLeft = from + (to - from) * t
+      if (progress < 1) {
+        requestAnimationFrame(tick)
+      } else {
+        resolve()
+      }
+    }
+    requestAnimationFrame(tick)
+  })
+}
+
 export default function Carousel({
   children,
   className = "",
@@ -28,6 +48,7 @@ export default function Carousel({
   const [activeIndex, setActiveIndex] = useState(0)
   const autoPlayTimer = useRef<ReturnType<typeof setInterval> | undefined>(undefined)
   const scrollTimeout = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
+  const isAnimating = useRef(false)
 
   const updateScrollState = useCallback(() => {
     const el = scrollRef.current
@@ -42,6 +63,7 @@ export default function Carousel({
     const el = scrollRef.current
     if (!el) return
     const handleScroll = () => {
+      if (isAnimating.current) return
       clearTimeout(scrollTimeout.current)
       scrollTimeout.current = setTimeout(updateScrollState, 50)
     }
@@ -57,39 +79,45 @@ export default function Carousel({
     if (!autoPlay) return
     autoPlayTimer.current = setInterval(() => {
       const el = scrollRef.current
-      if (!el) return
+      if (!el || isAnimating.current) return
       const maxScroll = el.scrollWidth - el.clientWidth
       if (el.scrollLeft >= maxScroll - 16) {
-        el.scrollTo({ left: 0, behavior: "smooth" })
+        animateScrollTo(0)
       } else {
-        el.scrollBy({ left: el.clientWidth * 0.75, behavior: "smooth" })
+        animateScrollTo(el.scrollLeft + el.clientWidth * 0.75)
       }
     }, interval)
     return () => clearInterval(autoPlayTimer.current)
   }, [autoPlay, interval])
 
+  async function animateScrollTo(target: number) {
+    const el = scrollRef.current
+    if (!el || isAnimating.current) return
+    isAnimating.current = true
+    const from = el.scrollLeft
+    await animateScroll(el, from, target, 500)
+    isAnimating.current = false
+    updateScrollState()
+  }
+
   function scrollToPage(dir: number) {
     const el = scrollRef.current
     if (!el) return
-    const target = el.scrollLeft + el.clientWidth * 0.75 * dir
-    el.scrollTo({ left: target, behavior: "smooth" })
+    animateScrollTo(el.scrollLeft + el.clientWidth * 0.75 * dir)
   }
 
   function scrollTo(index: number) {
     const el = scrollRef.current
     if (!el) return
-    el.scrollTo({
-      left: index * el.clientWidth * 0.8,
-      behavior: "smooth",
-    })
+    animateScrollTo(index * el.clientWidth * 0.8)
   }
 
   return (
     <div className={`relative ${className}`}>
       <div
         ref={scrollRef}
-        className="flex gap-5 overflow-x-auto scroll-smooth snap-x snap-proximity pb-4"
-        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+        className="flex gap-5 overflow-x-auto snap-x snap-proximity pb-4"
+        style={{ scrollbarWidth: "none", msOverflowStyle: "none", scrollBehavior: "auto" }}
       >
         {children.map((child, i) => (
           <div key={i} className={`snap-start shrink-0 ${itemWidth}`}>
@@ -127,11 +155,12 @@ export default function Carousel({
             <button
               key={i}
               onClick={() => scrollTo(i)}
-              className={`h-2 rounded-full transition-all duration-300 ${
+              className={`h-2 transition-all duration-300 ${
                 i === activeIndex
                   ? "w-8 bg-brand-500"
                   : "w-2 bg-brand-300 dark:bg-brand-600"
               }`}
+              style={{ borderRadius: "9999px" }}
               aria-label={`Ir para item ${i + 1}`}
             />
           ))}

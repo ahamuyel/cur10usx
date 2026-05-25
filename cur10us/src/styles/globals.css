@@ -165,7 +165,7 @@ body {
 .card-base {
   background-color: var(--school-card-bg);
   border: 1px solid var(--color-brand-200);
-  border-radius: 0;
+  border-radius: var(--school-card-radius);
   transition: background-color 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 

@@ -79,7 +79,7 @@ export default function FeaturesSection() {
       <div className="max-w-7xl mx-auto">
         <StaggerContainer className="text-center mb-14" staggerDelay={0.03}>
           <StaggerItem>
-            <span className="inline-flex items-center gap-2 text-sm font-medium text-growth-600 dark:text-growth-400 bg-growth-50 dark:bg-growth-950/30 px-4 py-1.5 border border-growth-200/50 dark:border-growth-800/30 mb-5">
+            <span className="inline-flex items-center gap-2 text-sm font-medium text-growth-600 dark:text-growth-400 bg-growth-50 dark:bg-growth-950/30 px-4 py-1.5 border border-growth-200/50 dark:border-growth-800/30 mb-5 rounded-full">
               A solução completa
             </span>
           </StaggerItem>
@@ -113,7 +113,7 @@ export default function FeaturesSection() {
                 whileHover={{ y: -4 }}
                 className="card-base p-6 h-full group"
               >
-                <div className={`w-11 h-11 ${item.bg} border border-brand-200 dark:border-brand-700 flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110`}>
+                <div className={`w-11 h-11 ${item.bg} border border-brand-200 dark:border-brand-700 flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110 rounded-lg`}>
                   <Icon className={`w-5 h-5 ${item.iconColor}`} />
                 </div>
                 <h3 className="font-bold text-base text-warm-900 dark:text-warm-100 mb-2">

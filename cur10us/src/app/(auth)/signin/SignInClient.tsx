@@ -24,6 +24,8 @@ const OAUTH_ERROR_MESSAGES: Record<string, string> = {
   default: "Ocorreu um erro ao autenticar. Tente novamente.",
 }
 
+const inputClass = "w-full h-10 px-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-transparent text-sm placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500 transition disabled:opacity-50"
+
 export default function SignInClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -137,7 +139,6 @@ export default function SignInClient() {
 
       const session = await getSession();
 
-      // 2FA verification required before granting access
       if (session?.user?.twoFactorEnabled && !session?.user?.twoFactorVerifiedAt) {
         router.push(`/signin/verify-2fa?email=${encodeURIComponent(email)}`);
         return;
@@ -168,169 +169,137 @@ export default function SignInClient() {
 
   return (
     <div className="w-full max-w-sm mx-auto">
-      <div className="flex flex-col gap-6">
-        <div className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-sm overflow-hidden">
-          <div className="p-8">
-            <div className="mb-8">
-              {schoolBranding?.logo && (
-                <div className="flex justify-center mb-4">
-                  <Image src={schoolBranding.logo} alt="Logo" width={64} height={64} className="w-16 h-16 object-contain rounded-xl" />
-                </div>
-              )}
-              <h1 className="text-2xl font-bold tracking-tight">
-                {schoolBranding?.loginMessage || "Bem-vindo de volta"}
-              </h1>
-              <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">
-                Entre na sua conta para continuar
-              </p>
-            </div>
-
-            <form onSubmit={handleSubmit} className="space-y-5">
-              {reason === "session_expired" && (
-                <div className="p-3 rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 text-sm text-amber-600 dark:text-amber-400">
-                  A sua sessão foi terminada porque iniciou sessão noutro
-                  dispositivo.
-                </div>
-              )}
-
-              {reason === "password_changed" && (
-                <div className="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 text-sm text-emerald-600 dark:text-emerald-400">
-                  Palavra-passe alterada com sucesso. Faça login novamente.
-                </div>
-              )}
-
-              {errorParam && (
-                <div className="p-3 rounded-xl bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 text-sm text-red-600 dark:text-red-400">
-                  {OAUTH_ERROR_MESSAGES[errorParam] || OAUTH_ERROR_MESSAGES.default}
-                </div>
-              )}
-
-              {errors.general && (
-                <div className="p-3 rounded-xl bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 text-sm text-red-600 dark:text-red-400">
-                  {errors.general}
-                </div>
-              )}
-
-              {/* EMAIL */}
-              <div className="space-y-2">
-                <label className="text-sm font-medium">E-mail</label>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  disabled={loading}
-                  className="w-full h-10 px-3 rounded-xl border"
-                />
-                {errors.email && (
-                  <p className="text-xs text-red-500">{errors.email}</p>
-                )}
+      <div className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-sm overflow-hidden">
+        <div className="p-8">
+          <div className="mb-8">
+            {schoolBranding?.logo && (
+              <div className="flex justify-center mb-4">
+                <Image src={schoolBranding.logo} alt="Logo" width={64} height={64} className="w-16 h-16 object-contain rounded-xl" />
               </div>
+            )}
+            <h1 className="text-2xl font-bold tracking-tight text-center">
+              {schoolBranding?.loginMessage || "Bem-vindo de volta"}
+            </h1>
+            <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1 text-center">
+              Entre na sua conta para continuar
+            </p>
+          </div>
 
-              {/* PASSWORD */}
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Senha</label>
-
-                <div className="relative">
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    disabled={loading}
-                    className="w-full h-10 px-3 pr-10 rounded-xl border"
-                  />
-
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2"
-                  >
-                    {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-                  </button>
-                </div>
-
-                {errors.password && (
-                  <p className="text-xs text-red-500">{errors.password}</p>
-                )}
+          <form onSubmit={handleSubmit} className="space-y-5">
+            {reason === "session_expired" && (
+              <div className="p-3 rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 text-sm text-amber-600 dark:text-amber-400">
+                A sua sessão foi terminada porque iniciou sessão noutro dispositivo.
               </div>
+            )}
 
-              {/* SUBMIT */}
-              <button
+            {reason === "password_changed" && (
+              <div className="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 text-sm text-emerald-600 dark:text-emerald-400">
+                Palavra-passe alterada com sucesso. Faça login novamente.
+              </div>
+            )}
+
+            {errorParam && (
+              <div className="p-3 rounded-xl bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 text-sm text-red-600 dark:text-red-400">
+                {OAUTH_ERROR_MESSAGES[errorParam] || OAUTH_ERROR_MESSAGES.default}
+              </div>
+            )}
+
+            {errors.general && (
+              <div className="p-3 rounded-xl bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 text-sm text-red-600 dark:text-red-400">
+                {errors.general}
+              </div>
+            )}
+
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">E-mail</label>
+              <input
+                type="email"
+                placeholder="seu@email.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 disabled={loading}
-                className="w-full h-10 rounded-xl bg-black text-white flex items-center justify-center gap-2"
-              >
-                {loading ? (
-                  <>
-                    <Loader2 className="animate-spin w-4 h-4" />
-                    Entrando...
-                  </>
-                ) : (
-                  "Entrar"
-                )}
-              </button>
-            </form>
-
-            {/* Forgot password */}
-            <div className="text-right -mt-3">
-              <Link
-                href="/forgot-password"
-                className="text-xs text-primary hover:underline"
-              >
-                Esqueceu-se da senha?
-              </Link>
+                className={`${inputClass} ${errors.email ? "border-red-500" : ""}`}
+                autoFocus
+              />
+              {errors.email && <p className="text-xs text-red-500">{errors.email}</p>}
             </div>
 
-            {/* Divider */}
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-zinc-200 dark:border-zinc-800" />
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">Senha</label>
+                <Link href="/forgot-password" className="text-xs text-indigo-600 dark:text-indigo-400 hover:underline">
+                  Esqueceu-se?
+                </Link>
               </div>
-              <div className="relative flex justify-center text-xs">
-                <span className="bg-white dark:bg-zinc-900 px-3 text-zinc-400">
-                  ou
-                </span>
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="A sua senha"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  disabled={loading}
+                  className={`${inputClass} pr-10 ${errors.password ? "border-red-500" : ""}`}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition"
+                  tabIndex={-1}
+                >
+                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
               </div>
+              {errors.password && <p className="text-xs text-red-500">{errors.password}</p>}
             </div>
 
-            {/* Google login */}
             <button
-              type="button"
-              onClick={() => {
-                const callbackUrl = searchParams.get("callbackUrl");
-                nextAuthSignIn("google", {
-                  callbackUrl: callbackUrl || "/minha-area",
-                });
-              }}
+              type="submit"
               disabled={loading}
-              className="w-full h-10 flex items-center justify-center gap-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-sm font-medium text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-700 transition disabled:opacity-50"
+              className="w-full h-10 flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-sm font-medium hover:from-indigo-700 hover:to-violet-700 shadow-lg shadow-indigo-600/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <svg className="w-4 h-4" viewBox="0 0 24 24">
-                <path
-                  d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"
-                  fill="#4285F4"
-                />
-                <path
-                  d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                  fill="#34A853"
-                />
-                <path
-                  d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-                  fill="#FBBC05"
-                />
-                <path
-                  d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                  fill="#EA4335"
-                />
-              </svg>
-              Continuar com Google
+              {loading ? (
+                <><Loader2 className="w-4 h-4 animate-spin" /> Entrando...</>
+              ) : (
+                "Entrar"
+              )}
             </button>
+          </form>
 
-            <div className="mt-6 text-center text-sm">
-              Não tem conta?{" "}
-              <Link               href="/signup" className="text-primary">
-                Criar conta
-              </Link>
+          <div className="relative my-6">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-zinc-200 dark:border-zinc-800" />
+            </div>
+            <div className="relative flex justify-center text-xs">
+              <span className="bg-white dark:bg-zinc-900 px-3 text-zinc-400">ou</span>
             </div>
           </div>
+
+          <button
+            type="button"
+            onClick={() => {
+              const callbackUrl = searchParams.get("callbackUrl");
+              nextAuthSignIn("google", {
+                callbackUrl: callbackUrl || "/minha-area",
+              });
+            }}
+            disabled={loading}
+            className="w-full h-10 flex items-center justify-center gap-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-sm font-medium text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-700 transition disabled:opacity-50"
+          >
+            <svg className="w-4 h-4" viewBox="0 0 24 24">
+              <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4" />
+              <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
+              <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" />
+              <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
+            </svg>
+            Continuar com Google
+          </button>
+
+          <p className="mt-6 text-center text-sm text-zinc-500 dark:text-zinc-400">
+            Não tem conta?{" "}
+            <Link href="/signup" className="text-indigo-600 dark:text-indigo-400 font-medium hover:underline">
+              Criar conta
+            </Link>
+          </p>
         </div>
       </div>
     </div>

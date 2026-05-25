@@ -64,7 +64,7 @@ export default function SignUpPage() {
           <p className="text-sm text-zinc-500 dark:text-zinc-400 mb-6 leading-relaxed">
             Enviámos um e-mail de verificação. Clique no link para activar a sua conta antes de fazer login.
           </p>
-          <Link href="/signin" className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium transition">
+          <Link href="/signin" className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-sm font-medium hover:from-indigo-700 hover:to-violet-700 shadow-lg shadow-indigo-600/20 transition-all">
             Ir para o login
           </Link>
           <p className="text-xs text-zinc-400 dark:text-zinc-500 mt-4">

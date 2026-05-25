@@ -131,7 +131,7 @@ export default function PricingSection() {
             return (
               <AnimateOnScroll key={plan.name} delay={i * 100}>
                 <div
-                  className={`relative rounded-3xl p-[1px] transition-all duration-300 ${
+                   className={`relative rounded-2xl p-[1px] transition-all duration-300 ${
                     plan.popular
                       ? "bg-gradient-to-b from-indigo-500 to-violet-600 shadow-xl shadow-indigo-600/20"
                       : ""
@@ -143,14 +143,14 @@ export default function PricingSection() {
                     </div>
                   )}
                   <div
-                    className={`rounded-3xl p-8 h-full flex flex-col ${
+                    className={`rounded-2xl p-8 h-full flex flex-col ${
                       plan.popular
                         ? "bg-white dark:bg-zinc-900"
                         : "bg-white/60 dark:bg-zinc-900/60 backdrop-blur-sm border border-zinc-200/60 dark:border-zinc-800/60"
                     }`}
                   >
                     <div className="mb-6">
-                      <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${plan.gradient} flex items-center justify-center mb-4 shadow-lg`}>
+                      <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${plan.gradient} flex items-center justify-center mb-4 shadow-lg`}>
                         <Icon className="w-5 h-5 text-white" />
                       </div>
                       <h3 className="text-xl font-bold mb-1">{plan.name}</h3>
@@ -198,7 +198,7 @@ export default function PricingSection() {
 
                     <Link
                       href={plan.ctaHref}
-                      className={`group flex items-center justify-center gap-2 w-full py-3.5 rounded-2xl text-sm font-semibold transition-all hover:scale-[1.02] active:scale-[0.98] ${
+                      className={`group flex items-center justify-center gap-2 w-full py-3.5 rounded-xl text-sm font-semibold transition-all hover:scale-[1.02] active:scale-[0.98] ${
                         plan.popular
                           ? "bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-lg shadow-indigo-600/20 hover:shadow-indigo-600/30"
                           : "bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 hover:bg-zinc-200 dark:hover:bg-zinc-700"

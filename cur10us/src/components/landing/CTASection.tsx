@@ -19,7 +19,7 @@ export default function CTASection() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
           viewport={{ once: true }}
-          className="relative bg-gradient-to-br from-warm-900 to-warm-950 p-10 sm:p-14 text-center overflow-hidden border border-white/10"
+          className="relative bg-gradient-to-br from-warm-900 to-warm-950 p-10 sm:p-14 text-center overflow-hidden border border-white/10 rounded-2xl"
         >
           <div className="absolute inset-0">
             <div className="absolute top-[-50%] left-[-20%] w-[400px] h-[400px] rounded-full bg-growth-500/10 blur-3xl" />
@@ -32,7 +32,7 @@ export default function CTASection() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
               viewport={{ once: true }}
-              className="inline-flex items-center gap-2 text-sm font-medium text-sun-400 bg-sun-500/10 px-4 py-1.5 mb-6 border border-sun-500/20"
+              className="inline-flex items-center gap-2 text-sm font-medium text-sun-400 bg-sun-500/10 px-4 py-1.5 mb-6 border border-sun-500/20 rounded-full"
             >
               <Sparkles className="w-4 h-4" />
               Comece hoje mesmo
@@ -69,14 +69,15 @@ export default function CTASection() {
             >
               <Link
                 href="/signin"
-                className="group inline-flex items-center gap-2.5 px-7 py-3.5 bg-growth-600 text-white font-bold hover:bg-growth-700 shadow-xl shadow-growth-600/20 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
-              >
-                Entrar na plataforma
+              className="group inline-flex items-center gap-2.5 px-7 py-3.5 bg-growth-600 text-white font-bold hover:bg-growth-700 shadow-xl shadow-growth-600/20 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] rounded-xl relative overflow-hidden"
+            >
+              <span className="absolute inset-0 bg-[linear-gradient(110deg,transparent_30%,rgba(255,255,255,0.15)_50%,transparent_70%)] translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+              Entrar na plataforma
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />
               </Link>
               <Link
                 href="/registar-escola"
-                className="px-7 py-3.5 border-2 border-white/20 text-white hover:bg-white/10 hover:border-white/30 transition-all duration-300 font-bold hover:scale-[1.02] active:scale-[0.98]"
+                className="px-7 py-3.5 border-2 border-white/20 text-white hover:bg-white/10 hover:border-white/30 transition-all duration-300 font-bold hover:scale-[1.02] active:scale-[0.98] rounded-xl"
               >
                 Registar escola
               </Link>

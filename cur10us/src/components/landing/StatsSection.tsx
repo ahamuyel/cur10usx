@@ -87,7 +87,7 @@ export default function StatsSection(props: Props) {
             return (
               <AnimateOnScroll key={stat.key}>
                 <div className="card-base flex flex-col items-center py-8 px-4">
-                  <div className={`w-10 h-10 ${stat.bg} border border-brand-200 dark:border-brand-700 flex items-center justify-center mb-3`}>
+                  <div className={`w-10 h-10 ${stat.bg} border border-brand-200 dark:border-brand-700 flex items-center justify-center mb-3 rounded-lg`}>
                     <Icon className={`w-4 h-4 ${stat.iconColor}`} />
                   </div>
                   <span className="text-3xl sm:text-4xl font-bold text-warm-900 dark:text-warm-100 tabular-nums">

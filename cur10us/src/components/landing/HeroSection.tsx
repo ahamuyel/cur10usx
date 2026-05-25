@@ -48,7 +48,7 @@ export default function HeroSection({ branding, schools }: Props) {
         >
           <motion.span
             variants={item}
-            className="inline-flex items-center gap-2 text-sm font-medium text-sun-400 bg-sun-500/10 px-4 py-1.5 border border-sun-500/20"
+            className="inline-flex items-center gap-2 text-sm font-medium text-sun-400 bg-sun-500/10 px-4 py-1.5 border border-sun-500/20 rounded-full"
           >
             <Sparkles className="w-3.5 h-3.5" />
             Plataforma de gestão escolar
@@ -78,14 +78,15 @@ export default function HeroSection({ branding, schools }: Props) {
           <motion.div variants={item} className="flex gap-3 flex-wrap justify-center pt-2">
             <Link
               href="/signin"
-              className="group inline-flex items-center gap-2.5 px-7 py-3.5 bg-growth-600 text-white font-bold hover:bg-growth-700 shadow-xl shadow-growth-600/20 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+              className="group inline-flex items-center gap-2.5 px-7 py-3.5 bg-growth-600 text-white font-bold hover:bg-growth-700 shadow-xl shadow-growth-600/20 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] rounded-xl relative overflow-hidden"
             >
+              <span className="absolute inset-0 bg-[linear-gradient(110deg,transparent_30%,rgba(255,255,255,0.15)_50%,transparent_70%)] translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
               Começar agora
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />
             </Link>
             <Link
               href="/registar-escola"
-              className="px-7 py-3.5 border border-sun-500/40 text-sun-300 hover:bg-sun-500/10 hover:border-sun-400 transition-all duration-300 font-semibold hover:scale-[1.02] active:scale-[0.98]"
+              className="px-7 py-3.5 border border-sun-500/40 text-sun-300 hover:bg-sun-500/10 hover:border-sun-400 transition-all duration-300 font-semibold hover:scale-[1.02] active:scale-[0.98] rounded-xl"
             >
               Registar escola
             </Link>
@@ -100,7 +101,7 @@ export default function HeroSection({ branding, schools }: Props) {
                   return (
                     <div
                       key={i}
-                      className={`w-8 h-8 ${colors[i]} border-2 border-warm-950 flex items-center justify-center`}
+                      className={`w-8 h-8 ${colors[i]} border-2 border-warm-950 flex items-center justify-center rounded-full`}
                     >
                       <span className="text-[10px] font-bold text-white">{initials}</span>
                     </div>
@@ -128,7 +129,7 @@ export default function HeroSection({ branding, schools }: Props) {
           className="flex flex-col items-center gap-1.5 text-warm-500"
         >
           <span className="text-[10px] font-medium tracking-[0.2em] uppercase">Scroll</span>
-          <div className="w-4 h-7 border border-warm-600 flex justify-center p-1">
+          <div className="w-4 h-7 border border-warm-600 flex justify-center p-1 rounded-full">
             <motion.div
               animate={{ y: [0, 6, 0] }}
               transition={{ duration: 1.5, repeat: Infinity }}
