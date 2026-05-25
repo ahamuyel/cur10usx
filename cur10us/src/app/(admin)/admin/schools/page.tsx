@@ -52,12 +52,16 @@ export default function SchoolsPage() {
       if (provinciaFilter) params.set("provincia", provinciaFilter)
 
       const res = await fetch(`/api/admin/schools?${params}`)
+      if (!res.ok) {
+        const err = await res.json()
+        throw new Error(err.error || `Erro ${res.status}`)
+      }
       const data = await res.json()
-      setSchools(data.data)
-      setTotal(data.total)
-      setTotalPages(data.totalPages)
-    } catch {
-      console.error("Erro ao carregar escolas")
+      setSchools(data.data ?? [])
+      setTotal(data.total ?? 0)
+      setTotalPages(data.totalPages ?? 1)
+    } catch (err) {
+      console.error("Erro ao carregar escolas:", err)
     } finally {
       setLoading(false)
     }

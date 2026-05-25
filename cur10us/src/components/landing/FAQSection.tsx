@@ -70,7 +70,7 @@ export default function FAQSection() {
             return (
               <div
                 key={i}
-                className={`rounded-2xl border transition-all duration-300 overflow-hidden ${
+                className={`rounded-xl border transition-all duration-300 overflow-hidden ${
                   isOpen
                     ? "border-indigo-200 dark:border-indigo-800/50 bg-white dark:bg-zinc-900 shadow-lg shadow-indigo-100/50 dark:shadow-black/20"
                     : "border-zinc-200/60 dark:border-zinc-800/60 bg-white/60 dark:bg-zinc-900/60 backdrop-blur-sm hover:border-zinc-300 dark:hover:border-zinc-700"

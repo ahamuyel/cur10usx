@@ -48,9 +48,9 @@ export default function StudentExperienceSection() {
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           <AnimateOnScroll direction="left" className="order-2 lg:order-1">
             <div className="relative">
-              <div className="bg-warm-100/50 dark:bg-warm-900/30 border border-warm-200/50 dark:border-warm-800/50 p-5">
+              <div className="bg-warm-100/50 dark:bg-warm-900/30 border border-warm-200/50 dark:border-warm-800/50 p-5 rounded-xl">
                 <div className="flex items-center gap-2.5 mb-5">
-                  <div className="w-9 h-9 bg-gradient-to-br from-growth-500 to-growth-600 flex items-center justify-center">
+                  <div className="w-9 h-9 bg-gradient-to-br from-growth-500 to-growth-600 flex items-center justify-center rounded-lg">
                     <Trophy className="w-4 h-4 text-white" />
                   </div>
                   <div>
@@ -68,7 +68,7 @@ export default function StudentExperienceSection() {
                   ].map((subject) => (
                     <div
                       key={subject.name}
-                      className="flex items-center justify-between p-2.5 bg-white/50 dark:bg-warm-900/50 border border-warm-200 dark:border-warm-800/50"
+                      className="flex items-center justify-between p-2.5 bg-white/50 dark:bg-warm-900/50 border border-warm-200 dark:border-warm-800/50 rounded-lg"
                     >
                       <span className="text-sm text-warm-700 dark:text-warm-300">{subject.name}</span>
                       <div className="flex items-center gap-1.5">
@@ -79,7 +79,7 @@ export default function StudentExperienceSection() {
                   ))}
                 </div>
 
-                <div className="flex items-center justify-between p-3.5 bg-gradient-to-r from-growth-50 to-sun-50 dark:from-growth-950/30 dark:to-sun-950/30 border border-growth-200/50 dark:border-growth-800/30">
+                <div className="flex items-center justify-between p-3.5 bg-gradient-to-r from-growth-50 to-sun-50 dark:from-growth-950/30 dark:to-sun-950/30 border border-growth-200/50 dark:border-growth-800/30 rounded-lg">
                   <div>
                     <div className="text-[11px] text-warm-500 dark:text-warm-400">Média Geral</div>
                     <div className="text-xl font-bold text-growth-700 dark:text-growth-300">15.7</div>
@@ -95,7 +95,7 @@ export default function StudentExperienceSection() {
 
           <AnimateOnScroll direction="right" className="order-1 lg:order-2">
             <div className="flex flex-col gap-5">
-              <span className="inline-flex items-center gap-2 text-sm font-medium text-growth-600 dark:text-growth-400 bg-growth-50 dark:bg-growth-950/30 px-4 py-1.5 border border-growth-200/50 dark:border-growth-800/30 w-fit">
+              <span className="inline-flex items-center gap-2 text-sm font-medium text-growth-600 dark:text-growth-400 bg-growth-50 dark:bg-growth-950/30 px-4 py-1.5 border border-growth-200/50 dark:border-growth-800/30 w-fit rounded-full">
                 Experiência do estudante
               </span>
 
@@ -117,7 +117,7 @@ export default function StudentExperienceSection() {
                   const Icon = item.icon
                   return (
                     <div key={item.title} className="card-base p-4">
-                      <div className={`w-9 h-9 ${item.bg} border border-brand-200 dark:border-brand-700 flex items-center justify-center mb-2.5`}>
+                      <div className={`w-9 h-9 ${item.bg} border border-brand-200 dark:border-brand-700 flex items-center justify-center mb-2.5 rounded-lg`}>
                         <Icon className={`w-4.5 h-4.5 ${item.iconColor}`} />
                       </div>
                       <h3 className="font-semibold text-sm text-warm-900 dark:text-warm-100 mb-1">

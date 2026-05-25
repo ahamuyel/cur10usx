@@ -45,7 +45,7 @@ export default function ProblemSection() {
       <div className="max-w-7xl mx-auto">
         <AnimateOnScroll>
           <div className="text-center mb-14">
-            <span className="inline-flex items-center gap-2 text-sm font-medium text-sun-600 dark:text-sun-400 bg-sun-50 dark:bg-sun-950/30 px-4 py-1.5 border border-sun-200/50 dark:border-sun-800/30 mb-5">
+            <span className="inline-flex items-center gap-2 text-sm font-medium text-sun-600 dark:text-sun-400 bg-sun-50 dark:bg-sun-950/30 px-4 py-1.5 border border-sun-200/50 dark:border-sun-800/30 mb-5 rounded-full">
               Os desafios
             </span>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-warm-900 dark:text-warm-100">
@@ -71,9 +71,9 @@ export default function ProblemSection() {
                   whileHover={{ x: 4 }}
                   className="card-base p-6 h-full relative group"
                 >
-                  <div className="absolute left-0 top-0 bottom-0 w-1 rounded-l-sm bg-gradient-to-b from-sun-400 to-growth-400 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-sun-400 to-growth-400 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                   <div className="flex gap-4">
-                    <div className={`w-11 h-11 ${problem.bg} border border-brand-200 dark:border-brand-700 flex items-center justify-center shrink-0`}>
+                    <div className={`w-11 h-11 ${problem.bg} border border-brand-200 dark:border-brand-700 flex items-center justify-center shrink-0 rounded-lg`}>
                       <Icon className={`w-5 h-5 ${problem.iconColor}`} />
                     </div>
                     <div className="flex-1 min-w-0">

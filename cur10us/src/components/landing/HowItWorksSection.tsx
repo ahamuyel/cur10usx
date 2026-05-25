@@ -67,7 +67,7 @@ export default function HowItWorksSection() {
                 <div className="relative text-center group">
                   {/* Step number + icon */}
                   <div className="relative inline-flex mb-6">
-                    <div className={`w-[72px] h-[72px] rounded-3xl bg-gradient-to-br ${item.color} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300 relative z-10`}>
+                    <div className={`w-[72px] h-[72px] rounded-2xl bg-gradient-to-br ${item.color} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300 relative z-10`}>
                       <Icon className="w-7 h-7 text-white" />
                     </div>
                     <span className="absolute -top-2 -right-2 w-7 h-7 rounded-full bg-white dark:bg-zinc-950 border-2 border-zinc-200 dark:border-zinc-700 flex items-center justify-center text-xs font-bold text-zinc-700 dark:text-zinc-300 z-20 shadow-sm">

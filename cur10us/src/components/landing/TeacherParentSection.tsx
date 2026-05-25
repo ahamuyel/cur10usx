@@ -40,7 +40,7 @@ export default function TeacherParentSection() {
       <div className="max-w-7xl mx-auto">
         <AnimateOnScroll>
           <div className="text-center mb-14">
-            <span className="inline-flex items-center gap-2 text-sm font-medium text-sun-600 dark:text-sun-400 bg-sun-50 dark:bg-sun-950/30 px-4 py-1.5 border border-sun-200/50 dark:border-sun-800/30 mb-5">
+            <span className="inline-flex items-center gap-2 text-sm font-medium text-sun-600 dark:text-sun-400 bg-sun-50 dark:bg-sun-950/30 px-4 py-1.5 border border-sun-200/50 dark:border-sun-800/30 mb-5 rounded-full">
               <BarChart3 className="w-4 h-4" />
               Professores e famílias
             </span>
@@ -61,7 +61,7 @@ export default function TeacherParentSection() {
             <AnimateOnScroll key={section.title} delay={150}>
               <div className="card-base p-6 h-full relative group">
                 <div className="flex items-center gap-3 mb-5">
-                  <div className={`w-10 h-10 ${section.bg} border border-brand-200 dark:border-brand-700 flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-110`}>
+                  <div className={`w-10 h-10 ${section.bg} border border-brand-200 dark:border-brand-700 flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-110 rounded-lg`}>
                     {section.title === "Painel do professor" ? (
                       <BarChart3 className={`w-5 h-5 ${section.iconColor}`} />
                     ) : (
