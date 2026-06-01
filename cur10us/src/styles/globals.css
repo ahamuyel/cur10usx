@@ -2,6 +2,7 @@
 
 @theme inline {
   --font-sans: var(--font-geist-sans);
+  --font-display: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 
   --color-background: var(--color-background);
@@ -10,11 +11,31 @@
   --color-primary: var(--school-primary);
   --color-primary-dark: var(--school-primary-dark);
   --color-primary-light: var(--school-primary-light);
+  --color-primary-50: var(--school-primary-50);
+  --color-primary-100: var(--school-primary-100);
+  --color-primary-200: var(--school-primary-200);
+  --color-primary-300: var(--school-primary-300);
+  --color-primary-400: var(--school-primary-400);
+  --color-primary-500: var(--school-primary-500);
+  --color-primary-600: var(--school-primary-600);
+  --color-primary-700: var(--school-primary-700);
+  --color-primary-800: var(--school-primary-800);
+  --color-primary-900: var(--school-primary-900);
+  --color-primary-950: var(--school-primary-950);
   --color-accent: var(--school-secondary, var(--school-primary));
   --color-accent-light: var(--school-secondary-light);
   --color-cyan: #06B6D4;
   --color-amber: #F59E0B;
   --color-emerald: #10B981;
+  --color-cream: var(--color-cream);
+  --color-cream-dark: var(--color-cream-dark);
+  --color-charcoal: var(--color-charcoal);
+  --color-amber-brand: var(--color-amber-brand);
+  --color-amber-brand-light: var(--color-amber-brand-light);
+  --color-emerald-brand: var(--color-emerald-brand);
+  --color-emerald-brand-light: var(--color-emerald-brand-light);
+  --color-warm-muted: var(--color-warm-muted);
+  --color-warm-gray: var(--color-warm-gray);
   --color-rose: #f43f5e;
 
   --animate-in: animate-in 0.2s ease-out;
@@ -89,6 +110,13 @@
     from { opacity: 1; transform: scale(1); }
     to { opacity: 0; transform: scale(0.95); }
   };
+
+  /* Landing page brand aliases */
+  --color-bg-brand: var(--color-cream);
+  --color-fg-brand: var(--color-charcoal);
+  --color-primary-brand: var(--color-amber-brand);
+  --color-secondary-brand: var(--color-emerald-brand);
+  --color-muted-brand: var(--color-warm-muted);
 }
 
 @custom-variant dark (&:where(.dark, .dark *));
@@ -101,8 +129,30 @@
   --school-primary: #6366f1;
   --school-primary-light: #eef2ff;
   --school-primary-dark: #312e81;
+  --school-primary-50: #eef2ff;
+  --school-primary-100: #e0e7ff;
+  --school-primary-200: #c7d2fe;
+  --school-primary-300: #a5b4fc;
+  --school-primary-400: #818cf8;
+  --school-primary-500: #6366f1;
+  --school-primary-600: #4f46e5;
+  --school-primary-700: #4338ca;
+  --school-primary-800: #3730a3;
+  --school-primary-900: #312e81;
+  --school-primary-950: #1e1b4b;
   --school-secondary: #06B6D4;
   --school-secondary-light: hsl(186, 94%, 95%);
+
+  /* Cur10usX Brand Colors */
+  --color-cream: #FAF8F5;
+  --color-cream-dark: #E8E2D8;
+  --color-charcoal: #111111;
+  --color-amber-brand: #D97706;
+  --color-amber-brand-light: #FEF3C7;
+  --color-emerald-brand: #14532D;
+  --color-emerald-brand-light: #D1FAE5;
+  --color-warm-muted: #EAE6DF;
+  --color-warm-gray: #787774;
 
   /* Typography */
   --school-font-family: 'Inter', sans-serif;
@@ -147,6 +197,16 @@
   --color-foreground: #fafafa;
   --school-card-bg: #09090b;
   --school-card-border: 1px solid #27272a;
+  --school-primary-light: #1e1b4b;
+  --school-primary-50: #1e1b4b;
+  --school-primary-100: #1e1b4b;
+  --school-primary-200: #312e81;
+  --school-primary-950: #eef2ff;
+  --color-cream: #1C1C1A;
+  --color-cream-dark: #2A2A28;
+  --color-charcoal: #F5F5F0;
+  --color-warm-muted: #2A2A28;
+  --color-warm-gray: #A0A09C;
 }
 
 html, body {

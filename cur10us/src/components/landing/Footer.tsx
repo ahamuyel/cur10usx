@@ -1,110 +1,102 @@
-import Link from "next/link"
-import { PlatformBranding } from "@/types/landing";
+"use client"
 
-export default function Footer({ branding }: { branding: PlatformBranding }) {
+import { Instagram, Linkedin, Youtube, Twitter } from "lucide-react";
+
+export default function Footer() {
+  const currentYear = new Date().getFullYear();
+
+  const columns = [
+    {
+      title: "Plataforma",
+      links: [
+        { label: "Funcionalidades", href: "#funcionalidades" },
+        { label: "Para Escolas", href: "#para-escolas" },
+        { label: "Para Estudantes", href: "#inicio" },
+        { label: "Preços", href: "#precos" },
+      ]
+    },
+    {
+      title: "Recursos",
+      links: [
+        { label: "Blog", href: "#blog" },
+        { label: "Central de Ajuda", href: "#ajuda" },
+        { label: "Privacidade", href: "#privacidade" },
+        { label: "Termos de Uso", href: "#termos" },
+      ]
+    }
+  ];
+
   return (
-    <footer className="border-t border-zinc-200/60 dark:border-zinc-800/60 bg-white/50 dark:bg-zinc-950/50 backdrop-blur-sm">
-      <div className="max-w-6xl mx-auto px-6 py-16">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
-          {/* Brand */}
-          <div className="lg:col-span-1">
-            <span className="text-xl font-bold tracking-tight">
-              {branding.name === "Cur10usX" ? (
-                <>
-                  Cur10us
-                  <span className="bg-gradient-to-r from-indigo-600 to-violet-600 dark:from-indigo-400 dark:to-violet-400 bg-clip-text text-transparent">
-                    X
-                  </span>
-                </>
-              ) : (
-                branding.name
-              )}
-            </span>
-            <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-3 leading-relaxed max-w-xs">
-              {branding.description || "Plataforma de gestão escolar moderna, pensada para o contexto angolano."}
+    <footer className="bg-bg-brand border-t border-muted-brand/40 py-16 lg:py-20" id="blog">
+      <div className="mx-auto max-w-7xl px-6">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-8">
+
+          <div className="md:col-span-4 flex flex-col items-start gap-4" id="footer-brand">
+            <div className="flex flex-col items-start gap-0.5">
+              <div className="flex items-center font-display text-2xl font-black tracking-tight text-secondary-brand">
+                <span>Cur</span>
+                <span className="text-primary-brand">10us</span>
+                <span>X</span>
+              </div>
+              <span className="font-sans text-[11px] font-semibold text-secondary-brand/70 uppercase">
+                Do aprendizado ao futuro.
+              </span>
+            </div>
+            <p className="font-sans text-xs text-fg-brand/60 leading-relaxed max-w-xs">
+              A principal plataforma inteligente de crescimento estudantil em África. Conectando educação, desenvolvimento pessoal e empregabilidade real.
             </p>
           </div>
 
-          {/* Plataforma */}
-          <div>
-            <h4 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 mb-4 uppercase tracking-wider text-[13px]">
-              Plataforma
-            </h4>
-            <ul className="space-y-3 text-sm text-zinc-500 dark:text-zinc-400">
-              <li>
-                <a href="#funcionalidades" className="hover:text-zinc-900 dark:hover:text-zinc-100 transition">
-                  Funcionalidades
-                </a>
-              </li>
-              <li>
-                <a href="#para-quem" className="hover:text-zinc-900 dark:hover:text-zinc-100 transition">
-                  Para quem
-                </a>
-              </li>
-              <li>
-                <a href="#faq" className="hover:text-zinc-900 dark:hover:text-zinc-100 transition">
-                  Perguntas frequentes
-                </a>
-              </li>
-            </ul>
+          {columns.map((column, idx) => (
+            <div key={idx} className="md:col-span-3">
+              <h3 className="font-display text-xs font-black tracking-wider text-fg-brand/45 uppercase mb-6">
+                {column.title}
+              </h3>
+              <ul className="space-y-4">
+                {column.links.map((link, lIdx) => (
+                  <li key={lIdx}>
+                    <a
+                      href={link.href}
+                      className="font-sans text-sm font-medium text-fg-brand/70 hover:text-primary-brand transition-colors duration-200"
+                    >
+                      {link.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+
+          <div className="md:col-span-2">
+            <h3 className="font-display text-xs font-black tracking-wider text-fg-brand/45 uppercase mb-6">
+              Siga-nos
+            </h3>
+            <div className="flex items-center gap-4 text-fg-brand/70">
+              <a href="#instagram" className="h-[38px] w-[38px] rounded-full border border-muted-brand/60 bg-white/70 hover:bg-white hover:text-primary-brand hover:border-primary-brand/40 flex items-center justify-center transition-all cursor-pointer" aria-label="Instagram">
+                <Instagram className="h-4.5 w-4.5" />
+              </a>
+              <a href="#linkedin" className="h-[38px] w-[38px] rounded-full border border-muted-brand/60 bg-white/70 hover:bg-white hover:text-primary-brand hover:border-primary-brand/40 flex items-center justify-center transition-all cursor-pointer" aria-label="LinkedIn">
+                <Linkedin className="h-4.5 w-4.5" />
+              </a>
+              <a href="#youtube" className="h-[38px] w-[38px] rounded-full border border-muted-brand/60 bg-white/70 hover:bg-white hover:text-primary-brand hover:border-primary-brand/40 flex items-center justify-center transition-all cursor-pointer" aria-label="YouTube">
+                <Youtube className="h-4.5 w-4.5" />
+              </a>
+              <a href="#twitter" className="h-[38px] w-[38px] rounded-full border border-muted-brand/60 bg-white/70 hover:bg-white hover:text-primary-brand hover:border-primary-brand/40 flex items-center justify-center transition-all cursor-pointer" aria-label="Twitter">
+                <Twitter className="h-4.5 w-4.5" />
+              </a>
+            </div>
           </div>
 
-          {/* Acesso */}
-          <div>
-            <h4 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 mb-4 uppercase tracking-wider text-[13px]">
-              Acesso
-            </h4>
-            <ul className="space-y-3 text-sm text-zinc-500 dark:text-zinc-400">
-              <li>
-                <Link href="/signin" className="hover:text-zinc-900 dark:hover:text-zinc-100 transition">
-                  Entrar
-                </Link>
-              </li>
-              <li>
-                <Link href="/registar-escola" className="hover:text-zinc-900 dark:hover:text-zinc-100 transition">
-                  Registar escola
-                </Link>
-              </li>
-              <li>
-                <Link href="/aplicacao" className="hover:text-zinc-900 dark:hover:text-zinc-100 transition">
-                  Solicitar matrícula
-                </Link>
-              </li>
-              <li>
-                <Link href="/aplicacao/status" className="hover:text-zinc-900 dark:hover:text-zinc-100 transition">
-                  Acompanhar candidatura
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Contacto */}
-          <div>
-            <h4 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 mb-4 uppercase tracking-wider text-[13px]">
-              Contacto
-            </h4>
-            <ul className="space-y-3 text-sm text-zinc-500 dark:text-zinc-400">
-              <li>{branding.contactEmail || "suporte@cur10usx.com"}</li>
-              {branding.contactPhone && <li>{branding.contactPhone}</li>}
-              <li>Luanda, Angola</li>
-            </ul>
-          </div>
         </div>
 
-        <div className="border-t border-zinc-200/60 dark:border-zinc-800/60 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-zinc-400 dark:text-zinc-500">
-            &copy; {new Date().getFullYear()} {branding.name}. Todos os direitos reservados.
+        <div className="mt-16 pt-8 border-t border-muted-brand/35 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-fg-brand/50">
+          <p>&copy; {currentYear} Cur10usX. Todos os direitos reservados.</p>
+          <p className="flex items-center gap-1">
+            Feito com propósito em Luanda, Angola &#x1F1E6;&#x1F1F4;
           </p>
-          <div className="flex items-center gap-6 text-sm text-zinc-400 dark:text-zinc-500">
-            <Link href="/termos" className="hover:text-zinc-900 dark:hover:text-zinc-100 transition">
-              Termos de uso
-            </Link>
-            <Link href="/privacidade" className="hover:text-zinc-900 dark:hover:text-zinc-100 transition">
-              Privacidade
-            </Link>
-          </div>
         </div>
+
       </div>
     </footer>
-  )
+  );
 }
