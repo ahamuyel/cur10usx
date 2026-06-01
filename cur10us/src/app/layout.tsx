@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Caveat } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
 import "@/styles/globals.css";
 import { ThemeProvider } from "@/provider/theme";
 import { AuthProvider } from "@/provider/auth";
+import { PlatformBrandingProvider } from "@/provider/platform-branding";
 import SessionGuard from "@/components/layout/SessionGuard";
+import { getPlatformConfig } from "@/lib/platform-config";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,16 +17,13 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const caveat = Caveat({
-  variable: "--font-handwriting",
-  subsets: ["latin"],
-});
-
-export const metadata: Metadata = {
-  title: "Cur10usX — O futuro da educação acadêmica africana",
-  description:
-    "Plataforma de gestão escolar moderna. Centralize alunos, professores, notas e comunicação numa só plataforma.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const config = await getPlatformConfig();
+  return {
+    title: config.name,
+    description: config.description || "Plataforma de gestão escolar",
+  };
+}
 
 export default function RootLayout({
   children,
@@ -34,11 +33,13 @@ export default function RootLayout({
   return (
     <html lang="pt" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${caveat.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <AuthProvider>
           <ThemeProvider>
-            <SessionGuard>{children}</SessionGuard>
+            <PlatformBrandingProvider>
+              <SessionGuard>{children}</SessionGuard>
+            </PlatformBrandingProvider>
           </ThemeProvider>
         </AuthProvider>
       </body>

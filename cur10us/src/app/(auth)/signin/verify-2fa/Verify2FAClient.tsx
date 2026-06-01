@@ -153,8 +153,8 @@ export default function Verify2FAClient() {
                     disabled={loading || success}
                     className={`w-11 h-12 sm:w-12 sm:h-14 text-center text-lg font-bold rounded-xl border-2 outline-none transition ${
                       digit
-                        ? "border-indigo-500 dark:border-indigo-400 bg-indigo-50 dark:bg-indigo-950/20"
-                        : "border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-950 focus:border-indigo-500"
+                        ? "border-primary dark:border-primary-400 bg-primary-50 dark:bg-primary-950/20"
+                        : "border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-950 focus:border-primary"
                     } ${loading || success ? "opacity-50" : ""}`}
                   />
                 ))}
@@ -163,7 +163,7 @@ export default function Verify2FAClient() {
               <button
                 type="submit"
                 disabled={loading || success || code.some((c) => !c)}
-                className="w-full h-10 flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-sm font-medium hover:from-indigo-700 hover:to-violet-700 shadow-lg shadow-indigo-600/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full h-10 rounded-xl bg-black text-white text-sm font-semibold flex items-center justify-center gap-2 hover:opacity-90 transition disabled:opacity-50"
               >
                 {loading ? (
                   <>

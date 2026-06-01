@@ -1,90 +1,83 @@
 "use client"
 
-import Link from "next/link"
-import { ArrowRight, Sparkles } from "lucide-react"
-import { motion } from "framer-motion"
+import { motion } from "framer-motion";
+import { ArrowRight, Sparkles, MessageCircle } from "lucide-react";
 
 export default function CTASection() {
   return (
-    <section className="section-padding px-6 relative overflow-hidden">
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-gradient-to-b from-warm-950 to-warm-950" />
-        <div className="absolute top-[-20%] left-[-10%] w-[500px] h-[500px] rounded-full bg-growth-500/8 blur-[120px]" />
-        <div className="absolute bottom-[-20%] right-[-10%] w-[500px] h-[500px] rounded-full bg-sun-500/8 blur-[120px]" />
-      </div>
+    <section id="para-escolas" className="relative overflow-hidden bg-bg-brand py-16 lg:py-24">
+      <div className="mx-auto max-w-7xl px-6">
 
-      <div className="max-w-4xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          viewport={{ once: true }}
-          className="relative bg-gradient-to-br from-warm-900 to-warm-950 p-10 sm:p-14 text-center overflow-hidden border border-white/10 rounded-2xl"
-        >
-          <div className="absolute inset-0">
-            <div className="absolute top-[-50%] left-[-20%] w-[400px] h-[400px] rounded-full bg-growth-500/10 blur-3xl" />
-            <div className="absolute bottom-[-50%] right-[-20%] w-[400px] h-[400px] rounded-full bg-sun-400/10 blur-3xl" />
+        <div className="relative rounded-3xl overflow-hidden py-24 px-8 lg:p-20 text-center shadow-2xl border border-muted-brand/40" id="final-cta-container">
+
+          <div className="absolute inset-0 z-0">
+            <img
+              src="/images/cta_sunset.png"
+              alt="Estudantes olhando para o pôr do sol"
+              className="w-full h-full object-cover select-none pointer-events-none filter scale-[1.05]"
+              referrerPolicy="no-referrer"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/55 to-black/30 z-10" />
+            <div className="absolute inset-0 bg-secondary-brand/10 mix-blend-overlay z-10" />
+
+            <svg className="absolute inset-0 w-full h-full opacity-35 z-20 pointer-events-none" viewBox="0 0 1000 1000" preserveAspectRatio="none">
+              <circle cx="500" cy="800" r="400" stroke="#FAF8F5" strokeWidth="1" strokeDasharray="4,8" fill="none" />
+              <circle cx="500" cy="800" r="550" stroke="#D97706" strokeWidth="1" strokeDasharray="8,12" fill="none" />
+            </svg>
           </div>
 
-          <div className="relative z-10">
+          <div className="relative z-30 max-w-2xl mx-auto flex flex-col items-center">
+
             <motion.div
-              initial={{ opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              className="inline-flex items-center gap-2 text-sm font-medium text-sun-400 bg-sun-500/10 px-4 py-1.5 mb-6 border border-sun-500/20 rounded-full"
+              className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3.5 py-1 text-xs font-semibold text-amber-300 md:mb-8 mb-6"
             >
-              <Sparkles className="w-4 h-4" />
-              Comece hoje mesmo
+              <Sparkles className="h-3.5 w-3.5 text-amber-300 animate-pulse" />
+              <span>Crescimento que começa hoje</span>
             </motion.div>
 
-            <motion.h2
-              initial={{ opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              viewport={{ once: true }}
-              className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 text-white tracking-tight leading-tight"
-            >
-              Pronto para fazer parte
-              <br />
-              do futuro da educação?
-            </motion.h2>
+            <h2 className="font-display text-3xl font-black tracking-tight text-white sm:text-5xl lg:text-5xl leading-tight">
+              O futuro não acontece por acaso. <br className="hidden sm:inline" />
+              A gente constrói, <span className="text-primary-brand">juntos.</span>
+            </h2>
 
-            <motion.p
-              initial={{ opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              viewport={{ once: true }}
-              className="text-warm-400 mb-8 max-w-md mx-auto text-base leading-relaxed"
-            >
-              Registe a sua escola e comece a transformar a gestão académica com a plataforma mais moderna de Angola.
-            </motion.p>
+            <p className="mt-6 font-sans text-sm sm:text-base leading-relaxed text-white/80 max-w-lg">
+              Junte-se à Cur10usX e mude a forma como encaramos o percurso escolar. Seja como estudante individual, professor ou instituição ativa.
+            </p>
 
-            <motion.div
-              initial={{ opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.4 }}
-              viewport={{ once: true }}
-              className="flex gap-3 flex-wrap justify-center"
-            >
-              <Link
-                href="/signin"
-              className="group inline-flex items-center gap-2.5 px-7 py-3.5 bg-growth-600 text-white font-bold hover:bg-growth-700 shadow-xl shadow-growth-600/20 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] rounded-xl relative overflow-hidden"
-            >
-              <span className="absolute inset-0 bg-[linear-gradient(110deg,transparent_30%,rgba(255,255,255,0.15)_50%,transparent_70%)] translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
-              Entrar na plataforma
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />
-              </Link>
-              <Link
-                href="/registar-escola"
-                className="px-7 py-3.5 border-2 border-white/20 text-white hover:bg-white/10 hover:border-white/30 transition-all duration-300 font-bold hover:scale-[1.02] active:scale-[0.98] rounded-xl"
+            <div className="mt-10 flex flex-col sm:flex-row gap-4 items-center justify-center w-full">
+              <motion.a
+                href="#criar-conta"
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.98 }}
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl bg-primary-brand px-7 py-4 font-sans text-base font-bold text-white shadow-lg hover:bg-orange-600 transition-all cursor-pointer group"
               >
-                Registar escola
-              </Link>
-            </motion.div>
+                <span>Criar conta gratuitamente</span>
+                <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+              </motion.a>
+
+              <motion.a
+                href="#falar-equipa"
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.98 }}
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl border border-white/40 bg-white/5 backdrop-blur-sm px-7 py-4 font-sans text-sm font-bold text-white hover:bg-white/10 hover:border-white transition-all cursor-pointer group"
+              >
+                <MessageCircle className="h-4 w-4" />
+                <span>Falar com nossa equipa</span>
+              </motion.a>
+            </div>
+
+            <div className="mt-8 text-white/50 text-[10.5px] font-medium tracking-wide">
+              * MVP em fase de ensaio &bull; Acesso gratuito para as primeiras escolas parceiras
+            </div>
+
           </div>
-        </motion.div>
+
+        </div>
+
       </div>
     </section>
-  )
+  );
 }
