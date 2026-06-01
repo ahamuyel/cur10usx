@@ -1,5 +1,3 @@
-"use client"
-
 import {
   LayoutDashboard,
   Users,
@@ -10,122 +8,118 @@ import {
   Calendar,
   BarChart3,
 } from "lucide-react"
-import { motion } from "framer-motion"
-import { StaggerContainer, StaggerItem } from "./AnimateOnScroll"
-import Carousel from "./Carousel"
+import AnimateOnScroll from "./AnimateOnScroll"
 
 const features = [
   {
     icon: LayoutDashboard,
     title: "Dashboards intuitivos",
-    description: "Visão geral em tempo real com métricas claras para cada perfil da escola.",
-    bg: "bg-growth-100 dark:bg-growth-900/30",
-    iconColor: "text-growth-600 dark:text-growth-400",
+    description: "Visão geral em tempo real com métricas claras para cada perfil de utilizador.",
+    gradient: "from-primary-500 to-primary-600",
+    span: "sm:col-span-2 lg:col-span-2",
   },
   {
     icon: Users,
     title: "Gestão de alunos",
     description: "Matrículas, perfis, turmas e acompanhamento individual completo.",
-    bg: "bg-sun-100 dark:bg-sun-900/30",
-    iconColor: "text-sun-600 dark:text-sun-400",
+    gradient: "from-cyan-500 to-cyan-600",
+    span: "",
   },
   {
     icon: ClipboardCheck,
     title: "Controlo de assiduidade",
     description: "Registo de presenças por aula ou dia, com relatórios automáticos.",
-    bg: "bg-growth-100 dark:bg-growth-900/30",
-    iconColor: "text-growth-600 dark:text-growth-400",
+    gradient: "from-emerald-500 to-emerald-600",
+    span: "",
   },
   {
     icon: GraduationCap,
     title: "Notas e avaliações",
-    description: "Lançamento de notas com médias automáticas por trimestre e exame.",
-    bg: "bg-sun-100 dark:bg-sun-900/30",
-    iconColor: "text-sun-600 dark:text-sun-400",
+    description: "Lançamento de notas por trimestre, exames e trabalhos com médias automáticas.",
+    gradient: "from-amber-500 to-amber-600",
+    span: "",
   },
   {
     icon: MessageSquare,
     title: "Comunicação interna",
     description: "Avisos, mensagens e notificações para toda a comunidade escolar.",
-    bg: "bg-growth-100 dark:bg-growth-900/30",
-    iconColor: "text-growth-600 dark:text-growth-400",
+    gradient: "from-rose-500 to-rose-600",
+    span: "",
   },
   {
     icon: FileText,
     title: "Candidaturas online",
     description: "Formulário público de matrícula com acompanhamento de estado.",
-    bg: "bg-sun-100 dark:bg-sun-900/30",
-    iconColor: "text-sun-600 dark:text-sun-400",
+    gradient: "from-primary-500 to-primary-600",
+    span: "sm:col-span-2 lg:col-span-2",
   },
   {
     icon: Calendar,
     title: "Calendário e horários",
     description: "Horários de aulas, exames e eventos escolares num só lugar.",
-    bg: "bg-growth-100 dark:bg-growth-900/30",
-    iconColor: "text-growth-600 dark:text-growth-400",
+    gradient: "from-sky-500 to-sky-600",
+    span: "",
   },
   {
     icon: BarChart3,
     title: "Relatórios detalhados",
-    description: "Análises de desempenho, frequência e evolução institucional.",
-    bg: "bg-sun-100 dark:bg-sun-900/30",
-    iconColor: "text-sun-600 dark:text-sun-400",
+    description: "Análises de desempenho, frequência e evolução dos alunos.",
+    gradient: "from-orange-500 to-orange-600",
+    span: "",
   },
 ]
 
 export default function FeaturesSection() {
   return (
-    <section id="solucao" className="section-padding px-6">
-      <div className="max-w-7xl mx-auto">
-        <StaggerContainer className="text-center mb-14" staggerDelay={0.03}>
-          <StaggerItem>
-            <span className="inline-flex items-center gap-2 text-sm font-medium text-growth-600 dark:text-growth-400 bg-growth-50 dark:bg-growth-950/30 px-4 py-1.5 border border-growth-200/50 dark:border-growth-800/30 mb-5 rounded-full">
-              A solução completa
-            </span>
-          </StaggerItem>
-          <StaggerItem>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-warm-900 dark:text-warm-100">
-              Tudo que a sua escola precisa,
-              <br />
-              <span className="text-warm-900 dark:text-warm-100">
-                numa só plataforma
-              </span>
-            </h2>
-          </StaggerItem>
-          <StaggerItem>
-            <p className="text-base text-warm-500 dark:text-warm-400 max-w-xl mx-auto mt-4 leading-relaxed">
-              Ferramentas modernas pensadas para cada momento do ecossistema escolar.
-            </p>
-          </StaggerItem>
-        </StaggerContainer>
+    <section id="funcionalidades" className="py-28 px-6 relative overflow-hidden">
+      {/* Background accent */}
+      <div className="absolute inset-0 -z-10">
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full bg-primary-400/5 dark:bg-primary-600/5 blur-[120px]" />
+        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] rounded-full bg-primary-400/5 dark:bg-primary/5 blur-[120px]" />
+      </div>
 
-        <Carousel
-          className="max-w-7xl mx-auto"
-          itemWidth="min-w-[280px] w-[85vw] sm:min-w-[300px] sm:w-[45vw] lg:min-w-[260px] lg:w-[22vw]"
-          autoPlay
-          interval={5000}
-        >
-          {features.map((item) => {
+      <div className="max-w-6xl mx-auto">
+        <div className="text-center mb-20">
+          <span className="inline-block text-sm font-medium text-primary dark:text-primary-400 bg-primary-50/80 dark:bg-primary-950/50 px-4 py-1.5 rounded-full border border-primary-200/50 dark:border-primary-800/50 mb-6">
+            Tudo incluído
+          </span>
+          <h2 className="text-4xl sm:text-5xl font-bold mb-5 tracking-tight">
+            Tudo que a sua escola precisa,{" "}
+            <br className="hidden sm:block" />
+            <span className="bg-gradient-to-r from-primary-600 to-primary-600 dark:from-primary-400 dark:to-primary-400 bg-clip-text text-transparent">
+              num só lugar
+            </span>
+          </h2>
+          <p className="text-lg text-zinc-500 dark:text-zinc-400 max-w-xl mx-auto">
+            Ferramentas pensadas para facilitar o dia-a-dia de quem faz a educação acontecer.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {features.map((item, i) => {
             const Icon = item.icon
             return (
-              <motion.div
-                key={item.title}
-                whileHover={{ y: -4 }}
-                className="card-base p-6 h-full group"
-              >
-                <div className={`w-11 h-11 ${item.bg} border border-brand-200 dark:border-brand-700 flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110 rounded-lg`}>
-                  <Icon className={`w-5 h-5 ${item.iconColor}`} />
+              <AnimateOnScroll key={item.title} delay={i * 60}>
+                <div
+                  className={`group relative rounded-2xl bg-white/60 dark:bg-zinc-900/60 backdrop-blur-sm border border-zinc-200/60 dark:border-zinc-800/60 p-6 hover:border-zinc-300 dark:hover:border-zinc-700 transition-all duration-300 h-full overflow-hidden hover:shadow-lg hover:shadow-zinc-200/50 dark:hover:shadow-black/20 ${item.span}`}
+                >
+                  {/* Hover gradient glow */}
+                  <div className={`absolute inset-0 bg-gradient-to-br ${item.gradient} opacity-0 group-hover:opacity-[0.03] dark:group-hover:opacity-[0.06] transition-opacity duration-500`} />
+
+                  <div className="relative z-10">
+                    <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${item.gradient} flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 group-hover:shadow-xl transition-all duration-300`}>
+                      <Icon className="w-5 h-5 text-white" />
+                    </div>
+                    <h3 className="font-bold text-lg mb-2">{item.title}</h3>
+                    <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
+                      {item.description}
+                    </p>
+                  </div>
                 </div>
-                <h3 className="font-bold text-base text-warm-900 dark:text-warm-100 mb-2">
-                  {item.title}
-                </h3>
-                <p className="text-sm text-warm-500 dark:text-warm-400 leading-relaxed">
-                  {item.description}
-                </p>
-              </motion.div>
+              </AnimateOnScroll>
             )
           })}
-        </Carousel>
+        </div>
       </div>
     </section>
   )

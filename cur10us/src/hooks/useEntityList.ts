@@ -49,7 +49,7 @@ function saveToSession(key: string, filters: Record<string, string>, sort: SortC
 
 export function useEntityList<T>({ endpoint, limit = 5, storageKey }: UseEntityListOptions): EntityListResult<T> {
   const key = storageKey || endpoint
-  const [saved] = useState(() => loadFromSession(key))
+  const saved = useRef(loadFromSession(key))
 
   const [data, setData] = useState<T[]>([])
   const [total, setTotal] = useState(0)
@@ -57,8 +57,8 @@ export function useEntityList<T>({ endpoint, limit = 5, storageKey }: UseEntityL
   const [totalPages, setTotalPages] = useState(1)
   const [search, setSearchState] = useState("")
   const [debouncedSearch, setDebouncedSearch] = useState("")
-  const [filters, setFiltersState] = useState<Record<string, string>>(saved.filters || {})
-  const [sort, setSortState] = useState<SortConfig | null>(saved.sort || null)
+  const [filters, setFiltersState] = useState<Record<string, string>>(saved.current.filters || {})
+  const [sort, setSortState] = useState<SortConfig | null>(saved.current.sort || null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
   const debounceRef = useRef<NodeJS.Timeout>(null)
