@@ -1,0 +1,30 @@
+.
+├── components.json
+├── containers
+├── docker-compose.override.yml
+├── docker-compose.yml
+├── docs
+├── eslint.config.mjs
+├── jest.config.ts
+├── Makefile
+├── next.config.ts
+├── next-env.d.ts
+├── node_modules
+├── package.json
+├── package-lock.json
+├── postcss.config.mjs
+├── prisma
+├── public
+├── README.md
+├── scripts
+├── src
+├── tests
+├── tree
+├── tsconfig.json
+├── tsconfig.tsbuildinfo
+├── vercel.json
+├── vitest.config.ts
+└── ws-server.js
+
+9 directories, 18 files
+a

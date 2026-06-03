@@ -1,0 +1,55 @@
+# Environment variables
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Dependencies
+node_modules/
+
+# Next.js
+.next/
+out/
+dist/
+
+# Prisma
+prisma/dev.db
+prisma/dev.db-journal
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build
+build/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# TypeScript
+*.tsbuildinfo
+
+# Testing
+coverage/
+
+# Docker / K8s (se quiser ignorar configs locais)
+k8s/
+
+# IDEs
+.vscode/
+.idea/
+
+# Cache
+.cache/
+.eslintcache
+
+# Vercel
+.vercel/
+
+# Docker (opcional, depende do teu fluxo)
+docker-compose.override.yml
