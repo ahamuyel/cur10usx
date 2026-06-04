@@ -19,6 +19,7 @@ const pt = {
       cta: "Solicitar Demonstração",
       explore: "Conhecer a Plataforma",
       stats: "Escolas em Angola já utilizam",
+      trusted_by: "Escolas que confiam na Cur10usX",
     },
     problem: {
       tag: "O Desafio que as Escolas Enfrentam",
