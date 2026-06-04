@@ -19,6 +19,7 @@ const en = {
       cta: "Request a Demo",
       explore: "Explore the Platform",
       stats: "Schools in Angola already use it",
+      trusted_by: "Schools that trust Cur10usX",
     },
     problem: {
       tag: "The Challenge Schools Face",

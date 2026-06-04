@@ -17,3 +17,8 @@ export type LandingStats = {
   results: number;
   applications: number;
 };
+
+export type SchoolLogo = {
+  name: string;
+  logo: string;
+};
