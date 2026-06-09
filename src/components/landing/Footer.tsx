@@ -181,9 +181,9 @@ export default function Footer({ locale = "pt" }: Props) {
               {t("landing.footer.status")}
             </span>
           </div>
-          <div className="flex items-center gap-4 text-[11px] text-[var(--landing-text-dim)]">
+          {/* <div className="flex items-center gap-4 text-[11px] text-[var(--landing-text-dim)]">
             <LocaleSwitcher currentLocale={locale} />
-          </div>
+          </div> */}
         </div>
       </div>
     </footer>
