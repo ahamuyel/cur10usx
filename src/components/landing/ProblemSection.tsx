@@ -1,8 +1,32 @@
 "use client"
 
 import { useTranslation } from "@/lib/i18n"
+import { Feature } from "@/components/ui/feature-with-image-carousel"
 
 type Props = { locale?: string }
+
+const IMAGES = [
+  {
+    src: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800&q=80",
+    alt: "Sala de aula moderna com alunos utilizando tablets",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=800&q=80",
+    alt: "Professor auxiliando alunos em ambiente digital",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1606761568499-6d2451b23c66?w=800&q=80",
+    alt: "Gestão escolar com ferramentas digitais",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&q=80",
+    alt: "Estudante pesquisando online",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1529390079861-591de354faf5?w=800&q=80",
+    alt: "Dashboard de analytics educacional",
+  },
+]
 
 export default function ProblemSection({ locale = "pt" }: Props) {
   const { t, tv } = useTranslation(locale)
@@ -17,19 +41,14 @@ export default function ProblemSection({ locale = "pt" }: Props) {
       className="py-20 md:py-32 bg-[var(--landing-bg-secondary)] relative"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="max-w-3xl mb-16 md:mb-20">
-          <span className="text-xs text-[var(--landing-text-dim)] uppercase tracking-widest block mb-3">
-            {t("landing.problem.tag")}
-          </span>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-[var(--landing-text-primary)] leading-tight mb-6">
-            {t("landing.problem.headline")}
-          </h2>
-          <p className="text-[var(--landing-text-secondary)] text-sm md:text-base leading-relaxed">
-            {t("landing.problem.description")}
-          </p>
-        </div>
+        <Feature
+          badge={t("landing.problem.tag")}
+          title={t("landing.problem.headline")}
+          description={t("landing.problem.description")}
+          images={IMAGES}
+        />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 -mt-10">
           {items.map((item, idx) => (
             <div
               key={idx}
