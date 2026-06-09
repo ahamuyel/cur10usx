@@ -172,47 +172,31 @@ export default function DashboardHeader() {
     results.students.length + results.teachers.length + results.classes.length + results.subjects.length > 0
 
   return (
-    <header className="sticky top-0 z-30 flex items-center justify-between px-3 sm:px-5 py-2.5 sm:py-3 border-b border-zinc-200 dark:border-zinc-800 bg-white/95 dark:bg-zinc-950/95 backdrop-blur-md gap-2 min-h-[57px]">
-      {/* Mobile sidebar toggle */}
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={toggleMobile}
-        className="md:hidden h-9 w-9 text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300 shrink-0"
-        aria-label="Abrir menu"
-      >
-        <PanelLeft size={18} />
-      </Button>
-
-      {/* Desktop: branding slogan */}
-      <div className="hidden md:flex items-center gap-3 min-w-0 mr-3">
-        {branding.slogan && (
-          <span className="text-xs text-zinc-400 dark:text-zinc-500 truncate max-w-[200px]">
-            {branding.slogan}
-          </span>
-        )}
-      </div>
-
-      {/* Mobile search trigger */}
-      <button
-        onClick={() => setSearchOpen(true)}
-        className="md:hidden p-2 rounded-lg text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition shrink-0"
-        aria-label="Pesquisar"
-      >
-        <Search size={18} />
-      </button>
-
-      {/* Mobile: centered logo */}
-      <div className="md:hidden flex flex-col items-center min-w-0 px-2">
+    <header className="sticky top-0 z-30 flex items-center justify-between px-2 sm:px-5 py-2 sm:py-3 border-b border-zinc-200 dark:border-zinc-800 bg-white/95 dark:bg-zinc-950/95 backdrop-blur-md gap-1 sm:gap-2 min-h-[52px]">
+      {/* Mobile: hamburger + school name */}
+      <div className="flex items-center gap-1.5 min-w-0 md:hidden">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={toggleMobile}
+          className="h-8 w-8 shrink-0 text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
+          aria-label="Abrir menu"
+        >
+          <PanelLeft size={17} />
+        </Button>
         {branding.name ? (
-          <span className="text-sm font-bold text-zinc-900 dark:text-zinc-100 truncate max-w-[140px]">
+          <span className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 truncate max-w-[120px]">
             {branding.name}
           </span>
         ) : (
-          <span className="text-sm font-bold text-zinc-900 dark:text-zinc-100">Dashboard</span>
+          <span className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">Dashboard</span>
         )}
+      </div>
+
+      {/* Desktop: branding */}
+      <div className="hidden md:flex items-center gap-3 min-w-0 mr-3">
         {branding.slogan && (
-          <span className="text-[9px] text-zinc-400 dark:text-zinc-500 leading-tight truncate max-w-[160px]">
+          <span className="text-xs text-zinc-400 dark:text-zinc-500 truncate max-w-[200px]">
             {branding.slogan}
           </span>
         )}
@@ -289,6 +273,15 @@ export default function DashboardHeader() {
 
       {/* Actions */}
       <div className="flex items-center gap-0.5 sm:gap-1.5">
+        {/* Mobile: Search trigger */}
+        <button
+          onClick={() => setSearchOpen(true)}
+          className="md:hidden p-2 rounded-lg text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition shrink-0"
+          aria-label="Pesquisar"
+        >
+          <Search size={17} />
+        </button>
+
         {/* Chat */}
         <Link
           href="/list/chat"
@@ -310,17 +303,17 @@ export default function DashboardHeader() {
         {/* Notifications */}
         <NotificationDropdown />
 
-        {/* Theme Toggle */}
+        {/* Theme Toggle — desktop only */}
         <div className="hidden sm:block">
           <ThemeToggle />
         </div>
 
-        {/* Locale Switcher */}
+        {/* Locale Switcher — desktop only */}
         <div className="hidden sm:block">
           <LocaleSwitcher currentLocale={locale} />
         </div>
 
-        {/* Desktop: Logout */}
+        {/* Logout — desktop only */}
         <button
           onClick={() => signOut({ callbackUrl: "/signin" })}
           className="hidden sm:inline-flex p-2 rounded-lg text-zinc-500 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 transition"
@@ -329,19 +322,7 @@ export default function DashboardHeader() {
           <LogOut size={18} />
         </button>
 
-        {/* Mobile: Theme + Logout combo */}
-        <div className="flex sm:hidden items-center gap-1.5">
-          <LocaleSwitcher currentLocale={locale} />
-          <button
-            onClick={() => signOut({ callbackUrl: "/signin" })}
-            className="p-2 rounded-lg text-zinc-500 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 transition"
-            title="Terminar Sessão"
-          >
-            <LogOut size={18} />
-          </button>
-        </div>
-
-        {/* Divider */}
+        {/* Divider — desktop only */}
         <div className="hidden sm:block w-px h-5 bg-zinc-200 dark:bg-zinc-700 mx-1" />
 
         {/* User Avatar */}
