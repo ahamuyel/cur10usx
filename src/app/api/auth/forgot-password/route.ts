@@ -6,7 +6,11 @@ import { sendPasswordResetEmail } from "@/lib/email"
 import { rateLimit } from "@/lib/rate-limit"
 import { withCsrf } from "@/lib/csrf"
 
-const forgotLimiter = rateLimit({ maxRequests: 3, windowMs: 60 * 60 * 1000 }) // 3 per hour
+const forgotLimiter = rateLimit({
+  maxRequests: 3,
+  windowMs: 60 * 60 * 1000,
+  key: "forgot-password",
+}) // 3 per hour
 
 function getIp(req: Request): string {
   return (

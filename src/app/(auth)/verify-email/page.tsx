@@ -1,6 +1,6 @@
 "use client"
 
-import { Suspense, useEffect, useState } from "react"
+import { Suspense, useEffect, useState, useRef } from "react"
 import { useSearchParams, useRouter } from "next/navigation"
 import { CheckCircle, XCircle, Loader2, Mail, ArrowRight } from "lucide-react"
 import Link from "next/link"
@@ -23,12 +23,16 @@ function VerifyEmailContent() {
   const [resending, setResending] = useState(false)
   const [resent, setResent] = useState(false)
   const [emailError, setEmailError] = useState("")
+  const verificationStarted = useRef(false)
 
   useEffect(() => {
     if (!token) {
       setStatus("resend")
       return
     }
+    if (verificationStarted.current) return
+    verificationStarted.current = true
+
     setStatus("verifying")
 
     async function verify() {

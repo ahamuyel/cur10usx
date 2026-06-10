@@ -3,6 +3,7 @@ import { redis } from "./redis"
 type RateLimitConfig = {
   maxRequests: number
   windowMs: number
+  key?: string
 }
 
 type WindowEntry = {
@@ -55,13 +56,13 @@ async function inMemoryCheck(
   }
 }
 
-export function rateLimit({ maxRequests, windowMs }: RateLimitConfig) {
+export function rateLimit({ maxRequests, windowMs, key: customKey }: RateLimitConfig) {
   return async function check(identifier: string): Promise<{
     success: boolean
     remaining: number
     resetAt: Date
   }> {
-    const configKey = `${maxRequests}-${windowMs}`
+    const configKey = customKey || `${maxRequests}-${windowMs}`
 
     // If Redis is enabled and connected, use Redis sliding window
     if (redis && redis.status === "ready") {
