@@ -5,7 +5,11 @@ import { resetPasswordSchema } from "@/lib/validations/auth"
 import { rateLimit } from "@/lib/rate-limit"
 import { withCsrf } from "@/lib/csrf"
 
-const resetLimiter = rateLimit({ maxRequests: 5, windowMs: 60 * 60 * 1000 }) // 5 per hour
+const resetLimiter = rateLimit({
+  maxRequests: 5,
+  windowMs: 60 * 60 * 1000,
+  key: "reset-password",
+}) // 5 per hour
 
 function getIp(req: Request): string {
   return (

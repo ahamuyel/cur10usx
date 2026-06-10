@@ -5,7 +5,7 @@ import { comparePassword } from "@/lib/password";
 import { prisma } from "@/lib/prisma";
 import { rateLimit } from "@/lib/rate-limit";
 
-const loginLimiter = rateLimit({ maxRequests: 10, windowMs: 5 * 60 * 1000 }) // 10 per 5 min
+const loginLimiter = rateLimit({ maxRequests: 10, windowMs: 5 * 60 * 1000, key: "login" }) // 10 per 5 min
 
 function getIp(req: Request): string {
   return (

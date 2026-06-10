@@ -68,7 +68,6 @@ export default function RegistarEscolaPage() {
       setError(parsed.error.issues[0].message)
       return
     }
-    loading;
     setLoading(true)
     try {
       const res = await csrfPost("/api/auth/register-school", parsed.data)

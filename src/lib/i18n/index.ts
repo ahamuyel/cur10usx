@@ -1,4 +1,4 @@
-import { useContext } from "react"
+import { useContext, useCallback } from "react"
 import { LocaleContext } from "@/provider/locale"
 import pt from "./pt"
 import en from "./en"
@@ -56,10 +56,15 @@ export function useTranslation(locale?: string) {
       activeLocale = "pt"
     }
   }
+
+  const t_fn = useCallback((key: TranslationKey) => t(activeLocale!, key), [activeLocale])
+  const tv_fn = useCallback((key: TranslationKey) => tv(activeLocale!, key), [activeLocale])
+  const tUI_fn = useCallback((text: string) => tUI(activeLocale!, text), [activeLocale])
+
   return {
-    t: (key: TranslationKey) => t(activeLocale!, key),
-    tv: (key: TranslationKey) => tv(activeLocale!, key),
-    tUI: (text: string) => tUI(activeLocale!, text),
+    t: t_fn,
+    tv: tv_fn,
+    tUI: tUI_fn,
     locale: activeLocale!,
   }
 }

@@ -5,8 +5,16 @@ import { sendVerificationEmail } from "@/lib/email"
 import { rateLimit } from "@/lib/rate-limit"
 import { withCsrf } from "@/lib/csrf"
 
-const verifyLimiter = rateLimit({ maxRequests: 3, windowMs: 60 * 60 * 1000 }) // 3 per hour
-const resendLimiter = rateLimit({ maxRequests: 5, windowMs: 60 * 60 * 1000 }) // 5 per hour
+const verifyLimiter = rateLimit({
+  maxRequests: 10,
+  windowMs: 60 * 60 * 1000,
+  key: "verify-email",
+}) // 10 per hour
+const resendLimiter = rateLimit({
+  maxRequests: 5,
+  windowMs: 60 * 60 * 1000,
+  key: "resend-verification",
+}) // 5 per hour
 
 function getIp(req: Request): string {
   return (
