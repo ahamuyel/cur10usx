@@ -12,8 +12,8 @@ const LOCALES = [
 
 interface LocaleSwitcherProps {
   currentLocale: string
-  theme: string
-  toggleTheme: () => void
+  theme?: string
+  toggleTheme?: () => void
 }
 
 export default function LocaleSwitcher({
@@ -60,8 +60,8 @@ export default function LocaleSwitcher({
       >
         <Globe className="w-3.5 h-3.5 opacity-80" />
         <span className="font-mono tracking-wider">{activeLocale.short}</span>
-        <span className="text-[var(--landing-border)] font-light">|</span>
-        {theme === "light" ? <Moon size={13} className="opacity-80" /> : <Sun size={13} className="opacity-80" />}
+        {theme && <><span className="text-[var(--landing-border)] font-light">|</span>
+        {theme === "light" ? <Moon size={13} className="opacity-80" /> : <Sun size={13} className="opacity-80" />}</>}
         <ChevronDown
           className={`w-3 h-3 opacity-60 transition-transform duration-200 ${
             isOpen ? "rotate-180" : ""
@@ -77,24 +77,27 @@ export default function LocaleSwitcher({
             : "opacity-0 scale-95 -translate-y-1 pointer-events-none"
         }`}
       >
-        {/* SECÇÃO 1: PREFERÊNCIAS DE TEMA */}
-        <p className="text-[9px] font-bold tracking-wider text-[var(--landing-text-dim)] uppercase px-2.5 pt-1.5 pb-1">
-          Aparência
-        </p>
-        <button
-          onClick={toggleTheme}
-          className="w-full flex items-center justify-between px-2.5 py-2 text-xs rounded-lg transition-colors cursor-pointer text-[var(--landing-text-secondary)] hover:text-[var(--landing-text-primary)] hover:bg-[var(--landing-bg-tertiary)] text-left mb-1"
-        >
-          <div className="flex items-center gap-2">
-            {theme === "light" ? <Moon size={14} /> : <Sun size={14} />}
-            <span>{theme === "light" ? "Modo Escuro" : "Modo Claro"}</span>
-          </div>
-          <span className="text-[10px] text-[var(--landing-text-dim)] bg-[var(--landing-bg-tertiary)] px-1.5 py-0.5 rounded font-mono uppercase">
-            Alt
-          </span>
-        </button>
+        {theme !== undefined && toggleTheme !== undefined && (
+          <>
+            <p className="text-[9px] font-bold tracking-wider text-[var(--landing-text-dim)] uppercase px-2.5 pt-1.5 pb-1">
+              Aparência
+            </p>
+            <button
+              onClick={toggleTheme}
+              className="w-full flex items-center justify-between px-2.5 py-2 text-xs rounded-lg transition-colors cursor-pointer text-[var(--landing-text-secondary)] hover:text-[var(--landing-text-primary)] hover:bg-[var(--landing-bg-tertiary)] text-left mb-1"
+            >
+              <div className="flex items-center gap-2">
+                {theme === "light" ? <Moon size={14} /> : <Sun size={14} />}
+                <span>{theme === "light" ? "Modo Escuro" : "Modo Claro"}</span>
+              </div>
+              <span className="text-[10px] text-[var(--landing-text-dim)] bg-[var(--landing-bg-tertiary)] px-1.5 py-0.5 rounded font-mono uppercase">
+                Alt
+              </span>
+            </button>
 
-        <div className="h-px bg-[var(--landing-border)] my-1 mx-1" />
+            <div className="h-px bg-[var(--landing-border)] my-1 mx-1" />
+          </>
+        )}
 
         {/* SECÇÃO 2: IDIOMAS */}
         <p className="text-[9px] font-bold tracking-wider text-[var(--landing-text-dim)] uppercase px-2.5 pt-1.5 pb-1">

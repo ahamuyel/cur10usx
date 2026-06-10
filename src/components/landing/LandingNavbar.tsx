@@ -122,7 +122,7 @@ export default function LandingNavbar({
 
           {/* Desktop/Tablet Actions - Mais Compacto */}
           <div className="hidden md:flex items-center gap-1 lg:gap-2 shrink-0">
-            <LocaleSwitcher currentLocale={locale} />
+            <LocaleSwitcher currentLocale={locale} theme={theme} toggleTheme={toggleTheme} />
             
             <button
               onClick={toggleTheme}
@@ -255,7 +255,7 @@ export default function LandingNavbar({
             </Link>
 
             <div className="pt-1 flex items-center justify-center">
-              <LocaleSwitcher currentLocale={locale} />
+              <LocaleSwitcher currentLocale={locale} theme={theme} toggleTheme={toggleTheme} />
             </div>
           </div>
         </div>
