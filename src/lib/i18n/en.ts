@@ -12,13 +12,13 @@ const en = {
       signin: "Sign In",
     },
     hero: {
-      badge: "School Management Platform",
-      headline: "A more organized school.\nBetter supported students.\nSmarter decisions.",
+      badge: "#1 School Management Platform in Angola",
+      headline: "The Operating System\nfor Your School",
       subheadline:
-        "Cur10usX helps schools centralize information, simplify processes and gain real visibility over student progress — so your team can focus on what matters most.",
+        "Replace spreadsheets, paper records, and WhatsApp groups with a single platform. Students, teachers, assessments, and reports — all centralized in one place.",
       cta: "Request a Demo",
-      explore: "Explore the Platform",
-      stats: "Schools in Angola already use it",
+      explore: "See Product in 60s",
+      stats: "Angolan schools already use it",
       trusted_by: "Schools that trust Cur10usX",
     },
     problem: {
@@ -119,6 +119,30 @@ const en = {
             ],
             status: "Accurate",
           },
+        },
+      ],
+    },
+    multiTenant: {
+      tag: "Built to Scale",
+      headline: "One platform. Multiple schools. Total control.",
+      description:
+        "Cur10usX was built from the ground up as a multi-tenant platform. Each school has its own isolated environment, while group leadership has consolidated visibility across all institutions.",
+      features: [
+        {
+          title: "Independent environments",
+          desc: "Each school operates in its own space, with its own data, students, teachers, and configurations — fully isolated and secure.",
+        },
+        {
+          title: "Custom branding",
+          desc: "Each school can have its own logo, colors, and visual identity. Cur10usX adapts to the institution's brand, not the other way around.",
+        },
+        {
+          title: "Consolidated reports",
+          desc: "Group leadership can view aggregated data from all schools in a single dashboard, without losing the details of each unit.",
+        },
+        {
+          title: "Centralized management",
+          desc: "Create and manage users, permissions, and settings for all schools from a single administration panel.",
         },
       ],
     },
@@ -231,6 +255,31 @@ const en = {
         },
       ],
     },
+    testimonials: {
+      tag: "What Directors Say",
+      headline: "Those who use it recommend it.",
+      description: "School directors and managers share how Cur10usX transformed their institution's management.",
+      items: [
+        {
+          quote: "Before, consolidating the end-of-term report took two weeks. Now it's one click. The difference in school organization was massive.",
+          author: "João Silva",
+          role: "Academic Director",
+          school: "Colégio São Miguel",
+        },
+        {
+          quote: "We finally left spreadsheets behind. We have three schools and now I can see everything in a single dashboard — attendance, grades, announcements. This changed everything.",
+          author: "Maria Fernandes",
+          role: "General Director",
+          school: "Horizonte Education Network",
+        },
+        {
+          quote: "What impressed me most was parent communication. Absences are notified automatically. Parents feel more involved.",
+          author: "António Domingos",
+          role: "School Administrator",
+          school: "Escola Secundária Moderna",
+        },
+      ],
+    },
     vision: {
       tag: "Building the Foundation for the Future",
       headline: "Schools that get organized today are ready for tomorrow.",
@@ -275,6 +324,37 @@ const en = {
         {
           title: "Support growth",
           desc: "With better academic monitoring, students receive the support they need to reach their full potential.",
+        },
+      ],
+    },
+    faq: {
+      tag: "Frequently Asked Questions",
+      headline: "Everything you need to know.",
+      description: "Quick answers to the most common questions about Cur10usX.",
+      items: [
+        {
+          q: "Do we need to install any software?",
+          a: "No. Cur10usX is 100% online (SaaS). It works on any computer, tablet, or phone with internet access. No servers, installations, or technical maintenance needed.",
+        },
+        {
+          q: "Can we migrate our existing data?",
+          a: "Yes. The Cur10usX team helps migrate your data — students, teachers, classes, grades, and history — from spreadsheets or other systems. The process is simple and secure.",
+        },
+        {
+          q: "Does each school need a separate account?",
+          a: "Not necessarily. Cur10usX supports multiple schools on a single platform (multi-tenant). You can manage several institutions from one dashboard, with isolated and independent data.",
+        },
+        {
+          q: "How long does implementation take?",
+          a: "Initial setup can be done in days, not months. After data migration, the school team starts using the system immediately with dedicated support.",
+        },
+        {
+          q: "Is it secure? Where is data stored?",
+          a: "Yes. Data is stored in secure servers with encryption, daily backups, and compliance with data protection regulations (GDPR).",
+        },
+        {
+          q: "Can we customize it with our logo and colors?",
+          a: "Yes. Each school can customize the platform with its logo, institutional colors, and visual identity. Cur10usX adapts to your brand.",
         },
       ],
     },

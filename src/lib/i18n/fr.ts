@@ -12,13 +12,13 @@ const fr = {
       signin: "Se connecter",
     },
     hero: {
-      badge: "Plateforme de gestion scolaire",
-      headline: "Une école plus organisée.\nDes élèves mieux soutenus.\nDes décisions plus intelligentes.",
+      badge: "Plateforme de gestion scolaire n°1 en Angola",
+      headline: "Le Système d'Exploitation\nde Votre École",
       subheadline:
-        "Cur10usX centralise les informations, simplifie les processus et offre une visibilité réelle sur les progrès des élèves — afin que votre équipe puisse se concentrer sur ce qui compte le plus.",
+        "Remplacez les tableurs, les cahiers et les groupes WhatsApp par une plateforme unique. Élèves, enseignants, évaluations et rapports — tout centralisé au même endroit.",
       cta: "Demander une démonstration",
-      explore: "Découvrir la plateforme",
-      stats: "Des écoles en Angola l'utilisent déjà",
+      explore: "Voir le produit en 60s",
+      stats: "écoles angolaises l'utilisent déjà",
       trusted_by: "Des écoles qui font confiance à Cur10usX",
     },
     problem: {
@@ -119,6 +119,30 @@ const fr = {
             ],
             status: "Précis",
           },
+        },
+      ],
+    },
+    multiTenant: {
+      tag: "Conçu pour Grandir",
+      headline: "Une plateforme. Plusieurs écoles. Contrôle total.",
+      description:
+        "Cur10usX a été conçu dès le départ comme une plateforme multi-tenant. Chaque école dispose de son propre environnement isolé, tandis que la direction du groupe a une visibilité consolidée sur l'ensemble des établissements.",
+      features: [
+        {
+          title: "Environnements indépendants",
+          desc: "Chaque école opère dans son propre espace, avec ses propres données, élèves, enseignants et configurations — totalement isolés et sécurisés.",
+        },
+        {
+          title: "Image de marque personnalisée",
+          desc: "Chaque école peut avoir son logo, ses couleurs et son identité visuelle. Cur10usX s'adapte à la marque de l'établissement, pas l'inverse.",
+        },
+        {
+          title: "Rapports consolidés",
+          desc: "La direction du groupe peut visualiser les données agrégées de toutes les écoles dans un seul tableau de bord, sans perdre les détails de chaque unité.",
+        },
+        {
+          title: "Gestion centralisée",
+          desc: "Créez et gérez les utilisateurs, les permissions et les configurations de toutes les écoles à partir d'un seul panneau d'administration.",
         },
       ],
     },
@@ -231,6 +255,31 @@ const fr = {
         },
       ],
     },
+    testimonials: {
+      tag: "Ce que disent les directeurs",
+      headline: "Ceux qui l'utilisent le recommandent.",
+      description: "Directeurs et gestionnaires d'écoles partagent comment Cur10usX a transformé la gestion de leur établissement.",
+      items: [
+        {
+          quote: "Avant, consolider le rapport de fin de période prenait deux semaines. Maintenant, c'est un clic. La différence dans l'organisation de l'école a été énorme.",
+          author: "João Silva",
+          role: "Directeur Pédagogique",
+          school: "Colégio São Miguel",
+        },
+        {
+          quote: "Nous avons enfin laissé les tableurs derrière nous. Nous avons trois écoles et je peux maintenant tout voir dans un seul tableau de bord — présences, notes, communications. Cela a tout changé.",
+          author: "Maria Fernandes",
+          role: "Directrice Générale",
+          school: "Réseau d'Enseignement Horizonte",
+        },
+        {
+          quote: "Ce qui m'a le plus impressionné, c'est la communication avec les parents. Les absences sont notifiées automatiquement. Les parents se sentent plus impliqués.",
+          author: "António Domingos",
+          role: "Administrateur Scolaire",
+          school: "École Secondaire Moderne",
+        },
+      ],
+    },
     vision: {
       tag: "Bâtir les bases de l'avenir",
       headline: "Les écoles qui s'organisent aujourd'hui se préparent pour demain.",
@@ -275,6 +324,37 @@ const fr = {
         {
           title: "Soutenez la croissance",
           desc: "Grâce à un meilleur suivi académique, les élèves reçoivent le soutien nécessaire pour atteindre leur plein potentiel.",
+        },
+      ],
+    },
+    faq: {
+      tag: "Questions Fréquentes",
+      headline: "Tout ce que vous devez savoir.",
+      description: "Réponses rapides aux questions les plus courantes sur Cur10usX.",
+      items: [
+        {
+          q: "Devons-nous installer un logiciel ?",
+          a: "Non. Cur10usX est 100% en ligne (SaaS). Il fonctionne sur tout ordinateur, tablette ou téléphone avec accès internet. Pas de serveurs, installations ou maintenance technique nécessaires.",
+        },
+        {
+          q: "Pouvons-nous migrer nos données existantes ?",
+          a: "Oui. L'équipe Cur10usX vous aide à migrer vos données — élèves, enseignants, classes, notes et historiques — à partir de tableurs ou d'autres systèmes. Le processus est simple et sécurisé.",
+        },
+        {
+          q: "Chaque école a-t-elle besoin d'un compte séparé ?",
+          a: "Pas nécessairement. Cur10usX prend en charge plusieurs écoles sur une seule plateforme (multi-tenant). Vous pouvez gérer plusieurs établissements depuis un seul tableau de bord, avec des données isolées et indépendantes.",
+        },
+        {
+          q: "Combien de temps prend la mise en œuvre ?",
+          a: "La configuration initiale peut être réalisée en quelques jours, pas en mois. Après la migration des données, l'équipe de l'école commence à utiliser le système immédiatement avec un accompagnement dédié.",
+        },
+        {
+          q: "Est-ce sécurisé ? Où les données sont-elles stockées ?",
+          a: "Oui. Les données sont stockées sur des serveurs sécurisés avec chiffrement, sauvegardes quotidiennes et conformité aux réglementations sur la protection des données (RGPD).",
+        },
+        {
+          q: "Pouvons-nous personnaliser avec notre logo et nos couleurs ?",
+          a: "Oui. Chaque école peut personnaliser la plateforme avec son logo, ses couleurs institutionnelles et son identité visuelle. Cur10usX s'adapte à votre marque.",
         },
       ],
     },

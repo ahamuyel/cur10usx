@@ -4,10 +4,13 @@ import LandingNavbar from "@/components/landing/LandingNavbar"
 import HeroSection from "@/components/landing/HeroSection"
 import ProblemSection from "@/components/landing/ProblemSection"
 import TransformationSection from "@/components/landing/TransformationSection"
+import MultiTenantSection from "@/components/landing/MultiTenantSection"
 import ProductEcosystem from "@/components/landing/ProductEcosystem"
 import BenefitsSection from "@/components/landing/BenefitsSection"
 import VisionSection from "@/components/landing/VisionSection"
 import TrustSection from "@/components/landing/TrustSection"
+import TestimonialsSection from "@/components/landing/TestimonialsSection"
+import FAQSection from "@/components/landing/FAQSection"
 import CTASection from "@/components/landing/CTASection"
 import Footer from "@/components/landing/Footer"
 import AnimateOnScroll from "@/components/landing/AnimateOnScroll"
@@ -77,12 +80,15 @@ export default async function Home() {
   return (
     <div className="min-h-screen bg-[var(--landing-bg)] text-[var(--landing-text-primary)] selection:bg-primary/20 landing-scrollbar pt-16">
       <LandingNavbar branding={branding} locale={locale} />
-      <HeroSection branding={branding} schools={schools} locale={locale} />
+      <HeroSection branding={branding} schools={schools} stats={stats} locale={locale} />
       <AnimateOnScroll>
         <ProblemSection locale={locale} />
       </AnimateOnScroll>
       <AnimateOnScroll>
         <TransformationSection locale={locale} />
+      </AnimateOnScroll>
+      <AnimateOnScroll>
+        <MultiTenantSection locale={locale} stats={stats} />
       </AnimateOnScroll>
       <AnimateOnScroll>
         <ProductEcosystem locale={locale} />
@@ -95,6 +101,12 @@ export default async function Home() {
       </AnimateOnScroll>
       <AnimateOnScroll>
         <TrustSection locale={locale} />
+      </AnimateOnScroll>
+      <AnimateOnScroll>
+        <TestimonialsSection locale={locale} />
+      </AnimateOnScroll>
+      <AnimateOnScroll>
+        <FAQSection locale={locale} />
       </AnimateOnScroll>
       <CTASection locale={locale} />
       <Footer locale={locale} />
