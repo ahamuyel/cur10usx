@@ -3,6 +3,7 @@ const pt = {
     nav: {
       problems: "O Desafio",
       transformation: "Solução",
+      product: "Produto",
       ecosystem: "Módulos",
       benefits: "Benefícios",
       vision: "Futuro",
@@ -10,42 +11,57 @@ const pt = {
       explore: "Explorar",
       demo: "Solicitar Demo",
       signin: "Entrar",
+      account: "Conta",
+      theme_toggle: "Alternar tema",
+      menu_open: "Abrir menu",
+      menu_close: "Fechar menu",
     },
     hero: {
       badge: "Plataforma #1 de Gestão Escolar em Angola",
       headline: "O Sistema Operacional\nda Sua Escola",
       subheadline:
-        "Substitua planilhas, cadernetas e grupos de WhatsApp por uma plataforma única. Alunos, professores, avaliações e relatórios — tudo centralizado num só lugar.",
+        "A Cur10usX centraliza informações, simplifica processos e dá visibilidade real sobre o progresso dos alunos — para que a sua equipa foque no que realmente importa.",
       cta: "Solicitar Demonstração",
-      explore: "Ver Produto em 60s",
+      explore: "Conhecer a Plataforma",
       stats: "escolas angolanas já utilizam",
+      stats_schools: "escolas",
+      stats_students: "alunos",
+      stats_results: "avaliações",
       trusted_by: "Escolas que confiam na Cur10usX",
     },
     problem: {
       tag: "O Desafio que as Escolas Enfrentam",
       headline: "Cada informação deveria estar num só lugar. Mas para a maioria das escolas, está dispersa.",
-      description:
-        "No dia-a-dia de uma escola, notas estão numa planilha, presenças num caderno, comunicados no WhatsApp e relatórios em arquivos perdidos. A equipa administrativa está sobrecarregada. Professores perdem tempo com burocracia. E os directores não têm visibilidade clara do que realmente acontece.",
+        description:
+         "No dia-a-dia de uma escola, notas estão numa planilha, presenças num caderno, comunicados no WhatsApp e relatórios em arquivos perdidos. A equipa administrativa está sobrecarregada. Professores perdem tempo com burocracia. E os directores não têm visibilidade clara do que realmente acontece.",
       items: [
         {
-          title: "Documentos e dados espalhados",
+          title: "Dados espalhados por todo o lado",
           description:
-            "Informações importantes sobre alunos, turmas e calendários estão em sistemas diferentes. A sua equipa gasta horas a consolidar dados que deveriam estar disponíveis instantaneamente.",
+            "Informações sobre alunos, turmas e calendários em sistemas diferentes. A sua equipa gasta horas a consolidar dados que deveriam estar disponíveis instantaneamente.",
+          stat: "74%",
+          statLabel: "dos directores gastam +10h/semana com planilhas",
         },
         {
-          title: "Processos que consomem tempo",
+          title: "Comunicação perdida no WhatsApp",
           description:
-            "Professores passam mais tempo a preencher formulários e planilhas do que a preparar aulas ou acompanhar alunos. Relatórios de fim de período consomem semanas de trabalho manual.",
+            "Recados perdidos em grupos intermináveis. Pais que não recebem informações. Professores que não conseguem comunicar eficientemente com a direcção.",
+          stat: "3x",
+          statLabel: "mais propensos a perder comunicados importantes",
         },
         {
-          title: "Visibilidade limitada",
+          title: "Relatórios que consomem semanas",
           description:
-            "Sem dados centralizados e actualizados, directores não conseguem identificar problemas a tempo. Alunos com dificuldades passam despercebidos até ser tarde para intervir.",
+            "No final de cada período, a equipa passa dias a compilar notas, presenças e estatísticas. Processo manual, sujeito a erros, que devia levar minutos.",
+          stat: "2+",
+          statLabel: "semanas para consolidar relatórios de período",
         },
         {
-          title: "Comunicação fragmentada",
+          title: "Visibilidade zero sobre o que acontece",
           description:
-            "Recados perdidos, mensagens em grupos dispersos e pais que não recebem informações importantes. A comunicação escolar precisa de ser tão organizada quanto a própria instituição.",
+            "Directores não conseguem identificar problemas a tempo. Alunos com dificuldades passam despercebidos até ser tarde para intervir. Decisões baseadas em suposições.",
+          stat: "60%",
+          statLabel: "dos problemas académicos são detectados tarde demais",
         },
       ],
     },
@@ -364,6 +380,10 @@ const pt = {
       description:
         "Começa com melhores sistemas, melhor visibilidade e melhores ferramentas para crescer. A Cur10usX ajuda a sua escola a organizar o presente e preparar-se para o futuro.",
       button: "Solicitar Demonstração",
+      free_account: "Criar Conta Gratuita",
+      security: "Dados encriptados e seguros",
+      setup: "Configuração em dias",
+      support: "Suporte dedicado",
     },
     footer: {
       description:
@@ -374,6 +394,8 @@ const pt = {
       contact: "CONTACTO",
       status: "Operacional",
       copyright: "Cur10usX. Gestão Escolar.",
+      tos: "Termos de Serviço",
+      privacy: "Política de Privacidade",
     },
   },
   common: {

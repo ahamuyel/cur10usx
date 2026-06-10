@@ -1,47 +1,22 @@
-"use client"
+ "use client"
 
 import { useTranslation } from "@/lib/i18n"
 import { FileSpreadsheet, MessageSquare, FileText, SearchX } from "lucide-react"
 
+type ProblemItem = {
+  title: string
+  description: string
+  stat: string
+  statLabel: string
+}
+
+const icons = [FileSpreadsheet, MessageSquare, FileText, SearchX]
+
 type Props = { locale?: string }
 
-const problems = [
-  {
-    icon: FileSpreadsheet,
-    title: "Dados espalhados por todo o lado",
-    description:
-      "Informações sobre alunos, turmas e calendários em sistemas diferentes. A sua equipa gasta horas a consolidar dados que deveriam estar disponíveis instantaneamente.",
-    stat: "74%",
-    statLabel: "dos directores gastam +10h/semana com planilhas",
-  },
-  {
-    icon: MessageSquare,
-    title: "Comunicação perdida no WhatsApp",
-    description:
-      "Recados perdidos em grupos intermináveis. Pais que não recebem informações. Professores que não conseguem comunicar eficientemente com a direcção.",
-    stat: "3x",
-    statLabel: "mais propensos a perder comunicados importantes",
-  },
-  {
-    icon: FileText,
-    title: "Relatórios que consomem semanas",
-    description:
-      "No final de cada período, a equipa passa dias a compilar notas, presenças e estatísticas. Processo manual, sujeito a erros, que devia levar minutos.",
-    stat: "2+",
-    statLabel: "semanas para consolidar relatórios de período",
-  },
-  {
-    icon: SearchX,
-    title: "Visibilidade zero sobre o que acontece",
-    description:
-      "Directores não conseguem identificar problemas a tempo. Alunos com dificuldades passam despercebidos até ser tarde para intervir. Decisões baseadas em suposições.",
-    stat: "60%",
-    statLabel: "dos problemas académicos são detectados tarde demais",
-  },
-]
-
 export default function ProblemSection({ locale = "pt" }: Props) {
-  const { t } = useTranslation(locale)
+  const { t, tv } = useTranslation(locale)
+  const problems = tv("landing.problem.items") as ProblemItem[]
 
   return (
     <section
@@ -53,19 +28,19 @@ export default function ProblemSection({ locale = "pt" }: Props) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="max-w-3xl mb-16 md:mb-20">
           <span className="text-xs text-[var(--landing-text-dim)] uppercase tracking-widest block mb-3">
-            O Desafio que as Escolas Enfrentam
+            {t("landing.problem.tag")}
           </span>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[var(--landing-text-primary)] tracking-tight leading-none mb-6">
-            Cada informação deveria estar num só lugar. Mas para a maioria das escolas, está dispersa.
+            {t("landing.problem.headline")}
           </h2>
           <p className="text-[var(--landing-text-secondary)] text-sm md:text-base leading-relaxed">
-            No dia-a-dia de uma escola, notas estão numa planilha, presenças num caderno, comunicados no WhatsApp e relatórios em arquivos perdidos. A equipa administrativa sobrecarregada. Professores a perder tempo com burocracia. Directores sem visibilidade.
+            {t("landing.problem.description")}
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {problems.map((item, idx) => {
-            const Icon = item.icon
+            const Icon = icons[idx]
             return (
               <div
                 key={idx}

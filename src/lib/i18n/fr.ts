@@ -3,6 +3,7 @@ const fr = {
     nav: {
       problems: "Le défi",
       transformation: "Solution",
+      product: "Produit",
       ecosystem: "Modules",
       benefits: "Avantages",
       vision: "Futur",
@@ -10,6 +11,10 @@ const fr = {
       explore: "Explorer",
       demo: "Demander une démo",
       signin: "Se connecter",
+      account: "Compte",
+      theme_toggle: "Changer le thème",
+      menu_open: "Ouvrir le menu",
+      menu_close: "Fermer le menu",
     },
     hero: {
       badge: "Plateforme de gestion scolaire n°1 en Angola",
@@ -19,33 +24,44 @@ const fr = {
       cta: "Demander une démonstration",
       explore: "Voir le produit en 60s",
       stats: "écoles angolaises l'utilisent déjà",
+      stats_schools: "écoles",
+      stats_students: "élèves",
+      stats_results: "évaluations",
       trusted_by: "Des écoles qui font confiance à Cur10usX",
     },
     problem: {
       tag: "Le défi auquel les écoles sont confrontées",
       headline: "Chaque information devrait être au même endroit. Mais pour la plupart des écoles, elle est dispersée.",
-      description:
-        "Au quotidien, les notes sont dans un tableur, les présences dans un cahier, les communications sur WhatsApp et les rapports dans des fichiers perdus. L'équipe administrative est débordée. Les enseignants perdent du temps dans la bureaucratie. Et les directeurs manquent de visibilité claire sur ce qui se passe réellement.",
+        description:
+         "Au quotidien, les notes sont dans un tableur, les présences dans un cahier, les communications sur WhatsApp et les rapports dans des fichiers perdus. L'équipe administrative est débordée. Les enseignants perdent du temps dans la bureaucratie. Et les directeurs manquent de visibilité claire sur ce qui se passe réellement.",
       items: [
         {
-          title: "Documents et données éparpillés",
+          title: "Données éparpillées partout",
           description:
-            "Les informations importantes sur les élèves, les classes et les calendriers se trouvent dans des systèmes différents. Votre équipe passe des heures à consolider des données qui devraient être disponibles instantanément.",
+            "Informations sur les élèves, les classes et les calendriers dans des systèmes différents. Votre équipe passe des heures à consolider des données qui devraient être disponibles instantanément.",
+          stat: "74%",
+          statLabel: "des directeurs consacrent +10h/semaine aux tableurs",
         },
         {
-          title: "Processus chronophages",
+          title: "Communication perdue sur WhatsApp",
           description:
-            "Les enseignants passent plus de temps à remplir des formulaires et des tableaux qu'à préparer les cours ou à accompagner les élèves. Les rapports de fin de trimestre demandent des semaines de travail manuel.",
+            "Messages perdus dans des groupes interminables. Parents qui ne reçoivent pas les informations. Enseignants qui ne peuvent pas communiquer efficacement avec la direction.",
+          stat: "3x",
+          statLabel: "plus susceptibles de manquer des communications importantes",
         },
         {
-          title: "Visibilité limitée",
+          title: "Rapports qui prennent des semaines",
           description:
-            "Sans données centralisées et à jour, les directeurs ne peuvent pas identifier les problèmes à temps. Les élèves en difficulté passent inaperçus jusqu'à ce qu'il soit trop tard pour intervenir.",
+            "À la fin de chaque période, l'équipe passe des jours à compiler les notes, présences et statistiques. Processus manuel, sujet aux erreurs, qui devrait prendre quelques minutes.",
+          stat: "2+",
+          statLabel: "semaines pour consolider les rapports de période",
         },
         {
-          title: "Communication fragmentée",
+          title: "Visibilité zéro sur ce qui se passe",
           description:
-            "Mots égarés, messages dans des groupes dispersés et parents qui manquent d'informations importantes. La communication scolaire doit être aussi organisée que l'institution elle-même.",
+            "Les directeurs ne peuvent pas identifier les problèmes à temps. Les élèves en difficulté passent inaperçus. Décisions basées sur des suppositions.",
+          stat: "60%",
+          statLabel: "des problèmes académiques sont détectés trop tard",
         },
       ],
     },
@@ -364,6 +380,10 @@ const fr = {
       description:
         "Cela commence par de meilleurs systèmes, une meilleure visibilité et de meilleurs outils pour grandir. Cur10usX aide votre école à organiser le présent et à préparer l'avenir.",
       button: "Demander une démonstration",
+      free_account: "Créer un compte gratuit",
+      security: "Données chiffrées et sécurisées",
+      setup: "Configuration en jours",
+      support: "Support dédié",
     },
     footer: {
       description:
@@ -374,6 +394,8 @@ const fr = {
       contact: "CONTACT",
       status: "Opérationnel",
       copyright: "Cur10usX. Gestion scolaire.",
+      tos: "Conditions d'utilisation",
+      privacy: "Politique de confidentialité",
     },
   },
   common: {

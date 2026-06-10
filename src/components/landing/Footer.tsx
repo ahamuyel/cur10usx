@@ -150,12 +150,12 @@ export default function Footer({ locale = "pt" }: Props) {
             <ul className="space-y-3">
               <li>
                 <Link href="/termos" className="text-xs text-[var(--landing-text-muted)] hover:text-[var(--landing-text-primary)] transition-colors">
-                  Termos de Serviço
+                  {t("landing.footer.tos")}
                 </Link>
               </li>
               <li>
                 <Link href="/privacidade" className="text-xs text-[var(--landing-text-muted)] hover:text-[var(--landing-text-primary)] transition-colors">
-                  Política de Privacidade
+                  {t("landing.footer.privacy")}
                 </Link>
               </li>
               <li className="pt-2">
