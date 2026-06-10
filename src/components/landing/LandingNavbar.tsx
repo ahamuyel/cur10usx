@@ -25,9 +25,8 @@ export default function LandingNavbar({
   const navLinks = [
     { label: t("landing.nav.problems"), href: "#problems" },
     { label: t("landing.nav.transformation"), href: "#transformation" },
+    { label: t("landing.nav.product"), href: "#produto" },
     { label: t("landing.nav.benefits"), href: "#benefits" },
-    { label: t("landing.nav.vision"), href: "#vision" },
-    { label: t("landing.nav.trust"), href: "#trust" },
   ]
 
   useEffect(() => {
@@ -92,7 +91,7 @@ export default function LandingNavbar({
           
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 group shrink-0 select-none">
-            <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-neutral-900 dark:bg-white text-white dark:text-zinc-900 text-xs font-bold transition-transform group-hover:scale-105 group-hover:rotate-3">
+            <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-neutral-900 dark:bg-white text-white dark:text-zinc-900 text-xs font-bold transition-transform group-hover:scale-105">
               <GraduationCap className="w-4 h-4" />
             </div>
             <span className="font-bold text-sm tracking-tight text-[var(--landing-text-primary)] hidden sm:block">
@@ -100,7 +99,7 @@ export default function LandingNavbar({
             </span>
           </Link>
 
-          {/* Desktop/Tablet Navigation - Espaçamentos e Margens Reduzidas em Telas Médias */}
+          {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-0.5 lg:gap-1">
             {navLinks.map((link) => {
               const isActive = activeSection === link.href
@@ -120,17 +119,17 @@ export default function LandingNavbar({
             })}
           </nav>
 
-          {/* Desktop/Tablet Actions - Mais Compacto */}
+          {/* Desktop Actions */}
           <div className="hidden md:flex items-center gap-1 lg:gap-2 shrink-0">
             <LocaleSwitcher currentLocale={locale} theme={theme} toggleTheme={toggleTheme} />
             
-            <button
+            {/* <button
               onClick={toggleTheme}
               className="p-1.5 lg:p-2 rounded-lg text-[var(--landing-text-muted)] hover:text-[var(--landing-text-primary)] hover:bg-[var(--landing-bg-tertiary)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary cursor-pointer"
               aria-label="Alternar tema"
             >
               {theme === "light" ? <Moon size={16} /> : <Sun size={16} />}
-            </button>
+            </button> */}
 
             <div className="w-px h-5 bg-[var(--landing-border)] mx-0.5 lg:mx-1" />
             
@@ -161,14 +160,14 @@ export default function LandingNavbar({
             <button
               onClick={toggleTheme}
               className="p-2 rounded-lg text-[var(--landing-text-muted)] hover:text-[var(--landing-text-primary)] hover:bg-[var(--landing-bg-tertiary)] transition-colors cursor-pointer"
-              aria-label="Alternar tema"
+              aria-label={t("landing.nav.theme_toggle")}
             >
               {theme === "light" ? <Moon size={18} /> : <Sun size={18} />}
             </button>
             <button
               onClick={() => setOpen(!open)}
               className="p-2 rounded-lg text-[var(--landing-text-muted)] hover:text-[var(--landing-text-primary)] hover:bg-[var(--landing-bg-tertiary)] transition-all relative z-50 focus-visible:outline-none cursor-pointer"
-              aria-label={open ? "Fechar menu" : "Abrir menu"}
+              aria-label={open ? t("landing.nav.menu_close") : t("landing.nav.menu_open")}
               aria-expanded={open}
             >
               <div className="relative w-5 h-5 flex items-center justify-center">
@@ -226,7 +225,7 @@ export default function LandingNavbar({
           >
             <div>
               <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--landing-text-dim)] px-4 pb-2">
-                Conta
+                {t("landing.nav.account")}
               </p>
               <div className="grid grid-cols-2 gap-2">
                 <Link
