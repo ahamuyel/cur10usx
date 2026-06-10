@@ -4,12 +4,13 @@ import LandingNavbar from "@/components/landing/LandingNavbar"
 import HeroSection from "@/components/landing/HeroSection"
 import ProblemSection from "@/components/landing/ProblemSection"
 import TransformationSection from "@/components/landing/TransformationSection"
-import MultiTenantSection from "@/components/landing/MultiTenantSection"
 import ProductEcosystem from "@/components/landing/ProductEcosystem"
+import ProductShowcase from "@/components/landing/ProductShowcase"
 import BenefitsSection from "@/components/landing/BenefitsSection"
-import VisionSection from "@/components/landing/VisionSection"
-import TrustSection from "@/components/landing/TrustSection"
+import StatsSection from "@/components/landing/StatsSection"
 import TestimonialsSection from "@/components/landing/TestimonialsSection"
+import TrustSection from "@/components/landing/TrustSection"
+import VisionSection from "@/components/landing/VisionSection"
 import FAQSection from "@/components/landing/FAQSection"
 import CTASection from "@/components/landing/CTASection"
 import Footer from "@/components/landing/Footer"
@@ -84,30 +85,38 @@ export default async function Home() {
       <AnimateOnScroll>
         <ProblemSection locale={locale} />
       </AnimateOnScroll>
+      {/* <AnimateOnScroll>
+        <StatsSection
+          schools={stats.schools}
+          students={stats.students}
+          teachers={stats.teachers}
+          classes={stats.classes}
+        />
+      </AnimateOnScroll> */}
       <AnimateOnScroll>
         <TransformationSection locale={locale} />
       </AnimateOnScroll>
-      <AnimateOnScroll>
-        <MultiTenantSection locale={locale} stats={stats} />
-      </AnimateOnScroll>
-      <AnimateOnScroll>
+      {/* <AnimateOnScroll>
+        <ProductShowcase locale={locale} />
+      </AnimateOnScroll> */}
+      {/* <AnimateOnScroll>
         <ProductEcosystem locale={locale} />
-      </AnimateOnScroll>
-      <AnimateOnScroll>
+      </AnimateOnScroll> */}
+      {/* <AnimateOnScroll>
         <BenefitsSection locale={locale} />
-      </AnimateOnScroll>
+      </AnimateOnScroll> */}
+      {/* <AnimateOnScroll>
+        <TestimonialsSection locale={locale} />
+      </AnimateOnScroll> */}
+      {/* <AnimateOnScroll>
+        <TrustSection locale={locale} />
+      </AnimateOnScroll> */}
       <AnimateOnScroll>
         <VisionSection locale={locale} />
       </AnimateOnScroll>
-      <AnimateOnScroll>
-        <TrustSection locale={locale} />
-      </AnimateOnScroll>
-      <AnimateOnScroll>
-        <TestimonialsSection locale={locale} />
-      </AnimateOnScroll>
-      <AnimateOnScroll>
+      {/* <AnimateOnScroll>
         <FAQSection locale={locale} />
-      </AnimateOnScroll>
+      </AnimateOnScroll> */}
       <CTASection locale={locale} />
       <Footer locale={locale} />
     </div>
