@@ -46,17 +46,15 @@ export default function HeroSection({
             </div> */}
 
             <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl tracking-tight leading-[0.95] text-zinc-900 dark:text-zinc-50">
-              <span className="font-black block">O Sistema Operacional</span>
-
-              <span className="font-black text-primary block mt-2">
-                da Sua Escola
-              </span>
+              {t("landing.hero.headline").split('\n').map((part, i, arr) => (
+                <span key={i} className={`font-black ${i === 0 ? 'block' : 'block mt-2'} ${i === arr.length - 1 ? 'text-primary' : ''}`}>
+                  {part}
+                </span>
+              ))}
             </h1>
 
             <p className="mt-8 max-w-2xl text-lg md:text-xl text-zinc-500 dark:text-zinc-400 leading-relaxed">
-              Substitua planilhas, cadernetas e grupos de WhatsApp por uma
-              plataforma única. Alunos, professores, avaliações e relatórios —
-              tudo centralizado num só lugar.
+              {t("landing.hero.subheadline")}
             </p>
 
             <div className="mt-10 flex flex-col sm:flex-row gap-4">
@@ -64,7 +62,7 @@ export default function HeroSection({
                 onClick={() => router.push("/registar-escola")}
                 className="group inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-semibold hover:scale-[1.02] active:scale-[0.98] transition-all shadow-lg"
               >
-                Solicitar Demonstração
+                {t("landing.hero.cta")}
               </button>
 
               <button
@@ -72,15 +70,15 @@ export default function HeroSection({
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl border border-zinc-200 dark:border-zinc-800 font-semibold hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-all"
               >
                 <Play size={14} className="fill-current" />
-                Ver Produto em 60s
+                {t("landing.hero.explore")}
               </button>
             </div>
 
             <div className="mt-12 inline-flex flex-wrap justify-center items-center gap-0 divide-x divide-zinc-200 dark:divide-zinc-800 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white/60 dark:bg-zinc-900/60 backdrop-blur-sm overflow-hidden">
               {[
-                { icon: School, value: stats.schools, label: "escolas" },
-                { icon: Users, value: stats.students, label: "alunos" },
-                { icon: BarChart3, value: stats.results, label: "avaliações" },
+                { icon: School, value: stats.schools, label: t("landing.hero.stats_schools") },
+                { icon: Users, value: stats.students, label: t("landing.hero.stats_students") },
+                { icon: BarChart3, value: stats.results, label: t("landing.hero.stats_results") },
               ].map(({ icon: Icon, value, label }) => (
                 <div
                   key={label}
@@ -100,7 +98,7 @@ export default function HeroSection({
         </div>
 
         {/* ── Logo carousel ───────────────────────────────────────────────── */}
-        {schools.length > 0 && (
+        {/* {schools.length > 0 && (
           <div className="mt-20 md:mt-28">
             <p className="text-center text-[10px] font-mono uppercase tracking-[0.25em] text-zinc-400 dark:text-zinc-600 mb-6">
               {t("landing.hero.trusted_by")}
@@ -140,7 +138,7 @@ export default function HeroSection({
               />
             </div>
           </div>
-        )}
+        )} */}
       </div>
     </TheInfiniteGrid>
   );
