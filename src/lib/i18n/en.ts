@@ -3,6 +3,7 @@ const en = {
     nav: {
       problems: "The Challenge",
       transformation: "Solution",
+      product: "Product",
       ecosystem: "Modules",
       benefits: "Benefits",
       vision: "Future",
@@ -10,6 +11,10 @@ const en = {
       explore: "Explore",
       demo: "Request a Demo",
       signin: "Sign In",
+      account: "Account",
+      theme_toggle: "Toggle theme",
+      menu_open: "Open menu",
+      menu_close: "Close menu",
     },
     hero: {
       badge: "#1 School Management Platform in Angola",
@@ -19,33 +24,44 @@ const en = {
       cta: "Request a Demo",
       explore: "See Product in 60s",
       stats: "Angolan schools already use it",
+      stats_schools: "schools",
+      stats_students: "students",
+      stats_results: "assessments",
       trusted_by: "Schools that trust Cur10usX",
     },
     problem: {
       tag: "The Challenge Schools Face",
       headline: "Every piece of information should be in one place. But for most schools, it's scattered.",
-      description:
-        "In a school's daily life, grades are in one spreadsheet, attendance in a notebook, messages on WhatsApp, and reports in lost files. The administrative team is overwhelmed. Teachers lose time to paperwork. And directors lack clear visibility into what's really happening.",
+        description:
+         "In a school's daily life, grades are in one spreadsheet, attendance in a notebook, messages on WhatsApp, and reports in lost files. The administrative team is overwhelmed. Teachers lose time to paperwork. And directors lack clear visibility into what's really happening.",
       items: [
         {
-          title: "Scattered documents and data",
+          title: "Data scattered everywhere",
           description:
-            "Important information about students, classes, and schedules lives in different systems. Your team spends hours consolidating data that should be available instantly.",
+            "Information about students, classes, and schedules in different systems. Your team spends hours consolidating data that should be available instantly.",
+          stat: "74%",
+          statLabel: "of directors spend 10+ hours/week on spreadsheets",
         },
         {
-          title: "Processes that consume time",
+          title: "Communication lost in WhatsApp",
           description:
-            "Teachers spend more time filling forms and spreadsheets than preparing lessons or supporting students. End-of-term reports take weeks of manual work.",
+            "Lost messages in endless groups. Parents missing information. Teachers unable to communicate efficiently with management.",
+          stat: "3x",
+          statLabel: "more likely to miss important announcements",
         },
         {
-          title: "Limited visibility",
+          title: "Reports that take weeks",
           description:
-            "Without centralized, up-to-date data, directors can't identify problems in time. Struggling students go unnoticed until it's too late to intervene.",
+            "At the end of each term, the team spends days compiling grades, attendance, and statistics. Manual, error-prone process that should take minutes.",
+          stat: "2+",
+          statLabel: "weeks to consolidate term reports",
         },
         {
-          title: "Fragmented communication",
+          title: "Zero visibility on what happens",
           description:
-            "Lost notices, scattered group messages, parents missing important information. School communication needs to be as organized as the institution itself.",
+            "Directors can't identify problems in time. Struggling students go unnoticed until it's too late. Decisions based on assumptions.",
+          stat: "60%",
+          statLabel: "of academic problems are detected too late",
         },
       ],
     },
@@ -364,6 +380,10 @@ const en = {
       description:
         "It starts with better systems, better visibility, and better tools for growth. Cur10usX helps your school organize the present and prepare for the future.",
       button: "Request a Demo",
+      free_account: "Create Free Account",
+      security: "Encrypted and secure data",
+      setup: "Setup in days",
+      support: "Dedicated support",
     },
     footer: {
       description:
@@ -374,6 +394,8 @@ const en = {
       contact: "CONTACT",
       status: "Operational",
       copyright: "Cur10usX. School Management.",
+      tos: "Terms of Service",
+      privacy: "Privacy Policy",
     },
   },
   common: {

@@ -45,6 +45,7 @@ async function handleSignup(req: Request) {
     }
 
     const { name, email, password } = parsed.data
+    const role = ["teacher", "student"].includes(body.role) ? body.role : "student"
     const hashedPassword = await hashPassword(password)
 
     // Create user with emailVerified = false
@@ -52,7 +53,7 @@ async function handleSignup(req: Request) {
     let user
     try {
       user = await prisma.user.create({
-        data: { name, email, hashedPassword, provider: "credentials", isActive: false, emailVerified: false },
+        data: { name, email, hashedPassword, role, provider: "credentials", isActive: false, emailVerified: false },
       })
     } catch (createError: unknown) {
       if (createError && typeof createError === "object" && "code" in createError && (createError as { code: string }).code === "P2002") {
