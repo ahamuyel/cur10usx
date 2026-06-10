@@ -1,189 +1,108 @@
-"use client"
+"use client";
 
-import { useRouter } from "next/navigation"
-import { useTranslation } from "@/lib/i18n"
-import { TheInfiniteGrid } from "@/components/ui/the-infinite-grid"
-import { InfiniteSlider } from "@/components/ui/infinite-slider"
-import { ProgressiveBlur } from "@/components/ui/progressive-blur"
-import { BarChart3, GraduationCap, Users, School } from "lucide-react"
-import type { PlatformBranding, SchoolLogo, LandingStats } from "@/types/landing"
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+import { useTranslation } from "@/lib/i18n";
+import { TheInfiniteGrid } from "@/components/ui/the-infinite-grid";
+import { InfiniteSlider } from "@/components/ui/infinite-slider";
+import { ProgressiveBlur } from "@/components/ui/progressive-blur";
+import { School, Users, BarChart3, Play } from "lucide-react";
+import type {
+  PlatformBranding,
+  SchoolLogo,
+  LandingStats,
+} from "@/types/landing";
 
 type Props = {
-  branding?: PlatformBranding
-  schools?: SchoolLogo[]
-  stats: LandingStats
-  locale?: string
-}
+  branding?: PlatformBranding;
+  schools?: SchoolLogo[];
+  stats: LandingStats;
+  locale?: string;
+};
 
 export default function HeroSection({
   schools: rawSchools = [],
   stats,
   locale = "pt",
 }: Props) {
-  const router = useRouter()
-  const { t } = useTranslation(locale)
+  const router = useRouter();
+  const { t } = useTranslation(locale);
 
-  const schools = Array.isArray(rawSchools) ? rawSchools : []
+  const schools = Array.isArray(rawSchools) ? rawSchools : [];
 
   return (
     <TheInfiniteGrid className="min-h-screen pt-24 md:pt-32 pb-20 md:pb-28 overflow-hidden relative">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        
-        {/* HERO CONTENT — Split layout: text left, visual right */}
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          
-          {/* LEFT: Text */}
-          <div className="text-center lg:text-left">
-            
-            {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[var(--landing-border)] bg-[var(--landing-bg)]/80 backdrop-blur-sm text-xs font-medium text-[var(--landing-text-secondary)] mb-8">
-              <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-              {t("landing.hero.badge")}
-            </div>
+      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-primary/12 dark:bg-primary/18 blur-[120px] rounded-full pointer-events-none" />
 
-            {/* Headline */}
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.05] text-[var(--landing-text-primary)] whitespace-pre-line">
-              {t("landing.hero.headline")}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="flex flex-col items-center text-center max-w-5xl mx-auto">
+          <div className="flex flex-col items-center text-center">
+            {/* <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-zinc-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-sm text-xs text-zinc-500 dark:text-zinc-400 mb-8">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="font-semibold text-zinc-900 dark:text-zinc-100">
+                {stats.schools}
+              </span>
+              <span>escolas angolanas já utilizam</span>
+            </div> */}
+
+            <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl tracking-tight leading-[0.95] text-zinc-900 dark:text-zinc-50">
+              <span className="font-black block">O Sistema Operacional</span>
+
+              <span className="font-black text-primary block mt-2">
+                da Sua Escola
+              </span>
             </h1>
 
-            {/* Subheadline */}
-            <p className="mt-6 max-w-xl text-base md:text-lg text-[var(--landing-text-secondary)] leading-relaxed">
-              {t("landing.hero.subheadline")}
+            <p className="mt-8 max-w-2xl text-lg md:text-xl text-zinc-500 dark:text-zinc-400 leading-relaxed">
+              Substitua planilhas, cadernetas e grupos de WhatsApp por uma
+              plataforma única. Alunos, professores, avaliações e relatórios —
+              tudo centralizado num só lugar.
             </p>
 
-            {/* CTA Buttons */}
-            <div className="mt-8 flex flex-col sm:flex-row gap-3">
+            <div className="mt-10 flex flex-col sm:flex-row gap-4">
               <button
                 onClick={() => router.push("/registar-escola")}
-                className="
-                  px-8 py-3.5
-                  rounded-xl
-                  bg-neutral-900 dark:bg-white
-                  text-white dark:text-neutral-900
-                  font-semibold text-sm
-                  hover:scale-[1.02]
-                  active:scale-[0.98]
-                  transition-all
-                  shadow-xl shadow-neutral-900/10 dark:shadow-white/5
-                "
+                className="group inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-semibold hover:scale-[1.02] active:scale-[0.98] transition-all shadow-lg"
               >
-                {t("landing.hero.cta")}
+                Solicitar Demonstração
               </button>
 
               <button
                 onClick={() => router.push("/signup")}
-                className="
-                  px-8 py-3.5
-                  rounded-xl
-                  border border-[var(--landing-border)]
-                  bg-[var(--landing-bg)]
-                  text-[var(--landing-text-primary)]
-                  font-semibold text-sm
-                  hover:bg-[var(--landing-bg-tertiary)]
-                  transition-all
-                "
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl border border-zinc-200 dark:border-zinc-800 font-semibold hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-all"
               >
-                {t("landing.hero.explore")}
+                <Play size={14} className="fill-current" />
+                Ver Produto em 60s
               </button>
             </div>
 
-            {/* Stats */}
-            <div className="mt-10 flex items-center gap-8">
-              <div className="flex items-center gap-2 text-sm text-[var(--landing-text-secondary)]">
-                <School size={16} className="text-primary" />
-                <span className="font-bold text-[var(--landing-text-primary)]">{stats.schools}</span>
-                <span>escolas</span>
-              </div>
-              <div className="flex items-center gap-2 text-sm text-[var(--landing-text-secondary)]">
-                <Users size={16} className="text-primary" />
-                <span className="font-bold text-[var(--landing-text-primary)]">{stats.students}</span>
-                <span>alunos</span>
-              </div>
-              <div className="flex items-center gap-2 text-sm text-[var(--landing-text-secondary)]">
-                <BarChart3 size={16} className="text-primary" />
-                <span className="font-bold text-[var(--landing-text-primary)]">{stats.results}</span>
-                <span>avaliações</span>
-              </div>
-            </div>
-          </div>
-
-          {/* RIGHT: Dashboard Mockup */}
-          <div className="hidden lg:block relative">
-            <div className="relative">
-              {/* Glow effect behind the mockup */}
-              <div className="absolute -inset-16 bg-gradient-to-r from-primary/20 via-cyan/10 to-transparent rounded-[40px] blur-3xl opacity-60" />
-              
-              {/* TODO: Replace this mockup with a real screenshot of the Cur10usX dashboard */}
-              <div className="relative rounded-2xl border border-[var(--landing-border)] bg-[var(--landing-bg-elevated)] shadow-2xl overflow-hidden">
-                {/* Mockup header */}
-                <div className="flex items-center justify-between px-5 py-3 border-b border-[var(--landing-border)] bg-[var(--landing-bg-secondary)]">
-                  <div className="flex items-center gap-2">
-                    <div className="flex gap-1.5">
-                      <div className="w-2.5 h-2.5 rounded-full bg-rose-400" />
-                      <div className="w-2.5 h-2.5 rounded-full bg-amber-400" />
-                      <div className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
-                    </div>
-                    <span className="text-[11px] font-mono text-[var(--landing-text-dim)] ml-3">cur10usx.app/dashboard</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center">
-                      <GraduationCap size={12} className="text-primary" />
-                    </div>
-                  </div>
+            <div className="mt-12 inline-flex flex-wrap justify-center items-center gap-0 divide-x divide-zinc-200 dark:divide-zinc-800 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white/60 dark:bg-zinc-900/60 backdrop-blur-sm overflow-hidden">
+              {[
+                { icon: School, value: stats.schools, label: "escolas" },
+                { icon: Users, value: stats.students, label: "alunos" },
+                { icon: BarChart3, value: stats.results, label: "avaliações" },
+              ].map(({ icon: Icon, value, label }) => (
+                <div
+                  key={label}
+                  className="flex items-center gap-2 px-5 py-3 text-sm"
+                >
+                  <Icon size={13} className="text-primary shrink-0" />
+                  <span className="font-bold text-zinc-900 dark:text-zinc-100">
+                    {value}
+                  </span>
+                  <span className="text-zinc-500 dark:text-zinc-400">
+                    {label}
+                  </span>
                 </div>
-
-                {/* Mockup body */}
-                <div className="p-5 space-y-4">
-                  {/* Stats row */}
-                  <div className="grid grid-cols-3 gap-3">
-                    <div className="rounded-xl bg-primary/5 border border-primary/10 p-4">
-                      <p className="text-[11px] text-[var(--landing-text-dim)] font-medium uppercase tracking-wider">Alunos</p>
-                      <p className="text-2xl font-bold text-[var(--landing-text-primary)] mt-1">{stats.students}</p>
-                    </div>
-                    <div className="rounded-xl bg-cyan/5 border border-cyan/10 p-4">
-                      <p className="text-[11px] text-[var(--landing-text-dim)] font-medium uppercase tracking-wider">Professores</p>
-                      <p className="text-2xl font-bold text-[var(--landing-text-primary)] mt-1">{stats.teachers}</p>
-                    </div>
-                    <div className="rounded-xl bg-emerald/5 border border-emerald/10 p-4">
-                      <p className="text-[11px] text-[var(--landing-text-dim)] font-medium uppercase tracking-wider">Turmas</p>
-                      <p className="text-2xl font-bold text-[var(--landing-text-primary)] mt-1">{stats.classes}</p>
-                    </div>
-                  </div>
-
-                  {/* Chart section */}
-                  <div className="rounded-xl bg-[var(--landing-bg-secondary)] border border-[var(--landing-border)] p-4">
-                    <div className="flex items-center justify-between mb-4">
-                      <p className="text-xs font-semibold text-[var(--landing-text-primary)]">Desempenho por Turma</p>
-                      <span className="text-[10px] text-[var(--landing-text-dim)]">Este período</span>
-                    </div>
-                    <div className="flex items-end gap-3 h-24">
-                      <div className="flex-1 bg-primary/20 rounded-t-lg h-16" style={{ height: "65%" }} />
-                      <div className="flex-1 bg-primary/30 rounded-t-lg" style={{ height: "80%" }} />
-                      <div className="flex-1 bg-primary/40 rounded-t-lg" style={{ height: "45%" }} />
-                      <div className="flex-1 bg-primary/50 rounded-t-lg" style={{ height: "90%" }} />
-                      <div className="flex-1 bg-primary/60 rounded-t-lg" style={{ height: "55%" }} />
-                      <div className="flex-1 bg-primary/40 rounded-t-lg" style={{ height: "70%" }} />
-                    </div>
-                  </div>
-
-                  {/* Bottom info */}
-                  <div className="flex items-center justify-between text-[11px] text-[var(--landing-text-dim)]">
-                    <span className="flex items-center gap-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                      {stats.schools} {t("landing.hero.stats")}
-                    </span>
-                    <span>actualizado em tempo real</span>
-                  </div>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         </div>
 
-        {/* LOGOS CAROUSEL */}
+        {/* ── Logo carousel ───────────────────────────────────────────────── */}
         {schools.length > 0 && (
-          <div className="mt-20 md:mt-24">
-            <p className="text-center text-[10px] font-mono uppercase tracking-[0.25em] text-[var(--landing-text-dim)] mb-6">
+          <div className="mt-20 md:mt-28">
+            <p className="text-center text-[10px] font-mono uppercase tracking-[0.25em] text-zinc-400 dark:text-zinc-600 mb-6">
               {t("landing.hero.trusted_by")}
             </p>
 
@@ -192,13 +111,7 @@ export default function HeroSection({
                 {schools.map((school, i) => (
                   <div
                     key={i}
-                    className="
-                      flex h-[50px] w-36
-                      items-center justify-center
-                      grayscale opacity-40
-                      hover:grayscale-0 hover:opacity-100
-                      transition-all duration-300
-                    "
+                    className="flex h-[50px] w-36 items-center justify-center grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-300"
                   >
                     {school.logo ? (
                       <img
@@ -207,7 +120,7 @@ export default function HeroSection({
                         className="max-h-full max-w-full object-contain"
                       />
                     ) : (
-                      <span className="text-xs font-medium text-[var(--landing-text-dim)]">
+                      <span className="text-xs font-medium text-zinc-400">
                         {school.name}
                       </span>
                     )}
@@ -230,5 +143,5 @@ export default function HeroSection({
         )}
       </div>
     </TheInfiniteGrid>
-  )
+  );
 }
