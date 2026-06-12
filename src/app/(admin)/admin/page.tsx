@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
-import { School, Users, GraduationCap, FileText, Loader2, UserCheck } from "lucide-react"
+import { School, Users, FileText, Loader2 } from "lucide-react"
 import {
   LineChart,
   Line,
@@ -78,10 +78,10 @@ export default function AdminDashboard() {
   }
 
   const cards = [
-    { icon: School, label: "Escolas ativas", value: data.activeSchools, color: "text-primary bg-primary-100 dark:bg-primary-950 dark:text-primary-400" },
-    { icon: School, label: "Escolas pendentes", value: data.pendingSchools, color: "text-amber-600 bg-amber-100 dark:bg-amber-950 dark:text-amber-400" },
-    { icon: Users, label: "Utilizadores", value: data.totalUsers, color: "text-cyan-600 bg-cyan-100 dark:bg-cyan-950 dark:text-cyan-400" },
-    { icon: FileText, label: "Solicitações pendentes", value: data.pendingApplications, color: "text-rose-600 bg-rose-100 dark:bg-rose-950 dark:text-rose-400" },
+    { key: "activeSchools", icon: School, label: "Escolas ativas", value: data.activeSchools, href: "/admin/schools", color: "text-primary bg-primary-100 dark:bg-primary-950 dark:text-primary-400" },
+    { key: "pendingSchools", icon: School, label: "Escolas pendentes", value: data.pendingSchools, href: "/admin/schools", color: "text-amber-600 bg-amber-100 dark:bg-amber-950 dark:text-amber-400" },
+    { key: "users", icon: Users, label: "Utilizadores", value: data.totalUsers, href: "/admin/users", color: "text-cyan-600 bg-cyan-100 dark:bg-cyan-950 dark:text-cyan-400" },
+    { key: "pendingApplications", icon: FileText, label: "Solicitações pendentes", value: data.pendingApplications, href: "/admin/applications", color: "text-rose-600 bg-rose-100 dark:bg-rose-950 dark:text-rose-400" },
   ]
 
   const pieData = data.statusBreakdown.filter((s) => s.count > 0)
@@ -96,15 +96,17 @@ export default function AdminDashboard() {
         {cards.map((card) => {
           const Icon = card.icon
           return (
-            <div key={card.label} className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-4 shadow-sm">
-              <div className="flex items-center gap-3 mb-3">
-                <div className={`w-9 h-9 rounded-lg flex items-center justify-center ${card.color}`}>
-                  <Icon className="w-4 h-4" />
+            <Link key={card.key} href={card.href}>
+              <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-4 shadow-sm hover:border-primary dark:hover:border-primary-400 transition-colors cursor-pointer select-none">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className={`w-9 h-9 rounded-lg flex items-center justify-center ${card.color}`}>
+                    <Icon className="w-4 h-4" />
+                  </div>
+                  <span className="text-xs text-zinc-500 dark:text-zinc-400">{card.label}</span>
                 </div>
-                <span className="text-xs text-zinc-500 dark:text-zinc-400">{card.label}</span>
+                <p className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">{card.value}</p>
               </div>
-              <p className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">{card.value}</p>
-            </div>
+            </Link>
           )
         })}
       </div>

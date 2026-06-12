@@ -143,7 +143,7 @@ export default function DashboardPage() {
       students: { icon: Users, color: "emerald", value: stats.students, href: "/list/students" },
       teachers: { icon: UserRound, color: "indigo", value: stats.teachers, href: "/list/teachers" },
       classes: { icon: Presentation, color: "cyan", value: stats.classes, href: "/list/classes" },
-      averageGrade: { icon: GraduationCap, color: "amber", value: `${stats.averageGrade}/20` },
+      averageGrade: { icon: GraduationCap, color: "amber", value: `${stats.averageGrade}/20`, href: "/list/results" },
       pendingAssignments: { icon: ClipboardList, color: "rose", value: stats.pendingAssignments, href: "/list/assignments" },
       todayLessons: { icon: Calendar, color: "indigo", value: stats.todayLessons, href: "/list/lessons" },
       pendingApplications: { icon: Inbox, color: "amber", value: stats.pendingApplications, href: "/list/applications" },
