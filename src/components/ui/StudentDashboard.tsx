@@ -78,18 +78,21 @@ export default function StudentDashboard({ studentId }: Props) {
           value={`${data.generalAverage}/20`}
           icon={GraduationCap}
           color={data.generalAverage >= 14 ? "emerald" : data.generalAverage >= 10 ? "amber" : "rose"}
+          href="/list/results"
         />
         <StatCard
           label="Assiduidade"
           value={`${data.attendancePercent}%`}
           icon={CalendarCheck}
           color={data.attendancePercent >= 90 ? "emerald" : data.attendancePercent >= 75 ? "amber" : "rose"}
+          href="/list/attendance"
         />
         <StatCard
           label="Total de Notas"
           value={data.totalResults}
           icon={BookOpen}
           color="indigo"
+          href="/list/results"
         />
         <StatCard
           label="Tarefas Pendentes"

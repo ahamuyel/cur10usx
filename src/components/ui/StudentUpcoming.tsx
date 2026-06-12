@@ -47,10 +47,8 @@ export default function StudentUpcoming({ exams, assignments }: Props) {
             return (
               <div
                 key={`${item.kind}-${item.id}`}
-                onClick={() => { if (item.kind === "assignment") router.push("/list/assignments") }}
-                className={`flex items-center gap-3 py-2.5 px-3 rounded-xl bg-zinc-50 dark:bg-zinc-800/50 ${
-                  item.kind === "assignment" ? "cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-700/50 transition-colors" : ""
-                }`}
+                onClick={() => router.push(item.kind === "assignment" ? "/list/assignments" : "/list/exams")}
+                className="flex items-center gap-3 py-2.5 px-3 rounded-xl bg-zinc-50 dark:bg-zinc-800/50 cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-700/50 transition-colors"
               >
                 <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
                   item.kind === "exam"
