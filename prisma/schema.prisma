@@ -70,8 +70,9 @@ model School {
   students          Student[]
   subjects          Subject[]
   supportTickets    SupportTicket[]
-  teachers          Teacher[]
-  users             User[]
+  teachers                Teacher[]
+  users                   User[]
+  academicHealthSnapshots AcademicHealthSnapshot[]
 }
 
 model Application {
@@ -586,8 +587,9 @@ model AcademicYear {
   enrollments       Enrollment[]
   exams             Exam[]
   gradingConfigs    GradingConfig[]
-  lessons           Lesson[]
-  results           Result[]
+  lessons                 Lesson[]
+  results                 Result[]
+  academicHealthSnapshots AcademicHealthSnapshot[]
 
   @@unique([name, schoolId])
 }
@@ -828,6 +830,25 @@ model AcademicHistory {
   student        Student          @relation(fields: [studentId], references: [id], onDelete: Cascade)
 
   @@unique([studentId, academicYearId, schoolId])
+}
+
+model AcademicHealthSnapshot {
+  id                       String   @id @default(cuid())
+  schoolId                 String
+  score                    Int
+  status                   String
+  academicPerformance      Int
+  attendance               Int
+  schoolActivity           Int
+  administrativeEfficiency Int
+  snapshotDate             DateTime @default(now())
+  periodStart              DateTime
+  periodEnd                DateTime
+  academicYearId           String?
+  school                   School         @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  academicYear             AcademicYear?  @relation(fields: [academicYearId], references: [id])
+
+  @@index([schoolId, snapshotDate])
 }
 
 model CycleCertificate {

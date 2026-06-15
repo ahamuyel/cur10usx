@@ -1,0 +1,58 @@
+import { NextRequest, NextResponse } from "next/server"
+import { requireRole, getSchoolId } from "@/lib/api-auth"
+import { predictorRegistry } from "@/lib/predictors"
+import { getCurrentAcademicYear } from "@/lib/academic-year"
+import { prisma } from "@/lib/prisma"
+
+import "@/lib/predictors/absenteism"
+import "@/lib/predictors/performance-drop"
+import "@/lib/predictors/reprovacao"
+import "@/lib/predictors/abandono"
+
+export async function GET(request: NextRequest) {
+  try {
+    const { error: authError, session } = await requireRole(
+      ["school_admin", "super_admin"],
+      { requireSchool: true }
+    )
+    if (authError) return authError
+
+    const schoolId = getSchoolId(session!)
+    const { searchParams } = new URL(request.url)
+    const studentId = searchParams.get("studentId")
+
+    const academicYear = await getCurrentAcademicYear(schoolId)
+    const academicYearId = academicYear?.id
+
+    const students = studentId
+      ? await prisma.student.findMany({ where: { id: studentId, schoolId }, select: { id: true } })
+      : await prisma.student.findMany({ where: { schoolId }, select: { id: true } })
+
+    const results = []
+    for (const student of students) {
+      const predictions = await predictorRegistry.predictAll({
+        studentId: student.id,
+        schoolId,
+        academicYearId,
+      })
+      results.push(...predictions)
+    }
+
+    const summary = {
+      total: results.length,
+      byType: {} as Record<string, number>,
+      bySeverity: {} as Record<string, number>,
+      highRisk: results.filter(r => r.severity === "high" || r.severity === "critical").length,
+    }
+
+    for (const r of results) {
+      summary.byType[r.type] = (summary.byType[r.type] || 0) + 1
+      summary.bySeverity[r.severity] = (summary.bySeverity[r.severity] || 0) + 1
+    }
+
+    return NextResponse.json({ predictions: results, summary })
+  } catch (error) {
+    console.error("[Predict Error]", error)
+    return NextResponse.json({ error: "Erro interno do servidor" }, { status: 500 })
+  }
+}
