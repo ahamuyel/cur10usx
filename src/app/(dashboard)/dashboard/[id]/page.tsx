@@ -13,6 +13,7 @@ import EventCalendar from "@/components/ui/EventCalendar"
 import Announcements from "@/components/ui/Announcements"
 import BigCalendar from "@/components/ui/BigCalendar"
 import StudentDashboard from "@/components/ui/StudentDashboard"
+import AcademicHealthScore from "@/components/ui/AcademicHealthScore"
 
 type SchoolStats = {
   students: number
@@ -207,6 +208,9 @@ export default function DashboardPage() {
             </button>
           </div>
         )}
+
+        {/* Academic Health Score */}
+        <AcademicHealthScore />
 
         {/* Stat Cards Grid */}
         <section className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
