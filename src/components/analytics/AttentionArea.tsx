@@ -56,7 +56,7 @@ export default function AttentionArea() {
     )
   }
 
-  if (!data) return null
+  if (!data || !data.attention) return null
 
   const alerts: AlertItem[] = [
     {

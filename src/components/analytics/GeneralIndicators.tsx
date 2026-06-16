@@ -30,7 +30,10 @@ export default function GeneralIndicators() {
 
   useEffect(() => {
     fetch("/api/school-stats")
-      .then(r => r.json())
+      .then(r => {
+        if (!r.ok) throw new Error()
+        return r.json()
+      })
       .then(setStats)
       .catch(() => {})
       .finally(() => setLoading(false))
@@ -46,7 +49,7 @@ export default function GeneralIndicators() {
     )
   }
 
-  if (!stats) return null
+  if (!stats || stats.students === undefined) return null
 
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
