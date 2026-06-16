@@ -21,23 +21,6 @@ export default function DashboardPage() {
   const [childrenList, setChildrenList] = useState<{ id: string; name: string }[]>([])
 
   useEffect(() => {
-    if (status === "unauthenticated") {
-      router.replace("/signin")
-      return
-    }
-    if (status === "authenticated" && session?.user?.id) {
-      if (session.user.role === "super_admin") {
-        router.replace("/admin")
-        return
-      }
-      if (id !== session.user.id && session.user.role !== "school_admin") {
-        router.replace(`/dashboard/${session.user.id}`)
-      }
-    }
-  }, [status, session, id, router])
-
-  // Resolve studentId for student or parent
-  useEffect(() => {
     if (status !== "authenticated" || !session?.user) return
     const role = session.user.role
 
@@ -72,7 +55,7 @@ export default function DashboardPage() {
   // ========== SCHOOL ADMIN DASHBOARD ==========
   if (role === "school_admin") {
     return (
-      <div className="p-3 sm:p-4 lg:p-6">
+      <div className="min-w-0">
         <ExecutiveDashboard />
       </div>
     )
@@ -81,7 +64,7 @@ export default function DashboardPage() {
   // ========== STUDENT & PARENT DASHBOARD ==========
   if (role === "student" || role === "parent") {
     return (
-      <div className="p-3 sm:p-4 lg:p-6 flex flex-col gap-4 sm:gap-6">
+      <div className="flex flex-col gap-4 sm:gap-6">
         {/* Parent child selector */}
         {role === "parent" && childrenList.length > 1 && (
           <div className="mb-4">
