@@ -49,29 +49,46 @@ export default function ExecutiveDashboard() {
 
   return (
     // Mudança: overflow-hidden garante que nada saia da tela principal
-    <div className="flex flex-col gap-6 max-w-[1600px] mx-auto w-full p-4 sm:p-6 overflow-hidden">
+    <div className="flex flex-col gap-6 w-full overflow-hidden">
       {/* HEADER */}
-      <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800/60 pb-5">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20 shrink-0">
-            <LayoutDashboard size={20} className="text-primary" />
+
+      <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800/60 pb-5 gap-4">
+        <div className="flex items-center gap-3 min-w-0">
+          {/* Icon Container com efeito Glassmorphism usando a tua cor Primary */}
+          <div className="w-10 h-10 rounded-xl bg-primary/5 dark:bg-primary/10 flex items-center justify-center border border-primary/10 dark:border-primary/20 shrink-0 shadow-2xs">
+            <LayoutDashboard
+              size={18}
+              className="text-primary dark:text-primary-400"
+              strokeWidth={2.2}
+            />
           </div>
-          <div>
-            <h1 className="text-lg font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
+
+          <div className="min-w-0">
+            <h1 className="text-base sm:text-lg font-bold tracking-tight text-zinc-900 dark:text-zinc-50 truncate">
               Centro de Decisão Escolar
             </h1>
-            <p className="text-xs text-zinc-500 dark:text-zinc-400 font-medium">
+            <p className="text-[11px] sm:text-xs text-zinc-400 dark:text-zinc-500 font-medium truncate mt-0.5">
               Painel Executivo de Gestão Académica
             </p>
           </div>
         </div>
+
+        {/* Botão de Refresh Otimizado para Interação */}
         <button
           onClick={refresh}
           disabled={refreshing}
-          className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-zinc-600 dark:text-zinc-300 bg-white dark:bg-zinc-900 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition disabled:opacity-50 border border-zinc-200 dark:border-zinc-800 shadow-sm shrink-0"
+          className="inline-flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold text-zinc-600 dark:text-zinc-300 bg-white dark:bg-zinc-900 hover:bg-zinc-50 dark:hover:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-800 shadow-3xs transition-all duration-200 active:scale-98 disabled:opacity-50 shrink-0 cursor-pointer"
         >
-          <RefreshCw size={14} className={refreshing ? "animate-spin" : ""} />
-          Actualizar Dados
+          <RefreshCw
+            size={13}
+            className={
+              refreshing
+                ? "animate-spin text-primary"
+                : "text-zinc-400 dark:text-zinc-500"
+            }
+            strokeWidth={2.2}
+          />
+          <span className="hidden @[380px]:inline">Actualizar Dados</span>
         </button>
       </div>
 
