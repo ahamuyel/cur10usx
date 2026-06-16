@@ -1,2 +1,2 @@
 -- AlterTable
-ALTER TABLE "ChatMessage" ADD COLUMN     "deliveredAt" TIMESTAMP(3);
+ALTER TABLE "ChatMessage" ADD COLUMN IF NOT EXISTS    "deliveredAt" TIMESTAMP(3);
