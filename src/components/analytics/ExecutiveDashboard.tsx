@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { RefreshCw, LayoutDashboard } from "lucide-react"
 import AcademicHealthScore from "@/components/ui/AcademicHealthScore"
 import AcademicHealthHistoryChart from "./AcademicHealthHistoryChart"
@@ -16,6 +16,23 @@ export default function ExecutiveDashboard() {
   const [refreshing, setRefreshing] = useState(false)
   const [key, setKey] = useState(0)
 
+  // Ensure we have at least one snapshot on mount to populate charts
+  useEffect(() => {
+    const ensureInitialData = async () => {
+      try {
+        const res = await fetch("/api/analytics/academic-health/history")
+        const data = await res.json()
+        if (!data.history || data.history.length === 0) {
+          await fetch("/api/analytics/academic-health/snapshot", { method: "POST" })
+          setKey(k => k + 1)
+        }
+      } catch (err) {
+        console.error("Failed to ensure initial data:", err)
+      }
+    }
+    ensureInitialData()
+  }, [])
+
   const refresh = async () => {
     setRefreshing(true)
     try {
@@ -29,7 +46,7 @@ export default function ExecutiveDashboard() {
 
   return (
     <div className="flex flex-col gap-6 sm:gap-8 max-w-[1600px] mx-auto w-full">
-      {/* Header */}
+...
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center">
