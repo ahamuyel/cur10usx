@@ -1,17 +1,14 @@
 "use client"
 
 import { useState } from "react"
-import { RefreshCw, LayoutDashboard, Settings2 } from "lucide-react"
+import { RefreshCw, LayoutDashboard } from "lucide-react"
 import AcademicHealthScore from "@/components/ui/AcademicHealthScore"
 import AcademicHealthHistoryChart from "./AcademicHealthHistoryChart"
-import InsightsPanel from "./InsightsPanel"
 import StudentRiskPanel from "./StudentRiskPanel"
 import ClassHealthPanel from "./ClassHealthPanel"
-import TrendsComparison from "./TrendsComparison"
 import RecommendationsPanel from "./RecommendationsPanel"
-import ExecutiveBriefing from "./ExecutiveBriefing"
 import AttentionArea from "./AttentionArea"
-import ReferenceData from "./ReferenceData"
+import GeneralIndicators from "./GeneralIndicators"
 import EventCalendar from "@/components/ui/EventCalendar"
 import Announcements from "@/components/ui/Announcements"
 
@@ -32,7 +29,7 @@ export default function ExecutiveDashboard() {
 
   return (
     <div className="flex flex-col gap-6 sm:gap-8 max-w-[1600px] mx-auto w-full">
-      {/* 1. Header & Actions */}
+      {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center">
@@ -57,53 +54,34 @@ export default function ExecutiveDashboard() {
         </button>
       </div>
 
-      {/* 2. Executive Briefing */}
-      <ExecutiveBriefing key={`briefing-${key}`} />
-
-      {/* 3. Attention Area */}
-      <AttentionArea key={`attention-${key}`} />
-
-      {/* 4. Core Intelligence (Health & Recommendations) */}
-      <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
-        <div className="xl:col-span-5">
+      {/* Line 1: Academic Health Score (hero) + Attention Area */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2">
           <AcademicHealthScore key={`score-${key}`} />
         </div>
-        <div className="xl:col-span-7">
-          <RecommendationsPanel key={`recs-${key}`} />
+        <div>
+          <AttentionArea key={`attention-${key}`} />
         </div>
       </div>
 
-      {/* 5. Insights & Detailed Diagnostics */}
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-        <InsightsPanel key={`insights-${key}`} />
-        <div className="grid grid-cols-1 gap-6">
-          <StudentRiskPanel key={`risk-${key}`} />
-          <ClassHealthPanel key={`classes-${key}`} />
-        </div>
+      {/* Line 2: Evolution Chart (dominant width) */}
+      <AcademicHealthHistoryChart key={`history-${key}`} />
+
+      {/* Line 3: General Indicators (reduced visual weight) */}
+      <GeneralIndicators />
+
+      {/* Line 4: Classes, Students at Risk, Recommendations */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <ClassHealthPanel key={`classes-${key}`} />
+        <StudentRiskPanel key={`risk-${key}`} />
+        <RecommendationsPanel key={`recs-${key}`} />
       </div>
 
-      {/* 6. Context & Timeline */}
-      <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
-        <div className="xl:col-span-8 flex flex-col gap-6">
-           <AcademicHealthHistoryChart key={`history-${key}`} />
-           <TrendsComparison key={`trends-${key}`} />
-        </div>
-        <aside className="xl:col-span-4 flex flex-col gap-6">
-          <EventCalendar />
-          <Announcements />
-        </aside>
+      {/* Line 5: Calendar + Announcements (secondary area) */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 opacity-60 hover:opacity-100 transition-opacity duration-300">
+        <EventCalendar />
+        <Announcements />
       </div>
-
-      {/* 7. Reference Data (Progressive Disclosure via details) */}
-      <details className="group border-t border-zinc-100 dark:border-zinc-800 pt-8 mt-4">
-        <summary className="flex items-center gap-2 cursor-pointer text-xs font-bold text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition list-none">
-          <Settings2 size={14} />
-          Visualizar Métricas de Suporte e Dados Base
-        </summary>
-        <div className="mt-8">
-          <ReferenceData />
-        </div>
-      </details>
     </div>
   )
 }
