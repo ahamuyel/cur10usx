@@ -1,28 +1,27 @@
-import Redis from "ioredis"
+let redis: any = null
 
-const redisUrl = process.env.REDIS_URL
-
-let redis: Redis | null = null
-
-if (redisUrl) {
+// ioredis is not compatible with Edge Runtime
+if (process.env.NEXT_RUNTIME !== "edge") {
   try {
-    redis = new Redis(redisUrl, {
-      maxRetriesPerRequest: 1,
-      connectTimeout: 2000,
-      retryStrategy: (times) => {
-        // Try reconnecting, but stop if we fail too many times to prevent blocking
-        if (times > 3) {
-          return null
-        }
-        return Math.min(times * 100, 2000)
-      },
-    })
+    const Redis = require("ioredis")
+    const redisUrl = process.env.REDIS_URL
 
-    redis.on("error", (err) => {
-      console.warn("Redis rate-limiter client error:", err.message)
-    })
+    if (redisUrl) {
+      redis = new Redis(redisUrl, {
+        maxRetriesPerRequest: 1,
+        connectTimeout: 2000,
+        retryStrategy: (times: number) => {
+          if (times > 3) return null
+          return Math.min(times * 100, 2000)
+        },
+      })
+
+      redis.on("error", (err: any) => {
+        console.warn("Redis rate-limiter client error:", err.message)
+      })
+    }
   } catch (err) {
-    console.error("Failed to initialize Redis rate-limiter client:", err)
+    // Silently fail if ioredis cannot be required (e.g. in some environments)
   }
 }
 
