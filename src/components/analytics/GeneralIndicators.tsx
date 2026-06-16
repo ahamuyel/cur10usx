@@ -41,10 +41,12 @@ export default function GeneralIndicators() {
 
   if (loading) {
     return (
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="h-16 rounded-2xl bg-zinc-100 dark:bg-zinc-800 animate-pulse" />
-        ))}
+      <div className="@container">
+        <div className="grid grid-cols-1 @[280px]:grid-cols-2 gap-3">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="h-16 rounded-2xl bg-zinc-100 dark:bg-zinc-800 animate-pulse" />
+          ))}
+        </div>
       </div>
     )
   }
@@ -52,26 +54,28 @@ export default function GeneralIndicators() {
   if (!stats || stats.students === undefined) return null
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-      {indicators.map(ind => {
-        const value = stats[ind.key]
-        return (
-          <div
-            key={ind.key}
-            className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800"
-          >
-            <div className="w-8 h-8 rounded-xl bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center shrink-0">
-              <ind.icon size={15} className="text-zinc-400" />
+    <div className="@container">
+      <div className="grid grid-cols-1 @[280px]:grid-cols-2 gap-3">
+        {indicators.map(ind => {
+          const value = stats[ind.key]
+          return (
+            <div
+              key={ind.key}
+              className="flex items-center gap-3 px-3 py-2.5 rounded-2xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 min-w-0"
+            >
+              <div className="w-8 h-8 rounded-xl bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center shrink-0">
+                <ind.icon size={15} className="text-zinc-400" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-xs text-zinc-500 dark:text-zinc-400 leading-tight truncate">{ind.label}</p>
+                <p className="text-base font-semibold text-zinc-800 dark:text-zinc-200 leading-tight tabular-nums">
+                  {ind.format(value)}
+                </p>
+              </div>
             </div>
-            <div>
-              <p className="text-xs text-zinc-500 dark:text-zinc-400 leading-tight">{ind.label}</p>
-              <p className="text-base font-semibold text-zinc-800 dark:text-zinc-200 leading-tight tabular-nums">
-                {ind.format(value)}
-              </p>
-            </div>
-          </div>
-        )
-      })}
+          )
+        })}
+      </div>
     </div>
   )
 }

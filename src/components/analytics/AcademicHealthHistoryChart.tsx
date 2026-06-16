@@ -1,8 +1,8 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip, ReferenceLine } from "recharts"
-import { TrendingUp, AlertCircle } from "lucide-react"
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip, ReferenceLine } from "recharts"
+import { TrendingUp, AlertCircle, ArrowUpRight, ArrowDownRight, Minus } from "lucide-react"
 import { useTheme } from "@/provider/theme"
 import { cn } from "@/lib/utils"
 
@@ -30,6 +30,26 @@ interface ChartResponse {
   trends: TrendsInfo
 }
 
+// UI UPGRADE: Tooltip totalmente customizado com Tailwind CSS
+function CustomTooltip({ active, payload, isDark }: any) {
+  if (active && payload && payload.length) {
+    return (
+      <div className="bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800/80 rounded-xl px-3 py-2 shadow-xl backdrop-blur-md">
+        <p className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider mb-0.5">
+          {payload[0].payload.dateFull}
+        </p>
+        <div className="flex items-center gap-1.5">
+          <span className="w-2 h-2 rounded-full bg-indigo-500" />
+          <p className="text-sm font-black text-zinc-900 dark:text-zinc-50 tabular-nums">
+            Score: {payload[0].value}
+          </p>
+        </div>
+      </div>
+    )
+  }
+  return null
+}
+
 export default function AcademicHealthHistoryChart() {
   const { theme } = useTheme()
   const isDark = theme === "dark"
@@ -53,32 +73,35 @@ export default function AcademicHealthHistoryChart() {
 
   if (loading) {
     return (
-      <div className="bg-white dark:bg-zinc-900 rounded-3xl border border-zinc-200 dark:border-zinc-800 shadow-sm p-6">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="w-6 h-6 rounded-lg bg-zinc-200 dark:bg-zinc-700 animate-pulse" />
-          <div className="h-5 w-44 rounded bg-zinc-200 dark:bg-zinc-700 animate-pulse" />
+      <div className="w-full space-y-6">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-7 h-7 rounded-xl bg-zinc-100 dark:bg-zinc-800 animate-pulse" />
+            <div className="h-4 w-48 rounded bg-zinc-200 dark:bg-zinc-700 animate-pulse" />
+          </div>
         </div>
-        <div className="h-56 rounded-2xl bg-zinc-100 dark:bg-zinc-800 animate-pulse" />
+        <div className="h-64 rounded-2xl bg-zinc-50/50 dark:bg-zinc-800/20 border border-zinc-100 dark:border-zinc-800/40 animate-pulse" />
       </div>
     )
   }
 
   if (error || !data) {
     return (
-      <div className="bg-white dark:bg-zinc-900 rounded-3xl border border-zinc-200 dark:border-zinc-800 shadow-sm p-6">
-        <div className="flex items-center gap-2 mb-4">
+      <div className="w-full py-6">
+        <div className="flex items-center gap-2 mb-3">
           <AlertCircle size={16} className="text-rose-500" />
-          <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">Evolução do Score</h3>
+          <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100">Evolução da Saúde Académica</h3>
         </div>
-        <p className="text-xs text-zinc-400">Não foi possível carregar o histórico.</p>
+        <p className="text-xs text-zinc-500 dark:text-zinc-400">Não foi possível carregar o histórico de dados analíticos.</p>
       </div>
     )
   }
 
   const chartData = [...data.history].reverse().map(h => ({
     date: new Date(h.snapshotDate).toLocaleDateString("pt", { day: "2-digit", month: "2-digit" }),
+    // Salva a data completa para o tooltip personalizado
+    dateFull: new Date(h.snapshotDate).toLocaleDateString("pt", { day: "2-digit", month: "short", year: "numeric" }),
     score: h.score,
-    previous: null as number | null,
   }))
 
   const latestScore = chartData.length > 0 ? chartData[chartData.length - 1].score : 0
@@ -87,95 +110,115 @@ export default function AcademicHealthHistoryChart() {
   const trend = totalChange >= 0 ? "up" : "down"
 
   return (
-    <div className="bg-white dark:bg-zinc-900 rounded-3xl border border-zinc-200 dark:border-zinc-800 shadow-sm p-6">
+    // UI UPGRADE: Removido o card de container redundante para encaixar perfeito no grid do DashboardPage
+    <div className="w-full space-y-5">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div className="flex items-center gap-3">
-          <div className="w-7 h-7 rounded-xl bg-indigo-50 dark:bg-indigo-950/20 flex items-center justify-center">
+          <div className="w-8 h-8 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-100 dark:border-indigo-900/30 flex items-center justify-center">
             <TrendingUp size={15} className="text-indigo-600 dark:text-indigo-400" />
           </div>
-          <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
-            Evolução da Saúde Académica
-          </h3>
+          <div>
+            <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-50 tracking-tight">
+              Evolução Histórica
+            </h3>
+            <p className="text-[10px] text-zinc-400 dark:text-zinc-500 font-medium">Histórico recente de saúde institucional</p>
+          </div>
         </div>
-        <div className="flex items-center gap-4">
+        
+        {/* Pílulas de Tendências Customizadas */}
+        <div className="flex items-center gap-2 self-end sm:self-center">
           {data.trends?.change7d !== null && data.trends?.change7d !== undefined && (
-            <span className={cn(
-              "text-xs font-medium",
-              data.trends.change7d >= 0 ? "text-emerald-600 dark:text-emerald-400" : "text-rose-600 dark:text-rose-400"
+            <div className={cn(
+              "inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-lg border shadow-3xs",
+              data.trends.change7d >= 0 
+                ? "text-emerald-700 dark:text-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/20 border-emerald-100 dark:border-emerald-900/30" 
+                : "text-rose-700 dark:text-rose-400 bg-rose-50/50 dark:bg-rose-950/20 border-rose-100 dark:border-rose-900/30"
             )}>
-              {data.trends.change7d >= 0 ? "+" : ""}{data.trends.change7d} (7d)
-            </span>
+              {data.trends.change7d >= 0 ? <ArrowUpRight size={12} /> : <ArrowDownRight size={12} />}
+              <span>{data.trends.change7d >= 0 ? "+" : ""}{data.trends.change7d}%</span>
+              <span className="opacity-50 font-medium">7d</span>
+            </div>
           )}
           {data.trends?.change30d !== null && data.trends?.change30d !== undefined && (
-            <span className={cn(
-              "text-xs font-semibold",
-              data.trends.change30d >= 0 ? "text-emerald-600 dark:text-emerald-400" : "text-rose-600 dark:text-rose-400"
+            <div className={cn(
+              "inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-lg border shadow-3xs",
+              data.trends.change30d >= 0 
+                ? "text-emerald-700 dark:text-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/20 border-emerald-100 dark:border-emerald-900/30" 
+                : "text-rose-700 dark:text-rose-400 bg-rose-50/50 dark:bg-rose-950/20 border-rose-100 dark:border-rose-900/30"
             )}>
-              {data.trends.change30d >= 0 ? "+" : ""}{data.trends.change30d} (30d)
-            </span>
+              {data.trends.change30d >= 0 ? <ArrowUpRight size={12} /> : <ArrowDownRight size={12} />}
+              <span>{data.trends.change30d >= 0 ? "+" : ""}{data.trends.change30d}%</span>
+              <span className="opacity-50 font-medium">30d</span>
+            </div>
           )}
         </div>
       </div>
 
-      {/* Chart */}
-      <div className="h-56 sm:h-64">
+      {/* Chart - Convertido para AreaChart com degradê líquido */}
+      <div className="h-60 sm:h-64 w-full">
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={chartData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke={isDark ? "#27272a" : "#e4e4e7"} vertical={false} />
+          <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
+            <defs>
+              <linearGradient id="scoreGlow" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#6366f1" stopOpacity={isDark ? 0.25 : 0.12}/>
+                <stop offset="95%" stopColor="#6366f1" stopOpacity={0}/>
+              </linearGradient>
+            </defs>
+            <CartesianGrid strokeDasharray="4 4" stroke={isDark ? "#27272a/60" : "#e4e4e7/80"} vertical={false} />
             <XAxis
               dataKey="date"
-              tick={{ fontSize: 11, fill: isDark ? "#a1a1aa" : "#71717a" }}
+              tick={{ fontSize: 10, fontWeight: 500, fill: isDark ? "#71717a" : "#a1a1aa" }}
               axisLine={false}
               tickLine={false}
-              minTickGap={20}
+              minTickGap={25}
             />
             <YAxis
               domain={[0, 100]}
-              tick={{ fontSize: 11, fill: isDark ? "#a1a1aa" : "#71717a" }}
+              tick={{ fontSize: 10, fontWeight: 500, fill: isDark ? "#71717a" : "#a1a1aa" }}
               axisLine={false}
               tickLine={false}
-              width={35}
+              width={40}
             />
-            <Tooltip
-              contentStyle={{
-                backgroundColor: isDark ? "#18181b" : "#ffffff",
-                border: `1px solid ${isDark ? "#27272a" : "#e4e4e7"}`,
-                borderRadius: "12px",
-                fontSize: "12px",
-                boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
-              }}
-            />
+            <Tooltip content={<CustomTooltip isDark={isDark} />} cursor={{ stroke: isDark ? "#3f3f46" : "#e4e4e7", strokeWidth: 1, strokeDasharray: "3 3" }} />
+            
             <ReferenceLine
               y={50}
-              stroke={isDark ? "#3f3f46" : "#d4d4d8"}
-              strokeDasharray="4 4"
-              strokeWidth={1}
+              stroke={isDark ? "#27272a" : "#e4e4e7"}
+              strokeDasharray="5 5"
+              strokeWidth={1.5}
             />
-            <Line
+            
+            <Area
               type="monotone"
               dataKey="score"
-              name="Score Geral"
               stroke="#6366f1"
               strokeWidth={2.5}
-              dot={{ r: 3, fill: "#6366f1", strokeWidth: 0 }}
-              activeDot={{ r: 6, fill: "#6366f1", strokeWidth: 2, stroke: isDark ? "#18181b" : "#ffffff" }}
+              fillOpacity={1}
+              fill="url(#scoreGlow)"
+              dot={{ r: 0 }} // Esconde as bolinhas normais para visual limpo estilo Apple
+              activeDot={{ r: 5, fill: "#6366f1", strokeWidth: 2.5, stroke: isDark ? "#09090b" : "#ffffff" }}
             />
-          </LineChart>
+          </AreaChart>
         </ResponsiveContainer>
       </div>
 
-      {/* Trend indicator */}
-      <div className="flex items-center gap-2 mt-4 pt-4 border-t border-zinc-100 dark:border-zinc-800">
-        <span className={cn(
-          "text-xs font-medium",
-          trend === "up" ? "text-emerald-600" : "text-rose-600"
-        )}>
-          Tendência {trend === "up" ? "positiva" : "negativa"}
-        </span>
-        <span className="text-xs text-zinc-400">
-          — {totalChange > 0 ? "+" : ""}{totalChange} pts no período
-        </span>
+      {/* Trend footer */}
+      <div className="flex items-center justify-between mt-2 pt-3 border-t border-zinc-100 dark:border-zinc-800/60">
+        <div className="flex items-center gap-1.5">
+          <span className={cn(
+            "text-xs font-bold px-2 py-0.5 rounded-md flex items-center gap-1",
+            trend === "up" 
+              ? "text-emerald-700 bg-emerald-50 dark:text-emerald-400 dark:bg-emerald-950/20" 
+              : "text-rose-700 bg-rose-50 dark:text-rose-400 dark:bg-rose-950/20"
+          )}>
+            {trend === "up" ? <ArrowUpRight size={12} /> : <ArrowDownRight size={12} />}
+            Tendência {trend === "up" ? "Geral Positiva" : "Geral Negativa"}
+          </span>
+          <span className="text-[11px] text-zinc-400 dark:text-zinc-500 font-medium">
+            — acumulado de {totalChange > 0 ? "+" : ""}{totalChange} pontos no período analisado
+          </span>
+        </div>
       </div>
     </div>
   )
