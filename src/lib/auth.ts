@@ -4,6 +4,7 @@ import Google from "next-auth/providers/google";
 import { comparePassword } from "@/lib/password";
 import { prisma } from "@/lib/prisma";
 import { rateLimit } from "@/lib/rate-limit";
+import { authConfig, PERMISSION_KEYS } from "./auth.config";
 
 const loginLimiter = rateLimit({ maxRequests: 10, windowMs: 5 * 60 * 1000, key: "login" }) // 10 per 5 min
 
@@ -15,67 +16,13 @@ function getIp(req: Request): string {
   )
 }
 
-const PERMISSION_KEYS = [
-  "canManageApplications",
-  "canManageTeachers",
-  "canManageStudents",
-  "canManageParents",
-  "canManageClasses",
-  "canManageCourses",
-  "canManageSubjects",
-  "canManageLessons",
-  "canManageExams",
-  "canManageAssignments",
-  "canManageResults",
-  "canManageAttendance",
-  "canManageMessages",
-  "canManageAnnouncements",
-  "canManageAdmins",
-] as const;
-
 function extractPermissions(perm: Record<string, unknown> | null): string[] {
   if (!perm) return [];
   return PERMISSION_KEYS.filter((key) => perm[key] === true);
 }
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  trustHost: true,
-  debug: process.env.NODE_ENV === "development",
-  secret: process.env.AUTH_SECRET,
-  session: { strategy: "jwt", updateAge: 60, maxAge: 24 * 60 * 60 },
-  pages: {
-    signIn: "/signin",
-    error: "/signin",
-  },
-  cookies: {
-    sessionToken: {
-      name: "authjs.session-token",
-      options: {
-        httpOnly: true,
-        sameSite: "lax",
-        path: "/",
-        secure: process.env.NODE_ENV === "production",
-      },
-    },
-    callbackUrl: {
-      name: "next-auth-callback-url",
-      options: {
-        httpOnly: false,
-        sameSite: "lax",
-        path: "/",
-        secure: process.env.NODE_ENV === "production",
-      },
-    },
-    csrfToken: {
-      name: "next-auth.csrf-token",
-      options: {
-        httpOnly: true,
-        sameSite: "lax",
-        path: "/",
-        secure: process.env.NODE_ENV === "production",
-      },
-    },
-  },
+  ...authConfig,
   providers: [
     ...(process.env.GOOGLE_AUTH_ENABLED === "true"
       ? [
@@ -145,6 +92,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
   ],
   callbacks: {
+    ...authConfig.callbacks,
     async signIn({ user, account }) {
       if (account?.provider === "google") {
         const email = user.email!;
@@ -195,49 +143,18 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return true;
     },
 
-    async jwt({ token, user, trigger, session }) {
-      delete token.picture;
-
-      // Primeiro login — dados vêm do objecto user
-      if (user) {
-        token.id = user.id!;
-        token.role = (user as { role: string }).role;
-        token.schoolId =
-          (user as { schoolId?: string | null }).schoolId ?? null;
-        token.schoolSlug =
-          (user as { schoolSlug?: string | null }).schoolSlug ?? null;
-        token.schoolStatus =
-          (user as { schoolStatus?: string | null }).schoolStatus ?? null;
-        token.isActive = (user as { isActive: boolean }).isActive;
-        token.mustChangePassword =
-          (user as { mustChangePassword?: boolean }).mustChangePassword ??
-          false;
-        token.profileComplete =
-          (user as { profileComplete: boolean }).profileComplete ?? true;
-        token.emailVerified = (user as { emailVerified?: boolean })
-          .emailVerified
-          ? new Date()
-          : null;
-        const img = (user as { image?: string | null }).image;
-        token.userImage = img && !img.startsWith("data:") ? img : null;
-        token.sessionVersion = (user as { sessionVersion?: number }).sessionVersion ?? 0;
-        token.hasPassword = (user as { hasPassword?: boolean }).hasPassword ?? false;
-        token.twoFactorEnabled = (user as { twoFactorEnabled?: boolean }).twoFactorEnabled ?? false;
-        token.twoFactorVerifiedAt = null;
-      }
-
-      // Handle session.update() — merge twoFactorVerifiedAt into token
-      // so the current session is marked as 2FA-verified after login verification
-      if (trigger === "update" && session?.twoFactorVerifiedAt) {
-        token.twoFactorVerifiedAt = session.twoFactorVerifiedAt;
-      }
+    async jwt(params) {
+      const { token, trigger, session } = params;
+      
+      // Call base light JWT callback first
+      let updatedToken = await authConfig.callbacks!.jwt!(params);
 
       // Refresh from DB on every request to keep token in sync with latest user data
       // (approvals, role changes, school associations, etc.)
       // NOTE: Skip this in Edge Runtime (middleware) to avoid Prisma incompatibility
-      if (token.id && process.env.NEXT_RUNTIME !== "edge") {
+      if (updatedToken.id && process.env.NEXT_RUNTIME !== "edge") {
         const dbUser = await prisma.user.findUnique({
-          where: { id: token.id as string },
+          where: { id: updatedToken.id as string },
           select: {
             id: true,
             role: true,
@@ -263,60 +180,34 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
         if (dbUser) {
           // Session invalidation — if sessionVersion changed (password reset, etc.), discard token
-          if (dbUser.sessionVersion !== (token.sessionVersion as number)) {
-            return null as unknown as typeof token
+          if (dbUser.sessionVersion !== (updatedToken.sessionVersion as number)) {
+            return null as any;
           }
 
-          token.id = dbUser.id;
-          token.role = dbUser.role;
-          token.schoolId = dbUser.schoolId ?? null;
-          token.schoolSlug = dbUser.school?.slug ?? null;
-          token.schoolStatus = dbUser.school?.status ?? null;
-          token.isActive = dbUser.isActive;
-          token.mustChangePassword = dbUser.mustChangePassword;
-          token.profileComplete = dbUser.profileComplete;
-          token.emailVerified = dbUser.emailVerified ? new Date() : null;
-          token.adminLevel = dbUser.adminPermission?.level ?? null;
-          token.permissions = extractPermissions(
+          updatedToken.id = dbUser.id;
+          updatedToken.role = dbUser.role;
+          updatedToken.schoolId = dbUser.schoolId ?? null;
+          updatedToken.schoolSlug = dbUser.school?.slug ?? null;
+          updatedToken.schoolStatus = dbUser.school?.status ?? null;
+          updatedToken.isActive = dbUser.isActive;
+          updatedToken.mustChangePassword = dbUser.mustChangePassword;
+          updatedToken.profileComplete = dbUser.profileComplete;
+          updatedToken.emailVerified = dbUser.emailVerified ? new Date() : null;
+          updatedToken.adminLevel = dbUser.adminPermission?.level ?? null;
+          updatedToken.permissions = extractPermissions(
             dbUser.adminPermission as unknown as Record<string, unknown>,
           );
-          token.schoolFeatures =
+          updatedToken.schoolFeatures =
             (dbUser.school?.features as Record<string, boolean>) ?? null;
           const img = dbUser.image;
-          token.userImage = img && !img.startsWith("data:") ? img : null;
-          token.sessionVersion = dbUser.sessionVersion;
-          token.hasPassword = !!dbUser.hashedPassword;
-          token.twoFactorEnabled = dbUser.twoFactorEnabled;
+          updatedToken.userImage = img && !img.startsWith("data:") ? img : null;
+          updatedToken.sessionVersion = dbUser.sessionVersion;
+          updatedToken.hasPassword = !!dbUser.hashedPassword;
+          updatedToken.twoFactorEnabled = dbUser.twoFactorEnabled;
         }
       }
 
-      return token;
-    },
-
-    async session({ session, token }) {
-      if (!token?.id) return session
-      if (session.user) {
-        session.user.id = token.id as string;
-        session.user.role = token.role as string;
-        session.user.schoolId = (token.schoolId as string) ?? null;
-        session.user.schoolSlug = (token.schoolSlug as string) ?? null;
-        session.user.schoolStatus = (token.schoolStatus as string) ?? null;
-        session.user.isActive = token.isActive as boolean;
-        session.user.mustChangePassword =
-          (token.mustChangePassword as boolean) ?? false;
-        session.user.profileComplete = token.profileComplete as boolean;
-        session.user.emailVerified =
-          (token.emailVerified as Date | null) ?? null;
-        session.user.adminLevel = (token.adminLevel as string) ?? null;
-        session.user.permissions = (token.permissions as string[]) ?? [];
-        session.user.schoolFeatures =
-          (token.schoolFeatures as Record<string, boolean>) ?? null;
-        session.user.image = (token.userImage as string) ?? null;
-        session.user.hasPassword = (token.hasPassword as boolean) ?? false;
-        session.user.twoFactorEnabled = (token.twoFactorEnabled as boolean) ?? false;
-        session.user.twoFactorVerifiedAt = (token.twoFactorVerifiedAt as string) ?? null;
-      }
-      return session;
+      return updatedToken;
     },
   },
 });
