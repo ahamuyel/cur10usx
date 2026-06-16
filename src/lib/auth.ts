@@ -234,10 +234,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       // Refresh from DB on every request to keep token in sync with latest user data
       // (approvals, role changes, school associations, etc.)
-      // NOTE: twoFactorVerifiedAt is intentionally NOT read from DB here.
-      // It is managed via session.update() after 2FA verification to ensure
-      // 2FA is always required on every new login session.
-      if (token.id) {
+      // NOTE: Skip this in Edge Runtime (middleware) to avoid Prisma incompatibility
+      if (token.id && process.env.NEXT_RUNTIME !== "edge") {
         const dbUser = await prisma.user.findUnique({
           where: { id: token.id as string },
           select: {

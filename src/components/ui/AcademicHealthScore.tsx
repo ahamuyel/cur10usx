@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState, useRef } from "react"
-import { ArrowRight, TrendingUp, TrendingDown, Minus, HeartPulse } from "lucide-react"
+import { ArrowRight, TrendingUp, TrendingDown, Minus, HeartPulse, Sparkles } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 interface Breakdown {
@@ -22,11 +22,12 @@ interface HistoryEntry {
   snapshotDate: string
 }
 
-const STATUS_GRADIENT: Record<string, { ring: string; text: string; label: string; iconBg: string; badgeBg: string }> = {
-  Excelente: { ring: "#10B981", text: "text-emerald-600 dark:text-emerald-400", label: "Excelente", iconBg: "bg-emerald-100 dark:bg-emerald-950/30", badgeBg: "bg-emerald-50 dark:bg-emerald-950/20" },
-  Boa: { ring: "#06B6D4", text: "text-cyan-600 dark:text-cyan-400", label: "Boa", iconBg: "bg-cyan-100 dark:bg-cyan-950/30", badgeBg: "bg-cyan-50 dark:bg-cyan-950/20" },
-  Atenção: { ring: "#F59E0B", text: "text-amber-600 dark:text-amber-400", label: "Atenção", iconBg: "bg-amber-100 dark:bg-amber-950/30", badgeBg: "bg-amber-50 dark:bg-amber-950/20" },
-  Crítica: { ring: "#F43F5E", text: "text-rose-600 dark:text-rose-400", label: "Crítica", iconBg: "bg-rose-100 dark:bg-rose-950/30", badgeBg: "bg-rose-50 dark:bg-rose-950/20" },
+// UI UPGRADE: Cores atualizadas com bordas e efeitos específicos para o modo escuro
+const STATUS_GRADIENT: Record<string, { ring: string; text: string; label: string; iconBg: string; badgeBg: string; glow: string }> = {
+  Excelente: { ring: "#10B981", text: "text-emerald-600 dark:text-emerald-400", label: "Excelente", iconBg: "bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200/50 dark:border-emerald-800/30", badgeBg: "bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800/60", glow: "from-emerald-50/20 via-transparent to-transparent dark:from-emerald-950/5" },
+  Boa: { ring: "#06B6D4", text: "text-cyan-600 dark:text-cyan-400", label: "Boa", iconBg: "bg-cyan-50 dark:bg-cyan-950/40 border-cyan-200/50 dark:border-cyan-800/30", badgeBg: "bg-cyan-50 dark:bg-cyan-950/40 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800/60", glow: "from-cyan-50/20 via-transparent to-transparent dark:from-cyan-950/5" },
+  Atenção: { ring: "#F59E0B", text: "text-amber-600 dark:text-amber-400", label: "Atenção", iconBg: "bg-amber-50 dark:bg-amber-950/40 border-amber-200/50 dark:border-amber-800/30", badgeBg: "bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800/60", glow: "from-amber-50/20 via-transparent to-transparent dark:from-amber-950/5" },
+  Crítica: { ring: "#F43F5E", text: "text-rose-600 dark:text-rose-400", label: "Crítica", iconBg: "bg-rose-50 dark:bg-rose-950/40 border-rose-200/50 dark:border-rose-800/30", badgeBg: "bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 border-rose-200 dark:border-rose-800/60", glow: "from-rose-50/20 via-transparent to-transparent dark:from-rose-950/5" },
 }
 
 const BREAKDOWN_LABELS: Record<keyof Breakdown, string> = {
@@ -36,43 +37,42 @@ const BREAKDOWN_LABELS: Record<keyof Breakdown, string> = {
   administrativeEfficiency: "Eficiência Administrativa",
 }
 
-function ScoreRing({ score, status, animate = false }: { score: number; status: string; animate?: boolean }) {
+function ScoreRing({ score, status }: { score: number; status: string; animate?: boolean }) {
   const colors = STATUS_GRADIENT[status] || STATUS_GRADIENT.Crítica
-  const radius = 72
+  const radius = 70 // Pequeno ajuste de tamanho para dar respiro à borda
   const circumference = 2 * Math.PI * radius
   const offset = circumference - (score / 100) * circumference
 
   return (
-    <div className="relative flex items-center justify-center w-44 h-44 shrink-0">
-      {/* Ring */}
-      <svg className="w-full h-full -rotate-90 drop-shadow-sm" viewBox="0 0 160 160">
+    <div className="relative flex items-center justify-center w-40 h-40 shrink-0">
+      <svg className="w-full h-full -rotate-90" viewBox="0 0 160 160">
+        {/* Background track com degradê suave opaco */}
         <circle
           cx="80" cy="80" r={radius}
           fill="none"
           stroke="currentColor"
-          strokeWidth="10"
-          className="text-zinc-100 dark:text-zinc-800"
+          strokeWidth="12"
+          className="text-zinc-100 dark:text-zinc-800/80"
         />
         <circle
           cx="80" cy="80" r={radius}
           fill="none"
           stroke={colors.ring}
-          strokeWidth="10"
+          strokeWidth="12"
           strokeLinecap="round"
           strokeDasharray={circumference}
           strokeDashoffset={offset}
-          className="transition-all duration-1000 ease-out"
+          className="transition-all duration-1000"
           style={{ transitionTimingFunction: "cubic-bezier(0.34, 1.56, 0.64, 1)" }}
         />
       </svg>
 
-      {/* Score number */}
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className="text-5xl font-bold text-zinc-900 dark:text-zinc-100 tracking-tight tabular-nums">
+        <span className="text-4xl sm:text-5xl font-black text-zinc-900 dark:text-zinc-50 tracking-tight tabular-nums">
           {score}
         </span>
-        <span className="text-xs font-medium text-zinc-400 dark:text-zinc-500 tracking-wider">
-          / 100
+        <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 tracking-widest uppercase mt-0.5">
+          Score Geral
         </span>
       </div>
     </div>
@@ -89,8 +89,8 @@ function getTrend(data: number[]): "up" | "down" | "flat" {
 
 function TrendSparkline({ data }: { data: number[] }) {
   if (data.length < 2) return null
-  const w = 32
-  const h = 14
+  const w = 36
+  const h = 16
   const min = Math.min(...data)
   const max = Math.max(...data)
   const range = Math.max(max - min, 1)
@@ -98,14 +98,14 @@ function TrendSparkline({ data }: { data: number[] }) {
     .map((v, i) => `${((i / (data.length - 1)) * w).toFixed(1)},${(((max - v) / range) * h).toFixed(1)}`)
     .join(" ")
   const trend = getTrend(data)
-  const stroke = trend === "up" ? "#10B981" : trend === "down" ? "#F43F5E" : "#a1a1aa"
+  const stroke = trend === "up" ? "#10B981" : trend === "down" ? "#F43F5E" : "#71717a"
 
   return (
-    <svg width={w} height={h} viewBox={`0 0 ${w} ${h}`} className="shrink-0">
+    <svg width={w} height={h} viewBox={`0 0 ${w} ${h}`} className="shrink-0 opacity-80 group-hover:opacity-100 transition-opacity">
       <polyline
         fill="none"
         stroke={stroke}
-        strokeWidth={1.5}
+        strokeWidth={2}
         strokeLinecap="round"
         strokeLinejoin="round"
         points={points}
@@ -127,26 +127,27 @@ function BreakdownBar({
   const trend = sparklineData ? getTrend(sparklineData) : null
 
   return (
-    <div className="group space-y-1.5">
+    // UI UPGRADE: Card interno muito sutil para cada métrica com hover discreto
+    <div className="group space-y-2 p-2.5 rounded-xl hover:bg-zinc-50 dark:hover:bg-zinc-800/40 transition-colors border border-transparent hover:border-zinc-100 dark:hover:border-zinc-800/50 border">
       <div className="flex items-center justify-between">
-        <span className="text-xs text-zinc-500 dark:text-zinc-400 group-hover:text-zinc-700 dark:group-hover:text-zinc-300 transition-colors">
+        <span className="text-xs font-medium text-zinc-600 dark:text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-zinc-200 transition-colors📋">
           {label}
         </span>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2.5">
           {sparklineData && <TrendSparkline data={sparklineData} />}
           {trend && trend !== "flat" && (
             trend === "up"
-              ? <TrendingUp size={10} className="text-emerald-500" />
-              : <TrendingDown size={10} className="text-rose-500" />
+              ? <span className="flex items-center text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/30 px-1 rounded"><TrendingUp size={12} /></span>
+              : <span className="flex items-center text-[10px] font-semibold text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/30 px-1 rounded"><TrendingDown size={12} /></span>
           )}
-          <span className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 tabular-nums text-right">
+          <span className="text-xs font-bold text-zinc-800 dark:text-zinc-200 tabular-nums min-w-[32px] text-right">
             {value}%
           </span>
         </div>
       </div>
-      <div className="h-1.5 rounded-full bg-zinc-100 dark:bg-zinc-800 overflow-hidden">
+      <div className="h-2 rounded-full bg-zinc-100 dark:bg-zinc-800/80 overflow-hidden relative">
         <div
-          className="h-full rounded-full transition-all duration-700 ease-out group-hover:opacity-80 bg-primary"
+          className="h-full rounded-full transition-all duration-1000 ease-out bg-primary group-hover:opacity-90"
           style={{ width: `${barWidth}%` }}
           ref={el => {
             if (el && barWidth === 0) {
@@ -170,26 +171,30 @@ function InsightText({ breakdown, sparklines }: { breakdown: Breakdown; sparklin
 
   if (best[0] === worst[0]) {
     return (
-      <p className="text-xs text-zinc-400 leading-relaxed">
+      <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
         {BREAKDOWN_LABELS[best[0]]} está em {best[1] >= 80 ? "boa condição" : "nível moderado"} ({best[1]}). Todos os indicadores alinhados.
       </p>
     )
   }
 
   return (
-    <p className="text-xs text-zinc-400 leading-relaxed">
-      <span className="font-medium text-zinc-500 dark:text-zinc-300">{BREAKDOWN_LABELS[best[0]]}</span> lidera ({best[1]})
-      {bestTrend === "up" ? " e a subir" : bestTrend === "down" ? " mas a descer" : ""}.
-      {" "}
-      <span className="font-medium text-zinc-500 dark:text-zinc-300">{BREAKDOWN_LABELS[worst[0]]}</span> precisa de atenção ({worst[1]})
-      {worstTrend === "up" ? " mas a recuperar" : worstTrend === "down" ? " e a piorar" : ""}.
-    </p>
+    // UI UPGRADE: Layout interno do bloco de IA reformulado
+    <div className="flex items-start gap-2.5">
+      {/* <div className="w-5 h-5 rounded-md bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center shrink-0 mt-0.5 text-zinc-500">
+        <Sparkles size={12} />
+      </div> */}
+      <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
+        Análise Automatizada: <span className="font-semibold text-zinc-800 dark:text-zinc-200">{BREAKDOWN_LABELS[best[0]]}</span> destaca-se positivamente com {best[1]}% 
+        {bestTrend === "up" ? " em crescimento contínuo" : bestTrend === "down" ? " mas demonstra desaceleração" : ""}. 
+        Em contrapartida, <span className="font-semibold text-zinc-800 dark:text-zinc-200">{BREAKDOWN_LABELS[worst[0]]}</span> acende um sinal de alerta com {worst[1]}% 
+        {worstTrend === "up" ? " apesar de indicar recuperação recente" : worstTrend === "down" ? " com forte tendência de queda" : ""}.
+      </p>
+    </div>
   )
 }
 
 function useCounter(target: number, enabled: boolean): number {
   const [count, setCount] = useState(0)
-  const ref = useRef<ReturnType<typeof setInterval> | null>(null)
 
   useEffect(() => {
     if (!enabled) {
@@ -209,7 +214,6 @@ function useCounter(target: number, enabled: boolean): number {
         setCount(Math.round(current))
       }
     }, duration / steps)
-    ref.current = interval
     return () => clearInterval(interval)
   }, [target, enabled])
 
@@ -226,10 +230,7 @@ export default function AcademicHealthScore() {
 
   useEffect(() => {
     Promise.all([
-      fetch("/api/analytics/academic-health").then(r => {
-        if (!r.ok) throw new Error()
-        return r.json()
-      }),
+      fetch("/api/analytics/academic-health").then(r => { if (!r.ok) throw new Error(); return r.json() }),
       fetch("/api/analytics/executive-briefing").then(r => r.json()).catch(() => ({ health: { evolution: null } })),
       fetch("/api/analytics/academic-health/history").then(r => r.json()).catch(() => null),
     ])
@@ -259,19 +260,18 @@ export default function AcademicHealthScore() {
 
   if (loading) {
     return (
-      <div className="bg-white dark:bg-zinc-900 rounded-3xl border border-zinc-200 dark:border-zinc-800 shadow-sm p-6 sm:p-8">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="w-6 h-6 rounded-lg bg-zinc-200 dark:bg-zinc-700 animate-pulse" />
-          <div className="h-5 w-48 rounded bg-zinc-200 dark:bg-zinc-700 animate-pulse" />
+      <div className="bg-white dark:bg-zinc-900 rounded-3xl border border-zinc-200 dark:border-zinc-800/80 shadow-sm p-6 sm:p-8 space-y-6">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-7 h-7 rounded-xl bg-zinc-100 dark:bg-zinc-800 animate-pulse" />
+            <div className="h-4 w-32 rounded bg-zinc-200 dark:bg-zinc-700 animate-pulse" />
+          </div>
         </div>
-        <div className="flex flex-col md:flex-row items-center gap-8">
-          <div className="w-44 h-44 rounded-full bg-zinc-100 dark:bg-zinc-800 animate-pulse shrink-0" />
+        <div className="flex flex-col lg:flex-row items-center gap-8">
+          <div className="w-40 h-40 rounded-full bg-zinc-100 dark:bg-zinc-800/60 animate-pulse shrink-0" />
           <div className="flex-1 w-full space-y-4">
             {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="space-y-1.5">
-                <div className="h-3 w-32 rounded bg-zinc-200 dark:bg-zinc-700 animate-pulse" />
-                <div className="h-1.5 rounded-full bg-zinc-100 dark:bg-zinc-800 animate-pulse" />
-              </div>
+              <div key={i} className="h-6 w-full rounded-lg bg-zinc-100 dark:bg-zinc-800/40 animate-pulse" />
             ))}
           </div>
         </div>
@@ -283,12 +283,12 @@ export default function AcademicHealthScore() {
     return (
       <div className="bg-white dark:bg-zinc-900 rounded-3xl border border-zinc-200 dark:border-zinc-800 shadow-sm p-6 sm:p-8">
         <div className="flex items-center gap-3 mb-4">
-          <div className="w-6 h-6 rounded-lg bg-red-100 dark:bg-red-950/50 flex items-center justify-center">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-red-500"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <div className="w-7 h-7 rounded-xl bg-rose-50 dark:bg-rose-950/30 flex items-center justify-center text-rose-500">
+            <HeartPulse size={16} />
           </div>
-          <h2 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">Academic Health Score</h2>
+          <h2 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">Saúde Académica</h2>
         </div>
-        <p className="text-sm text-zinc-400">Não foi possível calcular o score de saúde académica.</p>
+        <p className="text-xs text-zinc-500 dark:text-zinc-400">Não foi possível calcular o índice de saúde académica neste momento.</p>
       </div>
     )
   }
@@ -302,59 +302,70 @@ export default function AcademicHealthScore() {
   ]
 
   return (
-    <div className="bg-white dark:bg-zinc-900 rounded-3xl border border-zinc-200 dark:border-zinc-800 shadow-sm p-6 sm:p-8">
+    // UI UPGRADE: Adicionado overflow-hidden e um gradiente radial (colors.glow) de fundo muito discreto que muda de acordo com o status
+    <div className={cn(
+      "bg-white dark:bg-zinc-900 rounded-3xl border border-zinc-200 dark:border-zinc-800/80 shadow-sm p-6 sm:p-8 relative overflow-hidden bg-gradient-to-tr", 
+      colors.glow
+    )}>
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-8 relative z-10">
         <div className="flex items-center gap-3">
-          <div className={cn("w-7 h-7 rounded-xl flex items-center justify-center", colors.iconBg)}>
-            <HeartPulse size={16} className={colors.text} />
+          <div className={cn("w-8 h-8 rounded-xl flex items-center justify-center border", colors.iconBg)}>
+            <HeartPulse size={15} className={colors.text} />
           </div>
-          <h2 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
-            Academic Health Score
-          </h2>
+          <div>
+            <h2 className="text-sm font-bold text-zinc-900 dark:text-zinc-50 tracking-tight">
+              Saúde Académica Global
+            </h2>
+            <p className="text-[10px] text-zinc-400 dark:text-zinc-500 font-medium">Índice Geral em tempo real</p>
+          </div>
         </div>
-        <button className="flex items-center gap-1 text-xs font-medium text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors">
-          Ver relatório
+        <button className="flex items-center gap-1.5 text-xs font-semibold text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200 transition-colors bg-zinc-50 dark:bg-zinc-800/60 px-2.5 py-1.5 rounded-lg border border-zinc-100 dark:border-zinc-800/60 shadow-sm">
+          Relatório completo
           <ArrowRight size={12} />
         </button>
       </div>
 
       {/* Body */}
-      <div className="flex flex-col lg:flex-row items-center lg:items-start gap-6 lg:gap-10">
-        {/* Left: Score Ring + Badges */}
-        <div className="flex flex-col items-center gap-3 shrink-0">
+      <div className="flex flex-col md:flex-row items-center md:items-start gap-8 lg:gap-12 relative z-10">
+        
+        {/* Left Area: Anel de Score + Status em Destaque */}
+        <div className="flex flex-col items-center gap-4 shrink-0 bg-zinc-50/50 dark:bg-zinc-800/20 border border-zinc-100/70 dark:border-zinc-800/30 p-4 rounded-2xl min-w-[190px]">
           <ScoreRing score={visible ? displayScore : 0} status={data.status} />
-          <div className="flex flex-wrap items-center justify-center gap-2">
-            <span className={cn("text-xs font-semibold px-2.5 py-0.5 rounded-full", colors.badgeBg, colors.text)}>
-              {colors.label}
+          
+          <div className="flex flex-col items-center gap-1.5 w-full text-center">
+            {/* Tag de Status de alta fidelidade */}
+            <span className={cn("text-xs font-bold px-3 py-1 rounded-full border shadow-2xs tracking-wide w-full max-w-[130px]", colors.badgeBg)}>
+              Status: {colors.label}
             </span>
+            
             {evolution !== null && (
               <span className={cn(
-                "inline-flex items-center gap-0.5 text-xs font-medium px-2 py-0.5 rounded-full",
+                "inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-md",
                 evolution > 0
-                  ? "text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/20"
+                  ? "text-emerald-600 dark:text-emerald-400"
                   : evolution < 0
-                    ? "text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/20"
-                    : "text-zinc-400 bg-zinc-50 dark:bg-zinc-800"
+                    ? "text-rose-600 dark:text-rose-400"
+                    : "text-zinc-400"
               )}>
-                {evolution > 0 ? <TrendingUp size={10} /> : evolution < 0 ? <TrendingDown size={10} /> : <Minus size={10} />}
-                {evolution > 0 ? "+" : ""}{evolution} este mês
+                {evolution > 0 ? <TrendingUp size={11} /> : evolution < 0 ? <TrendingDown size={11} /> : <Minus size={11} />}
+                {evolution > 0 ? `+${evolution}` : evolution} este mês
               </span>
             )}
           </div>
         </div>
 
-        {/* Right: Breakdown */}
-        <div className="flex-1 w-full space-y-3 min-w-0 pt-1">
-          <div className="space-y-3">
+        {/* Right Area: Listas de Critérios (Breakdowns) e Caixa de Insight AI */}
+        <div className="flex-1 w-full space-y-5 min-w-0">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-1 sm:gap-4 lg:gap-1 bor">
             {breakdowns.map((b, i) => (
               <div
                 key={b.key}
-                className="transition-all duration-500"
+                className="transition-all duration-700 ease-out"
                 style={{
                   opacity: visible ? 1 : 0,
-                  transform: visible ? "translateY(0)" : "translateY(8px)",
-                  transitionDelay: `${(i + 1) * 80}ms`,
+                  transform: visible ? "translateY(0)" : "translateY(10px)",
+                  transitionDelay: `${(i + 1) * 60}ms`,
                 }}
               >
                 <BreakdownBar
@@ -366,19 +377,21 @@ export default function AcademicHealthScore() {
             ))}
           </div>
 
-          {/* Insight */}
+          {/* AI Insight Box com Design de Alerta moderno */}
           {sparklines && (
             <div
-              className="pt-3 mt-1 border-t border-zinc-100 dark:border-zinc-800 transition-all duration-500"
+              className="p-3.5 rounded-xl bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-100 dark:border-zinc-800/80 transition-all duration-700 shadow-2xs"
               style={{
                 opacity: visible ? 1 : 0,
-                transitionDelay: "400ms",
+                transform: visible ? "translateY(0)" : "translateY(10px)",
+                transitionDelay: "320ms",
               }}
             >
               <InsightText breakdown={data.breakdown} sparklines={sparklines} />
             </div>
           )}
         </div>
+
       </div>
     </div>
   )

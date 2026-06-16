@@ -21,23 +21,6 @@ export default function DashboardPage() {
   const [childrenList, setChildrenList] = useState<{ id: string; name: string }[]>([])
 
   useEffect(() => {
-    if (status === "unauthenticated") {
-      router.replace("/signin")
-      return
-    }
-    if (status === "authenticated" && session?.user?.id) {
-      if (session.user.role === "super_admin") {
-        router.replace("/admin")
-        return
-      }
-      if (id !== session.user.id && session.user.role !== "school_admin") {
-        router.replace(`/dashboard/${session.user.id}`)
-      }
-    }
-  }, [status, session, id, router])
-
-  // Resolve studentId for student or parent
-  useEffect(() => {
     if (status !== "authenticated" || !session?.user) return
     const role = session.user.role
 
