@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useSession } from "next-auth/react"
 import Pagination from "@/components/ui/Pagination"
 import Table from "@/components/ui/Table"
@@ -8,7 +8,7 @@ import FormModal from "@/components/ui/FormModal"
 import DeleteConfirmModal from "@/components/ui/DeleteConfirmModal"
 import ClassForm from "@/components/forms/ClassForm"
 import { useEntityList } from "@/hooks/useEntityList"
-import { Pencil, Trash2, SlidersHorizontal, ArrowUpDown, Plus, Loader2 } from "lucide-react"
+import { Pencil, Trash2, SlidersHorizontal, ArrowUpDown, Plus, Loader2, Calendar } from "lucide-react"
 
 type Class = {
   id: string
@@ -19,6 +19,7 @@ type Class = {
   courseId?: string | null
   supervisorId?: string | null
   course?: { id: string; name: string } | null
+  academicYear?: { id: string; name: string } | null
   _count?: { students: number }
 }
 
@@ -31,7 +32,7 @@ const columns = [
   { header: "Turma", accessor: "name" },
   { header: "Classe", accessor: "grade" },
   { header: "Período", accessor: "period", className: "hidden md:table-cell" },
-  { header: "Capacidade", accessor: "capacity", className: "hidden lg:table-cell" },
+  { header: "Ano Letivo", accessor: "academicYear", className: "hidden lg:table-cell" },
   { header: "Curso", accessor: "course", className: "hidden lg:table-cell" },
   { header: "Alunos", accessor: "students" },
   { header: "Ações", accessor: "actions" },
@@ -40,11 +41,16 @@ const columns = [
 const ClassListPage = () => {
   const { data: session } = useSession()
   const isAdmin = session?.user?.role === "school_admin"
-  const { data, totalPages, page, search, setSearch, setPage, loading, refetch, filters, setFilters } = useEntityList<Class>({ endpoint: "/api/classes", limit: 5 })
+  const { data, totalPages, page, search, setSearch, setPage, loading, refetch, filters, setFilters } = useEntityList<Class>({ endpoint: "/api/classes", limit: 10 })
 
   const [createOpen, setCreateOpen] = useState(false)
   const [editItem, setEditItem] = useState<Class | null>(null)
   const [deleteItem, setDeleteItem] = useState<Class | null>(null)
+  const [academicYears, setAcademicYears] = useState<{ id: string; name: string }[]>([])
+
+  useEffect(() => {
+    fetch("/api/academic-years").then(r => r.json()).then(d => setAcademicYears(d.data || []))
+  }, [])
 
   const handleDelete = async () => {
     if (!deleteItem) return
@@ -71,7 +77,10 @@ const ClassListPage = () => {
         </span>
       </td>
       <td className="hidden lg:table-cell text-zinc-600 dark:text-zinc-400 text-xs sm:text-sm">
-        {item.capacity} alunos
+        <div className="flex items-center gap-1.5">
+          <Calendar size={13} className="text-zinc-400" />
+          {item.academicYear?.name || "\u2014"}
+        </div>
       </td>
       <td className="hidden lg:table-cell text-zinc-600 dark:text-zinc-400 text-xs sm:text-sm">
         {item.course?.name || "\u2014"}
@@ -113,6 +122,16 @@ const ClassListPage = () => {
           </div>
           <div className="flex items-center justify-end gap-1.5 sm:gap-2">
             <select
+              value={filters.academicYearId || ""}
+              onChange={(e) => setFilters({ ...filters, academicYearId: e.target.value })}
+              className="px-2 py-2 sm:py-2.5 rounded-xl bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 text-xs sm:text-sm border-0 outline-none focus:ring-2 focus:ring-primary transition"
+            >
+              <option value="">Todos os anos</option>
+              {academicYears.map(y => (
+                <option key={y.id} value={y.id}>{y.name}</option>
+              ))}
+            </select>
+            <select
               value={filters.period || ""}
               onChange={(e) => setFilters({ ...filters, period: e.target.value })}
               className="px-2 py-2 sm:py-2.5 rounded-xl bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 text-xs sm:text-sm border-0 outline-none focus:ring-2 focus:ring-primary transition"
@@ -123,9 +142,6 @@ const ClassListPage = () => {
             </select>
             <button className="p-2 sm:p-2.5 rounded-xl bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition active:scale-95">
               <SlidersHorizontal size={16} />
-            </button>
-            <button className="p-2 sm:p-2.5 rounded-xl bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition active:scale-95">
-              <ArrowUpDown size={16} />
             </button>
             {isAdmin && (
               <button

@@ -72,8 +72,12 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
             studentId: r.studentId,
             status: r.status,
             schoolId,
+            academicYearId: lesson.academicYearId,
           },
-          update: { status: r.status },
+          update: { 
+            status: r.status,
+            academicYearId: lesson.academicYearId, // Ensure it's set on update too if missing
+          },
         })
       )
     )

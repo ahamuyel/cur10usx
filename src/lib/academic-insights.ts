@@ -2,6 +2,7 @@ import type { AcademicHealthResult } from "@/lib/academic-health"
 import type { HistoryEntry } from "@/lib/academic-health-history"
 import { prisma } from "@/lib/prisma"
 import { getCurrentAcademicYear } from "@/lib/academic-year"
+import { computeClassHealth } from "@/lib/class-health"
 
 export interface Insight {
   type: "positive" | "warning" | "critical"
@@ -203,7 +204,9 @@ export async function generateInsights(
     })
   }
 
-  // Disciplinas mais críticas (piores médias)
+  // ── Destaques Pedagógicos Específicos ──────────────────────────
+  
+  // Melhores e Piores Disciplinas
   if (subjectAverages.length > 0) {
     const topSubjects = await Promise.all(
       subjectAverages.map(async s => {
@@ -215,39 +218,40 @@ export async function generateInsights(
       })
     )
 
-    const worstSubjects = topSubjects
-      .filter(s => s.avg < 10)
-      .map(s => `${s.name} (${s.avg.toFixed(1)})`)
+    const worstSubject = topSubjects[0]
+    const bestSubject = [...topSubjects].sort((a, b) => b.avg - a.avg)[0]
 
-    if (worstSubjects.length === 1) {
-      insights.push({
-        type: "warning",
-        icon: "alert",
-        title: "Disciplina Crítica",
-        message: `${worstSubjects[0]} — média abaixo de 10 valores. Reforço pedagógico recomendado.`,
-      })
-    } else if (worstSubjects.length >= 2) {
+    if (worstSubject && worstSubject.avg < 10) {
       insights.push({
         type: "critical",
         icon: "trending-down",
-        title: "Múltiplas Disciplinas Críticas",
-        message: `${worstSubjects.join(", ")} — requerem intervenção pedagógica urgente.`,
+        title: "Pior Disciplina",
+        message: `${worstSubject.name} com média de ${worstSubject.avg.toFixed(1)} valores.`,
+      })
+    }
+
+    if (bestSubject && bestSubject.avg >= 14) {
+      insights.push({
+        type: "positive",
+        icon: "trending-up",
+        title: "Melhor Disciplina",
+        message: `${bestSubject.name} lidera com média de ${bestSubject.avg.toFixed(1)} valores.`,
       })
     }
   }
 
-  // Pico de faltas recentes
-  const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
-  const totalAbsencesLast30 = await prisma.attendance.count({
-    where: { schoolId, status: "ausente", date: { gte: thirtyDaysAgo } },
-  })
-  if (totalAbsencesLast30 > 0 && recentAbsences > totalAbsencesLast30 * 0.4) {
-    insights.push({
-      type: "warning",
-      icon: "trending-down",
-      title: "Pico de Absentismo",
-      message: `${recentAbsences} falta(s) apenas na última semana — mais de 40% do total dos últimos 30 dias.`,
-    })
+  // Turma Crítica (Usando o serviço especializado)
+  const classHealth = await computeClassHealth(schoolId)
+  if (classHealth.classes.length > 0) {
+    const criticalClass = classHealth.classes[0] // Já vem ordenado por score crescente em computeClassHealth
+    if (criticalClass && criticalClass.score < 60) {
+      insights.push({
+        type: "warning",
+        icon: "alert",
+        title: "Turma Crítica",
+        message: `${criticalClass.className} apresenta a menor média da escola (${criticalClass.score}%). Motivo: ${criticalClass.motivoPrincipal}.`,
+      })
+    }
   }
 
   return insights
