@@ -23,7 +23,25 @@ export function getHealthStatus(score: number): string {
 
 export async function computeAcademicHealth(schoolId: string): Promise<AcademicHealthResult> {
   const academicYear = await getCurrentAcademicYear(schoolId)
-  const yearFilter = academicYear?.id ? { academicYearId: academicYear.id } : {}
+
+  // Robust year filter for models with 'date' field (Attendance, Result)
+  const robustYearFilter = academicYear
+    ? {
+        OR: [
+          { academicYearId: academicYear.id },
+          {
+            academicYearId: null,
+            date: {
+              gte: academicYear.startDate,
+              lte: academicYear.endDate,
+            },
+          },
+        ],
+      }
+    : {}
+
+  // Simple year filter for models with only 'academicYearId' (Lesson, Assignment, Exam)
+  const simpleYearFilter = academicYear?.id ? { academicYearId: academicYear.id } : {}
 
   const [
     avgResult,
@@ -36,13 +54,13 @@ export async function computeAcademicHealth(schoolId: string): Promise<AcademicH
     totalStudents,
   ] = await Promise.all([
     prisma.result.aggregate({
-      where: { schoolId, ...yearFilter },
+      where: { schoolId, ...robustYearFilter },
       _avg: { score: true },
     }),
 
     prisma.attendance.groupBy({
       by: ["status"],
-      where: { schoolId, ...yearFilter },
+      where: { schoolId, ...robustYearFilter },
       _count: true,
     }),
 
@@ -53,15 +71,15 @@ export async function computeAcademicHealth(schoolId: string): Promise<AcademicH
     }),
 
     prisma.lesson.count({
-      where: { schoolId, ...yearFilter },
+      where: { schoolId, ...simpleYearFilter },
     }),
 
     prisma.assignment.count({
-      where: { schoolId, ...yearFilter },
+      where: { schoolId, ...simpleYearFilter },
     }),
 
     prisma.exam.count({
-      where: { schoolId, ...yearFilter },
+      where: { schoolId, ...simpleYearFilter },
     }),
 
     prisma.application.count({
@@ -77,12 +95,14 @@ export async function computeAcademicHealth(schoolId: string): Promise<AcademicH
     ? Math.round((averageGrade / 20) * 100)
     : 0
 
-  // 2. Assiduidade (30%) - percentage of presente
+  // 2. Assiduidade (30%) - percentage of presence (presente + atrasado)
   const presente = attendanceCounts.find(a => a.status === "presente")?._count ?? 0
+  const atrasado = attendanceCounts.find(a => a.status === "atrasado")?._count ?? 0
   const totalAttendance = attendanceCounts.reduce((sum, a) => sum + a._count, 0)
   const attendance = totalAttendance > 0
-    ? Math.round((presente / totalAttendance) * 100)
+    ? Math.round(((presente + atrasado) / totalAttendance) * 100)
     : 0
+
 
   // 3. Actividade Escolar (20%) - adapta aos dados disponíveis
   const activityMetrics: number[] = []

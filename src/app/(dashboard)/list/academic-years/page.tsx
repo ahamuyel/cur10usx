@@ -63,6 +63,7 @@ const AcademicYearsPage = () => {
   const [formStartDate, setFormStartDate] = useState("")
   const [formEndDate, setFormEndDate] = useState("")
   const [formLoading, setFormLoading] = useState(false)
+  const [formError, setFormError] = useState("")
 
   const fetchData = useCallback(async () => {
     setLoading(true)
@@ -86,6 +87,7 @@ const AcademicYearsPage = () => {
     setFormName("")
     setFormStartDate("")
     setFormEndDate("")
+    setFormError("")
     setCreateOpen(true)
   }
 
@@ -94,11 +96,13 @@ const AcademicYearsPage = () => {
     setFormName(item.name)
     setFormStartDate(toInputDate(item.startDate))
     setFormEndDate(toInputDate(item.endDate))
+    setFormError("")
     setEditItem(item)
   }
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault()
+    setFormError("")
     setFormLoading(true)
     try {
       const res = await fetch("/api/academic-years", {
@@ -106,10 +110,15 @@ const AcademicYearsPage = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: formName, startDate: formStartDate, endDate: formEndDate }),
       })
-      if (res.ok) {
-        setCreateOpen(false)
-        fetchData()
+      if (!res.ok) {
+        const data = await res.json()
+        setFormError(data.error || "Erro ao criar ano letivo")
+        return
       }
+      setCreateOpen(false)
+      fetchData()
+    } catch {
+      setFormError("Erro de conexão")
     } finally {
       setFormLoading(false)
     }
@@ -118,6 +127,7 @@ const AcademicYearsPage = () => {
   const handleEdit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!editItem) return
+    setFormError("")
     setFormLoading(true)
     try {
       const res = await fetch(`/api/academic-years/${editItem.id}`, {
@@ -125,10 +135,15 @@ const AcademicYearsPage = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: formName, startDate: formStartDate, endDate: formEndDate }),
       })
-      if (res.ok) {
-        setEditItem(null)
-        fetchData()
+      if (!res.ok) {
+        const data = await res.json()
+        setFormError(data.error || "Erro ao editar ano letivo")
+        return
       }
+      setEditItem(null)
+      fetchData()
+    } catch {
+      setFormError("Erro de conexão")
     } finally {
       setFormLoading(false)
     }
@@ -323,6 +338,11 @@ const AcademicYearsPage = () => {
       {/* Create Modal */}
       <FormModal open={createOpen} onClose={() => setCreateOpen(false)} title="Novo Ano Letivo">
         <form onSubmit={handleCreate}>
+          {formError && (
+            <div className="mb-4 p-3 rounded-lg bg-rose-50 dark:bg-rose-950/30 text-rose-600 dark:text-rose-400 text-sm font-medium border border-rose-100 dark:border-rose-900/50">
+              {formError}
+            </div>
+          )}
           {formFields}
           {formButtons(() => setCreateOpen(false))}
         </form>
@@ -332,6 +352,11 @@ const AcademicYearsPage = () => {
       <FormModal open={!!editItem} onClose={() => setEditItem(null)} title="Editar Ano Letivo">
         {editItem && (
           <form onSubmit={handleEdit}>
+            {formError && (
+              <div className="mb-4 p-3 rounded-lg bg-rose-50 dark:bg-rose-950/30 text-rose-600 dark:text-rose-400 text-sm font-medium border border-rose-100 dark:border-rose-900/50">
+                {formError}
+              </div>
+            )}
             {formFields}
             {formButtons(() => setEditItem(null))}
           </form>

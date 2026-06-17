@@ -18,8 +18,11 @@ export async function GET(req: Request) {
     const page = parseInt(searchParams.get("page") || "1")
     const limit = parseInt(searchParams.get("limit") || "10")
     const search = searchParams.get("search") || ""
+    const subjectId = searchParams.get("subjectId") || ""
+    const classId = searchParams.get("classId") || ""
 
-    const where = {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const where: any = {
       schoolId,
       ...(search
         ? {
@@ -27,6 +30,20 @@ export async function GET(req: Request) {
               { name: { contains: search, mode: "insensitive" as const } },
               { email: { contains: search, mode: "insensitive" as const } },
             ],
+          }
+        : {}),
+      ...(subjectId
+        ? {
+            teacherSubjects: {
+              some: { subjectId },
+            },
+          }
+        : {}),
+      ...(classId
+        ? {
+            teacherClasses: {
+              some: { classId },
+            },
           }
         : {}),
     }
