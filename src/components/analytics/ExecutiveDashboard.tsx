@@ -48,13 +48,10 @@ export default function ExecutiveDashboard() {
   };
 
   return (
-    // Mudança: overflow-hidden garante que nada saia da tela principal
-    <div className="flex flex-col gap-6 w-full overflow-hidden">
+    <div className="flex flex-col gap-6 w-full overflow-hidden p-1">
       {/* HEADER */}
-
       <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800/60 pb-5 gap-4">
         <div className="flex items-center gap-3 min-w-0">
-          {/* Icon Container com efeito Glassmorphism usando a tua cor Primary */}
           <div className="w-10 h-10 rounded-xl bg-primary/5 dark:bg-primary/10 flex items-center justify-center border border-primary/10 dark:border-primary/20 shrink-0 shadow-2xs">
             <LayoutDashboard
               size={18}
@@ -73,7 +70,6 @@ export default function ExecutiveDashboard() {
           </div>
         </div>
 
-        {/* Botão de Refresh Otimizado para Interação */}
         <button
           onClick={refresh}
           disabled={refreshing}
@@ -81,37 +77,39 @@ export default function ExecutiveDashboard() {
         >
           <RefreshCw
             size={13}
-            className={
-              refreshing
-                ? "animate-spin text-primary"
-                : "text-zinc-400 dark:text-zinc-500"
-            }
+            className={refreshing ? "animate-spin text-primary" : "text-zinc-400 dark:text-zinc-500"}
             strokeWidth={2.2}
           />
           <span className="hidden @[380px]:inline">Actualizar Dados</span>
         </button>
       </div>
 
-      {/* GRID PRINCIPAL: Blocado com min-w-0 para evitar distorções de gráficos */}
+      {/* GRID PRINCIPAL: Layout assimétrico masterizado */}
       <div className="grid grid-cols-1 xl:grid-cols-4 gap-6 items-start w-full">
-        {/* COLUNA DA ESQUERDA (Analytics/Gráficos) - min-w-0 é CRÍTICO aqui */}
+        
+        {/* COLUNA DA ESQUERDA (Analytics, Saúde e Tabelas) - 75% da Tela */}
         <div className="xl:col-span-3 flex flex-col gap-6 w-full min-w-0">
-          {/* Linha 1: Score + Indicadores */}
+
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch w-full">
             <div className="lg:col-span-2 min-w-0 flex flex-col">
               <AcademicHealthScore key={`score-${key}`} />
             </div>
-            <div className="min-w-0">
-              <GeneralIndicators />
+            <div className="min-w-0 flex flex-col">
+              <AttentionArea key={`attention-${key}`} />
             </div>
           </div>
 
-          {/* Linha 2: O Gráfico Histórico isolado em um container rígido */}
-          <div className="w-full min-w-0 bg-white dark:bg-zinc-900 p-4 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm overflow-x-auto">
+          {/* Linha 1: Indicadores Gerais Compactados */}
+          <div className="w-full min-w-0">
+            <GeneralIndicators key={`indicators-${key}`} />
+          </div>
+
+          {/* Linha 2: Histórico de Saúde Académica */}
+          <div className="w-full min-w-0 bg-white dark:bg-zinc-900 p-5 rounded-3xl border border-zinc-200 dark:border-zinc-800/80 shadow-xs">
             <AcademicHealthHistoryChart key={`history-${key}`} />
           </div>
 
-          {/* Linha 3: Tabelas/Painéis detalhados */}
+          {/* Linha 3: Painéis de Detalhe (Turmas e Alunos em Risco) */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full items-start">
             <div className="min-w-0">
               <ClassHealthPanel key={`classes-${key}`} />
@@ -122,33 +120,20 @@ export default function ExecutiveDashboard() {
           </div>
         </div>
 
-        {/* COLUNA DA DIREITA (Ações / Alertas) */}
+        {/* COLUNA DA DIREITA (Feed de Operações, Calendário e Alertas) - 25% da Tela */}
+        {/* Scroll customizado Y removido para limpeza estrutural e herança de scroll nativo */}
         <div className="xl:col-span-1 flex flex-col gap-6 w-full min-w-0 xl:sticky xl:top-6">
-          <div className="min-w-0">
-            <AttentionArea key={`attention-${key}`} />
-          </div>
           <div className="min-w-0">
             <RecommendationsPanel key={`recs-${key}`} />
           </div>
+          <div className="min-w-0">
+            <EventCalendar key={`calendar-${key}`} />
+          </div>
+          <div className="min-w-0">
+            <Announcements key={`announcements-${key}`} />
+          </div>
         </div>
-      </div>
 
-      {/* RODAPÉ (Calendário e Avisos) */}
-      <hr className="border-zinc-200 dark:border-zinc-800 my-2" />
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full">
-        <div className="min-w-0 bg-white dark:bg-zinc-900 p-4 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm">
-          <h3 className="text-sm font-semibold text-zinc-800 dark:text-zinc-200 mb-3">
-            Calendário Institucional
-          </h3>
-          <EventCalendar />
-        </div>
-        <div className="min-w-0 bg-white dark:bg-zinc-900 p-4 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm">
-          <h3 className="text-sm font-semibold text-zinc-800 dark:text-zinc-200 mb-3">
-            Comunicados e Avisos
-          </h3>
-          <Announcements />
-        </div>
       </div>
     </div>
   );

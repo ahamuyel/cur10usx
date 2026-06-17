@@ -1,6 +1,7 @@
 "use client"
 import { useState } from "react"
 import { useSession } from "next-auth/react"
+import { useRouter } from "next/navigation"
 import Pagination from "@/components/ui/Pagination"
 import Table from "@/components/ui/Table"
 import TableSearch from "@/components/ui/TableSearch"
@@ -61,6 +62,7 @@ const columns = [
 
 const ResultListPage = () => {
   const { data: session } = useSession()
+  const router = useRouter()
   const role = session?.user?.role
   const isStudent = role === "student"
   const canManage = role === "school_admin" || role === "teacher"
@@ -80,7 +82,6 @@ const ResultListPage = () => {
     { field: "score", label: "Nota" },
   ]
 
-  const [createOpen, setCreateOpen] = useState(false)
   const [editItem, setEditItem] = useState<Result | null>(null)
   const [deleteItem, setDeleteItem] = useState<Result | null>(null)
   const [summaryStudent, setSummaryStudent] = useState<string | null>(null)
@@ -153,7 +154,7 @@ const ResultListPage = () => {
                   <BarChart3 size={16} />
                 </button>
                 <button
-                  onClick={() => setCreateOpen(true)}
+                  onClick={() => router.push("/list/results/new")}
                   className="flex items-center justify-center gap-1.5 px-2.5 py-2 sm:px-4 sm:py-2.5 rounded-xl bg-primary text-white font-semibold text-xs sm:text-sm active:scale-95 shadow-lg shadow-primary/20 transition"
                 >
                   <Plus size={16} />
@@ -180,10 +181,6 @@ const ResultListPage = () => {
           <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
         </div>
       )}
-
-      <FormModal open={createOpen} onClose={() => setCreateOpen(false)} title="Novo Resultado">
-        <ResultForm mode="create" onSuccess={() => { setCreateOpen(false); refetch() }} onCancel={() => setCreateOpen(false)} />
-      </FormModal>
 
       <FormModal open={!!editItem} onClose={() => setEditItem(null)} title="Editar Resultado">
         {editItem && <ResultForm mode="edit" initialData={editItem} onSuccess={() => { setEditItem(null); refetch() }} onCancel={() => setEditItem(null)} />}

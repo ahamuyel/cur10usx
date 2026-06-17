@@ -50,6 +50,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: parsed.error.issues[0].message }, { status: 400 })
     }
 
+    // Check for duplicate name
     const existing = await prisma.academicYear.findFirst({
       where: { name: parsed.data.name, schoolId },
     })
@@ -57,11 +58,30 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Ano letivo com este nome já existe" }, { status: 409 })
     }
 
+    // Check for overlapping dates
+    const overlap = await prisma.academicYear.findFirst({
+      where: {
+        schoolId,
+        OR: [
+          {
+            startDate: { lte: parsed.data.endDate },
+            endDate: { gte: parsed.data.startDate },
+          },
+        ],
+      },
+    })
+    if (overlap) {
+      return NextResponse.json(
+        { error: `As datas sobrepõem-se ao ano letivo ${overlap.name}` },
+        { status: 409 }
+      )
+    }
+
     const year = await prisma.academicYear.create({
       data: {
         name: parsed.data.name,
-        startDate: new Date(parsed.data.startDate),
-        endDate: new Date(parsed.data.endDate),
+        startDate: parsed.data.startDate,
+        endDate: parsed.data.endDate,
         schoolId,
         status: "aberto",
       },

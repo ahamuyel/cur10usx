@@ -16,8 +16,10 @@ export async function GET(req: Request) {
     const limit = parseInt(searchParams.get("limit") || "10")
     const search = searchParams.get("search") || ""
     const period = searchParams.get("period") || ""
+    const subjectId = searchParams.get("subjectId") || ""
 
-    const where = {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const where: any = {
       schoolId,
       ...(search
         ? {
@@ -26,6 +28,18 @@ export async function GET(req: Request) {
         : {}),
       ...(period && (period === "regular" || period === "pos_laboral")
         ? { period: period as "regular" | "pos_laboral" }
+        : {}),
+      ...(searchParams.get("academicYearId")
+        ? { academicYearId: searchParams.get("academicYearId") }
+        : {}),
+      ...(subjectId
+        ? {
+            course: {
+              courseSubjects: {
+                some: { subjectId },
+              },
+            },
+          }
         : {}),
     }
 
@@ -37,6 +51,7 @@ export async function GET(req: Request) {
         orderBy: { name: "asc" },
         include: {
           course: { select: { id: true, name: true } },
+          academicYear: { select: { id: true, name: true } },
           _count: { select: { students: true } },
         },
       }),

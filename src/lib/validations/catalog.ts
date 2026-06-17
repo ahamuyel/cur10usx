@@ -32,12 +32,38 @@ export const createEducationCycleSchema = z.object({
 export const updateEducationCycleSchema = createEducationCycleSchema.partial()
 
 // Academic Year
-export const createAcademicYearSchema = z.object({
-  name: z.string().regex(/^\d{4}\/\d{4}$/, "Formato deve ser YYYY/YYYY (ex: 2025/2026)"),
-  startDate: z.string().min(1, "Data de início é obrigatória"),
-  endDate: z.string().min(1, "Data de fim é obrigatória"),
+const academicYearBaseSchema = z.object({
+  name: z
+    .string()
+    .trim()
+    .regex(/^\d{4}\/\d{4}$/, "Formato deve ser YYYY/YYYY (ex: 2025/2026)"),
+  startDate: z.coerce.date({
+    errorMap: () => ({ message: "Data de início inválida" }),
+  }),
+  endDate: z.coerce.date({
+    errorMap: () => ({ message: "Data de fim inválida" }),
+  }),
 })
-export const updateAcademicYearSchema = createAcademicYearSchema.partial()
+
+export const createAcademicYearSchema = academicYearBaseSchema
+  .refine((data) => data.endDate > data.startDate, {
+    message: "A data de fim deve ser posterior à data de início",
+    path: ["endDate"],
+  })
+  .refine(
+    (data) => {
+      const [startYear, endYear] = data.name.split("/").map(Number)
+      const startDateYear = data.startDate.getFullYear()
+      const endDateYear = data.endDate.getFullYear()
+      return startDateYear === startYear && endDateYear === endYear
+    },
+    {
+      message: "Os anos nas datas devem coincidir com o nome do ano letivo",
+      path: ["name"],
+    }
+  )
+
+export const updateAcademicYearSchema = academicYearBaseSchema.partial()
 
 // Grading Config
 export const createGradingConfigSchema = z.object({
