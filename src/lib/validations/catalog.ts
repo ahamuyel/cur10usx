@@ -38,10 +38,10 @@ const academicYearBaseSchema = z.object({
     .trim()
     .regex(/^\d{4}\/\d{4}$/, "Formato deve ser YYYY/YYYY (ex: 2025/2026)"),
   startDate: z.coerce.date({
-    errorMap: () => ({ message: "Data de início inválida" }),
+    message: "Data de início inválida",
   }),
   endDate: z.coerce.date({
-    errorMap: () => ({ message: "Data de fim inválida" }),
+    message: "Data de fim inválida",
   }),
 })
 
