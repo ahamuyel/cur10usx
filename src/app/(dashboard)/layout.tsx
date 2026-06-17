@@ -30,7 +30,8 @@ export default function DashboardLayout({
                     <div className="flex-1 flex flex-col min-w-0 w-full">
                       <DashboardHeader />
                       <main className="flex-1 overflow-y-auto styled-scroll">
-                        <div className="p-4 sm:p-6 lg:p-8 max-w-[1600px] mx-auto w-full">
+                        {/* Mudança: Reduzido de max-w-[1600px] para max-w-[1400px] e suavizado os paddings */}
+                        <div className="p-4 md:p-6 max-w-[1400px] mx-auto w-full">
                           {children}
                         </div>
                       </main>

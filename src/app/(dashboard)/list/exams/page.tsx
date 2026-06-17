@@ -1,6 +1,7 @@
 "use client"
 import { useState } from "react"
 import { useSession } from "next-auth/react"
+import { useRouter } from "next/navigation"
 import Pagination from "@/components/ui/Pagination"
 import Table from "@/components/ui/Table"
 import TableSearch from "@/components/ui/TableSearch"
@@ -33,10 +34,10 @@ const columns = [
 
 const ExamListPage = () => {
   const { data: session } = useSession()
+  const router = useRouter()
   const isAdmin = session?.user?.role === "school_admin"
   const { data, totalPages, page, search, setSearch, setPage, loading, refetch } = useEntityList<Exam>({ endpoint: "/api/exams", limit: 5 })
 
-  const [createOpen, setCreateOpen] = useState(false)
   const [editItem, setEditItem] = useState<Exam | null>(null)
   const [deleteItem, setDeleteItem] = useState<Exam | null>(null)
 
@@ -109,7 +110,7 @@ const ExamListPage = () => {
             </button>
             {isAdmin && (
               <button
-                onClick={() => setCreateOpen(true)}
+                onClick={() => router.push("/list/exams/new")}
                 className="flex items-center justify-center gap-1.5 px-2.5 py-2 sm:px-4 sm:py-2.5 rounded-xl bg-primary text-white font-semibold text-xs sm:text-sm active:scale-95 shadow-lg shadow-primary/20 transition"
               >
                 <Plus size={16} />
@@ -137,10 +138,6 @@ const ExamListPage = () => {
           <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
         </div>
       )}
-
-      <FormModal open={createOpen} onClose={() => setCreateOpen(false)} title="Nova Prova">
-        <ExamForm mode="create" onSuccess={() => { setCreateOpen(false); refetch() }} onCancel={() => setCreateOpen(false)} />
-      </FormModal>
 
       <FormModal open={!!editItem} onClose={() => setEditItem(null)} title="Editar Prova">
         {editItem && (

@@ -1,6 +1,7 @@
 "use client"
 import { useState } from "react"
 import { useSession } from "next-auth/react"
+import { useRouter } from "next/navigation"
 import Pagination from "@/components/ui/Pagination"
 import Table from "@/components/ui/Table"
 import TableSearch from "@/components/ui/TableSearch"
@@ -41,6 +42,7 @@ const columns = [
 
 const LessonListPage = () => {
   const { data: session } = useSession()
+  const router = useRouter()
   const role = session?.user?.role
   const canManage = role === "school_admin" || role === "teacher"
   const { data, totalPages, page, search, setSearch, setPage, filters, setFilters, sort, setSort, clearFilters, activeFilterCount, loading, refetch } = useEntityList<Lesson>({ endpoint: "/api/lessons", limit: 5 })
@@ -55,7 +57,6 @@ const LessonListPage = () => {
     { field: "startTime", label: "Hora de início" },
   ]
 
-  const [createOpen, setCreateOpen] = useState(false)
   const [editItem, setEditItem] = useState<Lesson | null>(null)
   const [deleteItem, setDeleteItem] = useState<Lesson | null>(null)
   const [attendanceLesson, setAttendanceLesson] = useState<Lesson | null>(null)
@@ -144,7 +145,7 @@ const LessonListPage = () => {
             <SortButton options={sortOptions} sort={sort} onChange={setSort} />
             {canManage && (
               <button
-                onClick={() => setCreateOpen(true)}
+                onClick={() => router.push("/list/lessons/new")}
                 className="flex items-center justify-center gap-1.5 px-2.5 py-2 sm:px-4 sm:py-2.5 rounded-xl bg-indigo-600 text-white font-semibold text-xs sm:text-sm active:scale-95 shadow-lg shadow-indigo-600/20 transition"
               >
                 <Plus size={16} />
@@ -172,10 +173,6 @@ const LessonListPage = () => {
           <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
         </div>
       )}
-
-      <FormModal open={createOpen} onClose={() => setCreateOpen(false)} title="Nova Aula">
-        <LessonForm mode="create" onSuccess={() => { setCreateOpen(false); refetch() }} onCancel={() => setCreateOpen(false)} />
-      </FormModal>
 
       <FormModal open={!!editItem} onClose={() => setEditItem(null)} title="Editar Aula">
         {editItem && (
