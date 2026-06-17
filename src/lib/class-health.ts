@@ -2,7 +2,7 @@ import { prisma } from "@/lib/prisma"
 import { getCurrentAcademicYear } from "@/lib/academic-year"
 import { getHealthStatus } from "@/lib/academic-health"
 
-export type ClassRiskLevel = "Baixo Risco" | "Médio Risco" | "Alto Risco" | "Crítico" | "Sem dados"
+export type ClassRiskLevel = "Baixo Risco" | "Moderado" | "Alto Risco" | "Crítico" | "Sem dados"
 
 export interface ClassHealthBreakdown {
   academicPerformance: number
@@ -18,6 +18,7 @@ export interface ClassHealthResult {
   score: number
   status: string
   riskLevel: ClassRiskLevel
+  motivoPrincipal: string
   breakdown: ClassHealthBreakdown
 }
 
@@ -25,13 +26,14 @@ export interface ClassHealthSummary {
   classes: ClassHealthResult[]
   criticalCount: number
   atRiskCount: number
+  totalUnderMonitoring: number
 }
 
 function getClassRiskLevel(score: number, status: string): ClassRiskLevel {
   if (status === "Sem dados") return "Sem dados"
   if (score < 45) return "Crítico"
   if (score < 60) return "Alto Risco"
-  if (score < 75) return "Médio Risco"
+  if (score < 75) return "Moderado"
   return "Baixo Risco"
 }
 
@@ -63,6 +65,7 @@ export async function computeClassHealth(schoolId: string): Promise<ClassHealthS
         score: 0,
         status: "Sem dados",
         riskLevel: "Sem dados",
+        motivoPrincipal: "Sem alunos matriculados",
         breakdown: { academicPerformance: 0, attendance: 0, schoolActivity: 0 },
       })
       continue
@@ -110,6 +113,18 @@ export async function computeClassHealth(schoolId: string): Promise<ClassHealthS
       submissionRate * 0.20
     )
 
+    // Determinar motivo principal de monitorização
+    let motivoPrincipal = "Estável"
+    if (score < 75) {
+      const issues = [
+        { label: "Baixo desempenho académico", value: 100 - academicPerformance },
+        { label: "Elevado absentismo", value: 100 - attendance },
+        { label: "Baixa entrega de trabalhos", value: 100 - submissionRate },
+      ]
+      issues.sort((a, b) => b.value - a.value)
+      motivoPrincipal = issues[0].label
+    }
+
     const finalScore = Math.min(100, Math.max(0, score))
     const status = studentCount > 0 ? getHealthStatus(finalScore) : "Sem dados"
 
@@ -121,6 +136,7 @@ export async function computeClassHealth(schoolId: string): Promise<ClassHealthS
       score: finalScore,
       status,
       riskLevel: getClassRiskLevel(finalScore, status),
+      motivoPrincipal,
       breakdown: {
         academicPerformance: Math.min(100, academicPerformance),
         attendance: Math.min(100, attendance),
@@ -130,8 +146,11 @@ export async function computeClassHealth(schoolId: string): Promise<ClassHealthS
   }
 
   results.sort((a, b) => a.score - b.score)
-  const criticalCount = results.filter(r => r.score < 60).length
-  const atRiskCount = results.filter(r => r.riskLevel === "Alto Risco" || r.riskLevel === "Crítico").length
+  
+  // Métricas de sumário (Não sobrepostas)
+  const criticalCount = results.filter(r => r.score < 45 && r.studentCount > 0).length
+  const atRiskCount = results.filter(r => r.score >= 45 && r.score < 60 && r.studentCount > 0).length
+  const totalUnderMonitoring = results.filter(r => r.score < 75 && r.studentCount > 0).length
 
-  return { classes: results, criticalCount, atRiskCount }
+  return { classes: results, criticalCount, atRiskCount, totalUnderMonitoring }
 }

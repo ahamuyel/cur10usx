@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma"
 import { getCurrentAcademicYear } from "@/lib/academic-year"
 
-export type RiskLevel = "Baixo Risco" | "Médio Risco" | "Alto Risco" | "Crítico"
+export type RiskLevel = "Baixo Risco" | "Moderado" | "Alto Risco" | "Crítico"
 
 export interface SubjectWeakness {
   subjectId: string
@@ -22,6 +22,7 @@ export interface StudentRiskResult {
   className: string
   riskScore: number
   riskLevel: RiskLevel
+  motivoPrincipal: string
   breakdown: StudentRiskBreakdown
   weakSubjects: SubjectWeakness[]
 }
@@ -37,7 +38,7 @@ export interface StudentRiskSummary {
 export function getRiskLevel(score: number): RiskLevel {
   if (score >= 75) return "Crítico"
   if (score >= 50) return "Alto Risco"
-  if (score >= 25) return "Médio Risco"
+  if (score >= 25) return "Moderado"
   return "Baixo Risco"
 }
 
@@ -101,6 +102,18 @@ export async function computeStudentRisk(schoolId: string): Promise<StudentRiskS
       riskFromSubmissions * 0.30
     )
 
+    // Determinar motivo principal
+    let motivoPrincipal = "Acompanhamento geral"
+    const risks = [
+      { label: "Baixo aproveitamento escolar", value: riskFromAcademic },
+      { label: "Elevado absentismo (faltas)", value: riskFromAttendance },
+      { label: "Falta de entrega de trabalhos", value: riskFromSubmissions },
+    ]
+    risks.sort((a, b) => b.value - a.value)
+    if (risks[0].value > 20) {
+      motivoPrincipal = risks[0].label
+    }
+
     // Calcular disciplinas mais fracas (média < 10)
     const subjectMap = new Map<string, { name: string; scores: number[] }>()
     for (const r of student.results) {
@@ -130,6 +143,7 @@ export async function computeStudentRisk(schoolId: string): Promise<StudentRiskS
       className: student.class?.name ?? "Sem turma",
       riskScore: Math.min(100, Math.max(0, riskScore)),
       riskLevel: getRiskLevel(riskScore),
+      motivoPrincipal,
       breakdown: {
         academicPerformance,
         attendance,
@@ -143,9 +157,9 @@ export async function computeStudentRisk(schoolId: string): Promise<StudentRiskS
 
   const summary: Record<string, number> = {
     "Baixo Risco": 0,
-    "Médio Risco": 0,
+    "Moderado": 0,
     "Alto Risco": 0,
-    Crítico: 0,
+    "Crítico": 0,
   }
   for (const r of results) {
     summary[r.riskLevel] = (summary[r.riskLevel] || 0) + 1

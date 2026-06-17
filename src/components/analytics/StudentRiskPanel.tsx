@@ -36,7 +36,7 @@ interface StudentRiskData {
 const LEVEL_STYLE: Record<string, { color: string; bg: string; dot: string }> = {
   Crítico: { color: "text-rose-600 dark:text-rose-400", bg: "bg-rose-50/60 dark:bg-rose-950/20 border-rose-100 dark:border-rose-900/30", dot: "bg-rose-500" },
   "Alto Risco": { color: "text-orange-600 dark:text-orange-400", bg: "bg-orange-50/60 dark:bg-orange-950/20 border-orange-100 dark:border-orange-900/30", dot: "bg-orange-500" },
-  "Médio Risco": { color: "text-amber-600 dark:text-amber-400", bg: "bg-amber-50/60 dark:bg-amber-950/20 border-amber-100 dark:border-amber-900/30", dot: "bg-amber-500" },
+  "Moderado": { color: "text-amber-600 dark:text-amber-400", bg: "bg-amber-50/60 dark:bg-amber-950/20 border-amber-100 dark:border-amber-900/30", dot: "bg-amber-500" },
   "Baixo Risco": { color: "text-emerald-600 dark:text-emerald-400", bg: "bg-emerald-50/60 dark:bg-emerald-950/20 border-emerald-100 dark:border-emerald-900/30", dot: "bg-emerald-500" },
 }
 
@@ -45,7 +45,7 @@ export default function StudentRiskPanel() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
   const [visible, setVisible] = useState(false)
-  const [isExpanded, setIsExpanded] = useState(false) // Estado de expansão
+  const [isExpanded, setIsExpanded] = useState(false)
 
   useEffect(() => {
     fetch("/api/analytics/student-risk")
@@ -92,7 +92,7 @@ export default function StudentRiskPanel() {
     )
   }
 
-  const filteredStudents = data.students.filter(s => s.riskLevel === "Crítico" || s.riskLevel === "Alto Risco")
+  const filteredStudents = data.students.filter(s => s.riskLevel === "Crítico" || s.riskLevel === "Alto Risco" || s.riskLevel === "Moderado")
   const displayStudents = isExpanded ? filteredStudents.slice(0, 10) : filteredStudents.slice(0, 3)
 
   return (
@@ -130,29 +130,33 @@ export default function StudentRiskPanel() {
             <p className="text-xs font-bold text-zinc-700 dark:text-zinc-300">Nenhum aluno em risco</p>
           </div>
         ) : (
-          <div className="space-y-1.5">
+          <div className="space-y-2">
             {displayStudents.map((s, i) => {
               const style = LEVEL_STYLE[s.riskLevel] || LEVEL_STYLE["Baixo Risco"]
               return (
                 <div
                   key={s.studentId}
-                  className="flex items-center justify-between py-2.5 px-3 rounded-xl transition-all duration-300 group cursor-pointer bg-zinc-50/50 dark:bg-zinc-950/20 hover:bg-zinc-100/70 dark:hover:bg-zinc-800/40 border border-zinc-100/50 dark:border-zinc-800/20"
+                  className="flex flex-col gap-1 p-3 rounded-xl transition-all duration-300 group cursor-pointer bg-zinc-50/50 dark:bg-zinc-950/20 hover:bg-zinc-100/70 dark:hover:bg-zinc-800/40 border border-zinc-100/50 dark:border-zinc-800/20"
                   style={{
                     opacity: visible ? 1 : 0,
                     transform: visible ? "translateY(0)" : "translateY(6px)",
                     transitionDelay: `${i * 30}ms`,
                   }}
                 >
-                  <div className="flex items-center gap-2.5 min-w-0 pr-2">
-                    <span className={cn("w-1.5 h-1.5 rounded-full shrink-0", style.dot)} />
-                    <span className="text-xs font-semibold text-zinc-800 dark:text-zinc-200 truncate group-hover:text-zinc-900 dark:group-hover:text-zinc-50">{s.studentName}</span>
-                    <span className="text-[11px] text-zinc-400 dark:text-zinc-500 font-medium truncate hidden sm:inline">· {s.className}</span>
-                  </div>
-                  <div className="flex items-center gap-2 shrink-0">
-                    <span className={cn("text-[10px] font-bold px-2 py-0.5 rounded border tracking-wide whitespace-nowrap", style.bg, style.color)}>
+                  <div className="flex items-center justify-between gap-2.5 min-w-0 pr-2">
+                    <div className="flex items-center gap-2 min-w-0">
+                      <span className={cn("w-1.5 h-1.5 rounded-full shrink-0", style.dot)} />
+                      <span className="text-sm font-bold text-zinc-800 dark:text-zinc-200 truncate group-hover:text-zinc-900 dark:group-hover:text-zinc-50">{s.studentName}</span>
+                    </div>
+                    <span className={cn("text-[9px] font-bold px-1.5 py-0.5 rounded border tracking-wide whitespace-nowrap", style.bg, style.color)}>
                       {s.riskLevel}
                     </span>
-                    <ChevronRight size={14} className="text-zinc-300 dark:text-zinc-600 group-hover:text-zinc-400 transition-colors hidden sm:block" />
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <p className="text-[10px] text-zinc-500 dark:text-zinc-400 font-medium italic truncate max-w-[180px]">
+                      {s.motivoPrincipal}
+                    </p>
+                    <span className="text-[11px] text-zinc-400 dark:text-zinc-500 font-bold tabular-nums">{s.className}</span>
                   </div>
                 </div>
               )

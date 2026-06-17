@@ -115,11 +115,11 @@ export default function AcademicHealthHistoryChart() {
           <div className="w-8 h-8 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-100 dark:border-indigo-900/30 flex items-center justify-center">
             <TrendingUp size={15} className="text-indigo-600 dark:text-indigo-400" />
           </div>
-          <div>
+            <div>
             <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-50 tracking-tight">
-              Evolução Histórica
+              Evolução do Aproveitamento
             </h3>
-            <p className="text-[10px] text-zinc-400 dark:text-zinc-500 font-medium">Histórico recente de saúde instituição</p>
+            <p className="text-[10px] text-zinc-400 dark:text-zinc-500 font-medium">Histórico recente de desempenho da instituição</p>
           </div>
         </div>
         
@@ -153,7 +153,7 @@ export default function AcademicHealthHistoryChart() {
       </div>
 
       {/* Chart */}
-      <div className="h-60 sm:h-64 w-full">
+      <div className="h-60 sm:h-64 w-full min-h-[240px]">
         <ResponsiveContainer width="100%" height="100%">
           {/* AJUSTE: left alterado para 0 para eliminar compressão lateral do container */}
           <AreaChart data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
