@@ -158,7 +158,7 @@ export default function ExecutiveDashboard() {
 
           {/* Agenda e Comunicados Unificados */}
           <div className="flex flex-col gap-6">
-            <EventCalendar key={`calendar-${key}`} />
+            <EventCalendar key={`calendar-${key}`} /> 
             <Announcements key={`announcements-${key}`} />
           </div>
         </div>
