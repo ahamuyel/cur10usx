@@ -2,6 +2,8 @@ import { NextResponse } from "next/server"
 import { requireRole, getSchoolId } from "@/lib/api-auth"
 import { computeAcademicHealth } from "@/lib/academic-health"
 import { computeStudentRisk } from "@/lib/student-risk"
+import { computeClassHealth } from "@/lib/class-health"
+import { getCurrentAcademicYear } from "@/lib/academic-year"
 import { prisma } from "@/lib/prisma"
 import { getLatestSnapshot } from "@/lib/academic-health-history"
 
@@ -16,37 +18,41 @@ export async function GET() {
 
     const schoolId = getSchoolId(session!)
 
-    const currentDay = new Date().getDay()
-    const dayValue = (currentDay === 0 ? 7 : currentDay).toString()
-
-    const [health, risk, pendingApplications, todayLessons, lastSnapshot] = await Promise.all([
+    const [health, risk, classHealth, pendingApplications, academicYear, lastSnapshot] = await Promise.all([
       computeAcademicHealth(schoolId),
       computeStudentRisk(schoolId),
+      computeClassHealth(schoolId),
       prisma.application.count({ where: { schoolId, status: "pendente" } }),
-      prisma.lesson.count({
-        where: {
-          schoolId,
-          day: dayValue,
-        }
-      }),
+      getCurrentAcademicYear(schoolId),
       getLatestSnapshot(schoolId),
     ])
 
     const evolution = lastSnapshot ? health.score - lastSnapshot.score : 0
 
     return NextResponse.json({
-      health: {
-        score: health.score,
+      schoolInfo: {
+        academicYear: academicYear?.name ?? "Ano Lectivo não definido",
+        schoolName: session?.user?.name ?? "Escola",
+      },
+      academic: {
+        aproveitamento: health.score,
+        assiduidade: health.breakdown.attendance,
         status: health.status,
         evolution,
       },
-      attention: {
-        criticalStudents: risk.summary["Crítico"] || 0,
-        highRiskStudents: risk.summary["Alto Risco"] || 0,
-        pendingApplications,
+      risk: {
+        totalAtRisk: risk.totalAtRisk,
+        riskPercentage: risk.riskPercentage,
+        summary: risk.summary,
       },
-      today: {
-        lessons: todayLessons,
+      classes: {
+        totalUnderMonitoring: classHealth.atRiskCount + classHealth.criticalCount,
+        criticalCount: classHealth.criticalCount,
+        atRiskCount: classHealth.atRiskCount,
+      },
+      operational: {
+        score: health.operationalScore,
+        pendingApplications,
       }
     })
   } catch (error) {

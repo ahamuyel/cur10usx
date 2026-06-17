@@ -37,7 +37,7 @@ export default function ClassHealthPanel() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
   const [visible, setVisible] = useState(false)
-  const [isExpanded, setIsExpanded] = useState(false) // Estado de expansão
+  const [isExpanded, setIsExpanded] = useState(false)
 
   useEffect(() => {
     fetch("/api/analytics/class-health")
@@ -82,7 +82,7 @@ export default function ClassHealthPanel() {
     )
   }
 
-  const filteredClasses = data.classes.filter(c => c.status === "Crítica" || c.status === "Atenção")
+  const filteredClasses = data.classes.filter(c => c.status === "Crítica" || c.status === "Atenção" || c.riskLevel === "Moderado")
   const displayClasses = isExpanded ? filteredClasses.slice(0, 10) : filteredClasses.slice(0, 3)
 
   return (
@@ -99,7 +99,7 @@ export default function ClassHealthPanel() {
             </div>
             <div>
               <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-50 tracking-tight">Turmas sob Monitorização</h3>
-              <p className="text-[10px] text-zinc-400 dark:text-zinc-500 font-medium">Intervenção pedagógica imediata</p>
+              <p className="text-[10px] text-zinc-400 dark:text-zinc-500 font-medium">Intervenção pedagógica recomendada</p>
             </div>
           </div>
           {filteredClasses.length > 0 && (
@@ -118,29 +118,33 @@ export default function ClassHealthPanel() {
             <p className="text-xs font-bold text-zinc-700 dark:text-zinc-300">Todas as turmas estáveis</p>
           </div>
         ) : (
-          <div className="space-y-1.5 transition-all duration-300">
+          <div className="space-y-2 transition-all duration-300">
             {displayClasses.map((c, i) => {
               const status = STATUS_MAP[c.status] || STATUS_MAP.Boa
               return (
                 <div
                   key={c.classId}
-                  className="flex items-center justify-between py-2.5 px-3 rounded-xl transition-all duration-300 group cursor-pointer bg-zinc-50/50 dark:bg-zinc-950/20 hover:bg-zinc-100/70 dark:hover:bg-zinc-800/40 border border-zinc-100/50 dark:border-zinc-800/20"
+                  className="flex flex-col gap-1 p-3 rounded-xl transition-all duration-300 group cursor-pointer bg-zinc-50/50 dark:bg-zinc-950/20 hover:bg-zinc-100/70 dark:hover:bg-zinc-800/40 border border-zinc-100/50 dark:border-zinc-800/20"
                   style={{
                     opacity: visible ? 1 : 0,
                     transform: visible ? "translateY(0)" : "translateY(6px)",
                     transitionDelay: `${i * 30}ms`,
                   }}
                 >
-                  <div className="flex items-center gap-2.5 min-w-0">
-                    <span className={cn("w-1.5 h-1.5 rounded-full shrink-0", status.dot)} />
-                    <span className="text-xs font-semibold text-zinc-800 dark:text-zinc-200 truncate group-hover:text-zinc-900 dark:group-hover:text-zinc-50">{c.className}</span>
-                    <span className="text-[11px] text-zinc-400 dark:text-zinc-500 font-medium whitespace-nowrap tabular-nums">· Média {c.score}%</span>
-                  </div>
-                  <div className="flex items-center gap-2 shrink-0">
-                    <span className={cn("text-[10px] font-bold px-2 py-0.5 rounded border tracking-wide", status.bg, status.color)}>
+                  <div className="flex items-center justify-between gap-2.5 min-w-0">
+                    <div className="flex items-center gap-2 min-w-0">
+                      <span className={cn("w-1.5 h-1.5 rounded-full shrink-0", status.dot)} />
+                      <span className="text-sm font-bold text-zinc-800 dark:text-zinc-200 truncate group-hover:text-zinc-900 dark:group-hover:text-zinc-50">{c.className}</span>
+                    </div>
+                    <span className={cn("text-[9px] font-bold px-1.5 py-0.5 rounded border tracking-wide whitespace-nowrap", status.bg, status.color)}>
                       {status.label}
                     </span>
-                    <ChevronRight size={14} className="text-zinc-300 dark:text-zinc-600 group-hover:text-zinc-400 transition-colors hidden sm:block" />
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <p className="text-[10px] text-zinc-500 dark:text-zinc-400 font-medium italic">
+                      Motivo: {c.motivoPrincipal}
+                    </p>
+                    <span className="text-[11px] text-zinc-400 dark:text-zinc-500 font-bold tabular-nums">{c.score}% Aproveitamento</span>
                   </div>
                 </div>
               )

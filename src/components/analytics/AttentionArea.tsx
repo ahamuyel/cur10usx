@@ -28,23 +28,20 @@ interface AlertItem {
   href: string
 }
 
-export default function AttentionArea() {
-  const [data, setData] = useState<AttentionData | null>(null)
+export default function AttentionArea({ briefing }: { briefing?: any }) {
   const [loading, setLoading] = useState(true)
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
-    fetch("/api/analytics/executive-briefing")
-      .then(r => r.json())
-      .then(json => {
-        setData(json)
-        requestAnimationFrame(() => setVisible(true))
-      })
-      .catch(() => {})
-      .finally(() => setLoading(false))
-  }, [])
+    if (briefing && !briefing.error) {
+      setLoading(false)
+      requestAnimationFrame(() => setVisible(true))
+    } else if (briefing?.error) {
+      setLoading(false)
+    }
+  }, [briefing])
 
-  if (loading) {
+  if (loading || briefing?.error) {
     return (
       <div className="bg-white dark:bg-zinc-900 rounded-3xl border border-zinc-200 dark:border-zinc-800 shadow-xs p-5 space-y-5">
         <div className="flex items-center gap-3">
@@ -60,42 +57,65 @@ export default function AttentionArea() {
     )
   }
 
-  if (!data || !data.attention) return null
-
-  const alerts: AlertItem[] = [
+  const sections = [
     {
-      label: "Alunos em Risco",
-      value: data.attention.criticalStudents + data.attention.highRiskStudents,
-      description: "Requerem acompanhamento imediato",
-      icon: UserX,
+      title: "Intervenção Imediata",
+      priority: "high",
       color: "text-rose-600 dark:text-rose-400",
       bg: "bg-rose-50/50 dark:bg-rose-950/30 border-rose-100/60 dark:border-rose-900/20",
-      href: "/list/students?risk=alto",
+      icon: AlertTriangle,
+      items: [
+        briefing?.risk?.summary["Crítico"] > 0 && {
+          label: "Alunos em Risco Crítico",
+          value: briefing.risk.summary["Crítico"],
+          href: "/list/students?risk=critico"
+        },
+        briefing?.classes?.criticalCount > 0 && {
+          label: "Turmas com Aproveitamento Crítico",
+          value: briefing.classes.criticalCount,
+          href: "/list/classes"
+        }
+      ].filter(Boolean)
     },
     {
-      label: "Solicitações Pendentes",
-      value: data.attention.pendingApplications,
-      description: "Processos aguardando revisão",
-      icon: Inbox,
+      title: "Atenção Pedagógica",
+      priority: "medium",
       color: "text-amber-600 dark:text-amber-400",
       bg: "bg-amber-50/50 dark:bg-amber-950/30 border-amber-100/60 dark:border-amber-900/20",
-      href: "/list/applications",
+      icon: Bell,
+      items: [
+        briefing?.risk?.summary["Alto Risco"] > 0 && {
+          label: "Alunos em Alto Risco",
+          value: briefing.risk.summary["Alto Risco"],
+          href: "/list/students?risk=alto"
+        },
+        briefing?.classes?.atRiskCount > 0 && {
+          label: "Turmas em Observação",
+          value: briefing.classes.atRiskCount,
+          href: "/list/classes"
+        }
+      ].filter(Boolean)
     },
     {
-      label: "Casos Críticos",
-      value: data.attention.criticalStudents,
-      description: "Situação de extrema vulnerabilidade",
-      icon: AlertTriangle,
-      color: "text-red-600 dark:text-red-400",
-      bg: "bg-red-50/50 dark:bg-red-950/30 border-red-100/60 dark:border-red-900/20",
-      href: "/list/students?risk=critico",
-    },
-  ].filter(a => a.value > 0)
+      title: "Operação e Secretaria",
+      priority: "low",
+      color: "text-zinc-600 dark:text-zinc-400",
+      bg: "bg-zinc-50/50 dark:bg-zinc-800/30 border-zinc-100/60 dark:border-zinc-800/20",
+      icon: Inbox,
+      items: [
+        briefing?.operational?.pendingApplications > 0 && {
+          label: "Candidaturas Pendentes",
+          value: briefing.operational.pendingApplications,
+          href: "/list/applications"
+        }
+      ].filter(Boolean)
+    }
+  ].filter(s => s.items.length > 0)
 
-  const noAlerts = alerts.length === 0
+  const noAlerts = sections.length === 0
 
   return (
-    <div className="bg-white dark:bg-zinc-900 rounded-3xl border border-zinc-200 dark:border-zinc-800 shadow-xs p-5 space-y-5 h-full">
+    <div className="bg-white dark:bg-zinc-900 rounded-3xl border border-zinc-200 dark:border-zinc-800 shadow-xs p-5 space-y-6">
       <div className="flex items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <div className={cn(
@@ -105,15 +125,10 @@ export default function AttentionArea() {
             <Bell size={15} className={noAlerts ? "text-emerald-500" : "text-amber-500"} />
           </div>
           <div>
-            <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-50 tracking-tight">Ações Requeridas</h3>
-            <p className="text-[10px] text-zinc-400 dark:text-zinc-500 font-medium">Alertas operacionais activos</p>
+            <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-50 tracking-tight">Acções Prioritárias</h3>
+            <p className="text-[10px] text-zinc-400 dark:text-zinc-500 font-medium">O que exige atenção hoje?</p>
           </div>
         </div>
-        {!noAlerts && (
-          <span className="inline-flex items-center justify-center bg-amber-50 dark:bg-amber-950/60 px-2.5 py-0.5 rounded-md text-xs font-bold text-amber-600 dark:text-amber-400 border border-amber-100 dark:border-amber-900/30 tabular-nums">
-            {alerts.length}
-          </span>
-        )}
       </div>
 
       {noAlerts ? (
@@ -124,30 +139,40 @@ export default function AttentionArea() {
           <p className="text-xs font-bold text-zinc-700 dark:text-zinc-300">Operação em Conformidade</p>
         </div>
       ) : (
-        <div className="space-y-1.5">
-          {alerts.map((alert, i) => (
-            <Link
-              key={i}
-              href={alert.href}
-              className="group flex items-center gap-3 p-2.5 rounded-2xl transition-all duration-300 border bg-zinc-50/50 dark:bg-zinc-950/20 hover:bg-zinc-100/70 dark:hover:bg-zinc-800/40 border-zinc-100/50 dark:border-zinc-800/20"
-              style={{
-                opacity: visible ? 1 : 0,
-                transform: visible ? "translateY(0)" : "translateY(6px)",
-                transitionDelay: `${i * 45}ms`,
-              }}
-            >
-              <div className={cn("w-9 h-9 rounded-xl flex items-center justify-center shrink-0 border", alert.bg)}>
-                <alert.icon size={15} className={alert.color} />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {sections.map((section, idx) => (
+            <div key={idx} className="space-y-3">
+              <div className="flex items-center gap-2 px-1">
+                <section.icon size={14} className={section.color} />
+                <h4 className="text-[11px] font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                  {section.title}
+                </h4>
               </div>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-baseline gap-1.5">
-                  <span className="text-sm font-bold text-zinc-900 dark:text-zinc-50 tabular-nums">{alert.value}</span>
-                  <span className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 truncate">{alert.label}</span>
-                </div>
-                <p className="text-[10px] text-zinc-400 dark:text-zinc-500 truncate font-medium mt-0.5">{alert.description}</p>
+              <div className="space-y-1.5">
+                {section.items.map((item: any, i: number) => (
+                  <Link
+                    key={i}
+                    href={item.href}
+                    className="group flex items-center gap-3 p-2.5 rounded-2xl transition-all duration-300 border bg-zinc-50/50 dark:bg-zinc-950/20 hover:bg-zinc-100/70 dark:hover:bg-zinc-800/40 border-zinc-100/50 dark:border-zinc-800/20"
+                    style={{
+                      opacity: visible ? 1 : 0,
+                      transform: visible ? "translateY(0)" : "translateY(6px)",
+                      transitionDelay: `${(idx * 2 + i) * 30}ms`,
+                    }}
+                  >
+                    <div className={cn("w-8 h-8 rounded-xl flex items-center justify-center shrink-0 border shadow-3xs", section.bg)}>
+                      <span className={cn("text-xs font-bold tabular-nums", section.color)}>{item.value}</span>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-[11px] font-bold text-zinc-700 dark:text-zinc-300 truncate leading-tight">
+                        {item.label}
+                      </p>
+                    </div>
+                    <ArrowRight size={14} className="text-zinc-300 dark:text-zinc-600 group-hover:text-zinc-500 group-hover:translate-x-0.5 transition-all shrink-0" />
+                  </Link>
+                ))}
               </div>
-              <ArrowRight size={14} className="text-zinc-300 dark:text-zinc-600 group-hover:text-zinc-500 group-hover:translate-x-0.5 transition-all shrink-0" />
-            </Link>
+            </div>
           ))}
         </div>
       )}

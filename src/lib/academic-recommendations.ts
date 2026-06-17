@@ -19,80 +19,69 @@ export function generateRecommendations(
   trends: TrendData
 ): Recommendation[] {
   const recommendations: Recommendation[] = []
+  const totalStudents = studentRisk.totalStudents || 1
 
+  // 1. Alunos em Risco (Baseado em %)
+  const riskPercentage = (studentRisk.totalAtRisk / totalStudents) * 100
   if (studentRisk.totalAtRisk > 0) {
     recommendations.push({
-      priority: studentRisk.totalAtRisk > 10 ? "urgent" : "high",
-      action: `Convocar reunião com encarregados dos ${studentRisk.totalAtRisk} alunos em risco académico.`,
-      reason: `${studentRisk.totalAtRisk} alunos apresentam risco elevado ou crítico.`,
+      priority: riskPercentage > 15 ? "urgent" : riskPercentage > 5 ? "high" : "medium",
+      action: `Convocar reunião com encarregados dos ${studentRisk.totalAtRisk} alunos em risco.`,
+      reason: `${studentRisk.totalAtRisk} alunos (${riskPercentage.toFixed(1)}%) apresentam risco elevado ou crítico.`,
       category: "pedagogico",
     })
   }
 
+  // 2. Turmas Críticas (Baseado em %)
+  const totalClasses = classHealth.classes.length || 1
+  const criticalClassesPercentage = (classHealth.criticalCount / totalClasses) * 100
   if (classHealth.criticalCount > 0) {
     recommendations.push({
-      priority: classHealth.criticalCount > 3 ? "urgent" : "high",
-      action: `Reforçar acompanhamento pedagógico das ${classHealth.criticalCount} turmas com score crítico.`,
-      reason: `${classHealth.criticalCount} turma(s) apresentam score inferior a 60.`,
+      priority: criticalClassesPercentage > 20 ? "urgent" : "high",
+      action: `Reforçar acompanhamento pedagógico das ${classHealth.criticalCount} turmas críticas.`,
+      reason: `${classHealth.criticalCount} turma(s) (${criticalClassesPercentage.toFixed(1)}%) têm aproveitamento inferior a 60%.`,
       category: "pedagogico",
     })
   }
 
-  if (health.breakdown.attendance < 75) {
+  // 3. Assiduidade (Threshold Pedagógico)
+  if (health.breakdown.attendance < 80) {
     recommendations.push({
-      priority: "high",
-      action: "Implementar medidas para redução do absentismo escolar.",
-      reason: `Assiduidade em ${health.breakdown.attendance}%, abaixo do mínimo recomendado de 75%.`,
+      priority: health.breakdown.attendance < 70 ? "urgent" : "high",
+      action: "Implementar plano de redução de faltas e absentismo.",
+      reason: `Assiduidade global em ${health.breakdown.attendance}%, abaixo da meta mínima de 80%.`,
       category: "assiduidade",
     })
   }
 
+  // 4. Queda de Performance (Tendência)
   if (trends.change7d !== null && trends.change7d < -3) {
     recommendations.push({
       priority: "high",
-      action: "Investigar causa da queda repentina no Academic Health Score.",
-      reason: `Score caiu ${Math.abs(trends.change7d)} pontos nos últimos 7 dias.`,
+      action: "Analisar causas da queda no aproveitamento semanal.",
+      reason: `O aproveitamento global caiu ${Math.abs(trends.change7d)} pontos nos últimos 7 dias.`,
       category: "geral",
     })
   }
 
-  if (health.breakdown.administrativeEfficiency < 70) {
+  // 5. Eficiência Operacional
+  if (health.breakdown.administrativeEfficiency < 75) {
     recommendations.push({
       priority: "medium",
-      action: "Regularizar solicitações e processos administrativos pendentes.",
+      action: "Regularizar processos administrativos e candidaturas pendentes.",
       reason: `Eficiência administrativa em ${health.breakdown.administrativeEfficiency}%.`,
       category: "administrativo",
     })
   }
 
-  if (health.breakdown.academicPerformance < 60) {
+  // 6. Aproveitamento Académico Crítico
+  if (health.breakdown.academicPerformance < 50) {
     recommendations.push({
       priority: "urgent",
-      action: "Realizar intervenção pedagógica urgente para elevar o desempenho académico.",
-      reason: `Desempenho académico crítico (${health.breakdown.academicPerformance}%).`,
+      action: "Intervenção pedagógica de emergência por baixo rendimento.",
+      reason: `Aproveitamento académico global crítico (${health.breakdown.academicPerformance}%).`,
       category: "pedagogico",
     })
-  }
-
-  if (health.breakdown.schoolActivity < 50) {
-    recommendations.push({
-      priority: "medium",
-      action: "Garantir que professores registam actividades e tarefas regularmente.",
-      reason: `Baixo índice de actividade escolar (${health.breakdown.schoolActivity}%).`,
-      category: "pedagogico",
-    })
-  }
-
-  if (classHealth.classes.length > 0) {
-    const worst = classHealth.classes[0]
-    if (worst && worst.score < 60) {
-      recommendations.push({
-        priority: "high",
-        action: `Intervir na turma ${worst.className} (score: ${worst.score}).`,
-        reason: `Pior turma da escola. Desempenho: ${worst.breakdown.academicPerformance}, Assiduidade: ${worst.breakdown.attendance}.`,
-        category: "pedagogico",
-      })
-    }
   }
 
   recommendations.sort((a, b) => {

@@ -9,9 +9,10 @@ export interface AcademicHealthBreakdown {
 }
 
 export interface AcademicHealthResult {
-  score: number
+  score: number // Aproveitamento Global (Desempenho + Assiduidade)
   status: string
   breakdown: AcademicHealthBreakdown
+  operationalScore: number // Eficiência Operacional (Actividade + Administrativo)
 }
 
 export function getHealthStatus(score: number): string {
@@ -89,13 +90,13 @@ export async function computeAcademicHealth(schoolId: string): Promise<AcademicH
     prisma.student.count({ where: { schoolId } }),
   ])
 
-  // 1. Desempenho Académico (40%) - 0-100 scale
+  // 1. Aproveitamento Académico (50% do Score Global se usarmos apenas Pedagógico)
   const averageGrade = avgResult._avg.score ?? 0
   const academicPerformance = averageGrade > 0
     ? Math.round((averageGrade / 20) * 100)
     : 0
 
-  // 2. Assiduidade (30%) - percentage of presence (presente + atrasado)
+  // 2. Assiduidade (50% do Score Global se usarmos apenas Pedagógico)
   const presente = attendanceCounts.find(a => a.status === "presente")?._count ?? 0
   const atrasado = attendanceCounts.find(a => a.status === "atrasado")?._count ?? 0
   const totalAttendance = attendanceCounts.reduce((sum, a) => sum + a._count, 0)
@@ -104,7 +105,7 @@ export async function computeAcademicHealth(schoolId: string): Promise<AcademicH
     : 0
 
 
-  // 3. Actividade Escolar (20%) - adapta aos dados disponíveis
+  // 3. Actividade Escolar (Parte da Eficiência Operacional)
   const activityMetrics: number[] = []
 
   // Submission completion rate
@@ -121,36 +122,32 @@ export async function computeAcademicHealth(schoolId: string): Promise<AcademicH
     activityMetrics.push(Math.min(100, (lessonCount / totalStudents) * 10))
   }
 
-  // Assignments per student
-  if (totalStudents > 0 && assignmentCount > 0) {
-    activityMetrics.push(Math.min(100, (assignmentCount / totalStudents) * 20))
-  }
-
-  // Exams per student
-  if (totalStudents > 0 && examCount > 0) {
-    activityMetrics.push(Math.min(100, (examCount / totalStudents) * 10))
-  }
-
   const schoolActivity = activityMetrics.length > 0
     ? Math.round(activityMetrics.reduce((a, b) => a + b, 0) / activityMetrics.length)
     : 0
 
-  // 4. Eficiência Administrativa (10%) - fewer pending items = higher score
+  // 4. Eficiência Administrativa (Parte da Eficiência Operacional)
   const totalPending = pendingApplications
   const pendingRatio = totalStudents > 0 ? totalPending / totalStudents : 0
   const administrativeEfficiency = Math.round(Math.max(0, 100 - pendingRatio * 100))
 
-  // Weighted final score
-  const score = Math.round(
-    academicPerformance * 0.40 +
-    attendance * 0.30 +
-    schoolActivity * 0.20 +
-    administrativeEfficiency * 0.10
+  // NOVO CÁLCULO:
+  // Score Global (Pedagógico) = 50% Aproveitamento + 50% Assiduidade
+  const globalScore = Math.round(
+    academicPerformance * 0.50 +
+    attendance * 0.50
+  )
+
+  // Score Operacional = 60% Actividade + 40% Administração
+  const operationalScore = Math.round(
+    schoolActivity * 0.60 +
+    administrativeEfficiency * 0.40
   )
 
   return {
-    score: Math.min(100, Math.max(0, score)),
-    status: getHealthStatus(score),
+    score: Math.min(100, Math.max(0, globalScore)),
+    status: getHealthStatus(globalScore),
+    operationalScore: Math.min(100, Math.max(0, operationalScore)),
     breakdown: {
       academicPerformance: Math.min(100, Math.max(0, academicPerformance)),
       attendance: Math.min(100, Math.max(0, attendance)),
