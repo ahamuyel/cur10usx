@@ -12,6 +12,7 @@ interface ClassHealth {
   score: number
   status: string
   riskLevel: string
+  motivoPrincipal: string
   breakdown: {
     academicPerformance: number
     attendance: number
