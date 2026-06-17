@@ -17,6 +17,7 @@ interface StudentRisk {
   className: string
   riskScore: number
   riskLevel: string
+  motivoPrincipal: string
   breakdown: {
     academicPerformance: number
     attendance: number
