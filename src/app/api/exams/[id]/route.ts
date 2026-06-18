@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { requirePermission, getSchoolId } from "@/lib/api-auth"
 import { updateExamSchema } from "@/lib/validations/academic"
+import { requestSnapshot } from "@/lib/snapshot-queue"
 
 export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -60,6 +61,7 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
         ...(date !== undefined ? { date: new Date(date) } : {}),
       },
     })
+    await requestSnapshot(schoolId)
     return NextResponse.json(exam)
   } catch (error) {
     console.error(`[API Error] ${error}`)

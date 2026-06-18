@@ -6,6 +6,7 @@ import { computeClassHealth } from "@/lib/class-health"
 import { getCurrentAcademicYear } from "@/lib/academic-year"
 import { prisma } from "@/lib/prisma"
 import { getLatestSnapshot } from "@/lib/academic-health-history"
+import { getLastActivityInfo } from "@/lib/snapshot-queue"
 
 // Main GET handler for executive briefing
 export async function GET() {
@@ -18,13 +19,14 @@ export async function GET() {
 
     const schoolId = getSchoolId(session!)
 
-    const [health, risk, classHealth, pendingApplications, academicYear, lastSnapshot] = await Promise.all([
+    const [health, risk, classHealth, pendingApplications, academicYear, lastSnapshot, activityInfo] = await Promise.all([
       computeAcademicHealth(schoolId),
       computeStudentRisk(schoolId),
       computeClassHealth(schoolId),
       prisma.application.count({ where: { schoolId, status: "pendente" } }),
       getCurrentAcademicYear(schoolId),
       getLatestSnapshot(schoolId),
+      getLastActivityInfo(schoolId),
     ])
 
     const evolution = lastSnapshot ? health.score - lastSnapshot.score : 0
@@ -53,7 +55,8 @@ export async function GET() {
       operational: {
         score: health.operationalScore,
         pendingApplications,
-      }
+      },
+      lastActivity: activityInfo,
     })
   } catch (error) {
     console.error("[Executive Briefing API Error]", error)

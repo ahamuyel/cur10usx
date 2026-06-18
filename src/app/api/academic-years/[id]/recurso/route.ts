@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { requirePermission, getSchoolId } from "@/lib/api-auth"
 import { evaluateStudent } from "@/lib/evaluation-engine"
+import { requestSnapshot } from "@/lib/snapshot-queue"
 
 // GET: List students in recurso for this academic year
 export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
@@ -109,6 +110,8 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
         },
       })
     }
+
+    await requestSnapshot(schoolId)
 
     return NextResponse.json({
       success: true,

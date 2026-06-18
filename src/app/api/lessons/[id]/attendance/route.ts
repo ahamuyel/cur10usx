@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { requirePermission, getSchoolId } from "@/lib/api-auth"
 import { createLessonAttendanceSchema } from "@/lib/validations/academic"
+import { requestSnapshot } from "@/lib/snapshot-queue"
 
 export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -81,6 +82,8 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
         })
       )
     )
+
+    await requestSnapshot(schoolId)
 
     return NextResponse.json({ count: results.length }, { status: 201 })
   } catch (error) {

@@ -1,22 +1,16 @@
 "use client";
 
 import { useEffect, useState, useMemo, useCallback } from "react";
-import {
-  Calendar,
-  momentLocalizer,
-  View,
-  Views,
-  ToolbarProps,
-} from "react-big-calendar";
+import { Calendar, momentLocalizer, View, Views, ToolbarProps } from "react-big-calendar";
 import moment from "moment";
-import { ChevronLeft, ChevronRight, X, Loader2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, X, Loader2, MapPin, User, Clock, BookOpen, Users } from "lucide-react";
 
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import "@/styles/big-calendar.css";
 import "moment/locale/pt-br";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetClose } from "@/components/ui/sheet";
 
 moment.locale("pt-br");
-
 const localizer = momentLocalizer(moment);
 
 type CalendarEvent = {
@@ -26,72 +20,51 @@ type CalendarEvent = {
   type?: string;
   teacher?: string;
   room?: string;
+  className?: string;
 };
 
-const COLORS = [
-  "#6366f1", "#10B981", "#F59E0B", "#06B6D4", "#f43f5e",
-  "#8b5cf6", "#ec4899", "#14b8a6", "#a855f7", "#f97316",
-];
+const COLORS = ["#8b5cf6", "#10b981", "#f43f5e", "#3b82f6", "#06b6d4", "#6366f1", "#ec4899"];
 
 const DAY_MAP: Record<string, number> = {
-  "Segunda": 1, "Terça": 2, "Quarta": 3, "Quinta": 4, "Sexta": 5,
+  Segunda: 1, Terça: 2, Quarta: 3, Quinta: 4, Sexta: 5,
 };
 
 const views = [
-  { key: Views.MONTH, label: "Mês" },
   { key: Views.WORK_WEEK, label: "Semana" },
   { key: Views.DAY, label: "Dia" },
 ];
 
-const CalendarHeader: React.FC<ToolbarProps<CalendarEvent, object>> = ({
-  date,
-  view,
-  onView,
-  onNavigate,
-}) => {
+const CalendarHeader: React.FC<ToolbarProps<CalendarEvent, object>> = ({ date, view, onView, onNavigate }) => {
   return (
-    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-3 sm:mb-4">
+    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-zinc-100 dark:border-zinc-800/60 pb-4 mb-4">
       <div className="flex items-center gap-2">
-        <button
-          onClick={() => onNavigate("PREV")}
-          className="p-1.5 sm:p-2 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition"
-        >
-          <ChevronLeft size={16} className="sm:w-[18px] sm:h-[18px]" />
-        </button>
-        <h2 className="text-sm sm:text-lg font-semibold capitalize text-zinc-900 dark:text-zinc-100">
+        <h2 className="text-base font-semibold text-zinc-900 dark:text-zinc-50 capitalize">
           {moment(date).format("MMMM YYYY")}
         </h2>
-        <button
-          onClick={() => onNavigate("NEXT")}
-          className="p-1.5 sm:p-2 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition"
-        >
-          <ChevronRight size={16} className="sm:w-[18px] sm:h-[18px]" />
-        </button>
+        <div className="flex items-center gap-0.5 bg-zinc-100 dark:bg-zinc-800/60 rounded-xl p-0.5 border border-zinc-200/40 dark:border-zinc-700/40">
+          <button onClick={() => onNavigate("PREV")} className="p-1 rounded-lg hover:bg-white dark:hover:bg-zinc-700 text-zinc-500 transition">
+            <ChevronLeft size={14} />
+          </button>
+          <button onClick={() => onNavigate("TODAY")} className="px-2 py-0.5 text-[10px] font-semibold rounded-lg hover:bg-white dark:hover:bg-zinc-700 text-zinc-600 dark:text-zinc-300 transition">
+            Hoje
+          </button>
+          <button onClick={() => onNavigate("NEXT")} className="p-1 rounded-lg hover:bg-white dark:hover:bg-zinc-700 text-zinc-500 transition">
+            <ChevronRight size={14} />
+          </button>
+        </div>
       </div>
 
-      <div className="flex items-center gap-2">
-        <button
-          onClick={() => onNavigate("TODAY")}
-          className="px-2.5 py-1 sm:px-3 sm:py-1.5 text-xs sm:text-sm rounded-lg border border-zinc-200 dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition text-zinc-700 dark:text-zinc-300"
-        >
-          Hoje
-        </button>
-        <div className="flex bg-zinc-100 dark:bg-zinc-800 rounded-xl p-0.5 sm:p-1">
-          {views.map((v) => (
-            <button
-              key={v.key}
-              onClick={() => onView(v.key)}
-              className={`px-2.5 py-1 sm:px-3 sm:py-1.5 text-xs sm:text-sm rounded-lg transition
-                ${
-                  view === v.key
-                    ? "bg-white dark:bg-zinc-700 shadow text-primary dark:text-primary-400 font-medium"
-                    : "text-zinc-500 dark:text-zinc-400"
-                }`}
-            >
-              {v.label}
-            </button>
-          ))}
-        </div>
+      <div className="flex bg-zinc-100 dark:bg-zinc-800/50 rounded-xl p-0.5 border border-zinc-200/10 w-fit">
+        {views.map((v) => (
+          <button
+            key={v.key}
+            onClick={() => onView(v.key)}
+            className={`px-3 py-1 text-xs font-medium rounded-lg transition-all duration-150
+              ${view === v.key ? "bg-white dark:bg-zinc-700 text-zinc-950 dark:text-white shadow-xs font-semibold" : "text-zinc-400 dark:text-zinc-500 hover:text-zinc-600"}`}
+          >
+            {v.label}
+          </button>
+        ))}
       </div>
     </div>
   );
@@ -100,7 +73,7 @@ const CalendarHeader: React.FC<ToolbarProps<CalendarEvent, object>> = ({
 const BigCalendar = () => {
   const [view, setView] = useState<View>(Views.WORK_WEEK);
   const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
-  const [calendarHeight, setCalendarHeight] = useState(500);
+  const [calendarHeight, setCalendarHeight] = useState(600);
   const [hiddenSubjects, setHiddenSubjects] = useState<Set<string>>(new Set());
   const [events, setEvents] = useState<CalendarEvent[]>([]);
   const [loading, setLoading] = useState(true);
@@ -109,13 +82,13 @@ const BigCalendar = () => {
   const fetchLessons = useCallback(async () => {
     try {
       const res = await fetch("/api/lessons?limit=200");
-      if (!res.ok) { setLoading(false); return; }
+      if (!res.ok) return;
       const json = await res.json();
 
       const colorMap: Record<string, string> = {};
       let colorIdx = 0;
 
-      const mapped: CalendarEvent[] = (json.data || []).map((lesson: { day: string; startTime: string; endTime: string; room?: string; subject?: { name: string }; teacher?: { name: string } }) => {
+      const mapped: CalendarEvent[] = (json.data || []).map((lesson: any) => {
         const subjectName = lesson.subject?.name || "Aula";
         if (!colorMap[subjectName]) {
           colorMap[subjectName] = COLORS[colorIdx % COLORS.length];
@@ -133,47 +106,32 @@ const BigCalendar = () => {
         const [sh, sm] = lesson.startTime.split(":").map(Number);
         const [eh, em] = lesson.endTime.split(":").map(Number);
 
-        const start = new Date(eventDate);
-        start.setHours(sh, sm, 0, 0);
-        const end = new Date(eventDate);
-        end.setHours(eh, em, 0, 0);
+        const start = new Date(eventDate); start.setHours(sh, sm, 0, 0);
+        const end = new Date(eventDate); end.setHours(eh, em, 0, 0);
 
         return {
-          title: subjectName,
-          start,
-          end,
-          type: subjectName,
-          teacher: lesson.teacher?.name,
-          room: lesson.room,
+          title: subjectName, start, end, type: subjectName,
+          teacher: lesson.teacher?.name, room: lesson.room, className: lesson.class?.name,
         };
       });
 
       setSubjectColors(colorMap);
       setEvents(mapped);
     } catch {
-      // silently fail
+      // fail silently
     } finally {
       setLoading(false);
     }
   }, []);
 
-  useEffect(() => {
-    fetchLessons();
-  }, [fetchLessons]);
+  useEffect(() => { fetchLessons(); }, [fetchLessons]);
 
   useEffect(() => {
     const updateSize = () => {
       const width = window.innerWidth;
-      if (width < 640) {
-        setView(Views.DAY);
-        setCalendarHeight(400);
-      } else if (width < 1024) {
-        setCalendarHeight(500);
-      } else {
-        setCalendarHeight(600);
-      }
+      if (width < 640) { setView(Views.DAY); setCalendarHeight(480); }
+      else { setCalendarHeight(580); }
     };
-
     updateSize();
     window.addEventListener("resize", updateSize);
     return () => window.removeEventListener("resize", updateSize);
@@ -182,80 +140,72 @@ const BigCalendar = () => {
   const toggleSubject = (subject: string) => {
     setHiddenSubjects((prev) => {
       const next = new Set(prev);
-      if (next.has(subject)) {
-        next.delete(subject);
-      } else {
-        next.add(subject);
-      }
+      if (next.has(subject)) next.delete(subject);
+      else next.add(subject);
       return next;
     });
   };
 
-  const filteredEvents = useMemo(
-    () => events.filter((e) => !hiddenSubjects.has(e.type || "")),
-    [hiddenSubjects, events]
-  );
-
-  const activeSubjects = useMemo(() => {
-    const types = new Set<string>();
-    for (const e of events) {
-      if (e.type) types.add(e.type);
-    }
-    return Array.from(types).sort();
-  }, [events]);
+  const filteredEvents = useMemo(() => events.filter((e) => !hiddenSubjects.has(e.type || "")), [hiddenSubjects, events]);
+  const activeSubjects = useMemo(() => Array.from(new Set(events.map(e => e.type).filter(Boolean))).sort() as string[], [events]);
 
   const eventStyleGetter = (event: CalendarEvent) => {
-    const bg = subjectColors[event.type || ""] || "#64748b";
+    const baseColor = subjectColors[event.type || ""] || "#64748b";
+    const isDark = typeof document !== "undefined" && document.documentElement.classList.contains("dark");
+
     return {
       style: {
-        background: `linear-gradient(135deg, ${bg} 0%, ${bg}dd 100%)`,
-        borderRadius: "6px",
+        backgroundColor: isDark ? `${baseColor}15` : `${baseColor}08`,
+        borderRadius: "12px",
         border: "none",
-        borderLeft: `3px solid ${bg}`,
-        color: "#fff",
-        fontSize: "0.7rem",
-        padding: "2px 5px",
-        boxShadow: `0 1px 3px ${bg}44`,
+        borderLeft: `3px solid ${baseColor}`,
+        color: baseColor,
+        fontSize: "0.75rem",
+        padding: "6px 10px",
+        fontWeight: "600",
       },
     };
   };
 
   const EventComponent = useCallback(({ event }: { event: CalendarEvent }) => (
-    <div className="leading-tight">
-      <div className="font-semibold truncate">{event.title}</div>
-      {event.teacher && (
-        <div className="text-[10px] opacity-80 truncate hidden sm:block">{event.teacher}</div>
-      )}
+    <div className="flex flex-col h-full py-0.5 leading-snug">
+      <div className="font-semibold text-zinc-900 dark:text-zinc-100 truncate text-xs">
+        {event.title}
+      </div>
+      <div className="flex items-center gap-1.5 opacity-60 mt-0.5 text-[10px] font-medium">
+        {event.room && <span className="truncate">{event.room}</span>}
+        {event.teacher && <span className="truncate border-l border-zinc-300 dark:border-zinc-700 pl-1.5">{event.teacher.split(' ')[0]}</span>}
+      </div>
     </div>
   ), []);
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-12">
-        <Loader2 size={24} className="animate-spin text-primary" />
+      <div className="flex flex-col items-center justify-center py-16 gap-2">
+        <Loader2 size={18} className="animate-spin text-violet-500" />
+        <p className="text-[10px] font-semibold text-zinc-400 uppercase tracking-wider">A carregar horários...</p>
       </div>
     );
   }
 
   return (
-    <>
+    <div className="flex flex-col gap-4 w-full">
+      {/* Filtros por Cadeira — Design Suave */}
       {activeSubjects.length > 0 && (
-        <div className="flex flex-wrap gap-1.5 mb-3">
+        <div className="flex flex-wrap gap-1.5 px-0.5">
           {activeSubjects.map((subject) => {
             const color = subjectColors[subject] || "#64748b";
             const isHidden = hiddenSubjects.has(subject);
+
             return (
               <button
                 key={subject}
                 onClick={() => toggleSubject(subject)}
-                className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium transition
-                  ${
-                    isHidden
-                      ? "bg-zinc-100 dark:bg-zinc-800 text-zinc-400 dark:text-zinc-500"
-                      : "text-white"
-                  }`}
-                style={!isHidden ? { backgroundColor: color } : undefined}
+                className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-medium transition-all cursor-pointer active:scale-98 border border-transparent
+                  ${isHidden ? "bg-zinc-100/60 dark:bg-zinc-800/40 text-zinc-400 dark:text-zinc-500" : ""}`}
+                style={!isHidden ? { backgroundColor: `${color}10`, color: color } : undefined}
               >
+                <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: color }} />
                 {subject}
               </button>
             );
@@ -263,113 +213,93 @@ const BigCalendar = () => {
         </div>
       )}
 
-      <div className="cur10us-calendar bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-2 sm:p-4 overflow-hidden">
+      {/* Container Alinhado ao Bento Grid */}
+      <div className="bg-white dark:bg-zinc-900/40 rounded-3xl border border-zinc-100 dark:border-zinc-800/60 p-4 shadow-xs overflow-hidden">
         <Calendar<CalendarEvent>
           localizer={localizer}
           events={filteredEvents}
           startAccessor="start"
           endAccessor="end"
-          views={{ month: true, work_week: true, day: true }}
+          views={{ work_week: true, day: true }}
           view={view}
           onView={setView}
           min={new Date(2025, 0, 1, 7, 30)}
-          max={new Date(2025, 0, 1, 17, 30)}
+          max={new Date(2025, 0, 1, 18, 30)}
           formats={{
             timeGutterFormat: "HH:mm",
-            eventTimeRangeFormat: ({ start, end }) =>
-              `${moment(start).format("HH:mm")} – ${moment(end).format("HH:mm")}`,
+            eventTimeRangeFormat: ({ start, end }) => `${moment(start).format("HH:mm")} – ${moment(end).format("HH:mm")}`,
           }}
           dayLayoutAlgorithm="no-overlap"
-          scrollToTime={new Date(2025, 0, 1, 7, 30)}
-          showMultiDayTimes
+          scrollToTime={new Date()}
           eventPropGetter={eventStyleGetter}
+          slotPropGetter={(date) => ({ className: date.getMinutes() === 0 ? "rbc-slot-hour" : "rbc-slot-half" })}
+          dayPropGetter={() => ({})}
           onSelectEvent={(event) => setSelectedEvent(event)}
           components={{ toolbar: CalendarHeader, event: EventComponent }}
           style={{ height: calendarHeight }}
         />
       </div>
 
-      {activeSubjects.length > 0 && (
-        <div className="flex flex-wrap gap-3 mt-3 px-1">
-          {activeSubjects.map((subject) => {
-            const color = subjectColors[subject] || "#64748b";
-            return (
-              <div key={subject} className="flex items-center gap-1.5">
-                <span
-                  className="w-2.5 h-2.5 rounded-full"
-                  style={{ backgroundColor: color }}
-                />
-                <span className="text-xs text-zinc-600 dark:text-zinc-400">
-                  {subject}
-                </span>
+      {/* Sheet Lateral Fluid */}
+      <Sheet open={!!selectedEvent} onOpenChange={(open) => !open && setSelectedEvent(null)}>
+        <SheetContent className="w-full sm:max-w-md bg-white dark:bg-zinc-950 border-l border-zinc-100 dark:border-zinc-800 p-0 overflow-hidden">
+          {selectedEvent && (
+            <div className="flex flex-col h-full">
+              <div className="h-24 w-full relative" style={{ backgroundColor: `${subjectColors[selectedEvent.type || ""] || "#64748b"}08` }}>
+                <div className="absolute bottom-0 left-0 w-full h-[2px]" style={{ backgroundColor: subjectColors[selectedEvent.type || ""] || "#64748b" }} />
+                <SheetClose className="absolute top-5 right-5 p-2 rounded-xl bg-white dark:bg-zinc-900 text-zinc-400 hover:text-zinc-600 transition-colors">
+                  <X size={16} />
+                </SheetClose>
               </div>
-            );
-          })}
-        </div>
-      )}
 
-      {selectedEvent && (
-        <div
-          className="fixed inset-0 bg-black/40 flex items-end sm:items-center justify-center z-50 p-4"
-          onClick={() => setSelectedEvent(null)}
-        >
-          <div
-            className="bg-white dark:bg-zinc-900 rounded-2xl p-5 sm:p-6 w-full max-w-md shadow-xl border border-zinc-200 dark:border-zinc-800"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-start justify-between">
-              <div>
-                <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-                  {selectedEvent.title}
-                </h2>
-                <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-0.5">
-                  {moment(selectedEvent.start).format("HH:mm")} – {moment(selectedEvent.end).format("HH:mm")}
-                </p>
+              <div className="px-6 -mt-4">
+                <SheetHeader className="text-left">
+                  <div className="bg-white dark:bg-zinc-900 rounded-2xl p-5 border border-zinc-100 dark:border-zinc-800 shadow-xs">
+                    <span className="inline-flex px-2 py-0.5 rounded-md text-[10px] font-semibold uppercase tracking-wider mb-2"
+                      style={{ backgroundColor: `${subjectColors[selectedEvent.type || ""] || "#64748b"}10`, color: subjectColors[selectedEvent.type || ""] || "#64748b" }}>
+                      {selectedEvent.type}
+                    </span>
+                    <SheetTitle className="text-lg font-bold text-zinc-900 dark:text-white tracking-tight">
+                      {selectedEvent.title}
+                    </SheetTitle>
+                  </div>
+                </SheetHeader>
               </div>
-              <button
-                onClick={() => setSelectedEvent(null)}
-                className="p-1 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition"
-              >
-                <X size={18} className="text-zinc-400" />
-              </button>
-            </div>
 
-            {selectedEvent.type && (
-              <span
-                className="inline-block mt-3 px-2.5 py-1 rounded-full text-xs font-medium text-white"
-                style={{
-                  backgroundColor: subjectColors[selectedEvent.type] || "#64748b",
-                }}
-              >
-                {selectedEvent.type}
-              </span>
-            )}
+              <div className="flex-1 px-6 py-6 space-y-6 overflow-y-auto">
+                <div className="space-y-4">
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3 text-sm">
+                      <Clock size={16} className="text-zinc-400" />
+                      <div>
+                        <p className="text-[10px] font-medium text-zinc-400 uppercase">Horário</p>
+                        <p className="font-semibold text-zinc-800 dark:text-zinc-200">{moment(selectedEvent.start).format("HH:mm")} – {moment(selectedEvent.end).format("HH:mm")}</p>
+                      </div>
+                    </div>
 
-            <div className="mt-4 space-y-2 text-sm text-zinc-700 dark:text-zinc-300">
-              {selectedEvent.teacher && (
-                <div className="flex items-center gap-2">
-                  <span className="text-zinc-400 dark:text-zinc-500">Professor:</span>
-                  <span className="font-medium">{selectedEvent.teacher}</span>
+                    <div className="flex items-center gap-3 text-sm">
+                      <MapPin size={16} className="text-zinc-400" />
+                      <div>
+                        <p className="text-[10px] font-medium text-zinc-400 uppercase">Sala / Local</p>
+                        <p className="font-semibold text-zinc-800 dark:text-zinc-200">{selectedEvent.room || "Não definida"}</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-3 text-sm">
+                      <User size={16} className="text-zinc-400" />
+                      <div>
+                        <p className="text-[10px] font-medium text-zinc-400 uppercase">Professor</p>
+                        <p className="font-semibold text-zinc-800 dark:text-zinc-200">{selectedEvent.teacher || "Não atribuído"}</p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              )}
-              {selectedEvent.room && (
-                <div className="flex items-center gap-2">
-                  <span className="text-zinc-400 dark:text-zinc-500">Sala:</span>
-                  <span className="font-medium">{selectedEvent.room}</span>
-                </div>
-              )}
+              </div>
             </div>
-
-            <button
-              onClick={() => setSelectedEvent(null)}
-              className="mt-6 w-full rounded-xl bg-primary text-white py-2.5 font-medium hover:bg-primary-700 transition active:scale-[0.98]"
-            >
-              Fechar
-            </button>
-          </div>
-        </div>
-      )}
-    </>
+          )}
+        </SheetContent>
+      </Sheet>
+    </div>
   );
 };
 
