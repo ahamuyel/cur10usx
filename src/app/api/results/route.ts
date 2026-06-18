@@ -4,6 +4,7 @@ import { requirePermission, getSchoolId } from "@/lib/api-auth"
 import { createResultSchema } from "@/lib/validations/academic"
 import { createNotification } from "@/lib/notifications"
 import { buildOrderBy } from "@/lib/query-helpers"
+import { requestSnapshot } from "@/lib/snapshot-queue"
 import { getOrDefaultAcademicYearId } from "@/lib/academic-year"
 import { logAudit, auditUser } from "@/lib/audit"
 
@@ -137,6 +138,8 @@ export async function POST(req: Request) {
     }
 
     logAudit({ ...auditUser(session!), action: "CREATE", entity: "Result", entityId: result.id, schoolId, description: `Nota ${rest.score} registada para aluno ${rest.studentId}` })
+
+    await requestSnapshot(schoolId)
 
     return NextResponse.json(result, { status: 201 })
   } catch (error) {

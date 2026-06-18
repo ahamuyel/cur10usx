@@ -60,7 +60,7 @@ export default function ExecutiveBriefing() {
                 <EvolutionIcon size={14} />
                 {Math.abs(data.health.evolution)}pts em relação ao último período.
               </span>
-            ) : " Mantém-se estável desde o último snapshot."}
+            ) : " Mantém-se estável."}
           </p>
         </div>
 

@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma"
 import { requirePermission, getSchoolId } from "@/lib/api-auth"
 import { createAttendanceSchema } from "@/lib/validations/academic"
 import { buildOrderBy } from "@/lib/query-helpers"
+import { requestSnapshot } from "@/lib/snapshot-queue"
 import { getOrDefaultAcademicYearId } from "@/lib/academic-year"
 import { logAudit, auditUser } from "@/lib/audit"
 
@@ -111,6 +112,8 @@ export async function POST(req: Request) {
     })
 
     logAudit({ ...auditUser(session!), action: "CREATE", entity: "Attendance", schoolId, description: `Presença registada para ${records.length} aluno(s) na turma ${classId}` })
+
+    await requestSnapshot(schoolId)
 
     return NextResponse.json(created, { status: 201 })
   } catch (error) {

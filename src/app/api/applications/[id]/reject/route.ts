@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma"
 import { requirePermission } from "@/lib/api-auth"
 import { rejectApplicationSchema } from "@/lib/validations/application"
 import { sendApplicationRejected } from "@/lib/email"
+import { requestSnapshot } from "@/lib/snapshot-queue"
 
 export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -35,6 +36,8 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     } catch (e) {
       console.error("Email error:", e)
     }
+
+    await requestSnapshot(existing.schoolId)
 
     return NextResponse.json(application)
   } catch (error) {

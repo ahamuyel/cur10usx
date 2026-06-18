@@ -7,6 +7,7 @@ import { Loader2 } from "lucide-react"
 
 import BigCalendar from "@/components/ui/BigCalendar"
 import StudentDashboard from "@/components/ui/StudentDashboard"
+import StudentCalendarExperience from "@/components/ui/StudentCalendarExperience"
 import ExecutiveDashboard from "@/components/analytics/ExecutiveDashboard"
 import EventCalendar from "@/components/ui/EventCalendar"
 import Announcements from "@/components/ui/Announcements"
@@ -89,20 +90,10 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {/* Schedule Calendar */}
+        {/* Schedule Calendar Experience */}
         {studentId && (
-          <section className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-3 sm:p-4 shadow-sm">
-            <div className="flex items-center justify-between mb-3">
-              <div>
-                <h2 className="text-base sm:text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-                  Horário de Aulas
-                </h2>
-                <p className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400">
-                  Visualize suas aulas da semana
-                </p>
-              </div>
-            </div>
-            <BigCalendar />
+          <section className="mt-4">
+            <StudentCalendarExperience />
           </section>
         )}
       </div>

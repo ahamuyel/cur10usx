@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma"
 import { requirePermission, getSchoolId } from "@/lib/api-auth"
 import { updateResultSchema } from "@/lib/validations/academic"
 import { logAudit, auditUser } from "@/lib/audit"
+import { requestSnapshot } from "@/lib/snapshot-queue"
 
 export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -76,6 +77,8 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
     })
 
     logAudit({ ...auditUser(session!), action: "UPDATE", entity: "Result", entityId: id, schoolId, description: `Nota actualizada para ${existing.score}` })
+
+    await requestSnapshot(schoolId)
 
     return NextResponse.json(result)
   } catch (error) {

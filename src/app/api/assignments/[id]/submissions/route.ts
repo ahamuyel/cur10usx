@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma"
 import { requirePermission, getSchoolId } from "@/lib/api-auth"
 import { createSubmissionSchema } from "@/lib/validations/academic"
 import { createNotification } from "@/lib/notifications"
+import { requestSnapshot } from "@/lib/snapshot-queue"
 
 export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -99,6 +100,8 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
         schoolId,
       })
     }
+
+    await requestSnapshot(schoolId)
 
     return NextResponse.json(submission, { status: 201 })
   } catch (error) {
