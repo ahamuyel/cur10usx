@@ -4,6 +4,7 @@ import { requirePermission, getSchoolId } from "@/lib/api-auth"
 import { createAssignmentSchema } from "@/lib/validations/academic"
 import { getOrDefaultAcademicYearId } from "@/lib/academic-year"
 import { buildOrderBy } from "@/lib/query-helpers"
+import { requestSnapshot } from "@/lib/snapshot-queue"
 
 export async function GET(req: Request) {
   try {
@@ -115,6 +116,7 @@ export async function POST(req: Request) {
         schoolId,
       },
     })
+    await requestSnapshot(schoolId)
     return NextResponse.json(assignment, { status: 201 })
   } catch (error) {
     console.error(`[API Error] ${error}`)

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { requirePermission } from "@/lib/api-auth"
+import { requestSnapshot } from "@/lib/snapshot-queue"
 
 export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -58,6 +59,8 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
         ...(body.status === "rejeitada" && body.rejectReason ? { rejectReason: body.rejectReason } : {}),
       },
     })
+
+    await requestSnapshot(session!.user.schoolId!)
 
     return NextResponse.json(application)
   } catch (error) {

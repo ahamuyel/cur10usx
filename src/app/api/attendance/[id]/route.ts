@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { requirePermission, getSchoolId } from "@/lib/api-auth"
 import { updateAttendanceStatusSchema } from "@/lib/validations/academic"
+import { requestSnapshot } from "@/lib/snapshot-queue"
 
 export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -27,6 +28,8 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
       where: { id },
       data: { status: parsed.data.status },
     })
+
+    await requestSnapshot(schoolId)
 
     return NextResponse.json(updated)
   } catch (error) {
