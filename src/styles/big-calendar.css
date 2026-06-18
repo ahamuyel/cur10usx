@@ -1,249 +1,141 @@
-/* ───── Base ───── */
-.cur10us-calendar {
+/* ==========================================================================
+   DESIGN SYSTEM ALIGNMENT — CUR10USX PREMIUM OVERRIDES
+   ========================================================================== */
+
+.rbc-calendar {
   font-family: inherit;
+  border: none !important;
 }
 
-.cur10us-calendar .rbc-calendar {
-  border-radius: 0.75rem;
+.rbc-time-view, .rbc-month-view, .rbc-time-header, .rbc-time-content {
+  border: none !important;
 }
 
-/* ───── Header ───── */
-.cur10us-calendar .rbc-toolbar {
-  display: none;
+/* Remoção total das linhas internas da grade de horas */
+.rbc-time-slot, 
+.rbc-slot-hour, 
+.rbc-slot-half, 
+.rbc-day-slot .rbc-time-slot {
+  border-top: none !important;
 }
 
-/* ───── Time gutter ───── */
-.cur10us-calendar .rbc-time-gutter .rbc-timeslot-group {
-  font-size: 0.7rem;
-  color: #a1a1aa;
+/* Remove divisórias verticais agressivas entre os dias */
+.rbc-day-slot {
+  border-left: none !important;
+  border-right: none !important;
 }
 
-.cur10us-calendar .rbc-time-gutter .rbc-label {
-  padding: 0 6px;
+.rbc-weekend-cell {
+  background-color: transparent !important;
 }
 
-/* ───── Time view (week / day) ───── */
-.cur10us-calendar .rbc-time-view {
-  border: none;
-  border-radius: 0;
+/* Linha horizontal sutil abaixo do cabeçalho dos dias */
+.rbc-time-header-content {
+  border-left: none !important;
+  border-bottom: 1px solid var(--border, rgba(228, 228, 231, 0.6)) !important;
+}
+.dark .rbc-time-header-content {
+  border-bottom: 1px solid rgba(63, 63, 70, 0.15) !important; /* Quase invisível, sem competição */
 }
 
-.cur10us-calendar .rbc-time-header {
-  border-radius: 0.5rem 0.5rem 0 0;
-  overflow: hidden;
+/* Cabeçalhos dos Dias (Seg, Ter...) — Normalizado */
+.rbc-header {
+  border-bottom: none !important;
+  border-left: none !important;
+  padding: 12px 4px !important;
+  font-size: 0.75rem !important;
+  font-weight: 600 !important; /* Alinhado com o design system */
+  text-transform: none !important; /* Sem gritar uppercase */
+  color: #71717a !important; /* zinc-500 */
+}
+.dark .rbc-header {
+  color: #a1a1aa !important; /* zinc-400 */
 }
 
-.cur10us-calendar .rbc-time-header > .rbc-row:first-child {
-  border: none;
+/* Dia Atual em Destaque Discreto */
+.rbc-header.rbc-today {
+  color: #8b5cf6 !important;
+  font-weight: 700 !important;
+}
+.dark .rbc-header.rbc-today {
+  color: #c084fc !important;
 }
 
-.cur10us-calendar .rbc-time-header-content {
-  border-left: none;
+.rbc-day-slot.rbc-today {
+  background-color: rgba(139, 92, 246, 0.01) !important;
 }
 
-.cur10us-calendar .rbc-header {
-  padding: 8px 4px;
-  font-size: 0.7rem;
+/* Coluna das Horas (Gutter) */
+.rbc-time-gutter .rbc-time-slot {
+  border: none !important;
+  color: #a1a1aa !important; /* zinc-400 */
+  font-size: 0.7rem !important;
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: #71717a;
-  border-bottom: none;
+  padding-right: 12px !important;
+  text-align: right;
+}
+.dark .rbc-time-gutter .rbc-time-slot {
+  color: #52525b !important; /* zinc-600 sutil ao fundo */
 }
 
-.cur10us-calendar .rbc-header + .rbc-header {
-  border-left: 1px solid #e4e4e7;
+/* Cards de Eventos (Pílulas Integradas) */
+.rbc-event {
+  border: none !important;
+  padding: 0 !important;
+  margin-left: 2px !important;
+  margin-right: 2px !important;
+  transition: all 0.2s ease !important;
 }
 
-.cur10us-calendar .rbc-time-content {
-  border-top: 1px solid #e4e4e7;
+.rbc-event:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.03);
 }
 
-.cur10us-calendar .rbc-time-content > * + * > * {
-  border-left: 1px solid #e4e4e7;
+.rbc-event-label {
+  display: none !important;
 }
 
-.cur10us-calendar .rbc-timeslot-group {
-  border-bottom: 1px solid #f4f4f5;
-  min-height: 48px;
+/* Indicador de Tempo Atual (Live Needle) */
+.rbc-current-time-indicator {
+  background-color: #f43f5e !important;
+  height: 2px !important;
+  z-index: 10 !important;
+}
+.dark .rbc-current-time-indicator {
+  background-color: #fb7185 !important;
 }
 
-.cur10us-calendar .rbc-day-slot .rbc-time-slot {
-  border-top: none;
+.rbc-current-time-indicator::before {
+  content: "";
+  position: absolute;
+  left: -4px;
+  top: -3px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #f43f5e !important;
+}
+.dark .rbc-current-time-indicator::before {
+  background-color: #fb7185 !important;
 }
 
-/* ───── Events ───── */
-.cur10us-calendar .rbc-event {
-  border: none;
-  border-radius: 6px;
-  padding: 3px 5px;
-  font-size: 0.7rem;
-  font-weight: 500;
-  transition: transform 0.12s ease, box-shadow 0.12s ease;
-  cursor: pointer;
-  min-height: 22px;
+/* Visão Mensal Unificada */
+.rbc-month-row, .rbc-day-bg {
+  border-left: none !important;
+  border-right: none !important;
+  border-color: rgba(228, 228, 231, 0.4) !important;
+}
+.dark .rbc-month-row, .dark .rbc-day-bg {
+  border-color: rgba(63, 63, 70, 0.12) !important;
 }
 
-.cur10us-calendar .rbc-event:hover {
-  transform: scale(1.03);
-  z-index: 10;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+.rbc-date-cell {
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
+  padding: 6px !important;
+  color: #4b5563 !important;
 }
-
-.cur10us-calendar .rbc-event-label {
-  display: none;
-}
-
-.cur10us-calendar .rbc-event-content {
-  font-size: 0.65rem;
-  line-height: 1.2;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-/* ───── Today highlight ───── */
-.cur10us-calendar .rbc-today {
-  background: #eef2ff;
-}
-
-.cur10us-calendar .rbc-current-time-indicator {
-  background-color: #6366f1;
-  height: 2px;
-}
-
-/* ───── Month view ───── */
-.cur10us-calendar .rbc-month-view {
-  border: none;
-  border-radius: 0;
-}
-
-.cur10us-calendar .rbc-month-row {
-  min-height: 72px;
-}
-
-.cur10us-calendar .rbc-month-row + .rbc-month-row {
-  border-top: 1px solid #e4e4e7;
-}
-
-.cur10us-calendar .rbc-month-view .rbc-header {
-  padding: 10px 4px 6px;
-  font-size: 0.7rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: #71717a;
-  border-bottom: 1px solid #e4e4e7;
-}
-
-.cur10us-calendar .rbc-date-cell {
-  padding: 2px 6px;
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: #52525b;
-}
-
-.cur10us-calendar .rbc-date-cell.rbc-now {
-  font-weight: 700;
-}
-
-.cur10us-calendar .rbc-date-cell.rbc-now a {
-  background: #6366f1;
-  color: white;
-  border-radius: 9999px;
-  padding: 1px 6px;
-  font-size: 0.7rem;
-}
-
-.cur10us-calendar .rbc-off-range {
-  color: #a1a1aa;
-}
-
-.cur10us-calendar .rbc-off-range-bg {
-  background: #fafafa;
-}
-
-.cur10us-calendar .rbc-row-segment {
-  padding: 1px 2px;
-}
-
-.cur10us-calendar .rbc-row-segment .rbc-event {
-  padding: 1px 4px;
-  font-size: 0.6rem;
-  border-radius: 4px;
-  margin-bottom: 1px;
-}
-
-.cur10us-calendar .rbc-row-content {
-  z-index: 1;
-}
-
-/* ───── Fade-in on view change ───── */
-.cur10us-calendar .rbc-month-view,
-.cur10us-calendar .rbc-time-view {
-  animation: calendarFadeIn 0.2s ease-out;
-}
-
-@keyframes calendarFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(3px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* ───── DARK MODE ───── */
-.dark .cur10us-calendar .rbc-header {
-  color: #a1a1aa;
-}
-
-.dark .cur10us-calendar .rbc-header + .rbc-header {
-  border-left-color: #27272a;
-}
-
-.dark .cur10us-calendar .rbc-time-content {
-  border-top-color: #27272a;
-}
-
-.dark .cur10us-calendar .rbc-time-content > * + * > * {
-  border-left-color: #27272a;
-}
-
-.dark .cur10us-calendar .rbc-timeslot-group {
-  border-bottom-color: #27272a;
-}
-
-.dark .cur10us-calendar .rbc-today {
-  background: rgba(99, 102, 241, 0.08);
-}
-
-.dark .cur10us-calendar .rbc-off-range-bg {
-  background: #18181b;
-}
-
-.dark .cur10us-calendar .rbc-off-range {
-  color: #52525b;
-}
-
-.dark .cur10us-calendar .rbc-date-cell {
-  color: #d4d4d8;
-}
-
-.dark .cur10us-calendar .rbc-month-row + .rbc-month-row {
-  border-top-color: #27272a;
-}
-
-.dark .cur10us-calendar .rbc-month-view .rbc-header {
-  border-bottom-color: #27272a;
-}
-
-.dark .cur10us-calendar .rbc-day-bg + .rbc-day-bg {
-  border-left-color: #27272a;
-}
-
-.dark .cur10us-calendar .rbc-event:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+.dark .rbc-date-cell {
+  color: #a1a1aa !important;
 }

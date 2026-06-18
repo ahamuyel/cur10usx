@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { requirePermission } from "@/lib/api-auth"
 import { sendApplicationApproved } from "@/lib/email"
+import { requestSnapshot } from "@/lib/snapshot-queue"
 import { broadcastToUser } from "@/lib/ws-broadcast"
 
 export async function POST(_req: Request, { params }: { params: Promise<{ id: string }> }) {
@@ -124,6 +125,8 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
         // WebSocket server may not be available
       }
     }
+
+    await requestSnapshot(existing.schoolId)
 
     return NextResponse.json({ success: true })
   } catch (error) {

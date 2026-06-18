@@ -163,15 +163,91 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
         }
       })
 
+    // --- Previous period average ---
+    const previousAverage = trimesterEvolution.length >= 2
+      ? trimesterEvolution[trimesterEvolution.length - 2].generalAverage
+      : 0
+
+    // --- Score distribution ---
+    const scoreDistribution = {
+      excelente: results.filter((r) => r.score >= 16).length,
+      bom: results.filter((r) => r.score >= 13 && r.score < 16).length,
+      suficiente: results.filter((r) => r.score >= 10 && r.score < 13).length,
+      insuficiente: results.filter((r) => r.score < 10).length,
+    }
+
+    // --- Last result per subject ---
+    const subjectLastScores: Record<string, { score: number; type: string; date: string }> = {}
+    for (const r of results) {
+      if (!subjectLastScores[r.subjectId]) {
+        subjectLastScores[r.subjectId] = {
+          score: r.score,
+          type: r.type,
+          date: r.date.toISOString(),
+        }
+      }
+    }
+
     // --- Recent results (last 10) ---
     const recentResults = results.slice(0, 10).map((r) => ({
       id: r.id,
       subjectName: r.subject.name,
       score: r.score,
       type: r.type,
-      date: r.date,
+      date: r.date.toISOString(),
       trimester: r.trimester,
     }))
+
+    // --- Class rank & size ---
+    let classRank: number | null = null
+    let classSize: number | null = null
+
+    if (student.classId) {
+      const classStudents = await prisma.student.findMany({
+        where: { classId: student.classId, schoolId: student.schoolId },
+        select: { id: true },
+      })
+      classSize = classStudents.length
+
+      const classStudentIds = classStudents.map((s) => s.id)
+      const classResults = await prisma.result.findMany({
+        where: { studentId: { in: classStudentIds }, schoolId: student.schoolId },
+        select: { studentId: true, score: true },
+      })
+
+      const studentScoreMap: Record<string, number[]> = {}
+      for (const r of classResults) {
+        if (!studentScoreMap[r.studentId]) studentScoreMap[r.studentId] = []
+        studentScoreMap[r.studentId].push(r.score)
+      }
+
+      const studentAverages: { studentId: string; average: number }[] = Object.entries(studentScoreMap).map(
+        ([studentId, scores]) => ({
+          studentId,
+          average:
+            scores.length > 0
+              ? Math.round((scores.reduce((a, b) => a + b, 0) / scores.length) * 10) / 10
+              : 0,
+        }),
+      )
+
+      studentAverages.sort((a, b) => b.average - a.average)
+
+      const currentAvg = generalAverage
+      let rank = 1
+      for (const sa of studentAverages) {
+        if (sa.average > currentAvg) rank++
+      }
+      classRank = rank
+    }
+
+    // --- Attendance warning ---
+    const attendanceWarning = attendancePercent < 85
+
+    // --- Subjects needing attention (average < 10) ---
+    const subjectsNeedingAttention = subjectAverages
+      .filter((s) => s.average < 10)
+      .map((s) => s.subjectName)
 
     return NextResponse.json({
       student: {
@@ -180,10 +256,17 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
         class: student.class,
       },
       generalAverage,
+      previousAverage,
+      classRank,
+      classSize,
       attendancePercent,
+      attendanceWarning,
       totalResults: results.length,
       pendingSubmissions,
       subjectAverages,
+      subjectsNeedingAttention,
+      subjectLastScores,
+      scoreDistribution,
       attendance: { total: totalAttendance, presente, ausente, atrasado, percent: attendancePercent },
       attendanceByMonth,
       trimesterEvolution,

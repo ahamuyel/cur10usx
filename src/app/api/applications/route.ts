@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma"
 import { requirePermission } from "@/lib/api-auth"
 import { createApplicationSchema } from "@/lib/validations/application"
 import { sendApplicationConfirmation } from "@/lib/email"
+import { requestSnapshot } from "@/lib/snapshot-queue"
 
 // POST — public (anyone can apply)
 export async function POST(req: Request) {
@@ -49,6 +50,8 @@ export async function POST(req: Request) {
     } catch (e) {
       console.error("Email error:", e)
     }
+
+    await requestSnapshot(application.schoolId)
 
     return NextResponse.json(
       { trackingToken: application.trackingToken },

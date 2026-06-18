@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { RefreshCw, LayoutDashboard } from "lucide-react";
+import { useState, useEffect, useCallback } from "react";
+import { RefreshCw, LayoutDashboard, Clock } from "lucide-react";
 import AcademicHealthHistoryChart from "./AcademicHealthHistoryChart";
 import StudentRiskPanel from "./StudentRiskPanel";
 import ClassHealthPanel from "./ClassHealthPanel";
@@ -18,42 +18,30 @@ export default function ExecutiveDashboard() {
   const [briefing, setBriefing] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
-  // Inicialização de dados sem loops de dependência
+  const loadDashboardData = useCallback(async () => {
+    try {
+      const [historyRes, briefingRes] = await Promise.all([
+        fetch("/api/analytics/academic-health/history"),
+        fetch("/api/analytics/executive-briefing"),
+      ]);
+
+      const briefingData = await briefingRes.json();
+      setBriefing(briefingData);
+    } catch (err) {
+      console.error("Failed to load dashboard data:", err);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   useEffect(() => {
-    const loadDashboardData = async () => {
-      try {
-        const [historyRes, briefingRes] = await Promise.all([
-          fetch("/api/analytics/academic-health/history"),
-          fetch("/api/analytics/executive-briefing"),
-        ]);
-
-        const historyData = await historyRes.json();
-        const briefingData = await briefingRes.json();
-
-        setBriefing(briefingData);
-
-        if (!historyData.history || historyData.history.length === 0) {
-          await fetch("/api/analytics/academic-health/snapshot", {
-            method: "POST",
-          });
-        }
-      } catch (err) {
-        console.error("Failed to load dashboard data:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     loadDashboardData();
-  }, [key]);
+  }, [key, loadDashboardData]);
 
   const refresh = async () => {
     setRefreshing(true);
     try {
-      await fetch("/api/analytics/academic-health/snapshot", {
-        method: "POST",
-      });
-      setKey((k) => k + 1); // Força a atualização síncrona de toda a árvore
+      setKey((k) => k + 1);
     } catch (err) {
       console.error("Error refreshing data:", err);
     } finally {
@@ -99,18 +87,27 @@ export default function ExecutiveDashboard() {
           </div>
         </div>
 
-        <button
-          onClick={refresh}
-          disabled={refreshing}
-          className="inline-flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold text-zinc-600 dark:text-zinc-300 bg-white dark:bg-zinc-900 hover:bg-zinc-50 dark:hover:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-800 shadow-3xs transition-all duration-200 active:scale-98 disabled:opacity-50 shrink-0 cursor-pointer"
-        >
-          <RefreshCw
-            size={13}
-            className={refreshing ? "animate-spin text-primary" : "text-zinc-400 dark:text-zinc-500"}
-            strokeWidth={2.2}
-          />
-          <span className="hidden @[380px]:inline">Actualizar Dados</span>
-        </button>
+        <div className="flex items-center gap-3">
+          {briefing?.lastActivity?.label && (
+            <div className="hidden sm:flex items-center gap-1.5 text-[11px] text-zinc-400 dark:text-zinc-500 font-medium">
+              <Clock size={12} strokeWidth={2.2} />
+              <span>{briefing.lastActivity.label}</span>
+            </div>
+          )}
+
+          <button
+            onClick={refresh}
+            disabled={refreshing}
+            className="inline-flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold text-zinc-600 dark:text-zinc-300 bg-white dark:bg-zinc-900 hover:bg-zinc-50 dark:hover:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-800 shadow-3xs transition-all duration-200 active:scale-98 disabled:opacity-50 shrink-0 cursor-pointer"
+          >
+            <RefreshCw
+              size={13}
+              className={refreshing ? "animate-spin text-primary" : "text-zinc-400 dark:text-zinc-500"}
+              strokeWidth={2.2}
+            />
+            <span className="hidden @[380px]:inline">Actualizar Dados</span>
+          </button>
+        </div>
       </div>
 
       {/* GRID PRINCIPAL: Layout Assimétrico 75% / 25% */}
