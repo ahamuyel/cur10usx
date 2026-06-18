@@ -4,18 +4,11 @@ import { useRouter } from "next/navigation"
 import { motion } from "framer-motion"
 import {
   Target, AlertTriangle, CheckCircle2, Sparkles, BookOpen,
-  ClipboardList, TrendingUp, ArrowRight, FileText, Users,
+  ClipboardList, TrendingUp, ArrowRight, Users,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 type StudentStatus = "excellent" | "stable" | "at_risk" | "improving"
-
-interface Exam {
-  id: string; title: string; subjectName: string; date: string
-}
-interface Assignment {
-  id: string; title: string; subjectName: string; dueDate: string
-}
 
 interface StudentActionHubProps {
   average: number
@@ -24,13 +17,13 @@ interface StudentActionHubProps {
   attendanceWarning: boolean
   pendingSubmissions: number
   subjectsNeedingAttention: string[]
-  upcomingExams: Exam[]
-  upcomingAssignments: Assignment[]
 }
 
 function getStudentStatus(
-  average: number, previousAverage: number,
-  attendanceWarning: boolean, subjectsNeedingAttention: string[],
+  average: number, 
+  previousAverage: number,
+  attendanceWarning: boolean, 
+  subjectsNeedingAttention: string[],
 ): StudentStatus {
   const trend = average - previousAverage
   const hasRisk = subjectsNeedingAttention.length > 0 || attendanceWarning
@@ -38,10 +31,6 @@ function getStudentStatus(
   if (average >= 10 && trend > 0 && !hasRisk) return "improving"
   if (hasRisk || average < 10) return "at_risk"
   return "stable"
-}
-
-function daysUntil(d: Date): number {
-  return Math.ceil((d.getTime() - Date.now()) / (1000 * 60 * 60 * 24))
 }
 
 function getPrimaryFocusData(
@@ -68,7 +57,9 @@ function getPrimaryFocusData(
 }
 
 function getSuggestion(
-  status: StudentStatus, subjectsNeedingAttention: string[], pendingSubmissions: number,
+  status: StudentStatus, 
+  subjectsNeedingAttention: string[], 
+  pendingSubmissions: number,
 ): { title: string; description: string; action: string; link?: string } {
   if (subjectsNeedingAttention.length > 0) {
     return { title: "Micro-objectivo", description: `Resolver exercícios de ${subjectsNeedingAttention[0]} hoje`, action: "Começar", link: "/list/results" }
@@ -83,15 +74,15 @@ function getSuggestion(
 }
 
 const statusConfig: Record<StudentStatus, { label: string; color: string; dotColor: string; icon: typeof Sparkles }> = {
-  excellent: { label: "Excelente", color: "text-emerald-700 dark:text-emerald-400", dotColor: "bg-emerald-500", icon: Sparkles },
-  improving: { label: "A melhorar", color: "text-blue-700 dark:text-blue-400", dotColor: "bg-blue-500", icon: TrendingUp },
-  stable: { label: "Estável", color: "text-zinc-600 dark:text-zinc-400", dotColor: "bg-zinc-400", icon: CheckCircle2 },
-  at_risk: { label: "Atenção", color: "text-rose-700 dark:text-rose-400", dotColor: "bg-rose-500", icon: AlertTriangle },
+  excellent: { label: "Excelente", color: "text-emerald-600 dark:text-emerald-400", dotColor: "bg-emerald-500", icon: Sparkles },
+  improving: { label: "A melhorar", color: "text-blue-600 dark:text-blue-400", dotColor: "bg-blue-500", icon: TrendingUp },
+  stable: { label: "Estável", color: "text-zinc-500 dark:text-zinc-400", dotColor: "bg-zinc-400", icon: CheckCircle2 },
+  at_risk: { label: "Atenção", color: "text-rose-600 dark:text-rose-400", dotColor: "bg-rose-500", icon: AlertTriangle },
 }
 
 export default function StudentActionHub({
   average, previousAverage, attendancePercent, attendanceWarning,
-  pendingSubmissions, subjectsNeedingAttention, upcomingExams, upcomingAssignments,
+  pendingSubmissions, subjectsNeedingAttention,
 }: StudentActionHubProps) {
   const router = useRouter()
   const status = getStudentStatus(average, previousAverage, attendanceWarning, subjectsNeedingAttention)
@@ -100,108 +91,116 @@ export default function StudentActionHub({
   const cfg = statusConfig[status]
   const isAtRisk = status === "at_risk"
 
-  const urgentItems: { id: string; message: string; icon: typeof FileText; variant: "danger" | "warning" }[] = []
-  for (const e of upcomingExams) {
-    const d = new Date(e.date); const days = daysUntil(d)
-    if (days <= 1) {
-      urgentItems.push({ id: `exam-${e.id}`, message: days <= 0 ? `Prova: ${e.subjectName} hoje` : `Prova: ${e.subjectName} amanhã`, icon: FileText, variant: "danger" })
-    }
-  }
-  for (const a of upcomingAssignments) {
-    const d = new Date(a.dueDate); const days = daysUntil(d)
-    if (days <= 1) {
-      urgentItems.push({ id: `assignment-${a.id}`, message: days <= 0 ? `Trabalho: ${a.subjectName} hoje` : `Trabalho: ${a.subjectName} amanhã`, icon: ClipboardList, variant: "danger" })
-    }
-  }
-
-  const hasContent = urgentItems.length > 0 || pendingSubmissions > 0 || subjectsNeedingAttention.length > 0 || attendanceWarning
+  const hasContent = pendingSubmissions > 0 || subjectsNeedingAttention.length > 0 || attendanceWarning
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="bg-white dark:bg-zinc-900 rounded-3xl border border-zinc-200/50 dark:border-zinc-800 shadow-sm h-full flex flex-col"
+      className="bg-white dark:bg-zinc-900/40 rounded-3xl border border-zinc-100 dark:border-zinc-800/60 shadow-2xs h-full flex flex-col justify-between"
     >
-      <div className="p-5 sm:p-6 flex flex-col gap-4 flex-1">
+      <div className="p-6 flex flex-col gap-5 flex-1">
+        {/* HEADER DO STATUS OPERACIONAL */}
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <span className={cn("w-2.5 h-2.5 rounded-full", cfg.dotColor)} />
-            <span className={cn("text-xs font-bold uppercase tracking-wider", cfg.color)}>{cfg.label}</span>
+          <div className="flex items-center gap-2">
+            <span className={cn("w-2 h-2 rounded-full animate-pulse", cfg.dotColor)} />
+            <span className={cn("text-[11px] font-bold uppercase tracking-wider", cfg.color)}>
+              Foco Operacional · {cfg.label}
+            </span>
           </div>
-          <div className={cn("w-8 h-8 rounded-xl flex items-center justify-center", isAtRisk ? "bg-rose-100 dark:bg-rose-950/30" : "bg-zinc-100 dark:bg-zinc-800")}>
-            <cfg.icon size={16} className={isAtRisk ? "text-rose-500" : "text-zinc-500"} />
-          </div>
-        </div>
-
-        <div className="bg-zinc-50 dark:bg-zinc-800/50 rounded-2xl p-4 border border-zinc-100 dark:border-zinc-800">
-          <div className="flex items-center gap-2 mb-1.5">
-            <Target size={14} className="text-violet-600 dark:text-violet-400" />
-            <span className="text-[11px] font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">Foco do Dia</span>
-          </div>
-          <p className="text-sm font-bold text-zinc-900 dark:text-zinc-100">{focus.title}</p>
-          <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">{focus.description}</p>
-        </div>
-
-        {urgentItems.length > 0 && (
-          <div className="space-y-1.5">
-            {urgentItems.map((item) => (
-              <div key={item.id} className="flex items-center gap-2.5 py-2 px-3 rounded-xl bg-rose-50 dark:bg-rose-950/10 border border-rose-200/50 dark:border-rose-900/30">
-                <item.icon size={14} className="text-rose-500 shrink-0" />
-                <span className="text-xs font-medium text-rose-800 dark:text-rose-300">{item.message}</span>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {pendingSubmissions > 0 && urgentItems.length === 0 && (
-          <div className="flex items-center gap-2.5 py-2 px-3 rounded-xl bg-amber-50 dark:bg-amber-950/10 border border-amber-200/50 dark:border-amber-900/30">
-            <ClipboardList size={14} className="text-amber-500 shrink-0" />
-            <span className="text-xs font-medium text-amber-800 dark:text-amber-300">{pendingSubmissions} tarefa{pendingSubmissions > 1 ? "s" : ""} por entregar</span>
-          </div>
-        )}
-
-        {attendanceWarning && urgentItems.length === 0 && pendingSubmissions === 0 && (
-          <div className="flex items-center gap-2.5 py-2 px-3 rounded-xl bg-amber-50 dark:bg-amber-950/10 border border-amber-200/50 dark:border-amber-900/30">
-            <Users size={14} className="text-amber-500 shrink-0" />
-            <span className="text-xs font-medium text-amber-800 dark:text-amber-300">Assiduidade: {attendancePercent}%</span>
-          </div>
-        )}
-
-        <div className="flex items-center gap-2.5 py-2 mt-auto">
           <div className={cn(
-            "w-8 h-8 rounded-xl flex items-center justify-center shrink-0",
-            pendingSubmissions > 0 ? "bg-amber-100 dark:bg-amber-950/30" : subjectsNeedingAttention.length > 0 ? "bg-rose-100 dark:bg-rose-950/30" : "bg-emerald-100 dark:bg-emerald-950/30"
+            "w-8 h-8 rounded-xl flex items-center justify-center border",
+            isAtRisk 
+              ? "bg-rose-50 dark:bg-rose-500/10 border-rose-100 dark:border-rose-900/20" 
+              : "bg-zinc-50 dark:bg-zinc-800/40 border-zinc-100 dark:border-zinc-800/60"
           )}>
-            {pendingSubmissions > 0 ? <ClipboardList size={14} className="text-amber-600 dark:text-amber-400" />
-              : subjectsNeedingAttention.length > 0 ? <BookOpen size={14} className="text-rose-600 dark:text-rose-400" />
-              : <CheckCircle2 size={14} className="text-emerald-600 dark:text-emerald-400" />}
+            <cfg.icon size={14} className={isAtRisk ? "text-rose-500" : "text-zinc-400 dark:text-zinc-500"} />
+          </div>
+        </div>
+
+        {/* ALVO CENTRAL / ALERTA DO DIA */}
+        <div className="bg-zinc-50/50 dark:bg-zinc-800/20 rounded-2xl p-4 border border-zinc-100 dark:border-zinc-800/40">
+          <div className="flex items-center gap-1.5 mb-2">
+            <Target size={13} className="text-violet-500 dark:text-violet-400" />
+            <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">
+              Objetivo Principal
+            </span>
+          </div>
+          <p className="text-sm font-bold text-zinc-900 dark:text-zinc-100 tracking-tight">
+            {focus.title}
+          </p>
+          <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5 leading-relaxed">
+            {focus.description}
+          </p>
+        </div>
+
+        {/* FEEDBACK DE ALERTAS SIMPLIFICADOS (SEM EXAMES/TAREFAS DUPLICADOS) */}
+        <div className="space-y-2 flex-1">
+          {pendingSubmissions > 0 && (
+            <div className="flex items-center gap-2.5 py-2 px-3 rounded-xl bg-amber-50/50 dark:bg-amber-500/5 border border-amber-100/50 dark:border-amber-900/20">
+              <ClipboardList size={13} className="text-amber-500 shrink-0" />
+              <span className="text-xs font-medium text-amber-800 dark:text-amber-400 tabular-nums">
+                {pendingSubmissions} tarefa{pendingSubmissions > 1 ? "s" : ""} por entregar
+              </span>
+            </div>
+          )}
+
+          {attendanceWarning && (
+            <div className="flex items-center gap-2.5 py-2 px-3 rounded-xl bg-rose-50/50 dark:bg-rose-500/5 border border-rose-100/50 dark:border-rose-900/20">
+              <Users size={13} className="text-rose-500 shrink-0" />
+              <span className="text-xs font-medium text-rose-800 dark:text-rose-400 tabular-nums">
+                Assiduidade crítica: {attendancePercent}%
+              </span>
+            </div>
+          )}
+
+          {!hasContent && (
+            <div className="flex flex-col items-center justify-center py-6 border border-dashed border-zinc-100 dark:border-zinc-800 rounded-2xl text-center">
+              <CheckCircle2 size={16} className="text-emerald-400 dark:text-emerald-500 mb-1" />
+              <p className="text-xs font-bold text-zinc-800 dark:text-zinc-200">Tudo em ordem!</p>
+              <p className="text-[11px] text-zinc-400 dark:text-zinc-500 mt-0.5 max-w-[180px]">
+                Nenhuma pendência operacional detetada na pauta.
+              </p>
+            </div>
+          )}
+        </div>
+
+        {/* CARD DE SUGESTÃO AUTOMÁTICA */}
+        <div className="flex items-center gap-3 py-3 px-3.5 bg-zinc-50/50 dark:bg-zinc-800/20 border border-zinc-100 dark:border-zinc-800/40 rounded-2xl mt-auto">
+          <div className={cn(
+            "w-8 h-8 rounded-xl flex items-center justify-center shrink-0 border",
+            pendingSubmissions > 0 ? "bg-amber-50 dark:bg-amber-500/10 border-amber-100 dark:border-amber-900/20" 
+              : subjectsNeedingAttention.length > 0 ? "bg-rose-50 dark:bg-rose-500/10 border-rose-100 dark:border-rose-900/20" 
+              : "bg-emerald-50 dark:bg-emerald-500/10 border-emerald-100 dark:border-emerald-900/20"
+          )}>
+            {pendingSubmissions > 0 ? <ClipboardList size={13} className="text-amber-500" />
+              : subjectsNeedingAttention.length > 0 ? <BookOpen size={13} className="text-rose-500" />
+              : <CheckCircle2 size={13} className="text-emerald-500" />}
           </div>
           <div className="min-w-0">
-            <p className="text-[11px] font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">{suggestion.title}</p>
-            <p className="text-xs font-medium text-zinc-800 dark:text-zinc-200 truncate">{suggestion.description}</p>
+            <p className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">
+              {suggestion.title}
+            </p>
+            <p className="text-xs font-semibold text-zinc-800 dark:text-zinc-200 truncate">
+              {suggestion.description}
+            </p>
           </div>
         </div>
 
-        {!hasContent && (
-          <div className="bg-emerald-50 dark:bg-emerald-950/10 rounded-2xl p-4 border border-emerald-200/50 dark:border-emerald-900/30 text-center">
-            <p className="text-sm font-medium text-emerald-800 dark:text-emerald-300">Tudo em dia! 🎉</p>
-            <p className="text-xs text-emerald-600 dark:text-emerald-400 mt-1">Que tal reveres os apontamentos das últimas aulas?</p>
-          </div>
-        )}
-
+        {/* BOTÃO DE AÇÃO PRINCIPAL */}
         <motion.button
           whileHover={{ scale: 1.01 }}
           whileTap={{ scale: 0.98 }}
           onClick={() => focus.link && router.push(focus.link)}
           className={cn(
-            "w-full py-3 px-4 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 transition-all",
-            isAtRisk ? "bg-rose-500 text-white hover:bg-rose-600 shadow-sm shadow-rose-500/20"
-              : "bg-violet-600 text-white hover:bg-violet-700 shadow-sm shadow-violet-600/20",
+            "w-full py-3 px-4 rounded-2xl font-bold text-xs flex items-center justify-center gap-2 transition-all tracking-wide uppercase",
+            isAtRisk ? "bg-rose-500 text-white hover:bg-rose-600 shadow-xs shadow-rose-500/10"
+              : "bg-violet-600 text-white hover:bg-violet-700 shadow-xs shadow-violet-600/10",
           )}
         >
           {focus.action}
-          <ArrowRight size={16} strokeWidth={2.5} />
+          <ArrowRight size={14} strokeWidth={2.5} />
         </motion.button>
       </div>
     </motion.div>

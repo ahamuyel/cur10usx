@@ -16,7 +16,7 @@ import {
   ClipboardList
 } from "lucide-react"
 import moment from "moment"
-import "moment/locale/pt-br"
+// import "moment/locale/pt-br"
 
 // Importação do nosso novo calendário nativo focado em Bento Grid
 import StudentAcademicAgenda from "./StudentAcademicAgenda"
@@ -273,21 +273,6 @@ export default function StudentCalendarExperience() {
             </div>
           </div>
 
-          {/* 3. CALENDÁRIO COM GRID NATIVO */}
-          <div className="space-y-4">
-            <div className="flex items-center justify-between px-1">
-              <div className="flex items-center gap-2">
-                <LayoutGrid size={16} className="text-violet-600" />
-                <h2 className="text-sm font-bold tracking-widest uppercase text-zinc-400">Distribuição Semanal</h2>
-              </div>
-            </div>
-            
-            {/* Componente injetado substituindo o BigCalendar legível e pesado */}
-            <StudentAcademicAgenda 
-              exams={dashboardData?.upcomingExams || []} 
-              assignments={dashboardData?.upcomingAssignments || []} 
-            />
-          </div>
         </div>
 
         {/* SIDEBAR DA JORNADA ACADÉMICA */}

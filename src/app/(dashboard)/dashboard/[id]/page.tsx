@@ -91,11 +91,11 @@ export default function DashboardPage() {
         )}
 
         {/* Schedule Calendar Experience */}
-        {studentId && (
+        {/* {studentId && (
           <section className="mt-4">
             <StudentCalendarExperience />
           </section>
-        )}
+        )} */}
       </div>
     )
   }
