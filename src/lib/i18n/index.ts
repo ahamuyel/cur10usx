@@ -48,24 +48,18 @@ export function tv(locale: string, key: TranslationKey): unknown {
 }
 
 export function useTranslation(locale?: string) {
-  let activeLocale = locale
-  if (!activeLocale) {
-    try {
-      activeLocale = useContext(LocaleContext) || "pt"
-    } catch {
-      activeLocale = "pt"
-    }
-  }
+  const context = useContext(LocaleContext)
+  const activeLocale = locale || context?.locale || "pt"
 
-  const t_fn = useCallback((key: TranslationKey) => t(activeLocale!, key), [activeLocale])
-  const tv_fn = useCallback((key: TranslationKey) => tv(activeLocale!, key), [activeLocale])
-  const tUI_fn = useCallback((text: string) => tUI(activeLocale!, text), [activeLocale])
+  const t_fn = useCallback((key: TranslationKey) => t(activeLocale, key), [activeLocale])
+  const tv_fn = useCallback((key: TranslationKey) => tv(activeLocale, key), [activeLocale])
+  const tUI_fn = useCallback((text: string) => tUI(activeLocale, text), [activeLocale])
 
   return {
     t: t_fn,
     tv: tv_fn,
     tUI: tUI_fn,
-    locale: activeLocale!,
+    locale: activeLocale,
   }
 }
 
