@@ -103,7 +103,6 @@ export default function Verify2FAClient() {
       setSuccess(true)
       await update({ twoFactorVerifiedAt: new Date().toISOString() })
       router.replace("/minha-area")
-      router.refresh()
     } catch {
       setError("Erro de conexão. Verifique a sua internet e tente novamente.")
     } finally {
