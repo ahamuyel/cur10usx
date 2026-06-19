@@ -4,7 +4,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useState, useEffect } from "react"
-import { signIn as nextAuthSignIn, getSession } from "next-auth/react"
+import { signIn as nextAuthSignIn, getSession, useSession } from "next-auth/react"
 import { signInSchema } from "@/lib/validations/auth"
 import { getDashboardPath } from "@/lib/routes"
 import { Mail, AlertCircle } from "lucide-react"
@@ -40,6 +40,7 @@ export default function SignInClient() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const { tUI } = useTranslation()
+  const { update } = useSession()
 
   const reason = searchParams.get("reason")
   const errorParam = searchParams.get("error")
@@ -145,7 +146,7 @@ export default function SignInClient() {
       } else {
         router.push("/minha-area")
       }
-      router.refresh()
+      await update()
     } catch {
       setErrors({ general: tUI("Erro de conexão. Verifique a sua internet e tente novamente.") })
     } finally {

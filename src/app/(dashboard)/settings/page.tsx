@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react"
 import { Moon, Sun, Bell, Shield, Globe, Settings2 } from "lucide-react"
 import { useTheme } from "@/provider/theme"
 import { useTranslation } from "@/lib/i18n"
+import { useLocale, useSetLocale } from "@/provider/locale"
 
 const SettingsPage = () => {
   const { theme, toggleTheme } = useTheme()
@@ -14,7 +15,8 @@ const SettingsPage = () => {
   const darkMode = theme === "dark"
   const [notifications, setNotifications] = useState(true)
   const [emailNotifs, setEmailNotifs] = useState(false)
-  const [locale, setLocale] = useState("pt")
+  const locale = useLocale()
+  const contextSetLocale = useSetLocale()
   const [saving, setSaving] = useState(false)
 
   // Só carrega preferências quando a sessão está activa
@@ -26,7 +28,6 @@ const SettingsPage = () => {
         if (pref) {
           setNotifications(pref.notifyPlatform ?? true)
           setEmailNotifs(pref.notifyEmail ?? false)
-          setLocale(pref.locale ?? "pt")
         }
       })
       .catch(() => {})
@@ -84,10 +85,8 @@ const SettingsPage = () => {
             value={locale}
             onChange={(e) => {
               const val = e.target.value
-              setLocale(val)
+              contextSetLocale(val)
               savePref({ locale: val })
-              document.cookie = `cur10usx_locale=${val}; path=/; max-age=31536000`
-              window.location.reload()
             }}
             className="px-3 py-1.5 rounded-lg border border-zinc-300 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-sm text-zinc-700 dark:text-zinc-300 focus:outline-none focus:ring-2 focus:ring-primary"
           >

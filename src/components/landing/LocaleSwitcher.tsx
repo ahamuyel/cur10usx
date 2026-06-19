@@ -1,8 +1,8 @@
 "use client"
 
 import { useCallback, useState, useRef, useEffect } from "react"
-import { LOCALE_COOKIE } from "@/lib/i18n"
 import { Globe, Check, ChevronDown, Sun, Moon } from "lucide-react"
+import { useSetLocale } from "@/provider/locale"
 
 const LOCALES = [
   { code: "pt", label: "Português", short: "PT" },
@@ -24,10 +24,11 @@ export default function LocaleSwitcher({
   const [isOpen, setIsOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
+  const setLocale = useSetLocale()
+
   const switchLocale = useCallback((code: string) => {
-    document.cookie = `${LOCALE_COOKIE}=${code}; path=/; max-age=31536000`
-    window.location.reload()
-  }, [])
+    setLocale(code)
+  }, [setLocale])
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
