@@ -1,4 +1,5 @@
 "use client"
+
 import { useState, useEffect } from "react"
 import { useSession } from "next-auth/react"
 import Pagination from "@/components/ui/Pagination"
@@ -27,20 +28,20 @@ const statusLabels: Record<string, string> = {
   ativa: "Ativa",
   transferida: "Transferida",
   cancelada: "Cancelada",
-  concluida: "Concluida",
+  concluida: "Concluída",
   aprovada: "Aprovada",
   reprovada: "Reprovada",
   em_recurso: "Em Recurso",
 }
 
 const statusColors: Record<string, string> = {
-  ativa: "bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400",
-  aprovada: "bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400",
-  reprovada: "bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400",
-  em_recurso: "bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400",
-  transferida: "bg-violet-50 dark:bg-violet-950/40 text-violet-600 dark:text-violet-400",
-  cancelada: "bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400",
-  concluida: "bg-cyan-50 dark:bg-cyan-950/40 text-cyan-600 dark:text-cyan-400",
+  ativa: "bg-zinc-100 dark:bg-zinc-900 text-emerald-600 dark:text-emerald-400 border-emerald-500/10",
+  aprovada: "bg-zinc-100 dark:bg-zinc-900 text-blue-600 dark:text-blue-400 border-blue-500/10",
+  reprovada: "bg-zinc-100 dark:bg-zinc-900 text-rose-600 dark:text-rose-400 border-rose-500/10",
+  em_recurso: "bg-zinc-100 dark:bg-zinc-900 text-amber-600 dark:text-amber-400 border-amber-500/10",
+  transferida: "bg-zinc-100 dark:bg-zinc-900 text-violet-600 dark:text-violet-400 border-violet-500/10",
+  cancelada: "bg-zinc-50 dark:bg-zinc-900 text-zinc-400 dark:text-zinc-500 border-zinc-200/50 dark:border-zinc-800",
+  concluida: "bg-zinc-100 dark:bg-zinc-900 text-cyan-600 dark:text-cyan-400 border-cyan-500/10",
 }
 
 const allStatuses = ["ativa", "transferida", "cancelada", "concluida", "aprovada", "reprovada", "em_recurso"]
@@ -59,9 +60,9 @@ const columns = [
   { header: "Turma", accessor: "class" },
   { header: "Ano Letivo", accessor: "academicYear", className: "hidden md:table-cell" },
   { header: "Estado", accessor: "status" },
-  { header: "Media Final", accessor: "finalAverage", className: "hidden lg:table-cell" },
-  { header: "Data Matricula", accessor: "enrolledAt", className: "hidden lg:table-cell" },
-  { header: "Acoes", accessor: "actions" },
+  { header: "Média Final", accessor: "finalAverage", className: "hidden lg:table-cell" },
+  { header: "Data Matrícula", accessor: "enrolledAt", className: "hidden lg:table-cell" },
+  { header: "Ações", accessor: "actions" },
 ]
 
 const EnrollmentListPage = () => {
@@ -74,12 +75,10 @@ const EnrollmentListPage = () => {
   const [createOpen, setCreateOpen] = useState(false)
   const [viewItem, setViewItem] = useState<Enrollment | null>(null)
 
-  // Options for filters and create form
   const [academicYears, setAcademicYears] = useState<SelectOption[]>([])
   const [students, setStudents] = useState<(SelectOption & { email: string })[]>([])
   const [classes, setClasses] = useState<(SelectOption & { grade: number })[]>([])
 
-  // Create form state
   const [createForm, setCreateForm] = useState({ studentId: "", classId: "", academicYearId: "", status: "ativa", observation: "" })
   const [createLoading, setCreateLoading] = useState(false)
   const [createError, setCreateError] = useState("")
@@ -109,7 +108,7 @@ const EnrollmentListPage = () => {
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!createForm.studentId || !createForm.classId || !createForm.academicYearId) {
-      setCreateError("Preencha todos os campos obrigatorios.")
+      setCreateError("Preencha todos os campos obrigatórios.")
       return
     }
     setCreateLoading(true)
@@ -122,53 +121,53 @@ const EnrollmentListPage = () => {
       })
       if (!res.ok) {
         const err = await res.json().catch(() => null)
-        throw new Error(err?.error || "Erro ao criar matricula")
+        throw new Error(err?.error || "Erro ao criar matrícula")
       }
       setCreateOpen(false)
       setCreateForm({ studentId: "", classId: "", academicYearId: "", status: "ativa", observation: "" })
       refetch()
     } catch (err: unknown) {
-      setCreateError(err instanceof Error ? err.message : "Erro ao criar matricula")
+      setCreateError(err instanceof Error ? err.message : "Erro ao criar matrícula")
     } finally {
       setCreateLoading(false)
     }
   }
 
   const renderRow = (item: Enrollment) => (
-    <tr key={item.id} className="border-b border-zinc-100 dark:border-zinc-800/50 text-sm hover:bg-zinc-50/50 dark:hover:bg-zinc-800/30 transition-colors">
-      <td className="py-2.5 sm:py-3 px-1.5 sm:px-2">
+    <tr key={item.id} className="border-b border-zinc-200 dark:border-zinc-800/50 text-sm hover:bg-zinc-50 dark:hover:bg-zinc-900/40 transition-colors">
+      <td className="py-3 px-4">
         <div>
-          <span className="font-bold text-zinc-900 dark:text-zinc-100 text-xs sm:text-sm">{item.student.name}</span>
-          <p className="text-[10px] sm:text-xs text-zinc-400 dark:text-zinc-500 truncate max-w-[140px] sm:max-w-none">{item.student.email}</p>
+          <span className="font-semibold text-zinc-900 dark:text-zinc-50">{item.student.name}</span>
+          <p className="text-xs text-zinc-400 dark:text-zinc-500 font-mono tracking-tight">{item.student.email}</p>
         </div>
       </td>
-      <td className="py-2.5 sm:py-3 px-1.5 sm:px-2">
-        <span className="px-1.5 sm:px-2 py-0.5 bg-primary-50 dark:bg-primary-950/40 text-primary dark:text-primary-400 rounded text-[9px] sm:text-[10px] font-bold">
+      <td className="py-3 px-4">
+        <span className="px-2 py-0.5 bg-zinc-100 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 rounded md:text-xs font-medium border border-transparent">
           {item.class.name}
         </span>
       </td>
-      <td className="hidden md:table-cell text-zinc-600 dark:text-zinc-400 text-xs sm:text-sm px-1.5 sm:px-2">
+      <td className="hidden md:table-cell text-zinc-600 dark:text-zinc-400 text-xs px-4 py-3">
         {item.academicYear.name}
       </td>
-      <td className="py-2.5 sm:py-3 px-1.5 sm:px-2">
-        <span className={`px-1.5 sm:px-2 py-0.5 rounded text-[9px] sm:text-[10px] font-semibold ${statusColors[item.status] || ""}`}>
+      <td className="py-3 px-4">
+        <span className={`px-2 py-0.5 rounded text-[10px] font-semibold border ${statusColors[item.status] || ""}`}>
           {statusLabels[item.status] || item.status}
         </span>
       </td>
-      <td className="hidden lg:table-cell text-zinc-600 dark:text-zinc-400 text-xs sm:text-sm px-1.5 sm:px-2">
+      <td className="hidden lg:table-cell text-zinc-600 dark:text-zinc-400 text-xs px-4 py-3 font-mono tracking-tight">
         {item.finalAverage !== null ? item.finalAverage.toFixed(1) : "\u2014"}
       </td>
-      <td className="hidden lg:table-cell text-zinc-600 dark:text-zinc-400 text-xs sm:text-sm px-1.5 sm:px-2">
+      <td className="hidden lg:table-cell text-zinc-600 dark:text-zinc-400 text-xs px-4 py-3 font-mono tracking-tight">
         {formatDate(item.enrolledAt)}
       </td>
-      <td className="px-1.5 sm:px-2">
+      <td className="py-3 px-4 text-right">
         <div className="flex items-center gap-1 justify-end">
           <button
             onClick={() => setViewItem(item)}
-            className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-primary hover:text-white transition-all active:scale-90"
+            className="w-8 h-8 flex items-center justify-center rounded-md border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 transition-colors cursor-pointer"
             title="Ver detalhes"
           >
-            <Eye size={13} />
+            <Eye size={12} />
           </button>
         </div>
       </td>
@@ -176,228 +175,251 @@ const EnrollmentListPage = () => {
   )
 
   return (
-    <div className="m-2 sm:m-3 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl sm:rounded-2xl p-2.5 sm:p-4 md:p-6 shadow-sm overflow-hidden">
-      {/* Header */}
-      <div className="flex flex-col gap-3 sm:gap-4 lg:gap-0 lg:flex-row lg:items-center justify-between mb-4 sm:mb-6">
-        <div>
-          <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-zinc-900 dark:text-zinc-100">Matriculas</h1>
-          <p className="text-[11px] sm:text-xs md:text-sm text-zinc-500 dark:text-zinc-400">Gerencie as matriculas dos alunos</p>
+    <div className="w-full bg-white dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800 p-4 sm:p-6 shadow-xs">
+      
+      {/* ================= HEADER DO CONTROLADOR ================= */}
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-center justify-between mb-6">
+        <div className="min-w-0">
+          <h1 className="text-lg font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">Matrículas</h1>
+          <p className="text-xs text-zinc-500 dark:text-zinc-400">Gerencie e acompanhe a distribuição do histórico escolar dos alunos.</p>
         </div>
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3">
-          <div className="flex-1 sm:w-56 md:w-64">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
+          <div className="w-full sm:w-60">
             <TableSearch value={search} onChange={setSearch} />
           </div>
-          <div className="flex items-center justify-end gap-1.5 sm:gap-2 flex-wrap">
-            {/* Status filter */}
+          
+          <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap justify-end">
             <select
               value={filters.status || ""}
               onChange={(e) => setFilters({ ...filters, status: e.target.value })}
-              className="px-2 py-2 sm:py-2.5 rounded-xl bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 text-xs sm:text-sm border-0 outline-none focus:ring-2 focus:ring-primary transition"
+              className="h-9 px-3 rounded-lg bg-zinc-100 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 text-xs border-0 outline-none focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-700 transition cursor-pointer"
             >
               <option value="">Todos os estados</option>
               {allStatuses.map((s) => (
                 <option key={s} value={s}>{statusLabels[s]}</option>
               ))}
             </select>
-            {/* Academic year filter */}
+
             <select
               value={filters.academicYearId || ""}
               onChange={(e) => setFilters({ ...filters, academicYearId: e.target.value })}
-              className="px-2 py-2 sm:py-2.5 rounded-xl bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 text-xs sm:text-sm border-0 outline-none focus:ring-2 focus:ring-primary transition"
+              className="h-9 px-3 rounded-lg bg-zinc-100 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 text-xs border-0 outline-none focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-700 transition cursor-pointer"
             >
               <option value="">Todos os anos</option>
               {academicYears.map((ay) => (
                 <option key={ay.id} value={ay.id}>{ay.name}</option>
               ))}
             </select>
-            <button className="p-2 sm:p-2.5 rounded-xl bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition active:scale-95">
-              <SlidersHorizontal size={16} />
+
+            <button className="w-9 h-9 flex items-center justify-center rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-zinc-500 hover:bg-zinc-50 dark:hover:bg-zinc-900 cursor-pointer transition-colors">
+              <SlidersHorizontal size={14} />
             </button>
-            <button className="p-2 sm:p-2.5 rounded-xl bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition active:scale-95">
-              <ArrowUpDown size={16} />
+            <button className="w-9 h-9 flex items-center justify-center rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-zinc-500 hover:bg-zinc-50 dark:hover:bg-zinc-900 cursor-pointer transition-colors">
+              <ArrowUpDown size={14} />
             </button>
+
             {isAdmin && (
               <button
                 onClick={() => { setCreateOpen(true); loadCreateOptions() }}
-                className="flex items-center justify-center gap-1.5 px-2.5 py-2 sm:px-4 sm:py-2.5 rounded-xl bg-primary text-white font-semibold text-xs sm:text-sm active:scale-95 shadow-lg shadow-primary/20 transition"
+                className="h-9 flex items-center justify-center gap-1.5 px-3 rounded-lg bg-zinc-900 hover:bg-zinc-800 dark:bg-zinc-50 dark:hover:bg-zinc-200 text-white dark:text-zinc-950 font-medium text-xs shadow-3xs transition-colors cursor-pointer shrink-0"
               >
-                <Plus size={16} />
-                <span className="hidden sm:inline">Nova Matricula</span>
+                <Plus size={14} />
+                <span>Nova Matrícula</span>
               </button>
             )}
           </div>
         </div>
       </div>
 
-      {/* Table */}
-      <div className="overflow-x-auto -mx-2.5 px-2.5 sm:-mx-4 sm:px-4 md:mx-0 md:px-0">
+      {/* ================= DATA GRID / TABELA ================= */}
+      <div className="w-full overflow-x-auto rounded-lg border border-zinc-200 dark:border-zinc-800">
         {loading ? (
-          <div className="flex items-center justify-center py-12">
-            <Loader2 size={24} className="animate-spin text-primary" />
+          <div className="flex items-center justify-center py-16">
+            <Loader2 size={20} className="animate-spin text-zinc-400 dark:text-zinc-500" />
           </div>
         ) : data.length === 0 ? (
-          <div className="text-center py-12 text-zinc-400 text-sm">Nenhuma matricula encontrada</div>
+          <div className="text-center py-12 text-zinc-400 dark:text-zinc-500 text-xs bg-zinc-50/40 dark:bg-zinc-900/10">
+            Nenhuma matrícula encontrada no sistema.
+          </div>
         ) : (
           <Table columns={columns} renderRow={renderRow} data={data} />
         )}
       </div>
 
-      {/* Pagination */}
+      {/* ================= PAGINAÇÃO ================= */}
       {!loading && data.length > 0 && (
-        <div className="mt-4 sm:mt-6 pt-3 sm:pt-4 border-t border-zinc-100 dark:border-zinc-800">
+        <div className="mt-4 pt-4 border-t border-zinc-100 dark:border-zinc-900 flex justify-end">
           <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
         </div>
       )}
 
-      {/* Create Modal */}
-      <FormModal open={createOpen} onClose={() => setCreateOpen(false)} title="Nova Matricula">
-        <form onSubmit={handleCreate} className="flex flex-col gap-4">
+      {/* ================= MODAL: CRIAÇÃO ================= */}
+      <FormModal open={createOpen} onClose={() => setCreateOpen(false)} title="Nova Matrícula">
+        <form onSubmit={handleCreate} className="mt-2">
           {createError && (
-            <div className="p-3 rounded-lg bg-rose-50 dark:bg-rose-950/30 text-rose-600 dark:text-rose-400 text-sm">
+            <div className="mb-4 p-3 rounded-lg bg-red-500/5 text-red-600 dark:text-red-400 text-xs font-medium border border-red-500/10">
               {createError}
             </div>
           )}
-          <div>
-            <label className="block text-xs font-semibold text-zinc-600 dark:text-zinc-400 mb-1">Aluno *</label>
-            <select
-              value={createForm.studentId}
-              onChange={(e) => setCreateForm({ ...createForm, studentId: e.target.value })}
-              className="w-full px-3 py-2.5 rounded-xl bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 text-sm border-0 outline-none focus:ring-2 focus:ring-primary transition"
-            >
-              <option value="">Selecione um aluno</option>
-              {students.map((s) => (
-                <option key={s.id} value={s.id}>{s.name}</option>
-              ))}
-            </select>
+          <div className="flex flex-col gap-3.5">
+            <div>
+              <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">Aluno *</label>
+              <select
+                value={createForm.studentId}
+                required
+                onChange={(e) => setCreateForm({ ...createForm, studentId: e.target.value })}
+                className="w-full px-3 h-9 rounded-lg bg-zinc-100 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-50 text-xs border-0 outline-none focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-700 transition cursor-pointer"
+              >
+                <option value="">Selecione um aluno</option>
+                {students.map((s) => (
+                  <option key={s.id} value={s.id}>{s.name}</option>
+                ))}
+              </select>
+            </div>
+            
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">Turma *</label>
+                <select
+                  value={createForm.classId}
+                  required
+                  onChange={(e) => setCreateForm({ ...createForm, classId: e.target.value })}
+                  className="w-full px-3 h-9 rounded-lg bg-zinc-100 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-50 text-xs border-0 outline-none focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-700 transition cursor-pointer"
+                >
+                  <option value="">Selecione a turma</option>
+                  {classes.map((c) => (
+                    <option key={c.id} value={c.id}>{c.name} ({c.grade}ª classe)</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">Ano Letivo *</label>
+                <select
+                  value={createForm.academicYearId}
+                  required
+                  onChange={(e) => setCreateForm({ ...createForm, academicYearId: e.target.value })}
+                  className="w-full px-3 h-9 rounded-lg bg-zinc-100 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-50 text-xs border-0 outline-none focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-700 transition cursor-pointer"
+                >
+                  <option value="">Selecione o ano letivo</option>
+                  {academicYears.map((ay) => (
+                    <option key={ay.id} value={ay.id}>{ay.name}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">Estado Inicial</label>
+              <select
+                value={createForm.status}
+                onChange={(e) => setCreateForm({ ...createForm, status: e.target.value })}
+                className="w-full px-3 h-9 rounded-lg bg-zinc-100 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-50 text-xs border-0 outline-none focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-700 transition cursor-pointer"
+              >
+                {allStatuses.map((s) => (
+                  <option key={s} value={s}>{statusLabels[s]}</option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">Observações</label>
+              <textarea
+                value={createForm.observation}
+                onChange={(e) => setCreateForm({ ...createForm, observation: e.target.value })}
+                rows={3}
+                className="w-full p-3 rounded-lg bg-zinc-100 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-50 text-xs border-0 outline-none focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-700 transition resize-none placeholder:text-zinc-400"
+                placeholder="Notas suplementares opcionais..."
+              />
+            </div>
           </div>
-          <div>
-            <label className="block text-xs font-semibold text-zinc-600 dark:text-zinc-400 mb-1">Turma *</label>
-            <select
-              value={createForm.classId}
-              onChange={(e) => setCreateForm({ ...createForm, classId: e.target.value })}
-              className="w-full px-3 py-2.5 rounded-xl bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 text-sm border-0 outline-none focus:ring-2 focus:ring-primary transition"
-            >
-              <option value="">Selecione uma turma</option>
-              {classes.map((c) => (
-                <option key={c.id} value={c.id}>{c.name} ({c.grade}.a classe)</option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label className="block text-xs font-semibold text-zinc-600 dark:text-zinc-400 mb-1">Ano Letivo *</label>
-            <select
-              value={createForm.academicYearId}
-              onChange={(e) => setCreateForm({ ...createForm, academicYearId: e.target.value })}
-              className="w-full px-3 py-2.5 rounded-xl bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 text-sm border-0 outline-none focus:ring-2 focus:ring-primary transition"
-            >
-              <option value="">Selecione o ano letivo</option>
-              {academicYears.map((ay) => (
-                <option key={ay.id} value={ay.id}>{ay.name}</option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label className="block text-xs font-semibold text-zinc-600 dark:text-zinc-400 mb-1">Estado</label>
-            <select
-              value={createForm.status}
-              onChange={(e) => setCreateForm({ ...createForm, status: e.target.value })}
-              className="w-full px-3 py-2.5 rounded-xl bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 text-sm border-0 outline-none focus:ring-2 focus:ring-primary transition"
-            >
-              {allStatuses.map((s) => (
-                <option key={s} value={s}>{statusLabels[s]}</option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label className="block text-xs font-semibold text-zinc-600 dark:text-zinc-400 mb-1">Observacao</label>
-            <textarea
-              value={createForm.observation}
-              onChange={(e) => setCreateForm({ ...createForm, observation: e.target.value })}
-              rows={3}
-              className="w-full px-3 py-2.5 rounded-xl bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 text-sm border-0 outline-none focus:ring-2 focus:ring-primary transition resize-none"
-              placeholder="Observacoes opcionais..."
-            />
-          </div>
-          <div className="flex justify-end gap-2 pt-2">
+
+          <div className="flex items-center gap-2 justify-end mt-6 pt-4 border-t border-zinc-100 dark:border-zinc-900">
             <button
               type="button"
               onClick={() => setCreateOpen(false)}
-              className="px-4 py-2.5 rounded-xl bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 text-sm font-medium hover:bg-zinc-200 dark:hover:bg-zinc-700 transition"
+              className="h-8 px-3 rounded-md text-xs font-medium text-zinc-600 dark:text-zinc-400 bg-white dark:bg-zinc-950 hover:bg-zinc-50 dark:hover:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 transition-colors cursor-pointer"
             >
               Cancelar
             </button>
             <button
               type="submit"
               disabled={createLoading}
-              className="px-4 py-2.5 rounded-xl bg-primary text-white text-sm font-semibold hover:bg-primary-700 transition disabled:opacity-50 flex items-center gap-2"
+              className="h-8 px-3 rounded-md text-xs font-medium text-white dark:text-zinc-950 bg-zinc-900 hover:bg-zinc-800 dark:bg-zinc-50 dark:hover:bg-zinc-200 shadow-3xs transition-colors cursor-pointer disabled:opacity-50 flex items-center gap-1.5"
             >
-              {createLoading && <Loader2 size={14} className="animate-spin" />}
-              Criar Matricula
+              {createLoading && <Loader2 size={12} className="animate-spin" />}
+              {createLoading ? "A processar..." : "Confirmar Matrícula"}
             </button>
           </div>
         </form>
       </FormModal>
 
-      {/* View Details Modal */}
-      <FormModal open={!!viewItem} onClose={() => setViewItem(null)} title="Detalhes da Matricula">
+      {/* ================= MODAL: DETALHES ================= */}
+      <FormModal open={!!viewItem} onClose={() => setViewItem(null)} title="Detalhes da Matrícula">
         {viewItem && (
-          <div className="flex flex-col gap-4">
-            <div className="grid grid-cols-2 gap-3">
+          <div className="flex flex-col gap-5 mt-2">
+            <div className="grid grid-cols-2 gap-y-4 gap-x-3 border-b border-zinc-100 dark:border-zinc-900 pb-4">
               <div>
-                <span className="block text-[10px] sm:text-xs font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wide mb-0.5">Aluno</span>
-                <span className="text-sm font-bold text-zinc-900 dark:text-zinc-100">{viewItem.student.name}</span>
-                <p className="text-xs text-zinc-500 dark:text-zinc-400">{viewItem.student.email}</p>
+                <span className="block text-[10px] font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider mb-0.5">Aluno</span>
+                <span className="text-xs font-bold text-zinc-900 dark:text-zinc-50">{viewItem.student.name}</span>
+                <p className="text-[11px] font-mono tracking-tight text-zinc-400 dark:text-zinc-500">{viewItem.student.email}</p>
               </div>
               <div>
-                <span className="block text-[10px] sm:text-xs font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wide mb-0.5">Turma</span>
-                <span className="text-sm font-bold text-zinc-900 dark:text-zinc-100">{viewItem.class.name}</span>
-                <p className="text-xs text-zinc-500 dark:text-zinc-400">{viewItem.class.grade}.a classe</p>
+                <span className="block text-[10px] font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider mb-0.5">Turma atribuída</span>
+                <span className="text-xs font-bold text-zinc-900 dark:text-zinc-50">{viewItem.class.name}</span>
+                <p className="text-[11px] text-zinc-400 dark:text-zinc-500">{viewItem.class.grade}ª classe</p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-y-4 gap-x-3">
+              <div>
+                <span className="block text-[10px] font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider mb-0.5">Ciclo Letivo</span>
+                <span className="text-xs font-medium text-zinc-800 dark:text-zinc-200">{viewItem.academicYear.name}</span>
               </div>
               <div>
-                <span className="block text-[10px] sm:text-xs font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wide mb-0.5">Ano Letivo</span>
-                <span className="text-sm text-zinc-900 dark:text-zinc-100">{viewItem.academicYear.name}</span>
+                <span className="block text-[10px] font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider mb-0.5">Estado Vigente</span>
+                <div>
+                  <span className={`inline-block px-2 py-0.5 rounded text-[10px] font-semibold border ${statusColors[viewItem.status] || ""}`}>
+                    {statusLabels[viewItem.status] || viewItem.status}
+                  </span>
+                </div>
               </div>
               <div>
-                <span className="block text-[10px] sm:text-xs font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wide mb-0.5">Estado</span>
-                <span className={`inline-block px-2 py-0.5 rounded text-[10px] font-semibold ${statusColors[viewItem.status] || ""}`}>
-                  {statusLabels[viewItem.status] || viewItem.status}
-                </span>
-              </div>
-              <div>
-                <span className="block text-[10px] sm:text-xs font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wide mb-0.5">Media Final</span>
-                <span className="text-sm text-zinc-900 dark:text-zinc-100">
+                <span className="block text-[10px] font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider mb-0.5">Média Final Global</span>
+                <span className="text-xs font-mono font-semibold text-zinc-800 dark:text-zinc-200">
                   {viewItem.finalAverage !== null ? viewItem.finalAverage.toFixed(1) : "\u2014"}
                 </span>
               </div>
               <div>
-                <span className="block text-[10px] sm:text-xs font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wide mb-0.5">Disciplinas Reprovadas</span>
-                <span className="text-sm text-zinc-900 dark:text-zinc-100">
-                  {viewItem.failedSubjects !== null ? viewItem.failedSubjects : "\u2014"}
+                <span className="block text-[10px] font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider mb-0.5">Cadeiras em Atraso</span>
+                <span className="text-xs font-mono text-zinc-800 dark:text-zinc-200">
+                  {viewItem.failedSubjects !== null ? viewItem.failedSubjects : "0"}
                 </span>
               </div>
               <div>
-                <span className="block text-[10px] sm:text-xs font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wide mb-0.5">Data Matricula</span>
-                <span className="text-sm text-zinc-900 dark:text-zinc-100">{formatDate(viewItem.enrolledAt)}</span>
+                <span className="block text-[10px] font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider mb-0.5">Data de Registo</span>
+                <span className="text-xs font-mono tracking-tight text-zinc-600 dark:text-zinc-400">{formatDate(viewItem.enrolledAt)}</span>
               </div>
               <div>
-                <span className="block text-[10px] sm:text-xs font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wide mb-0.5">Data Decisao</span>
-                <span className="text-sm text-zinc-900 dark:text-zinc-100">{formatDate(viewItem.decidedAt)}</span>
+                <span className="block text-[10px] font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider mb-0.5">Data de Despacho</span>
+                <span className="text-xs font-mono tracking-tight text-zinc-600 dark:text-zinc-400">{formatDate(viewItem.decidedAt)}</span>
               </div>
             </div>
+
             {viewItem.observation && (
-              <div>
-                <span className="block text-[10px] sm:text-xs font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wide mb-1">Observacao</span>
-                <p className="text-sm text-zinc-700 dark:text-zinc-300 bg-zinc-50 dark:bg-zinc-800/50 rounded-xl p-3">
+              <div className="pt-2 border-t border-zinc-100 dark:border-zinc-900">
+                <span className="block text-[10px] font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider mb-1">Notas de Observação</span>
+                <p className="text-xs text-zinc-600 dark:text-zinc-400 bg-zinc-50 dark:bg-zinc-900/60 border border-zinc-200/40 dark:border-zinc-800/60 rounded-lg p-2.5 leading-relaxed">
                   {viewItem.observation}
                 </p>
               </div>
             )}
-            <div className="flex justify-end pt-2">
+
+            <div className="flex justify-end pt-3 border-t border-zinc-100 dark:border-zinc-900">
               <button
                 onClick={() => setViewItem(null)}
-                className="px-4 py-2.5 rounded-xl bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 text-sm font-medium hover:bg-zinc-200 dark:hover:bg-zinc-700 transition"
+                className="h-8 px-3 rounded-md text-xs font-medium text-zinc-600 dark:text-zinc-400 bg-white dark:bg-zinc-950 hover:bg-zinc-50 dark:hover:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 transition-colors cursor-pointer"
               >
-                Fechar
+                Fechar Ficha
               </button>
             </div>
           </div>

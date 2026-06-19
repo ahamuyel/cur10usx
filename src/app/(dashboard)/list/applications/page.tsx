@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState, useCallback } from "react"
-import { Loader2, Search } from "lucide-react"
+import { Loader2, Search, SlidersHorizontal } from "lucide-react"
 import StatusBadge from "@/components/ui/StatusBadge"
 import ApplicationReviewForm from "@/components/forms/ApplicationReviewForm"
 import Pagination from "@/components/ui/Pagination"
@@ -62,45 +62,61 @@ export default function ApplicationsPage() {
     }
   }, [page, search, statusFilter])
 
-  useEffect(() => { fetchApplications() }, [fetchApplications])
+  useEffect(() => { 
+    fetchApplications() 
+  }, [fetchApplications])
 
   return (
-    <div className="p-3 sm:p-4 lg:p-6">
-      <div className="mb-6">
-        <h1 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">Solicitações</h1>
-        <p className="text-sm text-zinc-500">{total} solicitação(ões) encontrada(s)</p>
+    <div className="w-full bg-white dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800 p-4 sm:p-6 shadow-xs">
+      
+      {/* ================= HEADER DO CONTROLADOR ================= */}
+      <div className="flex flex-col gap-1 mb-6">
+        <h1 className="text-lg font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">Solicitações</h1>
+        <p className="text-xs text-zinc-500 dark:text-zinc-400">
+          {total === 0 ? "Nenhuma solicitação registada" : `${total} solicitação(ões) encontrada(s)`}
+        </p>
       </div>
 
-      {/* Filters */}
-      <div className="flex flex-wrap gap-3 mb-4">
-        <div className="flex items-center gap-2 px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-sm flex-1 max-w-xs">
-          <Search size={14} className="text-zinc-400" />
+      {/* ================= FILTROS E PESQUISA ================= */}
+      <div className="flex flex-col gap-3.5 md:flex-row md:items-center justify-between mb-5 pb-4 border-b border-zinc-100 dark:border-zinc-900">
+        <div className="flex items-center gap-2 px-3 h-9 rounded-lg bg-zinc-100 dark:bg-zinc-900 text-xs w-full md:max-w-xs border border-transparent focus-within:border-zinc-300 dark:focus-within:border-zinc-700 transition-all">
+          <Search size={13} className="text-zinc-400 shrink-0" />
           <input
             type="text"
-            placeholder="Pesquisar..."
+            placeholder="Pesquisar por nome ou email..."
             value={search}
             onChange={(e) => { setSearch(e.target.value); setPage(1) }}
-            className="bg-transparent outline-none text-sm w-full text-zinc-700 dark:text-zinc-200 placeholder:text-zinc-400"
+            className="bg-transparent outline-none w-full text-zinc-900 dark:text-zinc-50 placeholder:text-zinc-400"
           />
         </div>
-        <div className="flex gap-1.5 flex-wrap">
-          {statusFilters.map((f) => (
-            <button
-              key={f.value}
-              onClick={() => { setStatusFilter(f.value); setPage(1) }}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition ${
-                statusFilter === f.value
-                  ? "bg-indigo-600 text-white"
-                  : "bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800"
-              }`}
-            >
-              {f.label}
-            </button>
-          ))}
+        
+        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5 -mx-4 px-4 md:mx-0 md:px-0">
+          <div className="flex items-center gap-1.5 text-zinc-400 dark:text-zinc-500 mr-1 shrink-0">
+            <SlidersHorizontal size={12} />
+            <span className="text-[11px] font-medium hidden lg:inline">Filtrar:</span>
+          </div>
+          <div className="flex gap-1">
+            {statusFilters.map((f) => {
+              const isActive = statusFilter === f.value
+              return (
+                <button
+                  key={f.value}
+                  onClick={() => { setStatusFilter(f.value); setPage(1) }}
+                  className={`h-7 px-2.5 rounded-md text-[11px] font-medium border transition-colors cursor-pointer shrink-0 ${
+                    isActive
+                      ? "bg-zinc-900 border-zinc-900 text-white dark:bg-zinc-50 dark:border-zinc-50 dark:text-zinc-950 font-semibold"
+                      : "bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-900"
+                  }`}
+                >
+                  {f.label}
+                </button>
+              )
+            })}
+          </div>
         </div>
       </div>
 
-      {/* Review modal */}
+      {/* ================= MODAL DE REVISÃO ================= */}
       {selected && (
         <ApplicationReviewForm
           application={selected}
@@ -109,53 +125,63 @@ export default function ApplicationsPage() {
         />
       )}
 
-      {/* Table */}
-      {loading ? (
-        <div className="flex justify-center py-12">
-          <Loader2 className="w-6 h-6 animate-spin text-indigo-500" />
-        </div>
-      ) : (
-        <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-zinc-200 dark:border-zinc-800">
-                  <th className="text-left px-4 py-3 text-zinc-500 font-medium">Nome</th>
-                  <th className="text-left px-4 py-3 text-zinc-500 font-medium hidden sm:table-cell">Perfil</th>
-                  <th className="text-left px-4 py-3 text-zinc-500 font-medium">Status</th>
-                  <th className="text-left px-4 py-3 text-zinc-500 font-medium hidden sm:table-cell">Data</th>
-                </tr>
-              </thead>
-              <tbody>
-                {applications.map((app) => (
-                  <tr
-                    key={app.id}
-                    onClick={() => setSelected(app)}
-                    className="border-b border-zinc-100 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 cursor-pointer transition"
-                  >
-                    <td className="px-4 py-3">
-                      <div className="font-medium text-zinc-900 dark:text-zinc-100">{app.name}</div>
-                      <div className="text-xs text-zinc-400">{app.email}</div>
-                    </td>
-                    <td className="px-4 py-3 text-zinc-600 dark:text-zinc-400 hidden sm:table-cell">{roleLabels[app.role] || app.role}</td>
-                    <td className="px-4 py-3"><StatusBadge status={app.status} /></td>
-                    <td className="px-4 py-3 text-zinc-500 hidden sm:table-cell">{new Date(app.createdAt).toLocaleDateString("pt")}</td>
-                  </tr>
-                ))}
-                {applications.length === 0 && (
-                  <tr>
-                    <td colSpan={4} className="px-4 py-8 text-center text-zinc-400">Nenhuma solicitação encontrada</td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
+      {/* ================= DATA GRID / TABELA ================= */}
+      <div className="w-full overflow-x-auto rounded-lg border border-zinc-200 dark:border-zinc-800">
+        {loading ? (
+          <div className="flex items-center justify-center py-16">
+            <Loader2 size={20} className="animate-spin text-zinc-400 dark:text-zinc-500" />
           </div>
+        ) : applications.length === 0 ? (
+          <div className="text-center py-12 text-zinc-400 dark:text-zinc-500 text-xs bg-zinc-50/40 dark:bg-zinc-900/10">
+            Nenhuma solicitação encontrada com os critérios definidos.
+          </div>
+        ) : (
+          <table className="w-full text-left border-collapse">
+            <thead>
+              <tr className="border-b border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/20 text-xs font-semibold text-zinc-500 dark:text-zinc-400 select-none">
+                <th className="px-4 py-3 font-medium">Candidato / Info</th>
+                <th className="px-4 py-3 font-medium hidden sm:table-cell">Perfil Solicitado</th>
+                <th className="px-4 py-3 font-medium">Estado</th>
+                <th className="px-4 py-3 font-medium hidden sm:table-cell text-right">Data de Entrada</th>
+              </tr>
+            </thead>
+            <tbody className="text-sm">
+              {applications.map((app) => (
+                <tr
+                  key={app.id}
+                  onClick={() => setSelected(app)}
+                  className="border-b border-zinc-200 dark:border-zinc-800/50 hover:bg-zinc-50/60 dark:hover:bg-zinc-900/40 cursor-pointer transition-colors group"
+                >
+                  <td className="px-4 py-3">
+                    <div className="font-semibold text-zinc-900 dark:text-zinc-50 group-hover:text-primary transition-colors">
+                      {app.name}
+                    </div>
+                    <div className="text-xs text-zinc-400 dark:text-zinc-500 font-mono tracking-tight">
+                      {app.email} {app.phone && `• ${app.phone}`}
+                    </div>
+                  </td>
+                  <td className="px-4 py-3 text-zinc-600 dark:text-zinc-400 text-xs hidden sm:table-cell">
+                    <span className="bg-zinc-100 dark:bg-zinc-900 px-2 py-0.5 rounded text-zinc-700 dark:text-zinc-300 font-medium">
+                      {roleLabels[app.role] || app.role}
+                    </span>
+                  </td>
+                  <td className="px-4 py-3 vertical-align-middle">
+                    <StatusBadge status={app.status} />
+                  </td>
+                  <td className="px-4 py-3 text-zinc-500 dark:text-zinc-400 text-xs font-mono tracking-tight tabular-nums hidden sm:table-cell text-right">
+                    {new Date(app.createdAt).toLocaleDateString("pt-PT")}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
 
-          {totalPages > 1 && (
-            <div className="px-4 border-t border-zinc-200 dark:border-zinc-800">
-              <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
-            </div>
-          )}
+      {/* ================= PAGINAÇÃO ================= */}
+      {!loading && totalPages > 1 && (
+        <div className="mt-4 pt-4 border-t border-zinc-100 dark:border-zinc-900 flex justify-end">
+          <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
         </div>
       )}
     </div>

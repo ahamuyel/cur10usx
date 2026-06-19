@@ -23,7 +23,10 @@ export async function GET(req: Request) {
     const subjectId = searchParams.get("subjectId") || ""
     const trimester = searchParams.get("trimester") || ""
     const academicYear = searchParams.get("academicYear") || ""
+    const academicYearId = searchParams.get("academicYearId") || ""
     const classId = searchParams.get("classId") || ""
+    const teacherId = searchParams.get("teacherId") || ""
+    const type = searchParams.get("type") || ""
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const where: any = {
@@ -31,8 +34,24 @@ export async function GET(req: Request) {
       ...(studentId ? { studentId } : {}),
       ...(subjectId ? { subjectId } : {}),
       ...(trimester ? { trimester } : {}),
+      ...(type ? { type } : {}),
       ...(academicYear ? { academicYear } : {}),
+      ...(academicYearId ? { academicYearId } : {}),
       ...(classId ? { student: { classId } } : {}),
+    }
+
+    if (teacherId) {
+      const teacher = await prisma.teacher.findFirst({
+        where: { id: teacherId, schoolId },
+        select: {
+          teacherClasses: { select: { classId: true } },
+          teacherSubjects: { select: { subjectId: true } }
+        }
+      })
+      const teacherClassIds = teacher?.teacherClasses.map((tc) => tc.classId) || []
+      const teacherSubjectIds = teacher?.teacherSubjects.map((ts) => ts.subjectId) || []
+      where.subjectId = { in: teacherSubjectIds }
+      where.student = { ...where.student, classId: { in: teacherClassIds } }
     }
 
     // Student: own results only (ignore studentId from searchParams)
@@ -50,11 +69,24 @@ export async function GET(req: Request) {
       where.studentId = parent ? { in: parent.students.map((s) => s.id) } : "none"
     }
 
-    // Teacher: only results of students in their classes
+    // Teacher: only results of subjects they teach in classes they are assigned to
     if (role === "teacher") {
-      const teacher = await prisma.teacher.findFirst({ where: { userId, schoolId }, select: { teacherClasses: { select: { classId: true } } } })
-      const teacherClassIds = teacher?.teacherClasses.map((tc) => tc.classId) || []
-      where.student = { ...where.student, classId: { in: teacherClassIds } }
+      const teacher = await prisma.teacher.findFirst({
+        where: { userId, schoolId },
+        include: {
+          teacherClasses: true,
+          teacherSubjects: true,
+        }
+      })
+      if (!teacher) {
+        where.subjectId = "none"
+        where.student = { classId: "none" }
+      } else {
+        const teacherClassIds = teacher.teacherClasses.map((tc) => tc.classId)
+        const teacherSubjectIds = teacher.teacherSubjects.map((ts) => ts.subjectId)
+        where.subjectId = { in: teacherSubjectIds }
+        where.student = { ...where.student, classId: { in: teacherClassIds } }
+      }
     }
 
     const orderBy = buildOrderBy(searchParams, ["score", "date", "type"], { date: "desc" })
@@ -96,6 +128,32 @@ export async function POST(req: Request) {
     }
 
     const { date, trimester, academicYear, assignmentId, ...rest } = parsed.data
+
+    // Teacher validation: must teach this subject in this student's class
+    if (session!.user.role === "teacher") {
+      const teacher = await prisma.teacher.findFirst({
+        where: { userId: session!.user.id, schoolId },
+        include: {
+          teacherClasses: true,
+          teacherSubjects: true,
+        }
+      })
+      if (!teacher) {
+        return NextResponse.json({ error: "Perfil de professor não encontrado" }, { status: 403 })
+      }
+      const student = await prisma.student.findUnique({
+        where: { id: rest.studentId },
+        select: { classId: true }
+      })
+      if (!student || !student.classId) {
+        return NextResponse.json({ error: "Aluno não está enturmado" }, { status: 400 })
+      }
+      const hasClass = teacher.teacherClasses.some((tc) => tc.classId === student.classId)
+      const hasSubject = teacher.teacherSubjects.some((ts) => ts.subjectId === rest.subjectId)
+      if (!hasClass || !hasSubject) {
+        return NextResponse.json({ error: "Sem permissão para lançar nesta turma/disciplina" }, { status: 403 })
+      }
+    }
 
     // Auto-fill academicYearId from current year
     const academicYearId = await getOrDefaultAcademicYearId(schoolId, body.academicYearId)

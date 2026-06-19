@@ -1,10 +1,11 @@
 "use client"
+
 import { useState, useEffect, useCallback } from "react"
 import { useSession } from "next-auth/react"
 import Table from "@/components/ui/Table"
 import FormModal from "@/components/ui/FormModal"
 import ConfirmActionModal from "@/components/ui/ConfirmActionModal"
-import { Scale, CheckCircle2, XCircle, Loader2, Plus, Trash2 } from "lucide-react"
+import { Scale, CheckCircle2, XCircle, Loader2, Plus, Trash2, LayoutGrid, List, User, GraduationCap } from "lucide-react"
 
 type AcademicYear = {
   id: string
@@ -36,11 +37,11 @@ type SubjectScore = {
 }
 
 const columns = [
-  { header: "Aluno", accessor: "student" },
+  { header: "Aluno(a)", accessor: "student" },
   { header: "Turma", accessor: "class" },
   { header: "Classe", accessor: "grade" },
   { header: "Média Final", accessor: "finalAverage" },
-  { header: "Disc. Reprovadas", accessor: "failedSubjects", className: "hidden md:table-cell" },
+  { header: "Disciplinas em Falta", accessor: "failedSubjects", className: "hidden md:table-cell" },
   { header: "Observação", accessor: "observation", className: "hidden lg:table-cell" },
   { header: "Ações", accessor: "actions" },
 ]
@@ -48,6 +49,9 @@ const columns = [
 const RecursoListPage = () => {
   const { data: session } = useSession()
   const isAdmin = session?.user?.role === "school_admin"
+
+  // Estado para alternância de visualização
+  const [view, setView] = useState<"table" | "card">("table")
 
   const [academicYears, setAcademicYears] = useState<AcademicYear[]>([])
   const [selectedYearId, setSelectedYearId] = useState("")
@@ -196,29 +200,24 @@ const RecursoListPage = () => {
     )
   }
 
+  // Row Renderer para Tabela
   const renderRow = (item: RecursoEnrollment) => (
-    <tr key={item.id} className="border-b border-zinc-100 dark:border-zinc-800/50 text-sm hover:bg-zinc-50/50 dark:hover:bg-zinc-800/30 transition-colors">
-      <td className="py-2.5 sm:py-3 px-1.5 sm:px-2">
-        <span className="font-bold text-zinc-900 dark:text-zinc-100 text-xs sm:text-sm">{item.student?.name}</span>
-      </td>
-      <td className="py-2.5 sm:py-3 px-1.5 sm:px-2 text-zinc-600 dark:text-zinc-400 text-xs sm:text-sm">
-        {item.class?.name}
-      </td>
-      <td className="py-2.5 sm:py-3 px-1.5 sm:px-2 text-zinc-600 dark:text-zinc-400 text-xs sm:text-sm">
-        {item.class?.grade}
-      </td>
-      <td className="py-2.5 sm:py-3 px-1.5 sm:px-2">
-        <span className="font-bold text-sm text-amber-600 dark:text-amber-400">
+    <tr key={item.id} className="border-b border-zinc-200 dark:border-zinc-800/50 text-sm hover:bg-zinc-50 dark:hover:bg-zinc-900/40 transition-colors">
+      <td className="py-3 px-4 font-semibold text-zinc-900 dark:text-zinc-50">{item.student?.name}</td>
+      <td className="py-3 px-4 text-zinc-600 dark:text-zinc-400 text-xs">{item.class?.name}</td>
+      <td className="py-3 px-4 text-zinc-600 dark:text-zinc-400 text-xs font-mono tracking-tight">{item.class?.grade}ª Classe</td>
+      <td className="py-3 px-4">
+        <span className="font-bold font-mono tracking-tight text-sm text-amber-600 dark:text-amber-500">
           {item.finalAverage != null ? item.finalAverage.toFixed(1) : "—"}
         </span>
       </td>
-      <td className="hidden md:table-cell py-2.5 sm:py-3 px-1.5 sm:px-2 text-zinc-500 text-xs">
+      <td className="hidden md:table-cell py-3 px-4 text-zinc-500 dark:text-zinc-400 text-xs font-mono tracking-tight">
         {item.failedSubjects != null ? item.failedSubjects : "—"}
       </td>
-      <td className="hidden lg:table-cell py-2.5 sm:py-3 px-1.5 sm:px-2 text-zinc-500 text-xs max-w-[200px] truncate">
+      <td className="hidden lg:table-cell py-3 px-4 text-zinc-500 dark:text-zinc-400 text-xs max-w-[200px] truncate italic">
         {item.observation || "—"}
       </td>
-      <td className="px-1.5 sm:px-2">
+      <td className="py-3 px-4 text-right">
         {isAdmin && (
           <div className="flex items-center gap-1 justify-end">
             <button
@@ -227,24 +226,24 @@ const RecursoListPage = () => {
                 setDecision("aprovada")
                 setSubjectScores([])
               }}
-              className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-lg bg-indigo-100 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-600 hover:text-white transition-all active:scale-90"
+              className="w-8 h-8 flex items-center justify-center rounded-md border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors cursor-pointer"
               title="Resolver Recurso"
             >
-              <Scale size={13} />
+              <Scale size={12} />
             </button>
             <button
               onClick={() => setQuickApprove(item)}
-              className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-lg bg-emerald-100 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-600 hover:text-white transition-all active:scale-90"
-              title="Aprovar"
+              className="w-8 h-8 flex items-center justify-center rounded-md border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/30 transition-colors cursor-pointer"
+              title="Aprovação Direta"
             >
-              <CheckCircle2 size={13} />
+              <CheckCircle2 size={12} />
             </button>
             <button
               onClick={() => setQuickReject(item)}
-              className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-lg bg-rose-100 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 hover:bg-rose-600 hover:text-white transition-all active:scale-90"
-              title="Reprovar"
+              className="w-8 h-8 flex items-center justify-center rounded-md border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-colors cursor-pointer"
+              title="Reprovação Direta"
             >
-              <XCircle size={13} />
+              <XCircle size={12} />
             </button>
           </div>
         )}
@@ -253,26 +252,26 @@ const RecursoListPage = () => {
   )
 
   return (
-    <div className="m-2 sm:m-3 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl sm:rounded-2xl p-2.5 sm:p-4 md:p-6 shadow-sm overflow-hidden">
-      {/* Header */}
-      <div className="flex flex-col gap-3 sm:gap-4 lg:gap-0 lg:flex-row lg:items-center justify-between mb-4 sm:mb-6">
-        <div>
-          <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <Scale size={22} className="text-amber-500" />
-            Recursos
+    <div className="w-full bg-white dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800 p-4 sm:p-6 shadow-xs">
+      
+      {/* ================= HEADER DO CONTROLADOR ================= */}
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-center justify-between mb-6">
+        <div className="min-w-0">
+          <h1 className="text-lg font-semibold tracking-tight text-zinc-900 dark:text-zinc-50 flex items-center gap-2">
+            <Scale size={18} className="text-zinc-400 dark:text-zinc-500" />
+            Recursos Académicos
           </h1>
-          <p className="text-[11px] sm:text-xs md:text-sm text-zinc-500 dark:text-zinc-400">
-            Gestão de recursos e decisões de alunos em recurso
-          </p>
+          <p className="text-xs text-zinc-500 dark:text-zinc-400">Análise de pautas, lançamento de exames especiais e deliberação final.</p>
         </div>
-        <div className="flex items-center gap-2 sm:gap-3">
+
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
           {loadingYears ? (
-            <Loader2 size={18} className="animate-spin text-zinc-400" />
+            <div className="flex items-center justify-center w-48 h-9"><Loader2 size={14} className="animate-spin text-zinc-400" /></div>
           ) : (
             <select
               value={selectedYearId}
               onChange={(e) => setSelectedYearId(e.target.value)}
-              className="px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/30 transition"
+              className="h-9 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-50 text-xs px-3 font-medium focus:outline-hidden transition-colors"
             >
               <option value="">Selecionar Ano Letivo</option>
               {academicYears.map((ay) => (
@@ -282,129 +281,226 @@ const RecursoListPage = () => {
               ))}
             </select>
           )}
+
+          {selectedYearId && enrollments.length > 0 && (
+            /* Seletor Dual View */
+            <div className="flex items-center rounded-lg border border-zinc-200 dark:border-zinc-800 p-0.5 bg-zinc-50 dark:bg-zinc-900 select-none self-end sm:self-auto">
+              <button
+                onClick={() => setView("table")}
+                className={`w-8 h-8 flex items-center justify-center rounded-md transition-all cursor-pointer ${view === "table" ? "bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-50 shadow-3xs" : "text-zinc-400 hover:text-zinc-600"}`}
+                title="Visualização em Lista"
+              >
+                <List size={14} />
+              </button>
+              <button
+                onClick={() => setView("card")}
+                className={`w-8 h-8 flex items-center justify-center rounded-md transition-all cursor-pointer ${view === "card" ? "bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-50 shadow-3xs" : "text-zinc-400 hover:text-zinc-600"}`}
+                title="Visualização em Grelha"
+              >
+                <LayoutGrid size={14} />
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Success message */}
+      {/* Success Banner */}
       {successMsg && (
-        <div className="mb-4 px-4 py-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-400 text-sm font-medium flex items-center gap-2">
-          <CheckCircle2 size={16} />
-          {successMsg}
+        <div className="mb-4 px-4 py-3 rounded-lg bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-emerald-600 dark:text-emerald-400 text-xs font-medium flex items-center gap-2 animate-fade-in">
+          <CheckCircle2 size={14} />
+          <span>{successMsg}</span>
         </div>
       )}
 
-      {/* Status badge */}
-      {selectedYearId && !loading && (
-        <div className="mb-4 flex items-center gap-2">
-          <span className="px-2.5 py-1 rounded-lg bg-amber-100 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 text-xs font-bold">
-            {enrollments.length} aluno{enrollments.length !== 1 ? "s" : ""} em recurso
+      {/* Status Counter */}
+      {selectedYearId && !loading && enrollments.length > 0 && (
+        <div className="mb-4">
+          <span className="px-2 py-0.5 border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 rounded text-xs font-medium text-amber-600 dark:text-amber-500 font-mono tracking-tight">
+            {enrollments.length} {enrollments.length === 1 ? "estudante listado" : "estudantes listados"} em regime de recurso
           </span>
         </div>
       )}
 
-      {/* Table */}
-      <div className="overflow-x-auto -mx-2.5 px-2.5 sm:-mx-4 sm:px-4 md:mx-0 md:px-0">
+      {/* ================= DATA RENDER LIST CONTAINER ================= */}
+      <div className="w-full">
         {!selectedYearId ? (
-          <div className="text-center py-12 text-zinc-400 text-sm">
-            Selecione um ano letivo para ver os alunos em recurso
+          <div className="text-center py-16 text-zinc-400 dark:text-zinc-500 text-xs border border-dashed border-zinc-200 dark:border-zinc-800 rounded-xl bg-zinc-50/30 dark:bg-zinc-900/10">
+            Selecione o ano letivo correspondente na barra superior para carregar os processos de recurso em aberto.
           </div>
         ) : loading ? (
-          <div className="flex items-center justify-center py-12">
-            <Loader2 size={24} className="animate-spin text-indigo-500" />
+          <div className="flex items-center justify-center py-20">
+            <Loader2 size={20} className="animate-spin text-zinc-400 dark:text-zinc-500" />
           </div>
         ) : enrollments.length === 0 ? (
-          <div className="text-center py-12 text-zinc-400 text-sm">
-            Nenhum aluno em recurso neste ano letivo
+          <div className="text-center py-16 text-zinc-400 dark:text-zinc-500 text-xs bg-zinc-50/40 dark:bg-zinc-900/10 rounded-lg border border-zinc-200 dark:border-zinc-800">
+            Nenhum estudante sob processo de recurso registado para este ano letivo.
+          </div>
+        ) : view === "table" ? (
+          /* TABLE CORE VIEW */
+          <div className="w-full overflow-x-auto rounded-lg border border-zinc-200 dark:border-zinc-800">
+            <Table columns={columns} renderRow={renderRow} data={enrollments} />
           </div>
         ) : (
-          <Table columns={columns} renderRow={renderRow} data={enrollments} />
+          /* CARD CORE VIEW */
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {enrollments.map((item) => (
+              <div
+                key={item.id}
+                className="flex flex-col justify-between p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/30 hover:border-zinc-300 dark:hover:border-zinc-700 transition-all duration-200"
+              >
+                <div className="flex items-start justify-between gap-2 mb-3">
+                  <div className="flex items-center gap-1.5 min-w-0">
+                    <User size={13} className="text-zinc-400 shrink-0" />
+                    <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-50 line-clamp-1 leading-snug">
+                      {item.student?.name}
+                    </h3>
+                  </div>
+                  <span className="text-base font-bold font-mono tracking-tight text-amber-600 dark:text-amber-500 shrink-0">
+                    {item.finalAverage != null ? item.finalAverage.toFixed(1) : "—"}
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-4 mb-4 text-xs font-mono tracking-tight text-zinc-500 dark:text-zinc-400 bg-zinc-50 dark:bg-zinc-900/50 p-2.5 rounded-lg border border-zinc-200/50 dark:border-zinc-800/50">
+                  <div>
+                    Estrutura: <span className="font-bold text-zinc-800 dark:text-zinc-200">{item.class?.grade}ª Classe</span>
+                  </div>
+                  <div className="border-l border-zinc-200 dark:border-zinc-800 h-3" />
+                  <div>
+                    Em Falta: <span className="font-bold text-zinc-800 dark:text-zinc-200">{item.failedSubjects ?? "—"}</span>
+                  </div>
+                </div>
+
+                {item.observation && (
+                  <p className="text-[11px] text-zinc-400 dark:text-zinc-500 line-clamp-2 leading-relaxed mb-4 italic">
+                    &ldquo;{item.observation}&rdquo;
+                  </p>
+                )}
+
+                <div className="flex items-center justify-between pt-3 border-t border-zinc-100 dark:border-zinc-800/60 text-xs">
+                  <div className="flex items-center gap-1 text-zinc-400 font-medium font-sans">
+                    <GraduationCap size={13} />
+                    <span className="truncate">{item.class?.name}</span>
+                  </div>
+
+                  {isAdmin && (
+                    <div className="flex items-center gap-0.5 border-l border-zinc-200 dark:border-zinc-800 pl-2">
+                      <button
+                        onClick={() => {
+                          setResolveItem(item)
+                          setDecision("aprovada")
+                          setSubjectScores([])
+                        }}
+                        className="w-7 h-7 flex items-center justify-center rounded-md text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 transition-colors cursor-pointer"
+                        title="Decidir Processo"
+                      >
+                        <Scale size={12} />
+                      </button>
+                      <button
+                        onClick={() => setQuickApprove(item)}
+                        className="w-7 h-7 flex items-center justify-center rounded-md text-zinc-400 hover:text-emerald-600 transition-colors cursor-pointer"
+                        title="Aprovar"
+                      >
+                        <CheckCircle2 size={12} />
+                      </button>
+                      <button
+                        onClick={() => setQuickReject(item)}
+                        className="w-7 h-7 flex items-center justify-center rounded-md text-zinc-400 hover:text-rose-500 transition-colors cursor-pointer"
+                        title="Reprovar"
+                      >
+                        <XCircle size={12} />
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
         )}
       </div>
 
-      {/* Resolve Recurso Modal */}
+      {/* ================= DIALOG FORM MODAL SYSTEM ================= */}
       <FormModal
         open={!!resolveItem}
         onClose={() => {
           setResolveItem(null)
           setSubjectScores([])
         }}
-        title="Resolver Recurso"
+        title="Deliberar e Resolver Recurso"
       >
         {resolveItem && (
           <div className="space-y-5">
-            {/* Student info */}
-            <div className="p-3 rounded-xl bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-100 dark:border-zinc-700">
-              <p className="text-sm font-bold text-zinc-900 dark:text-zinc-100">{resolveItem.student?.name}</p>
-              <p className="text-xs text-zinc-500 mt-0.5">
-                {resolveItem.class?.name} - Classe {resolveItem.class?.grade}
-                {resolveItem.finalAverage != null && ` - Média: ${resolveItem.finalAverage.toFixed(1)}`}
+            {/* Contexto do Aluno */}
+            <div className="p-3.5 rounded-lg bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-xs">
+              <p className="font-semibold text-zinc-900 dark:text-zinc-50">{resolveItem.student?.name}</p>
+              <p className="text-zinc-400 font-medium mt-1">
+                {resolveItem.class?.name} &bull; {resolveItem.class?.grade}ª Classe &bull; Média Atual: <span className="font-mono">{resolveItem.finalAverage?.toFixed(1) || "—"}</span>
               </p>
             </div>
 
-            {/* Decision */}
+            {/* Fluxo de Decisões de Rádio */}
             <div>
-              <label className="block text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-2">
-                Decisão
+              <label className="block text-xs font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider mb-2">
+                Sentença Final
               </label>
-              <div className="flex items-center gap-4">
-                <label className="flex items-center gap-2 cursor-pointer">
+              <div className="flex items-center gap-5">
+                <label className="flex items-center gap-2 cursor-pointer select-none">
                   <input
                     type="radio"
                     name="decision"
                     value="aprovada"
                     checked={decision === "aprovada"}
                     onChange={() => setDecision("aprovada")}
-                    className="w-4 h-4 text-emerald-600 border-zinc-300 focus:ring-emerald-500"
+                    className="w-3.5 h-3.5 text-zinc-900 focus:ring-0 dark:bg-zinc-950 border-zinc-300 dark:border-zinc-800"
                   />
-                  <span className="text-sm font-medium text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
-                    <CheckCircle2 size={14} />
-                    Aprovar
+                  <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
+                    <CheckCircle2 size={13} /> Homologar Aprovação
                   </span>
                 </label>
-                <label className="flex items-center gap-2 cursor-pointer">
+                <label className="flex items-center gap-2 cursor-pointer select-none">
                   <input
                     type="radio"
                     name="decision"
                     value="reprovada"
                     checked={decision === "reprovada"}
                     onChange={() => setDecision("reprovada")}
-                    className="w-4 h-4 text-rose-600 border-zinc-300 focus:ring-rose-500"
+                    className="w-3.5 h-3.5 text-zinc-900 focus:ring-0 dark:bg-zinc-950 border-zinc-300 dark:border-zinc-800"
                   />
-                  <span className="text-sm font-medium text-rose-600 dark:text-rose-400 flex items-center gap-1">
-                    <XCircle size={14} />
-                    Reprovar
+                  <span className="text-xs font-semibold text-rose-600 dark:text-rose-400 flex items-center gap-1">
+                    <XCircle size={13} /> Decretar Reprovação
                   </span>
                 </label>
               </div>
             </div>
 
-            {/* Recurso exam scores (optional) */}
+            {/* Inserção Dinâmica de Notas Especiais */}
             <div>
-              <div className="flex items-center justify-between mb-2">
-                <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
-                  Notas de Exame de Recurso <span className="font-normal text-zinc-400">(opcional)</span>
+              <div className="flex items-center justify-between mb-2.5">
+                <label className="text-xs font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">
+                  Classificações do Exame de Recurso <span className="font-normal text-zinc-400 lowercase">(opcional)</span>
                 </label>
                 <button
                   type="button"
                   onClick={addScoreRow}
-                  className="flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-medium text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/30 hover:bg-indigo-100 dark:hover:bg-indigo-900/40 transition"
+                  className="h-7 flex items-center gap-1 px-2.5 rounded-md text-xs font-medium bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-900 dark:hover:bg-zinc-800 text-zinc-800 dark:text-zinc-200 transition-colors cursor-pointer"
                 >
-                  <Plus size={12} />
-                  Adicionar
+                  <Plus size={11} />
+                  <span>Adicionar Pauta</span>
                 </button>
               </div>
+              
               {subjectScores.length === 0 && (
-                <p className="text-xs text-zinc-400">Nenhuma nota de recurso adicionada.</p>
+                <p className="text-xs italic text-zinc-400 dark:text-zinc-600 bg-zinc-50/50 dark:bg-zinc-900/10 p-3 rounded-lg border border-dashed border-zinc-200 dark:border-zinc-800 text-center">Nenhuma nota suplementar anexada a esta deliberação.</p>
               )}
-              <div className="space-y-2">
+              
+              <div className="space-y-2 max-h-[160px] overflow-y-auto pr-1">
                 {subjectScores.map((row, index) => (
                   <div key={index} className="flex items-center gap-2">
                     <select
                       value={row.subjectId}
                       onChange={(e) => updateScoreRow(index, "subjectId", e.target.value)}
-                      className="flex-1 px-2.5 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/30"
+                      className="flex-1 h-8 rounded-md border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-50 text-xs px-2.5 focus:outline-hidden"
                     >
-                      <option value="">Disciplina</option>
+                      <option value="">Componente / Disciplina</option>
                       {subjects.map((s) => (
                         <option key={s.id} value={s.id}>{s.name}</option>
                       ))}
@@ -416,75 +512,71 @@ const RecursoListPage = () => {
                       step={0.1}
                       value={row.score}
                       onChange={(e) => updateScoreRow(index, "score", e.target.value)}
-                      placeholder="Nota"
-                      className="w-20 px-2.5 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/30"
+                      placeholder="Nota (0-20)"
+                      className="w-24 h-8 rounded-md border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-50 font-mono text-xs px-2.5 focus:outline-hidden"
                     />
                     <button
                       type="button"
                       onClick={() => removeScoreRow(index)}
-                      className="p-1.5 rounded-lg text-zinc-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition"
+                      className="w-8 h-8 flex items-center justify-center rounded-md text-zinc-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-colors cursor-pointer"
                     >
-                      <Trash2 size={14} />
+                      <Trash2 size={13} />
                     </button>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Actions */}
-            <div className="flex items-center gap-3 justify-end pt-2 border-t border-zinc-100 dark:border-zinc-800">
+            {/* Painel Inferior de Ações */}
+            <div className="flex items-center gap-2.5 justify-end pt-3 border-t border-zinc-100 dark:border-zinc-900">
               <button
                 onClick={() => {
                   setResolveItem(null)
                   setSubjectScores([])
                 }}
                 disabled={submitting}
-                className="px-4 py-2 rounded-xl text-sm font-medium text-zinc-600 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition"
+                className="h-9 px-3.5 rounded-lg text-xs font-medium text-zinc-600 dark:text-zinc-400 bg-white hover:bg-zinc-50 dark:bg-zinc-950 dark:hover:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 transition-colors cursor-pointer"
               >
                 Cancelar
               </button>
               <button
                 onClick={handleResolve}
                 disabled={submitting}
-                className={`px-4 py-2 rounded-xl text-sm font-semibold text-white transition disabled:opacity-50 shadow-lg flex items-center gap-1.5 ${
-                  decision === "aprovada"
-                    ? "bg-emerald-600 hover:bg-emerald-700 shadow-emerald-600/20"
-                    : "bg-rose-600 hover:bg-rose-700 shadow-rose-600/20"
-                }`}
+                className="h-9 flex items-center gap-1.5 px-4 rounded-lg bg-zinc-900 hover:bg-zinc-800 dark:bg-zinc-50 dark:hover:bg-zinc-200 text-white dark:text-zinc-950 font-medium text-xs shadow-3xs transition-colors cursor-pointer disabled:opacity-50"
               >
                 {submitting ? (
-                  <Loader2 size={14} className="animate-spin" />
+                  <Loader2 size={13} className="animate-spin" />
                 ) : decision === "aprovada" ? (
-                  <CheckCircle2 size={14} />
+                  <CheckCircle2 size={13} />
                 ) : (
-                  <XCircle size={14} />
+                  <XCircle size={13} />
                 )}
-                {submitting ? "Processando..." : decision === "aprovada" ? "Aprovar Recurso" : "Reprovar Recurso"}
+                <span>{submitting ? "A processar..." : "Salvar Resolução"}</span>
               </button>
             </div>
           </div>
         )}
       </FormModal>
 
-      {/* Quick Approve Modal */}
+      {/* Quick Approve Confirmpanel */}
       <ConfirmActionModal
         open={!!quickApprove}
         onClose={() => setQuickApprove(null)}
         onConfirm={() => handleQuickAction(quickApprove!, "aprovada")}
-        title="Aprovar Recurso"
-        message={`Tem a certeza que deseja aprovar o recurso de ${quickApprove?.student?.name}? O aluno será marcado como aprovado.`}
-        confirmLabel="Aprovar"
-        confirmColor="emerald"
+        title="Homologar Aprovação"
+        message={`Tem a certeza que deseja validar a aprovação direta do recurso de ${quickApprove?.student?.name}? O processo civil do aluno será encerrado como aprovado.`}
+        confirmLabel="Confirmar Aprovação"
+        // confirmColor="zinc"
       />
 
-      {/* Quick Reject Modal */}
+      {/* Quick Reject Confirmpanel */}
       <ConfirmActionModal
         open={!!quickReject}
         onClose={() => setQuickReject(null)}
         onConfirm={() => handleQuickAction(quickReject!, "reprovada")}
-        title="Reprovar Recurso"
-        message={`Tem a certeza que deseja reprovar o recurso de ${quickReject?.student?.name}? O aluno será marcado como reprovado.`}
-        confirmLabel="Reprovar"
+        title="Decretar Reprovação"
+        message={`Tem a certeza que deseja ratificar a reprovação do recurso de ${quickReject?.student?.name}? O aluno será retido na presente classe.`}
+        confirmLabel="Confirmar Reprovação"
         confirmColor="red"
       />
     </div>
