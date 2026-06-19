@@ -24,6 +24,9 @@ export async function GET(req: Request) {
     const lessonId = searchParams.get("lessonId") || ""
     const startDate = searchParams.get("startDate") || ""
     const endDate = searchParams.get("endDate") || ""
+    const academicYearId = searchParams.get("academicYearId") || ""
+    const subjectId = searchParams.get("subjectId") || ""
+    const teacherId = searchParams.get("teacherId") || ""
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const where: any = {
@@ -31,7 +34,21 @@ export async function GET(req: Request) {
       ...(classId ? { classId } : {}),
       ...(studentId ? { studentId } : {}),
       ...(lessonId ? { lessonId } : {}),
-      ...(date ? { date: new Date(date) } : {}),
+      ...(academicYearId ? { academicYearId } : {}),
+    }
+
+    if (date) {
+      const parsedDate = new Date(date)
+      const startOfDay = new Date(parsedDate.setHours(0, 0, 0, 0))
+      const endOfDay = new Date(parsedDate.setHours(23, 59, 59, 999))
+      where.date = { gte: startOfDay, lte: endOfDay }
+    }
+
+    if (subjectId || teacherId) {
+      where.lesson = {
+        ...(subjectId ? { subjectId } : {}),
+        ...(teacherId ? { teacherId } : {}),
+      }
     }
 
     if (startDate || endDate) {

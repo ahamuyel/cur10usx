@@ -46,17 +46,33 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
       return NextResponse.json({ error: "Resultado não encontrado" }, { status: 404 })
     }
 
-    // Teacher scope: only edit results of students in their classes
+    // Teacher scope: only edit results of subjects they teach in classes they are assigned to
     if (session!.user.role === "teacher") {
       const teacher = await prisma.teacher.findFirst({
         where: { userId: session!.user.id, schoolId },
-        select: { teacherClasses: { select: { classId: true } } },
+        include: {
+          teacherClasses: true,
+          teacherSubjects: true,
+        },
       })
       if (!teacher) return NextResponse.json({ error: "Perfil de professor não encontrado" }, { status: 403 })
       const student = await prisma.student.findUnique({ where: { id: existing.studentId }, select: { classId: true } })
-      if (!student || !teacher.teacherClasses.some((tc) => tc.classId === student.classId)) {
-        return NextResponse.json({ error: "Sem permissão para editar esta nota" }, { status: 403 })
+      if (!student || !student.classId) {
+        return NextResponse.json({ error: "Aluno não enturmado" }, { status: 403 })
       }
+      const hasClass = teacher.teacherClasses.some((tc) => tc.classId === student.classId)
+      const hasSubject = teacher.teacherSubjects.some((ts) => ts.subjectId === existing.subjectId)
+      
+      const body = await req.json()
+      const newSubjectId = body.subjectId || existing.subjectId
+      const hasNewSubject = teacher.teacherSubjects.some((ts) => ts.subjectId === newSubjectId)
+      
+      if (!hasClass || !hasSubject || !hasNewSubject) {
+        return NextResponse.json({ error: "Sem permissão para gerir esta nota (fora do seu contexto pedagógico)" }, { status: 403 })
+      }
+      
+      // Pass the body down so we don't call req.json() again since it can only be consumed once
+      req.json = async () => body
     }
 
     const body = await req.json()
@@ -100,15 +116,23 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
       return NextResponse.json({ error: "Resultado não encontrado" }, { status: 404 })
     }
 
-    // Teacher scope: only delete results of students in their classes
+    // Teacher scope: only delete results of subjects they teach in classes they are assigned to
     if (session!.user.role === "teacher") {
       const teacher = await prisma.teacher.findFirst({
         where: { userId: session!.user.id, schoolId },
-        select: { teacherClasses: { select: { classId: true } } },
+        include: {
+          teacherClasses: true,
+          teacherSubjects: true,
+        },
       })
       if (!teacher) return NextResponse.json({ error: "Perfil de professor não encontrado" }, { status: 403 })
       const student = await prisma.student.findUnique({ where: { id: existing.studentId }, select: { classId: true } })
-      if (!student || !teacher.teacherClasses.some((tc) => tc.classId === student.classId)) {
+      if (!student || !student.classId) {
+        return NextResponse.json({ error: "Aluno não enturmado" }, { status: 403 })
+      }
+      const hasClass = teacher.teacherClasses.some((tc) => tc.classId === student.classId)
+      const hasSubject = teacher.teacherSubjects.some((ts) => ts.subjectId === existing.subjectId)
+      if (!hasClass || !hasSubject) {
         return NextResponse.json({ error: "Sem permissão para eliminar esta nota" }, { status: 403 })
       }
     }
