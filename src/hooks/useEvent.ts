@@ -8,9 +8,6 @@ type EventPayload<E> = E extends EventName
   ? Parameters<Parameters<typeof events.on<E>>[1]>[0]
   : never
 
-/**
- * Subscribe to a domain event. Automatically cleans up on unmount.
- */
 export function useEvent<E extends EventName>(
   event: E,
   callback: (payload: EventPayload<E>) => void,
@@ -19,16 +16,16 @@ export function useEvent<E extends EventName>(
   cbRef.current = callback
 
   useEffect(() => {
-    const unsub = events.on(event, ((payload: EventPayload<E>) => {
+    // Usamos um cast para 'any' apenas no callback do listener.
+    // Como o 'events.on' está a ser chamado com o evento 'event' (tipo E), 
+    // sabemos por contrato que o payload será do tipo EventPayload<E>.
+    const unsub = events.on(event, (payload: any) => {
       cbRef.current(payload)
-    }) as (payload: EventPayload<E>) => void)
+    })
     return unsub
   }, [event])
 }
 
-/**
- * Subscribe to multiple events with the same callback.
- */
 export function useEvents<E extends EventName>(
   eventNames: E[],
   callback: (payload: EventPayload<E>) => void,
@@ -38,21 +35,18 @@ export function useEvents<E extends EventName>(
 
   useEffect(() => {
     const unsubs = eventNames.map((name) =>
-      events.on(name, ((payload: EventPayload<E>) => {
+      events.on(name, (payload: any) => {
         cbRef.current(payload)
-      }) as (payload: EventPayload<E>) => void),
+      }),
     )
     return () => unsubs.forEach((unsub) => unsub())
   }, [eventNames.join(",")])
 }
 
-/**
- * Returns a stable emitter function for a specific event type.
- */
 export function useEmitter<E extends EventName>(event: E) {
   return useCallback(
     (payload: EventPayload<E>) => {
-      events.emit(event, payload as any)
+      events.emit(event, payload)
     },
     [event],
   )
