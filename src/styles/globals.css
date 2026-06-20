@@ -28,6 +28,17 @@
   --color-emerald: #10B981;
   --color-rose: #f43f5e;
 
+  --color-card: var(--school-card-bg);
+  --color-card-foreground: var(--color-foreground);
+  --color-muted: var(--school-muted);
+  --color-muted-foreground: var(--school-muted-foreground);
+  --color-border: var(--school-border);
+  --color-primary-foreground: var(--school-primary-foreground);
+  --color-accent-foreground: var(--school-accent-foreground);
+
+  --radius-card: var(--school-card-radius);
+  --shadow-card: var(--school-card-shadow);
+
   --animate-in: animate-in 0.2s ease-out;
   --animate-out: animate-out 0.2s ease-in;
 
@@ -155,6 +166,13 @@
   --school-card-border: 1px solid #e4e4e7;
   --school-card-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
 
+  /* Semantic aliases */
+  --school-muted: #f4f4f5;
+  --school-muted-foreground: #71717a;
+  --school-border: #e4e4e7;
+  --school-primary-foreground: #ffffff;
+  --school-accent-foreground: #18181b;
+
   /* Button styles */
   --school-button-radius: 0.5rem;
   --school-button-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
@@ -169,6 +187,11 @@
   --color-foreground: #fafafa;
   --school-card-bg: #09090b;
   --school-card-border: 1px solid #27272a;
+  --school-muted: #27272a;
+  --school-muted-foreground: #a1a1aa;
+  --school-border: #27272a;
+  --school-primary-foreground: #09090b;
+  --school-accent-foreground: #fafafa;
   --school-primary-light: #1e1b4b;
   --school-primary-50: #1e1b4b;
   --school-primary-100: #1e1b4b;
