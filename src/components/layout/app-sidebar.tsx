@@ -226,7 +226,7 @@ export default function AppSidebar() {
     <TooltipProvider delayDuration={0}>
       <aside
         className={cn(
-          "hidden md:flex md:flex-col bg-white dark:bg-zinc-950 border-r border-zinc-200 dark:border-zinc-800 transition-[width] duration-300 ease-in-out shrink-0",
+          "hidden md:flex md:flex-col bg-white dark:bg-zinc-900 border-r border-zinc-200 dark:border-zinc-800 transition-[width] duration-300 ease-in-out shrink-0",
           collapsed ? "w-[68px]" : "w-[240px]"
         )}
       >
@@ -249,7 +249,7 @@ export default function AppSidebar() {
                 className="w-7 h-7 rounded-lg object-contain shrink-0"
               />
             ) : name ? (
-              <span className="flex items-center justify-center w-7 h-7 rounded-lg bg-primary/10 text-primary text-[11px] font-bold shrink-0">
+              <span className="flex items-center justify-center w-7 h-7 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-250 text-[11px] font-bold shrink-0 border border-zinc-200/50 dark:border-zinc-700/50">
                 {name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase()}
               </span>
             ) : null}
@@ -264,7 +264,7 @@ export default function AppSidebar() {
           {!collapsed && (
             <button
               onClick={() => setCollapsed(true)}
-              className="flex items-center justify-center h-7 w-7 rounded-lg text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all shrink-0"
+              className="flex items-center justify-center h-7 w-7 rounded-lg text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all shrink-0 cursor-pointer"
               title="Colapsar sidebar"
             >
               <PanelLeftClose size={15} />
@@ -277,7 +277,7 @@ export default function AppSidebar() {
           <div className="flex justify-center py-3 border-b border-zinc-200 dark:border-zinc-800">
             <button
               onClick={() => setCollapsed(false)}
-              className="flex items-center justify-center h-8 w-8 rounded-lg text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all"
+              className="flex items-center justify-center h-8 w-8 rounded-lg text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all cursor-pointer"
               title="Expandir sidebar"
             >
               <PanelLeft size={15} />
@@ -318,7 +318,7 @@ export default function AppSidebar() {
                 {/* Group header — clickable to toggle */}
                 <button
                   onClick={() => toggleGroup(group.title)}
-                  className="flex items-center gap-1.5 w-full px-3 mb-1 group"
+                  className="flex items-center gap-1.5 w-full px-3 mb-1 group cursor-pointer"
                 >
                   <ChevronDown
                     size={12}
@@ -379,13 +379,13 @@ export default function AppSidebar() {
               {userImage ? (
                 <AvatarImage src={userImage} alt={userName} />
               ) : null}
-              <AvatarFallback className="text-[10px] font-semibold bg-primary-light text-primary">
+              <AvatarFallback className="text-[10px] font-semibold bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
                 {userInitials}
               </AvatarFallback>
             </Avatar>
             {!collapsed && (
               <div className="flex-1 min-w-0">
-                <p className="text-xs font-medium text-zinc-800 dark:text-zinc-200 truncate group-hover:text-primary transition-colors">
+                <p className="text-xs font-medium text-zinc-800 dark:text-zinc-200 truncate group-hover:text-zinc-950 dark:group-hover:text-zinc-50 transition-colors">
                   {userName}
                 </p>
                 <p className="text-[10px] text-zinc-400 dark:text-zinc-500 truncate">
