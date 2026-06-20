@@ -24,7 +24,7 @@ export default function DashboardLayout({
             <PendingAccountGate>
               <MustChangePasswordGate>
                 <SidebarProvider>
-                  <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 flex">
+                  <div className="min-h-screen bg-background flex">
                     <AppSidebar />
                     <SidebarMobile />
                     <div className="flex-1 flex flex-col min-w-0 w-full">

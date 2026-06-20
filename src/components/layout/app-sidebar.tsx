@@ -144,8 +144,8 @@ function NavItemLink({
       className={cn(
         "group flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-all duration-200",
         isActive
-          ? "bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 shadow-sm"
-          : "text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 hover:bg-zinc-100/70 dark:hover:bg-zinc-800/40"
+          ? "bg-accent text-accent-foreground shadow-card"
+          : "text-muted-foreground hover:text-foreground hover:bg-accent"
       )}
     >
       <item.icon
@@ -171,8 +171,8 @@ function NavItemLink({
             className={cn(
               "flex items-center justify-center h-10 w-10 mx-auto rounded-xl transition-all duration-200",
               isActive
-                ? "bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 shadow-sm"
-                : "text-zinc-400 dark:text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800/60"
+                ? "bg-accent text-accent-foreground shadow-card"
+                : "text-muted-foreground hover:text-foreground hover:bg-accent"
             )}
           >
             <item.icon size={18} strokeWidth={isActive ? 2.5 : 2} />
@@ -226,13 +226,13 @@ export default function AppSidebar() {
     <TooltipProvider delayDuration={0}>
       <aside
         className={cn(
-          "hidden md:flex md:flex-col bg-white dark:bg-zinc-900 border-r border-zinc-200 dark:border-zinc-800 transition-[width] duration-300 ease-in-out shrink-0",
+          "hidden md:flex md:flex-col bg-background border-r border-border transition-[width] duration-300 ease-in-out shrink-0",
           collapsed ? "w-[68px]" : "w-[240px]"
         )}
       >
         {/* Header / Brand — always fixed at top */}
         <div className={cn(
-          "flex items-center h-14 border-b border-zinc-200 dark:border-zinc-800 shrink-0 transition-all duration-300",
+          "flex items-center h-14 border-b border-border shrink-0 transition-all duration-300",
           collapsed ? "justify-center px-0" : "justify-between px-3"
         )}>
           <Link
@@ -249,12 +249,12 @@ export default function AppSidebar() {
                 className="w-7 h-7 rounded-lg object-contain shrink-0"
               />
             ) : name ? (
-              <span className="flex items-center justify-center w-7 h-7 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-250 text-[11px] font-bold shrink-0 border border-zinc-200/50 dark:border-zinc-700/50">
+              <span className="flex items-center justify-center w-7 h-7 rounded-lg bg-muted text-foreground text-[11px] font-bold shrink-0 border border-border">
                 {name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase()}
               </span>
             ) : null}
             {!collapsed && name && (
-              <span className="text-sm font-semibold text-zinc-700 dark:text-zinc-300 truncate">
+              <span className="text-sm font-semibold text-foreground truncate">
                 {name}
               </span>
             )}
@@ -264,7 +264,7 @@ export default function AppSidebar() {
           {!collapsed && (
             <button
               onClick={() => setCollapsed(true)}
-              className="flex items-center justify-center h-7 w-7 rounded-lg text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all shrink-0 cursor-pointer"
+              className="flex items-center justify-center h-7 w-7 rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent transition-all shrink-0 cursor-pointer"
               title="Colapsar sidebar"
             >
               <PanelLeftClose size={15} />
@@ -274,10 +274,10 @@ export default function AppSidebar() {
 
         {/* Expand button — visible only when collapsed, pinned below header */}
         {collapsed && (
-          <div className="flex justify-center py-3 border-b border-zinc-200 dark:border-zinc-800">
+          <div className="flex justify-center py-3 border-b border-border">
             <button
               onClick={() => setCollapsed(false)}
-              className="flex items-center justify-center h-8 w-8 rounded-lg text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all cursor-pointer"
+              className="flex items-center justify-center h-8 w-8 rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent transition-all cursor-pointer"
               title="Expandir sidebar"
             >
               <PanelLeft size={15} />
@@ -323,11 +323,11 @@ export default function AppSidebar() {
                   <ChevronDown
                     size={12}
                     className={cn(
-                      "text-zinc-400 dark:text-zinc-500 transition-transform duration-200 shrink-0",
+                      "text-muted-foreground transition-transform duration-200 shrink-0",
                       isGroupOpen ? "rotate-0" : "-rotate-90"
                     )}
                   />
-                  <span className="text-[10px] font-semibold uppercase tracking-widest text-zinc-400 dark:text-zinc-500">
+                  <span className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
                     {getTranslatedGroup(group.title)}
                   </span>
                 </button>
@@ -366,29 +366,29 @@ export default function AppSidebar() {
         {/* Platform Name — after menu, before user */}
         {!collapsed && (
           <div className="px-4 py-2 shrink-0">
-            <p className="text-[10px] font-medium uppercase tracking-widest text-zinc-400 dark:text-zinc-500">
+            <p className="text-[10px] font-medium uppercase tracking-widest text-muted-foreground">
               {platform.name}
             </p>
           </div>
         )}
 
         {/* User Section — always at bottom */}
-        <div className="border-t border-zinc-200 dark:border-zinc-800 p-2 shrink-0">
+        <div className="border-t border-border p-2 shrink-0">
           <Link href="/profile" className="flex items-center gap-3 px-2 py-1.5 group">
-            <Avatar className="h-8 w-8 border border-zinc-200 dark:border-zinc-700 shrink-0">
+            <Avatar className="h-8 w-8 border border-border shrink-0">
               {userImage ? (
                 <AvatarImage src={userImage} alt={userName} />
               ) : null}
-              <AvatarFallback className="text-[10px] font-semibold bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
+              <AvatarFallback className="text-[10px] font-semibold bg-muted text-foreground">
                 {userInitials}
               </AvatarFallback>
             </Avatar>
             {!collapsed && (
               <div className="flex-1 min-w-0">
-                <p className="text-xs font-medium text-zinc-800 dark:text-zinc-200 truncate group-hover:text-zinc-950 dark:group-hover:text-zinc-50 transition-colors">
+                <p className="text-xs font-medium text-foreground truncate group-hover:text-foreground transition-colors">
                   {userName}
                 </p>
-                <p className="text-[10px] text-zinc-400 dark:text-zinc-500 truncate">
+                <p className="text-[10px] text-muted-foreground truncate">
                   {userEmail}
                 </p>
               </div>

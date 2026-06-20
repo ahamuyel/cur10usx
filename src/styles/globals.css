@@ -35,6 +35,8 @@
   --color-border: var(--school-border);
   --color-primary-foreground: var(--school-primary-foreground);
   --color-accent-foreground: var(--school-accent-foreground);
+  --color-destructive: var(--school-destructive);
+  --color-destructive-foreground: var(--school-destructive-foreground);
 
   --radius-card: var(--school-card-radius);
   --shadow-card: var(--school-card-shadow);
@@ -172,6 +174,8 @@
   --school-border: #e4e4e7;
   --school-primary-foreground: #ffffff;
   --school-accent-foreground: #18181b;
+  --school-destructive: #ef4444;
+  --school-destructive-foreground: #ffffff;
 
   /* Button styles */
   --school-button-radius: 0.5rem;
@@ -192,6 +196,8 @@
   --school-border: #27272a;
   --school-primary-foreground: #09090b;
   --school-accent-foreground: #fafafa;
+  --school-destructive: #ef4444;
+  --school-destructive-foreground: #fafafa;
   --school-primary-light: #1e1b4b;
   --school-primary-50: #1e1b4b;
   --school-primary-100: #1e1b4b;
