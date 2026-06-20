@@ -202,7 +202,7 @@ const TeacherListPage = () => {
             {isAdmin && (
               <button
                 onClick={() => setCreateOpen(true)}
-                className="h-9 flex items-center justify-center gap-1.5 px-3 rounded-lg bg-zinc-900 hover:bg-zinc-800 dark:bg-zinc-50 dark:hover:bg-zinc-200 text-white dark:text-zinc-950 font-medium text-xs shadow-3xs transition-colors cursor-pointer shrink-0"
+                className="h-9 flex items-center justify-center gap-1.5 px-4 rounded-lg bg-primary-600 hover:bg-primary-700 text-white font-medium text-xs shadow-3xs transition-colors"
               >
                 <UserPlus size={14} />
                 <span>Adicionar</span>
