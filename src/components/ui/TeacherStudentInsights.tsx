@@ -1,106 +1,51 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { TrendingUp, TrendingDown, ChevronRight } from "lucide-react"
+import { TrendingUp, TrendingDown } from "lucide-react"
+import { cn } from "@/lib/utils"
 import type { TeacherDashboardData } from "@/hooks/useTeacherDashboard"
 
-type Props = {
-  data: NonNullable<TeacherDashboardData>
-}
-
-export default function TeacherStudentInsights({ data }: Props) {
+export default function TeacherStudentInsights({ data }: { data: NonNullable<TeacherDashboardData> }) {
   const { mostImproved, mostDeclined } = data.studentInsights
 
-  return (
-    <div className="bg-white/60 dark:bg-zinc-900/20 backdrop-blur-md rounded-3xl border border-zinc-200/60 dark:border-zinc-800/50 p-4 sm:p-5 shadow-2xs">
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2">
-          <TrendingUp size={14} className="text-emerald-500" />
-          <h3 className="text-xs font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
-            Insights de Alunos
-          </h3>
-        </div>
+  const renderList = (list: any[], title: string, icon: any, color: string, border: string) => (
+    <div className="flex-1 w-full">
+      <div className="flex items-center gap-2 mb-4 text-[10px] font-bold uppercase tracking-widest text-zinc-400">
+        {icon} {title}
       </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div>
-          <div className="flex items-center gap-1.5 mb-2.5">
-            <TrendingUp size={12} className="text-emerald-500" />
-            <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">
-              Mais Evoluíram
-            </span>
-          </div>
-          {mostImproved.length === 0 ? (
-            <p className="text-[10px] text-zinc-400 italic pl-1">Sem dados suficientes.</p>
-          ) : (
-            <div className="flex flex-col gap-1.5">
-              {mostImproved.map((student, idx) => (
-                <motion.div
-                  key={student.id}
-                  initial={{ opacity: 0, x: -5 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.2, delay: idx * 0.03 }}
-                  className="flex items-center justify-between p-2 rounded-xl hover:bg-emerald-50/30 dark:hover:bg-emerald-950/10 transition-colors cursor-pointer"
-                >
-                  <div className="flex items-center gap-2 min-w-0">
-                    <div className="w-6 h-6 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center text-[8px] font-black text-emerald-700 dark:text-emerald-300 uppercase shrink-0">
-                      {student.name[0]}
-                    </div>
-                    <div className="min-w-0">
-                      <p className="text-[11px] font-semibold text-zinc-700 dark:text-zinc-300 truncate">{student.name}</p>
-                      <p className="text-[9px] font-medium text-zinc-400 dark:text-zinc-500 truncate">{student.subject}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-1 shrink-0">
-                    <span className="text-[10px] font-black text-emerald-600 dark:text-emerald-400 tabular-nums">
-                      +{student.evolutionPercent}%
-                    </span>
-                    <ChevronRight size={10} className="text-zinc-300 dark:text-zinc-600" />
-                  </div>
-                </motion.div>
-              ))}
+      <div className="space-y-2">
+        {list.slice(0, 3).map((s) => (
+          <div key={s.id} className="flex items-center justify-between p-2 rounded-xl hover:bg-zinc-50/50 dark:hover:bg-zinc-950/40 border border-transparent hover:border-zinc-200 dark:hover:border-zinc-800/80 transition-all">
+            <div className="flex items-center gap-3 min-w-0">
+              <div className={cn("w-8 h-8 rounded-full border flex items-center justify-center text-[10px] font-bold shrink-0", border)}>
+                {s.name.charAt(0)}
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-xs font-bold text-zinc-900 dark:text-zinc-100 truncate">{s.name}</p>
+                <p className="text-[9px] text-zinc-400 dark:text-zinc-500 truncate">{s.subject}</p>
+              </div>
             </div>
-          )}
-        </div>
-
-        <div>
-          <div className="flex items-center gap-1.5 mb-2.5">
-            <TrendingDown size={12} className="text-rose-500" />
-            <span className="text-[10px] font-bold text-rose-600 dark:text-rose-400 uppercase tracking-wider">
-              Mais Regrediram
-            </span>
-          </div>
-          {mostDeclined.length === 0 ? (
-            <p className="text-[10px] text-zinc-400 italic pl-1">Sem dados suficientes.</p>
-          ) : (
-            <div className="flex flex-col gap-1.5">
-              {mostDeclined.map((student, idx) => (
-                <motion.div
-                  key={student.id}
-                  initial={{ opacity: 0, x: -5 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.2, delay: idx * 0.03 }}
-                  className="flex items-center justify-between p-2 rounded-xl hover:bg-rose-50/30 dark:hover:bg-rose-950/10 transition-colors cursor-pointer"
-                >
-                  <div className="flex items-center gap-2 min-w-0">
-                    <div className="w-6 h-6 rounded-full bg-rose-100 dark:bg-rose-900/30 flex items-center justify-center text-[8px] font-black text-rose-700 dark:text-rose-300 uppercase shrink-0">
-                      {student.name[0]}
-                    </div>
-                    <div className="min-w-0">
-                      <p className="text-[11px] font-semibold text-zinc-700 dark:text-zinc-300 truncate">{student.name}</p>
-                      <p className="text-[9px] font-medium text-zinc-400 dark:text-zinc-500 truncate">{student.subject}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-1 shrink-0">
-                    <span className="text-[10px] font-black text-rose-600 dark:text-rose-400 tabular-nums">
-                      {student.evolutionPercent}%
-                    </span>
-                    <ChevronRight size={10} className="text-zinc-300 dark:text-zinc-600" />
-                  </div>
-                </motion.div>
-              ))}
+            <div className={cn("text-[10px] font-black shrink-0 ml-2", color)}>
+              {s.evolutionPercent > 0 ? '+' : ''}{s.evolutionPercent}%
             </div>
-          )}
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+
+  return (
+    <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-3xl p-6 shadow-sm h-full flex flex-col">
+      <h3 className="text-xs font-bold text-zinc-500 uppercase tracking-widest mb-6">Insights de Performance</h3>
+      
+      {/* Grid em vez de Flex com divide-x */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+        {renderList(mostImproved, "Melhoria", <TrendingUp size={12} className="text-emerald-500" />, "text-emerald-600", "border-emerald-200 dark:border-emerald-800/60 bg-emerald-500/5 dark:bg-emerald-500/10")}
+        
+        {/* Usamos um divisor vertical apenas em desktop */}
+        <div className="relative md:pl-8">
+            <div className="hidden md:block absolute left-0 top-0 bottom-0 w-px bg-zinc-200 dark:bg-zinc-800/60" />
+            {renderList(mostDeclined, "Atenção", <TrendingDown size={12} className="text-rose-500" />, "text-rose-600", "border-rose-200 dark:border-rose-800/60 bg-rose-500/5 dark:bg-rose-500/10")}
         </div>
       </div>
     </div>
