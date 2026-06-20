@@ -47,6 +47,7 @@ export default function StudentCalendarExperience() {
   const [lessons, setLessons] = useState<Lesson[]>([])
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(null)
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(false)
   const [now, setNow] = useState(new Date())
 
   // Atualiza o relógio interno a cada minuto para o cálculo da aula ativa/seguinte
@@ -58,10 +59,17 @@ export default function StudentCalendarExperience() {
   useEffect(() => {
     async function fetchData() {
       try {
+        setLoading(true)
+        setError(false)
         const [lessonsRes, profileRes] = await Promise.all([
           fetch("/api/lessons?limit=200"),
           fetch("/api/profile")
         ])
+
+        if (!lessonsRes.ok || !profileRes.ok) {
+          setError(true)
+          return
+        }
 
         const lessonsJson = await lessonsRes.json()
         const profileJson = await profileRes.json()
@@ -70,11 +78,16 @@ export default function StudentCalendarExperience() {
 
         if (profileJson.student?.id) {
           const dashRes = await fetch(`/api/students/${profileJson.student.id}/dashboard`)
+          if (!dashRes.ok) {
+            setError(true)
+            return
+          }
           const dashJson = await dashRes.json()
           setDashboardData(dashJson)
         }
-      } catch (error) {
-        console.error("Error fetching calendar experience data:", error)
+      } catch (err) {
+        console.error("Error fetching calendar experience data:", err)
+        setError(true)
       } finally {
         setLoading(false)
       }
@@ -121,6 +134,14 @@ export default function StudentCalendarExperience() {
       <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
         <Loader2 className="w-8 h-8 animate-spin text-violet-600" />
         <p className="text-xs font-bold text-zinc-400 uppercase tracking-widest">Sincronizando Centro de Comando...</p>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center py-20 border border-dashed border-zinc-200 dark:border-zinc-800 rounded-[2rem] text-center">
+        <p className="text-xs font-semibold text-rose-500">Não foi possível carregar a agenda letiva.</p>
       </div>
     )
   }
