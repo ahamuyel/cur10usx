@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState, useMemo } from "react"
-import { Calendar, BookOpen, FileText, Users, ChevronRight } from "lucide-react"
+import { Calendar, ChevronRight } from "lucide-react"
 import { cn } from "@/lib/utils"
 import moment from "moment"
 
@@ -9,7 +9,8 @@ moment.locale("pt")
 
 interface CalendarEvent {
   id: string
-  title: string
+  className: string
+  subjectName: string
   type: "aula" | "avaliação" | "reunião" | "evento"
   date: string
   time?: string
@@ -39,9 +40,10 @@ export default function TeacherCalendarExperience() {
 
         const lessonEvents: CalendarEvent[] = (lessonsJson.data || [])
           .filter((l: { teacherId?: string }) => !teacherId || l.teacherId === teacherId)
-          .map((l: { id: string; subject: { name: string }; startTime: string; endTime: string; room?: string; day: string }) => ({
+          .map((l: { id: string; subject: { name: string }; class: { name: string }; startTime: string; endTime: string; room?: string; day: string }) => ({
             id: `lesson-${l.id}`,
-            title: l.subject.name,
+            className: l.class?.name || "Sem Turma",
+            subjectName: l.subject?.name || "Sem Disciplina",
             type: "aula" as const,
             date: getNextDateForDay(l.day).toISOString(),
             time: `${l.startTime} — ${l.endTime}`,
@@ -49,12 +51,13 @@ export default function TeacherCalendarExperience() {
           }))
 
         const examEvents: CalendarEvent[] = (examsJson.data || [])
-          .map((e: { id: string; title?: string; subject: { name: string }; date: string }) => ({
+          .map((e: { id: string; title?: string; subject: { name: string }; class?: { name: string }; date: string }) => ({
             id: `exam-${e.id}`,
-            title: e.title || e.subject.name,
+            className: e.class?.name || "Sem Turma",
+            subjectName: e.title || e.subject?.name || "Avaliação",
             type: "avaliação" as const,
             date: e.date,
-            description: e.subject.name,
+            description: e.subject?.name || "",
           }))
 
         setEvents([...lessonEvents, ...examEvents])
@@ -94,7 +97,7 @@ export default function TeacherCalendarExperience() {
 
   if (loading) {
     return (
-      <div className="bg-white/60 dark:bg-zinc-900/20 backdrop-blur-md rounded-3xl border border-zinc-200/60 dark:border-zinc-800/50 p-4 sm:p-5 shadow-2xs">
+      <div className="bg-white dark:bg-zinc-900 rounded-3xl border border-zinc-200 dark:border-zinc-800 p-4 sm:p-5 shadow-sm">
         <div className="animate-pulse space-y-4">
           <div className="h-4 w-24 bg-zinc-200 dark:bg-zinc-800 rounded" />
           <div className="grid grid-cols-7 gap-1">
@@ -108,10 +111,10 @@ export default function TeacherCalendarExperience() {
   }
 
   return (
-    <div className="bg-white/60 dark:bg-zinc-900/20 backdrop-blur-md rounded-3xl border border-zinc-200/60 dark:border-zinc-800/50 p-4 sm:p-5 shadow-2xs">
+    <div className="bg-white dark:bg-zinc-900 rounded-3xl border border-zinc-200 dark:border-zinc-800 p-4 sm:p-5 shadow-sm">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <Calendar size={14} className="text-primary" />
+          <Calendar size={14} className="text-zinc-500 dark:text-zinc-400" />
           <h3 className="text-xs font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
             Calendário
           </h3>
@@ -119,7 +122,7 @@ export default function TeacherCalendarExperience() {
         <div className="flex items-center gap-1">
           <button
             onClick={() => setSelectedDate(new Date(selectedDate.getFullYear(), selectedDate.getMonth() - 1, 1))}
-            className="w-6 h-6 rounded-lg bg-zinc-100 dark:bg-zinc-800/50 flex items-center justify-center text-zinc-500 hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-colors text-[10px] font-bold"
+            className="w-6 h-6 rounded-lg bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors flex items-center justify-center text-[10px] font-bold cursor-pointer"
           >
             ←
           </button>
@@ -128,7 +131,7 @@ export default function TeacherCalendarExperience() {
           </span>
           <button
             onClick={() => setSelectedDate(new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 1))}
-            className="w-6 h-6 rounded-lg bg-zinc-100 dark:bg-zinc-800/50 flex items-center justify-center text-zinc-500 hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-colors text-[10px] font-bold"
+            className="w-6 h-6 rounded-lg bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors flex items-center justify-center text-[10px] font-bold cursor-pointer"
           >
             →
           </button>
@@ -159,9 +162,9 @@ export default function TeacherCalendarExperience() {
               key={day.getTime()}
               onClick={() => setSelectedDate(day)}
               className={cn(
-                "relative aspect-square rounded-xl text-[10px] font-semibold transition-all flex flex-col items-center justify-center",
-                isSelected && "bg-primary text-primary-foreground shadow-xs",
-                !isSelected && isToday && "border border-primary/40 text-primary",
+                "relative aspect-square rounded-xl text-[10px] font-semibold transition-all flex flex-col items-center justify-center cursor-pointer",
+                isSelected && "bg-zinc-900 text-white dark:bg-zinc-50 dark:text-zinc-950 shadow-sm",
+                !isSelected && isToday && "border border-zinc-900/30 text-zinc-900 dark:border-zinc-100/30 dark:text-zinc-50",
                 !isSelected && !isToday && "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800/50",
               )}
             >
@@ -169,7 +172,7 @@ export default function TeacherCalendarExperience() {
               {dayEventCount > 0 && (
                 <span className={cn(
                   "absolute -top-0.5 -right-0.5 w-1.5 h-1.5 rounded-full",
-                  isSelected ? "bg-white" : "bg-rose-500"
+                  isSelected ? "bg-white dark:bg-zinc-950" : "bg-rose-500 dark:bg-rose-400"
                 )} />
               )}
             </button>
@@ -178,39 +181,50 @@ export default function TeacherCalendarExperience() {
       </div>
 
       {dayEvents.length > 0 && (
-        <div className="mt-4 pt-3 border-t border-zinc-100 dark:border-zinc-800/40 space-y-2">
+        <div className="mt-4 pt-3 border-t border-zinc-100 dark:border-zinc-800/60 space-y-2">
           <p className="text-[9px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">
             {selectedDate.toLocaleDateString("pt-PT", { day: "numeric", month: "long" })}
           </p>
           {dayEvents.slice(0, 4).map((event) => (
             <div
               key={event.id}
-              className={cn(
-                "flex items-center gap-2.5 p-2.5 rounded-xl border",
-                event.type === "aula" && "bg-violet-500/5 dark:bg-violet-500/10 border-violet-200/60 dark:border-violet-900/30",
-                event.type === "avaliação" && "bg-amber-500/5 dark:bg-amber-500/10 border-amber-200/60 dark:border-amber-900/30",
-                event.type === "reunião" && "bg-emerald-500/5 dark:bg-emerald-500/10 border-emerald-200/60 dark:border-emerald-900/30",
-              )}
+              className="flex items-center gap-2.5 p-2.5 rounded-2xl border border-zinc-200 dark:border-zinc-800/80 bg-zinc-50/30 dark:bg-zinc-950/40 shadow-xs"
             >
               <div className={cn(
-                "w-6 h-6 rounded-lg flex items-center justify-center shrink-0",
-                event.type === "aula" && "bg-violet-500/10 text-violet-600 dark:text-violet-400",
-                event.type === "avaliação" && "bg-amber-500/10 text-amber-600 dark:text-amber-400",
-                event.type === "reunião" && "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
-              )}>
-                {event.type === "aula" ? <BookOpen size={11} /> : event.type === "avaliação" ? <FileText size={11} /> : <Users size={11} />}
-              </div>
+                "w-1 h-7 rounded-full shrink-0",
+                event.type === "aula" && "bg-violet-500 dark:bg-violet-400",
+                event.type === "avaliação" && "bg-amber-500 dark:bg-amber-400",
+                event.type === "reunião" && "bg-emerald-500 dark:bg-emerald-400",
+                event.type === "evento" && "bg-blue-500 dark:bg-blue-400",
+              )} />
+              
               <div className="min-w-0 flex-1">
-                <p className="text-[11px] font-semibold text-zinc-700 dark:text-zinc-300 truncate">{event.title}</p>
-                <div className="flex items-center gap-2 text-[9px] text-zinc-400 dark:text-zinc-500">
-                  {event.time && <span>{event.time}</span>}
-                  {event.location && <span>· {event.location}</span>}
-                </div>
+                {/* Turma name (exibir o nome da Turma como título principal (text-xs font-bold)) */}
+                <p className="text-xs font-bold text-zinc-800 dark:text-zinc-200 truncate">
+                  {event.className}
+                </p>
+                {/* Disciplina como subtítulo (text-[9px] text-zinc-400) */}
+                <p className="text-[9px] text-zinc-400 dark:text-zinc-500 font-medium">
+                  {event.subjectName}
+                </p>
+              </div>
+              
+              <div className="text-right shrink-0 flex flex-col items-end gap-0.5">
+                {event.time && (
+                  <span className="text-[10px] font-semibold text-zinc-700 dark:text-zinc-300 font-mono tabular-nums">
+                    {event.time}
+                  </span>
+                )}
+                {event.location && (
+                  <span className="text-[9px] text-zinc-400 dark:text-zinc-500 truncate max-w-[80px]">
+                    {event.location}
+                  </span>
+                )}
               </div>
             </div>
           ))}
           {dayEvents.length > 4 && (
-            <button className="w-full text-[9px] font-bold text-primary dark:text-primary-400 flex items-center justify-center gap-1 py-1 uppercase tracking-wider">
+            <button className="w-full text-[9px] font-bold text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200 flex items-center justify-center gap-1 py-1 uppercase tracking-wider transition-colors cursor-pointer">
               +{dayEvents.length - 4} mais <ChevronRight size={10} />
             </button>
           )}
@@ -218,7 +232,7 @@ export default function TeacherCalendarExperience() {
       )}
 
       {dayEvents.length === 0 && (
-        <div className="mt-4 pt-3 border-t border-zinc-100 dark:border-zinc-800/40 text-center py-4">
+        <div className="mt-4 pt-3 border-t border-zinc-100 dark:border-zinc-800/60 text-center py-4">
           <p className="text-[10px] text-zinc-400 dark:text-zinc-500">Nenhum evento neste dia</p>
         </div>
       )}
