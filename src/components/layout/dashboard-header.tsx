@@ -170,16 +170,15 @@ export default function DashboardHeader() {
   const hasResults =
     results &&
     results.students.length + results.teachers.length + results.classes.length + results.subjects.length > 0
-
   return (
-    <header className="sticky top-0 z-30 flex items-center justify-between px-2 sm:px-5 py-2 sm:py-3 border-b border-zinc-200 dark:border-zinc-800 bg-white/95 dark:bg-zinc-950/95 backdrop-blur-md gap-1 sm:gap-2 min-h-[52px]">
+    <header className="sticky top-0 z-30 flex items-center justify-between px-2 sm:px-5 py-2 sm:py-3 border-b border-zinc-200 dark:border-zinc-800 bg-white/95 dark:bg-zinc-900/95 backdrop-blur-md gap-1 sm:gap-2 min-h-[52px]">
       {/* Mobile: hamburger + school name */}
       <div className="flex items-center gap-1.5 min-w-0 md:hidden">
         <Button
           variant="ghost"
           size="icon"
           onClick={toggleMobile}
-          className="h-8 w-8 shrink-0 text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
+          className="h-8 w-8 shrink-0 text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300 cursor-pointer"
           aria-label="Abrir menu"
         >
           <PanelLeft size={17} />
@@ -204,7 +203,7 @@ export default function DashboardHeader() {
 
       {/* Desktop search */}
       <div className="hidden md:block relative flex-1 max-w-md" ref={dropdownRef}>
-        <div className="flex items-center gap-2 px-3 py-2 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-900 text-xs text-zinc-500 focus-within:border-primary focus-within:bg-white dark:focus-within:bg-zinc-950 transition-all">
+        <div className="flex items-center gap-2 px-3 py-2 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-955 text-xs text-zinc-500 focus-within:border-zinc-400 dark:focus-within:border-zinc-650 focus-within:bg-white dark:focus-within:bg-zinc-900 transition-all">
           <Search size={14} className="text-zinc-400 shrink-0" />
           <input
             ref={searchInputRef}
@@ -215,7 +214,7 @@ export default function DashboardHeader() {
             onFocus={() => {
               if (results) setShowResults(true)
             }}
-            className="w-full bg-transparent outline-none text-sm placeholder:text-zinc-400 text-zinc-700 dark:text-zinc-200"
+            className="w-full bg-transparent outline-none text-sm placeholder:text-zinc-400 text-zinc-700 dark:text-zinc-250"
           />
           {query && (
             <button
@@ -224,7 +223,7 @@ export default function DashboardHeader() {
                 setResults(null)
                 setShowResults(false)
               }}
-              className="p-0.5 rounded text-zinc-400 hover:text-zinc-600"
+              className="p-0.5 rounded text-zinc-400 hover:text-zinc-600 cursor-pointer"
             >
               <X size={14} />
             </button>
@@ -258,7 +257,7 @@ export default function DashboardHeader() {
                           setShowResults(false)
                           setQuery("")
                         }}
-                        className="block px-3 py-2 text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition"
+                        className="block px-3 py-2 text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-850 transition"
                       >
                         {item.name}
                       </Link>
@@ -276,7 +275,7 @@ export default function DashboardHeader() {
         {/* Mobile: Search trigger */}
         <button
           onClick={() => setSearchOpen(true)}
-          className="md:hidden p-2 rounded-lg text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition shrink-0"
+          className="md:hidden p-2 rounded-lg text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition shrink-0 cursor-pointer"
           aria-label="Pesquisar"
         >
           <Search size={17} />
@@ -285,7 +284,7 @@ export default function DashboardHeader() {
         {/* Chat */}
         <Link
           href="/list/chat"
-          className="relative p-2 rounded-lg text-zinc-500 hover:text-primary hover:bg-zinc-100 dark:hover:bg-zinc-800 transition"
+          className="relative p-2 rounded-lg text-zinc-500 hover:text-zinc-950 dark:hover:text-zinc-50 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition"
           aria-label="Chat"
         >
           {unreadCount > 0 ? (
@@ -316,7 +315,7 @@ export default function DashboardHeader() {
         {/* Logout — desktop only */}
         <button
           onClick={() => signOut({ callbackUrl: "/signin" })}
-          className="hidden sm:inline-flex p-2 rounded-lg text-zinc-500 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 transition"
+          className="hidden sm:inline-flex p-2 rounded-lg text-zinc-500 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 transition cursor-pointer"
           title="Terminar Sessão"
         >
           <LogOut size={18} />
@@ -331,16 +330,16 @@ export default function DashboardHeader() {
           className="flex items-center gap-3 group cursor-pointer shrink-0"
         >
           <div className="hidden sm:flex flex-col leading-tight text-right">
-            <span className="text-xs font-semibold text-zinc-800 dark:text-zinc-100 group-hover:text-primary transition-colors truncate max-w-[120px]">
+            <span className="text-xs font-semibold text-zinc-800 dark:text-zinc-100 group-hover:text-zinc-950 dark:group-hover:text-zinc-50 transition-colors truncate max-w-[120px]">
               {userName}
             </span>
             <span className="text-[10px] text-zinc-500">
               {roleLabels[userRole] || userRole}
             </span>
           </div>
-          <Avatar className="h-8 w-8 border-2 border-zinc-200 dark:border-zinc-700 group-hover:border-primary transition-colors shrink-0">
+          <Avatar className="h-8 w-8 border-2 border-zinc-200 dark:border-zinc-700 group-hover:border-zinc-400 dark:group-hover:border-zinc-500 transition-colors shrink-0">
             {userImage ? <AvatarImage src={userImage} alt={userName} /> : null}
-            <AvatarFallback className="text-[10px] font-semibold bg-primary-light text-primary">
+            <AvatarFallback className="text-[10px] font-semibold bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
               {userInitials}
             </AvatarFallback>
           </Avatar>
@@ -349,7 +348,7 @@ export default function DashboardHeader() {
 
       {/* Mobile search overlay */}
       {searchOpen && (
-        <div className="md:hidden fixed inset-0 z-50 flex flex-col bg-white dark:bg-zinc-950">
+        <div className="md:hidden fixed inset-0 z-50 flex flex-col bg-white dark:bg-zinc-900">
           <div className="flex items-center px-4 py-3 gap-3 border-b border-zinc-200 dark:border-zinc-800">
             <Search size={16} className="text-zinc-400 shrink-0" />
             <input
@@ -362,7 +361,7 @@ export default function DashboardHeader() {
             />
             <button
               onClick={closeSearch}
-              className="p-1.5 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-500"
+              className="p-1.5 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-500 cursor-pointer"
               aria-label="Fechar pesquisa"
             >
               <X size={18} />
