@@ -1,0 +1,314 @@
+.
+├── app
+│   ├── (admin)
+│   │   └── admin
+│   ├── api
+│   │   ├── academic-years
+│   │   ├── admin
+│   │   ├── admins
+│   │   ├── analytics
+│   │   ├── announcements
+│   │   ├── applications
+│   │   ├── assignments
+│   │   ├── attendance
+│   │   ├── audit-logs
+│   │   ├── auth
+│   │   ├── chat
+│   │   ├── classes
+│   │   ├── courses
+│   │   ├── cron
+│   │   ├── enrollments
+│   │   ├── evaluation
+│   │   ├── exams
+│   │   ├── friends
+│   │   ├── gdpr
+│   │   ├── grading-config
+│   │   ├── health
+│   │   ├── import
+│   │   ├── lessons
+│   │   ├── messages
+│   │   ├── notifications
+│   │   ├── parents
+│   │   ├── platform
+│   │   ├── profile
+│   │   ├── reports
+│   │   ├── results
+│   │   ├── school-catalog
+│   │   ├── schools
+│   │   ├── school-settings
+│   │   ├── school-stats
+│   │   ├── search
+│   │   ├── students
+│   │   ├── subjects
+│   │   ├── support
+│   │   ├── teachers
+│   │   ├── user
+│   │   └── user-preferences
+│   ├── (auth)
+│   │   ├── forgot-password
+│   │   ├── layout.tsx
+│   │   ├── maintenance
+│   │   ├── registar-escola
+│   │   ├── reset-password
+│   │   ├── signin
+│   │   ├── signup
+│   │   └── verify-email
+│   ├── (dashboard)
+│   │   ├── dashboard
+│   │   ├── help
+│   │   ├── import
+│   │   ├── layout.tsx
+│   │   ├── list
+│   │   ├── profile
+│   │   ├── settings
+│   │   └── support
+│   ├── hello
+│   │   └── page.tsx
+│   ├── layout.tsx
+│   ├── (minha-area)
+│   │   ├── change-password
+│   │   ├── layout.tsx
+│   │   └── minha-area
+│   ├── page.tsx
+│   └── (public)
+│       ├── aplicacao
+│       ├── layout.tsx
+│       ├── privacidade
+│       └── termos
+├── components
+│   ├── admin
+│   │   └── SchoolFeaturesManager.tsx
+│   ├── analytics
+│   │   ├── AcademicHealthHistoryChart.tsx
+│   │   ├── AttentionArea.tsx
+│   │   ├── ClassHealthPanel.tsx
+│   │   ├── ExecutiveDashboard.tsx
+│   │   ├── GeneralIndicators.tsx
+│   │   ├── PedagogicalInsights.tsx
+│   │   ├── RecommendationsPanel.tsx
+│   │   └── StudentRiskPanel.tsx
+│   ├── auth
+│   │   ├── AlertBanner.tsx
+│   │   ├── AuthCard.tsx
+│   │   ├── AuthHeader.tsx
+│   │   ├── AuthSuccess.tsx
+│   │   ├── FormInput.tsx
+│   │   ├── index.ts
+│   │   ├── OAuthButton.tsx
+│   │   ├── OAuthDivider.tsx
+│   │   ├── PasswordInput.tsx
+│   │   ├── SubmitButton.tsx
+│   │   └── TrustBadge.tsx
+│   ├── forms
+│   │   ├── AdminForm.tsx
+│   │   ├── AnnouncementForm.tsx
+│   │   ├── ApplicationReviewForm.tsx
+│   │   ├── AssignmentForm.tsx
+│   │   ├── AttendanceForm.tsx
+│   │   ├── ClassForm.tsx
+│   │   ├── CourseForm.tsx
+│   │   ├── EvaluateSubmissionForm.tsx
+│   │   ├── ExamCreateForm.tsx
+│   │   ├── ExamForm.tsx
+│   │   ├── LessonAttendanceForm.tsx
+│   │   ├── LessonCreateForm.tsx
+│   │   ├── LessonForm.tsx
+│   │   ├── MessageForm.tsx
+│   │   ├── ParentForm.tsx
+│   │   ├── ResultCreateForm.tsx
+│   │   ├── ResultForm.tsx
+│   │   ├── SchoolForm.tsx
+│   │   ├── StudentForm.tsx
+│   │   ├── SubjectForm.tsx
+│   │   ├── SubmissionForm.tsx
+│   │   ├── SupportTicketForm.tsx
+│   │   └── TeacherForm.tsx
+│   ├── landing
+│   │   ├── AnimateOnScroll.tsx
+│   │   ├── BenefitsSection.tsx
+│   │   ├── CTASection.tsx
+│   │   ├── FAQSection.tsx
+│   │   ├── FeaturesSection.tsx
+│   │   ├── Footer.tsx
+│   │   ├── HeroSection.tsx
+│   │   ├── HowItWorksSection.tsx
+│   │   ├── LandingNavbar.tsx
+│   │   ├── LocaleSwitcher.tsx
+│   │   ├── MultiTenantSection.tsx
+│   │   ├── PricingSection.tsx
+│   │   ├── ProblemSection.tsx
+│   │   ├── ProductEcosystem.tsx
+│   │   ├── ProductShowcase.tsx
+│   │   ├── ProfilesSection.tsx
+│   │   ├── StatsSection.tsx
+│   │   ├── TestimonialsSection.tsx
+│   │   ├── TransformationSection.tsx
+│   │   ├── TrustSection.tsx
+│   │   └── VisionSection.tsx
+│   ├── layout
+│   │   ├── AdminMobileNav.tsx
+│   │   ├── AdminNavBar.tsx
+│   │   ├── app-sidebar.tsx
+│   │   ├── DashboardFooter.tsx
+│   │   ├── dashboard-header.tsx
+│   │   ├── MaintenanceGuard.tsx
+│   │   ├── Menu.tsx
+│   │   ├── MobileNav.tsx
+│   │   ├── MustChangePasswordGate.tsx
+│   │   ├── Navbar.tsx
+│   │   ├── PendingAccountGate.tsx
+│   │   ├── SessionGuard.tsx
+│   │   ├── SidebarBrand.tsx
+│   │   ├── sidebar-mobile.tsx
+│   │   ├── Sidebar.tsx
+│   │   └── TwoFactorGate.tsx
+│   └── ui
+│       ├── AcademicHealthScore.tsx
+│       ├── Announcements.tsx
+│       ├── AttendanceStatsPanel.tsx
+│       ├── avatar.tsx
+│       ├── badge.tsx
+│       ├── BigCalendar.tsx
+│       ├── button.tsx
+│       ├── CardGrid.tsx
+│       ├── carousel.tsx
+│       ├── ClassGradeSummary.tsx
+│       ├── collapsible.tsx
+│       ├── ConfirmActionModal.tsx
+│       ├── DataTable.tsx
+│       ├── DeleteConfirmModal.tsx
+│       ├── dialog.tsx
+│       ├── dropdown-menu.tsx
+│       ├── EventCalendar.tsx
+│       ├── feature-with-image-carousel.tsx
+│       ├── FilterPanel.tsx
+│       ├── FloatingHelpButton.tsx
+│       ├── FormField.tsx
+│       ├── FormModal.tsx
+│       ├── HeroBackgroundPaths.tsx
+│       ├── infinite-slider.tsx
+│       ├── NotificationDropdown.tsx
+│       ├── Pagination.tsx
+│       ├── progressive-blur.tsx
+│       ├── separator.tsx
+│       ├── sheet.tsx
+│       ├── SortButton.tsx
+│       ├── StatCard.tsx
+│       ├── StatusBadge.tsx
+│       ├── StudentAcademicAgenda.tsx
+│       ├── StudentAcademicForecast.tsx
+│       ├── StudentAcademicJourney.tsx
+│       ├── StudentAcademicStatus.tsx
+│       ├── StudentActionHub.tsx
+│       ├── StudentActivityChart.tsx
+│       ├── StudentAttendanceCard.tsx
+│       ├── StudentCalendarExperience.tsx
+│       ├── StudentDashboard.tsx
+│       ├── StudentGradeSummary.tsx
+│       ├── StudentHero.tsx
+│       ├── StudentPerformanceBreakdown.tsx
+│       ├── StudentSubjectCards.tsx
+│       ├── TableSearch.tsx
+│       ├── Table.tsx
+│       ├── TeacherAnalyticsSnapshot.tsx
+│       ├── TeacherAnnouncements.tsx
+│       ├── TeacherAssessmentCenter.tsx
+│       ├── TeacherAttentionCenter.tsx
+│       ├── TeacherCalendarExperience.tsx
+│       ├── TeacherClassPerformance.tsx
+│       ├── TeacherDashboard.tsx
+│       ├── TeacherHero.tsx
+│       ├── TeacherQuickActions.tsx
+│       ├── TeacherStudentInsights.tsx
+│       ├── TeacherUpcomingLessons.tsx
+│       ├── the-infinite-grid.tsx
+│       ├── ThemeToggle.tsx
+│       ├── tooltip.tsx
+│       └── UserCard.tsx
+├── hooks
+│   ├── useDataFetch.ts
+│   ├── useEntityList.ts
+│   ├── useEvent.ts
+│   ├── useOnlineStatus.ts
+│   ├── useSchoolData.ts
+│   ├── useSidebar.tsx
+│   ├── useTeacherDashboard.ts
+│   ├── useUnreadNotifications.ts
+│   └── useWebSocket.ts
+├── lib
+│   ├── academic-health-history.ts
+│   ├── academic-health.ts
+│   ├── academic-insights.ts
+│   ├── academic-recommendations.ts
+│   ├── academic-year.ts
+│   ├── account-types.ts
+│   ├── api-auth.ts
+│   ├── api-mutate.ts
+│   ├── audit.ts
+│   ├── auth.config.ts
+│   ├── auth.ts
+│   ├── class-health.ts
+│   ├── csrf-client.ts
+│   ├── csrf.ts
+│   ├── email.ts
+│   ├── evaluation-engine.ts
+│   ├── events
+│   │   └── index.ts
+│   ├── features.ts
+│   ├── help-content.ts
+│   ├── i18n
+│   │   ├── en.ts
+│   │   ├── es.ts
+│   │   ├── fr.ts
+│   │   ├── index.ts
+│   │   ├── pt.ts
+│   │   └── server.ts
+│   ├── import-utils.ts
+│   ├── lesson-conflicts.ts
+│   ├── notifications.ts
+│   ├── password.ts
+│   ├── platform-config.ts
+│   ├── predictors
+│   │   ├── abandono.ts
+│   │   ├── absenteism.ts
+│   │   ├── performance-drop.ts
+│   │   └── reprovacao.ts
+│   ├── predictors.ts
+│   ├── prisma.ts
+│   ├── query-helpers.ts
+│   ├── rate-limit.ts
+│   ├── redis.ts
+│   ├── revalidate.ts
+│   ├── routes.config.ts
+│   ├── routes.ts
+│   ├── snapshot-queue.ts
+│   ├── student-risk.ts
+│   ├── utils.ts
+│   ├── validations
+│   │   ├── academic.ts
+│   │   ├── application.ts
+│   │   ├── auth.ts
+│   │   ├── catalog.ts
+│   │   ├── entities.ts
+│   │   ├── import.ts
+│   │   ├── register-school.ts
+│   │   ├── school.ts
+│   │   └── support.ts
+│   ├── ws-broadcast.ts
+│   └── year-transition.ts
+├── middleware.ts
+├── provider
+│   ├── auth.tsx
+│   ├── locale.tsx
+│   ├── platform-branding.tsx
+│   ├── school-branding.tsx
+│   └── theme.tsx
+├── styles
+│   ├── big-calendar.css
+│   └── globals.css
+├── tree
+└── types
+    ├── landing.ts
+    └── next-auth.d.ts
+
+87 directories, 225 files
