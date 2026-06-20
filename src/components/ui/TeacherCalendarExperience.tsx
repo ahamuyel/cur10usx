@@ -21,16 +21,24 @@ interface CalendarEvent {
 export default function TeacherCalendarExperience() {
   const [events, setEvents] = useState<CalendarEvent[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(false)
   const [selectedDate, setSelectedDate] = useState(new Date())
 
   useEffect(() => {
     async function fetchData() {
       try {
+        setLoading(true)
+        setError(false)
         const [lessonsRes, examsRes, profileRes] = await Promise.all([
           fetch("/api/lessons?limit=100"),
           fetch("/api/exams?limit=50"),
           fetch("/api/profile"),
         ])
+
+        if (!lessonsRes.ok || !examsRes.ok || !profileRes.ok) {
+          setError(true)
+          return
+        }
 
         const lessonsJson = await lessonsRes.json()
         const examsJson = await examsRes.json()
@@ -61,8 +69,9 @@ export default function TeacherCalendarExperience() {
           }))
 
         setEvents([...lessonEvents, ...examEvents])
-      } catch {
-        // silently fail
+      } catch (err) {
+        console.error("Error fetching teacher calendar data:", err)
+        setError(true)
       } finally {
         setLoading(false)
       }
@@ -106,6 +115,14 @@ export default function TeacherCalendarExperience() {
             ))}
           </div>
         </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="bg-white dark:bg-zinc-900 rounded-3xl border border-zinc-200 dark:border-zinc-800 p-5 shadow-sm text-center py-8">
+        <p className="text-xs font-semibold text-rose-500">Não foi possível carregar a agenda letiva.</p>
       </div>
     )
   }
