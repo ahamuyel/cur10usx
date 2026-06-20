@@ -99,7 +99,7 @@ export default function AdminDashboard() {
       icon: Users,
       color: "text-emerald-500",
       bg: "bg-emerald-500/10",
-      href: "/admin/utilizadores",
+      href: "/admin/users",
     },
     {
       label: "Solicitações",
@@ -107,7 +107,7 @@ export default function AdminDashboard() {
       icon: TrendingUp,
       color: "text-sky-500",
       bg: "bg-sky-500/10",
-      href: "/admin/solicitacoes",
+      href: "/admin/applications",
     },
   ];
 

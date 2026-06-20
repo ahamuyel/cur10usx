@@ -27,13 +27,18 @@ export default function StudentAcademicAgenda({ exams, assignments }: Props) {
   const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
   const [lessons, setLessons] = useState<Lesson[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   // Ingestão dinâmica de dados da API de Lições do Cur10usX
   const fetchLessons = useCallback(async () => {
     try {
       setLoading(true);
+      setError(false);
       const res = await fetch("/api/lessons?limit=200");
-      if (!res.ok) return;
+      if (!res.ok) {
+        setError(true);
+        return;
+      }
       
       const json = await res.json();
 
@@ -50,8 +55,9 @@ export default function StudentAcademicAgenda({ exams, assignments }: Props) {
       }));
 
       setLessons(mapped);
-    } catch (error) {
-      console.error("Erro ao carregar a agenda letiva:", error);
+    } catch (err) {
+      console.error("Erro ao carregar a agenda letiva:", err);
+      setError(true);
     } finally {
       setLoading(false);
     }
@@ -104,6 +110,10 @@ export default function StudentAcademicAgenda({ exams, assignments }: Props) {
             <div className="flex flex-col items-center justify-center py-20 gap-2 min-h-[280px]">
               <Loader2 size={16} className="animate-spin text-violet-600 dark:text-violet-400" />
               <p className="text-[10px] font-medium text-zinc-400 uppercase tracking-wider">Sincronizando aulas...</p>
+            </div>
+          ) : error ? (
+            <div className="flex flex-col items-center justify-center py-20 gap-2 min-h-[280px]">
+              <p className="text-xs font-semibold text-rose-500 dark:text-rose-400">Não foi possível carregar a agenda letiva.</p>
             </div>
           ) : (
             /* O Canvas Flutuante das Aulas REAIS */
