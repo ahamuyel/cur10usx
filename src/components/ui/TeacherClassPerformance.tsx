@@ -1,109 +1,62 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { BarChart3, TrendingUp, TrendingDown, Users } from "lucide-react"
+import { BarChart3, Users, TrendingUp, TrendingDown } from "lucide-react"
 import { cn } from "@/lib/utils"
 import type { TeacherDashboardData } from "@/hooks/useTeacherDashboard"
 
-type Props = {
-  data: NonNullable<TeacherDashboardData>
-}
-
-export default function TeacherClassPerformance({ data }: Props) {
+export default function TeacherClassPerformance({ data }: { data: NonNullable<TeacherDashboardData> }) {
   const classes = data.classPerformance
 
-  if (classes.length === 0) {
-    return (
-      <div className="bg-white/60 dark:bg-zinc-900/20 backdrop-blur-md rounded-3xl border border-zinc-200/60 dark:border-zinc-800/50 p-4 sm:p-5 shadow-2xs">
-        <div className="flex items-center gap-2 mb-4">
-          <BarChart3 size={14} className="text-primary" />
-          <h3 className="text-xs font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
-            Performance por Turma
-          </h3>
-        </div>
-        <div className="flex flex-col items-center justify-center py-8 text-center border border-dashed border-zinc-200 dark:border-zinc-800 rounded-2xl bg-zinc-50/30 dark:bg-zinc-950/10">
-          <p className="text-xs font-bold text-zinc-500 dark:text-zinc-400">Nenhuma turma atribuída</p>
-        </div>
-      </div>
-    )
-  }
+  if (!classes?.length) return null
 
   return (
-    <div className="bg-white/60 dark:bg-zinc-900/20 backdrop-blur-md rounded-3xl border border-zinc-200/60 dark:border-zinc-800/50 p-4 sm:p-5 shadow-2xs">
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2">
-          <BarChart3 size={14} className="text-primary" />
-          <h3 className="text-xs font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
-            Performance por Turma
-          </h3>
-        </div>
+    <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-3xl p-6 shadow-sm">
+      <div className="flex items-center gap-2 mb-6">
+        <BarChart3 size={16} className="text-zinc-400" />
+        <h3 className="text-xs font-bold text-zinc-500 uppercase tracking-widest">Performance por Turma</h3>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        {classes.map((cls, idx) => {
-          const avgColor = cls.average >= 14 ? "text-emerald-600 dark:text-emerald-400" : cls.average >= 10 ? "text-amber-600 dark:text-amber-400" : "text-rose-600 dark:text-rose-400"
-          const avgBarColor = cls.average >= 14 ? "bg-emerald-500" : cls.average >= 10 ? "bg-amber-500" : "bg-rose-500"
-
-          return (
-            <motion.div
-              key={cls.classId}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: idx * 0.05 }}
-              className="bg-zinc-50/50 dark:bg-zinc-900/20 rounded-2xl p-4 border border-zinc-100 dark:border-zinc-800/40 hover:border-zinc-200 dark:hover:border-zinc-700/60 transition-all"
-            >
-              <div className="flex items-center justify-between mb-3">
-                <h4 className="text-xs font-bold text-zinc-700 dark:text-zinc-300">{cls.className}</h4>
-                <div className="flex items-center gap-1.5 text-[10px] text-zinc-400">
-                  <Users size={10} />
-                  <span className="tabular-nums font-medium">{cls.studentCount}</span>
+      <div className="space-y-4">
+        {classes.map((cls) => (
+          <div key={cls.classId} className="group flex flex-col gap-3 p-4 rounded-2xl bg-zinc-50/40 dark:bg-zinc-950/40 border border-zinc-200 dark:border-zinc-800/80 hover:border-zinc-300 dark:hover:border-zinc-700 transition-all">
+            
+            {/* Header: Nome e Presença */}
+            <div className="flex justify-between items-center">
+              <div className="flex items-center gap-3">
+                <div className="font-black text-sm text-zinc-900 dark:text-white">{cls.className}</div>
+                <div className="flex items-center gap-1 text-[10px] font-bold text-zinc-550 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-800 px-2 py-0.5 rounded-md border border-zinc-200/50 dark:border-zinc-700/50">
+                  <Users size={10} /> {cls.studentCount}
                 </div>
               </div>
+              <div className="text-[10px] font-bold text-zinc-400">Presença: <span className="text-zinc-900 dark:text-white">{cls.attendanceRate}%</span></div>
+            </div>
 
-              <div className="flex items-end gap-3 mb-3">
-                <div>
-                  <span className="text-[9px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">Média</span>
-                  <div className="flex items-baseline gap-0.5">
-                    <span className={cn("text-2xl font-black tracking-tight tabular-nums", avgColor)}>
-                      {cls.average.toFixed(1)}
-                    </span>
-                    <span className="text-[10px] font-bold text-zinc-400">/20</span>
-                  </div>
+            {/* Média e Barra */}
+            <div className="flex items-center gap-4">
+              <div className="w-12 text-center">
+                <div className={cn("text-lg font-black", cls.average >= 14 ? "text-emerald-600" : "text-amber-600")}>
+                  {cls.average.toFixed(1)}
                 </div>
-
-                {cls.monthlyEvolution !== 0 && (
-                  <div className={cn(
-                    "flex items-center gap-0.5 px-1.5 py-0.5 rounded-md text-[10px] font-bold tabular-nums mb-1",
-                    cls.monthlyEvolution > 0
-                      ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
-                      : "bg-rose-500/10 text-rose-600 dark:text-rose-400"
-                  )}>
-                    {cls.monthlyEvolution > 0 ? <TrendingUp size={10} /> : <TrendingDown size={10} />}
-                    {Math.abs(cls.monthlyEvolution).toFixed(1)}%
-                  </div>
-                )}
               </div>
-
-              <div className="w-full h-1.5 bg-zinc-100 dark:bg-zinc-800 rounded-full overflow-hidden mb-3">
-                <div
-                  className={cn("h-full rounded-full transition-all duration-500", avgBarColor)}
+              
+              <div className="flex-1 h-2 bg-zinc-200 dark:bg-zinc-700 rounded-full overflow-hidden">
+                <div 
+                  className={cn("h-full rounded-full", cls.average >= 14 ? "bg-emerald-500" : "bg-amber-500")}
                   style={{ width: `${(cls.average / 20) * 100}%` }}
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-2">
-                <div className="bg-white/50 dark:bg-zinc-900/30 rounded-xl p-2 border border-zinc-100 dark:border-zinc-800/40">
-                  <span className="text-[9px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider block">Presença</span>
-                  <span className="text-xs font-bold text-zinc-700 dark:text-zinc-300 tabular-nums">{cls.attendanceRate}%</span>
+              {/* Evolução */}
+              {cls.monthlyEvolution !== 0 && (
+                <div className={cn("flex items-center gap-0.5 text-[10px] font-bold", cls.monthlyEvolution > 0 ? "text-emerald-600" : "text-rose-600")}>
+                  {cls.monthlyEvolution > 0 ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
+                  {Math.abs(cls.monthlyEvolution)}%
                 </div>
-                <div className="bg-white/50 dark:bg-zinc-900/30 rounded-xl p-2 border border-zinc-100 dark:border-zinc-800/40">
-                  <span className="text-[9px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider block">Aprovação</span>
-                  <span className="text-xs font-bold text-zinc-700 dark:text-zinc-300 tabular-nums">{cls.approvalRate}%</span>
-                </div>
-              </div>
-            </motion.div>
-          )
-        })}
+              )}
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   )
