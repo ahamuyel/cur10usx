@@ -75,7 +75,7 @@ const NotificationDropdown = () => {
     <div className="relative" ref={ref}>
       <button
         onClick={() => setOpen(!open)}
-        className="relative p-2 rounded-lg text-zinc-500 hover:text-primary hover:bg-zinc-100 dark:hover:bg-zinc-800 transition"
+        className="relative p-2 rounded-lg text-muted-foreground hover:text-primary hover:bg-accent transition"
       >
         <Bell size={18} />
         {unreadCount > 0 && (
@@ -86,9 +86,9 @@ const NotificationDropdown = () => {
       </button>
 
       {open && (
-        <div className="absolute right-0 top-full mt-2 w-[calc(100vw-2rem)] sm:w-80 max-w-80 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl shadow-xl z-50 overflow-hidden">
-          <div className="flex items-center justify-between px-4 py-3 border-b border-zinc-100 dark:border-zinc-800">
-            <span className="text-sm font-bold text-zinc-900 dark:text-zinc-100">Notificações</span>
+        <div className="absolute right-0 top-full mt-2 w-[calc(100vw-2rem)] sm:w-80 max-w-80 bg-card border border-border rounded-xl shadow-xl z-50 overflow-hidden">
+          <div className="flex items-center justify-between px-4 py-3 border-b border-border">
+            <span className="text-sm font-bold text-foreground">Notificações</span>
             {unreadCount > 0 && (
               <button onClick={markAllRead} className="flex items-center gap-1 text-[11px] text-primary hover:text-primary-700 font-medium">
                 <CheckCheck size={12} /> Marcar todas
@@ -98,21 +98,21 @@ const NotificationDropdown = () => {
 
           <div className="max-h-80 overflow-y-auto">
             {notifications.length === 0 ? (
-              <div className="p-4 text-sm text-zinc-400 text-center">Sem notificações</div>
+              <div className="p-4 text-sm text-muted-foreground text-center">Sem notificações</div>
             ) : (
               notifications.map((n) => (
                 <div
                   key={n.id}
-                  className={`flex gap-3 px-4 py-3 border-b border-zinc-50 dark:border-zinc-800/50 hover:bg-zinc-50 dark:hover:bg-zinc-800/30 transition ${
+                  className={`flex gap-3 px-4 py-3 border-b border-border hover:bg-accent transition ${
                     !n.read ? "bg-primary-50/50 dark:bg-primary-950/10" : ""
                   }`}
                 >
                   <div className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${typeColors[n.type] || "bg-zinc-400"}`} />
                   <div className="flex-1 min-w-0">
-                    <p className="text-xs font-semibold text-zinc-900 dark:text-zinc-100 truncate">{n.title}</p>
-                    <p className="text-[11px] text-zinc-500 truncate">{n.message}</p>
+                    <p className="text-xs font-semibold text-foreground truncate">{n.title}</p>
+                    <p className="text-[11px] text-muted-foreground truncate">{n.message}</p>
                     <div className="flex items-center gap-2 mt-1">
-                      <span className="text-[10px] text-zinc-400">{timeAgo(n.createdAt)}</span>
+                      <span className="text-[10px] text-muted-foreground">{timeAgo(n.createdAt)}</span>
                       {!n.read && (
                         <button onClick={() => markAsRead(n.id)} className="text-[10px] text-primary hover:text-primary-700 font-medium flex items-center gap-0.5">
                           <Check size={10} /> Lida

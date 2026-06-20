@@ -81,8 +81,8 @@ export default function StudentInsights({
   }
 
   return (
-    <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-5 shadow-sm">
-      <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 mb-4">Insights</h3>
+    <div className="bg-card rounded-card border border-border p-5 shadow-card">
+      <h3 className="text-sm font-semibold text-foreground mb-4">Insights</h3>
       <div className="space-y-2">
         {insights.slice(0, 4).map((insight, i) => {
           const Icon = icons[insight.type]

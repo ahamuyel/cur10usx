@@ -5,36 +5,41 @@ import { PenLine, ClipboardCheck, FilePlus, PlusCircle, Send } from "lucide-reac
 import { cn } from "@/lib/utils"
 
 const actions = [
-  { label: "Lançar nota", icon: PenLine, color: "text-violet-600 dark:text-violet-400", bg: "bg-violet-500/10 hover:bg-violet-500/20" },
-  { label: "Registar presença", icon: ClipboardCheck, color: "text-emerald-600 dark:text-emerald-400", bg: "bg-emerald-500/10 hover:bg-emerald-500/20" },
-  { label: "Criar avaliação", icon: FilePlus, color: "text-amber-600 dark:text-amber-400", bg: "bg-amber-500/10 hover:bg-amber-500/20" },
-  { label: "Criar atividade", icon: PlusCircle, color: "text-cyan-600 dark:text-cyan-400", bg: "bg-cyan-500/10 hover:bg-cyan-500/20" },
-  { label: "Enviar comunicado", icon: Send, color: "text-rose-600 dark:text-rose-400", bg: "bg-rose-500/10 hover:bg-rose-500/20" },
+  { label: "Lançar nota", icon: PenLine, color: "text-violet-600 dark:text-violet-400" },
+  { label: "Registar presença", icon: ClipboardCheck, color: "text-emerald-600 dark:text-emerald-400" },
+  { label: "Criar avaliação", icon: FilePlus, color: "text-amber-600 dark:text-amber-400" },
+  { label: "Criar atividade", icon: PlusCircle, color: "text-cyan-600 dark:text-cyan-400" },
+  { label: "Enviar comunicado", icon: Send, color: "text-rose-600 dark:text-rose-400" },
 ]
 
 export default function TeacherQuickActions() {
   return (
-    <div className="bg-white/60 dark:bg-zinc-900/20 backdrop-blur-md rounded-3xl border border-zinc-200/60 dark:border-zinc-800/50 p-4 sm:p-5 shadow-2xs">
-      <h3 className="text-xs font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider mb-3">
+    <div className="bg-card border border-border rounded-card p-6 shadow-card h-full">
+      <h3 className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-4">
         Ações Rápidas
       </h3>
 
-      <div className="grid grid-cols-5 gap-2">
+      {/* Grid Inteligente:
+        - Mobile: 1 coluna (lista vertical) ou 2 colunas
+        - Tablet/Desktop: 3 a 5 colunas dependendo do contexto do pai 
+      */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-1 gap-3">
         {actions.map((action, idx) => {
           const Icon = action.icon
           return (
             <motion.button
               key={action.label}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.2, delay: idx * 0.03 }}
-              className={cn(
-                "flex flex-col items-center gap-1.5 p-3 rounded-2xl border border-transparent transition-all",
-                action.bg, action.color,
-              )}
+              whileHover={{ x: 4 }}
+              whileTap={{ scale: 0.98 }}
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.2, delay: idx * 0.05 }}
+              className="group flex items-center gap-3 p-3 rounded-card bg-muted border border-border hover:bg-accent transition-all text-left w-full cursor-pointer"
             >
-              <Icon size={16} />
-              <span className="text-[8px] font-bold uppercase tracking-wider text-center leading-tight">
+                <div className={cn("p-2 rounded-xl bg-card border border-border shrink-0", action.color)}>
+                <Icon size={16} />
+              </div>
+              <span className="text-[11px] font-bold uppercase tracking-wide text-foreground truncate">
                 {action.label}
               </span>
             </motion.button>

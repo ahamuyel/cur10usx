@@ -32,9 +32,9 @@ const StatCard = ({ label, value, icon: Icon, color = "primary", subtitle, href 
           <Icon size={20} className={c.text} />
         </div>
         <div className="min-w-0">
-          <p className="text-[11px] sm:text-xs text-zinc-500 dark:text-zinc-400 truncate">{label}</p>
+          <p className="text-[11px] sm:text-xs text-muted-foreground truncate">{label}</p>
           <p className={cn("text-lg sm:text-xl font-bold", c.text)}>{value}</p>
-          {subtitle && <p className="text-[10px] text-zinc-400 truncate">{subtitle}</p>}
+          {subtitle && <p className="text-[10px] text-muted-foreground truncate">{subtitle}</p>}
         </div>
       </div>
     </div>

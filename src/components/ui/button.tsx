@@ -8,14 +8,14 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-white shadow-sm hover:bg-primary-dark dark:hover:brightness-110",
-        destructive: "bg-red-500 text-zinc-50 shadow-sm hover:bg-red-600 dark:bg-red-900 dark:text-zinc-50 dark:hover:bg-red-800",
-        outline: "border border-zinc-200 bg-white shadow-sm hover:bg-zinc-100 hover:text-zinc-900 dark:border-zinc-800 dark:bg-zinc-950 dark:hover:bg-zinc-800 dark:hover:text-zinc-50",
-        secondary: "bg-zinc-100 text-zinc-900 shadow-sm hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-50 dark:hover:bg-zinc-700",
-        ghost: "hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-zinc-800 dark:hover:text-zinc-50",
-        link: "text-primary underline-offset-4 hover:underline dark:text-primary",
-        primary: "bg-primary text-white shadow-sm hover:bg-primary-dark",
-        "primary-outline": "border-2 border-primary text-primary bg-transparent hover:bg-primary hover:text-white",
+        default: "bg-primary text-primary-foreground shadow-card hover:bg-primary-dark dark:hover:brightness-110",
+        destructive: "bg-red-500 text-primary-foreground shadow-card hover:bg-red-600 dark:bg-red-900 dark:text-primary-foreground dark:hover:bg-red-800",
+        outline: "border border-border bg-card shadow-card hover:bg-accent hover:text-foreground",
+        secondary: "bg-muted text-foreground shadow-card hover:bg-accent",
+        ghost: "hover:bg-accent hover:text-foreground",
+        link: "text-primary underline-offset-4 hover:underline",
+        primary: "bg-primary text-primary-foreground shadow-card hover:bg-primary-dark",
+        "primary-outline": "border-2 border-primary text-primary bg-transparent hover:bg-primary hover:text-primary-foreground",
       },
       size: {
         default: "h-9 px-4 py-2",

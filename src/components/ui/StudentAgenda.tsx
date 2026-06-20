@@ -64,21 +64,21 @@ export default function StudentAgenda({ exams, assignments }: StudentAgendaProps
 
   if (items.length === 0) {
     return (
-      <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-5 shadow-sm">
+      <div className="bg-card rounded-card border border-border p-5 shadow-card">
         <div className="flex items-center gap-2 mb-4">
           <Calendar size={16} className="text-primary" />
-          <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">Agenda Académica</h3>
+          <h3 className="text-sm font-semibold text-foreground">Agenda Académica</h3>
         </div>
-        <p className="text-sm text-zinc-400 text-center py-6">Nenhum evento próximo</p>
+        <p className="text-sm text-muted-foreground text-center py-6">Nenhum evento próximo</p>
       </div>
     )
   }
 
   return (
-    <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-5 shadow-sm">
+    <div className="bg-card rounded-card border border-border p-5 shadow-card">
       <div className="flex items-center gap-2 mb-4">
         <Calendar size={16} className="text-primary" />
-        <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">Agenda Académica</h3>
+          <h3 className="text-sm font-semibold text-foreground">Agenda Académica</h3>
       </div>
       <div className="space-y-2">
         {items.slice(0, 6).map((item) => {
@@ -88,18 +88,18 @@ export default function StudentAgenda({ exams, assignments }: StudentAgendaProps
             <div
               key={`${item.kind}-${item.id}`}
               onClick={() => router.push(item.link)}
-              className="flex items-center gap-3 py-2.5 px-3 rounded-xl bg-zinc-50 dark:bg-zinc-800/50 cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-700/50 transition-colors"
+              className="flex items-center gap-3 py-2.5 px-3 rounded-xl bg-muted cursor-pointer hover:bg-accent transition-colors"
             >
               <div className="flex flex-col items-center w-10 shrink-0">
-                <span className="text-sm font-black text-zinc-800 dark:text-zinc-100 tabular-nums leading-none">{date.day}</span>
-                <span className="text-[9px] font-medium text-zinc-400 uppercase">{date.month}</span>
+                <span className="text-sm font-black text-foreground tabular-nums leading-none">{date.day}</span>
+                <span className="text-[9px] font-medium text-muted-foreground uppercase">{date.month}</span>
               </div>
               <div className={cn("w-8 h-8 rounded-lg flex items-center justify-center shrink-0", item.iconBg)}>
                 <Icon size={14} />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100 truncate">{item.title}</p>
-                <p className="text-[11px] text-zinc-400">{item.subjectName} · {item.kindLabel}</p>
+                <p className="text-sm font-medium text-foreground truncate">{item.title}</p>
+                <p className="text-[11px] text-muted-foreground">{item.subjectName} · {item.kindLabel}</p>
               </div>
               {date.urgent && (
                 <span className="text-[10px] font-bold text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/30 px-2 py-1 rounded-lg shrink-0">

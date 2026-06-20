@@ -11,25 +11,25 @@ export default function TeacherClassPerformance({ data }: { data: NonNullable<Te
   if (!classes?.length) return null
 
   return (
-    <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-3xl p-6 shadow-sm">
+    <div className="bg-card border border-border rounded-card p-6 shadow-card">
       <div className="flex items-center gap-2 mb-6">
-        <BarChart3 size={16} className="text-zinc-400" />
-        <h3 className="text-xs font-bold text-zinc-500 uppercase tracking-widest">Performance por Turma</h3>
+        <BarChart3 size={16} className="text-muted-foreground" />
+        <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-widest">Performance por Turma</h3>
       </div>
 
       <div className="space-y-4">
         {classes.map((cls) => (
-          <div key={cls.classId} className="group flex flex-col gap-3 p-4 rounded-2xl bg-zinc-50/40 dark:bg-zinc-950/40 border border-zinc-200 dark:border-zinc-800/80 hover:border-zinc-300 dark:hover:border-zinc-700 transition-all">
+          <div key={cls.classId} className="group flex flex-col gap-3 p-4 rounded-card bg-muted border border-border hover:bg-accent transition-all">
             
             {/* Header: Nome e Presença */}
             <div className="flex justify-between items-center">
               <div className="flex items-center gap-3">
-                <div className="font-black text-sm text-zinc-900 dark:text-white">{cls.className}</div>
-                <div className="flex items-center gap-1 text-[10px] font-bold text-zinc-550 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-800 px-2 py-0.5 rounded-md border border-zinc-200/50 dark:border-zinc-700/50">
+                <div className="font-black text-sm text-foreground">{cls.className}</div>
+                <div className="flex items-center gap-1 text-[10px] font-bold text-muted-foreground bg-accent px-2 py-0.5 rounded-md border border-border">
                   <Users size={10} /> {cls.studentCount}
                 </div>
               </div>
-              <div className="text-[10px] font-bold text-zinc-400">Presença: <span className="text-zinc-900 dark:text-white">{cls.attendanceRate}%</span></div>
+              <div className="text-[10px] font-bold text-muted-foreground">Presença: <span className="text-foreground">{cls.attendanceRate}%</span></div>
             </div>
 
             {/* Média e Barra */}
@@ -40,7 +40,7 @@ export default function TeacherClassPerformance({ data }: { data: NonNullable<Te
                 </div>
               </div>
               
-              <div className="flex-1 h-2 bg-zinc-200 dark:bg-zinc-700 rounded-full overflow-hidden">
+              <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
                 <div 
                   className={cn("h-full rounded-full", cls.average >= 14 ? "bg-emerald-500" : "bg-amber-500")}
                   style={{ width: `${(cls.average / 20) * 100}%` }}

@@ -70,11 +70,11 @@ export default function StudentAcademicAgenda({ exams, assignments }: Props) {
           <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
             Horário Semanal
           </h3>
-          <span className="text-[10px] bg-violet-50 dark:bg-violet-500/10 text-violet-600 dark:text-violet-400 font-bold px-2 py-0.5 rounded-md uppercase tracking-wider">
+          {/* <span className="text-[10px] bg-violet-50 dark:bg-violet-500/10 text-violet-600 dark:text-violet-400 font-bold px-2 py-0.5 rounded-md uppercase tracking-wider">
             SaaS Grid
-          </span>
+          </span> */}
         </div>
-        
+{/*         
         <div className="flex items-center gap-1 bg-zinc-100 dark:bg-zinc-800/40 rounded-xl p-0.5 border border-zinc-200/40 dark:border-zinc-700/40">
           <button className="p-1 rounded-lg hover:bg-white dark:hover:bg-zinc-700 text-zinc-500 transition">
             <ChevronLeft size={14} />
@@ -83,7 +83,7 @@ export default function StudentAcademicAgenda({ exams, assignments }: Props) {
           <button className="p-1 rounded-lg hover:bg-white dark:hover:bg-zinc-700 text-zinc-500 transition">
             <ChevronRight size={14} />
           </button>
-        </div>
+        </div> */}
       </div>
 
       {/* CONTAINER BENTO GRID NATIVO */}

@@ -17,13 +17,13 @@ export default function TeacherAttentionCenter({ data }: Props) {
   const students = data.attentionStudents
 
   return (
-    <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-3xl p-6 shadow-sm h-full">
+    <div className="bg-card border border-border rounded-card p-6 shadow-card h-full">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-xs font-bold text-zinc-500 uppercase tracking-widest flex items-center gap-2">
+        <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-widest flex items-center gap-2">
           <AlertTriangle size={14} />
           Centro de Atenção
         </h3>
-        <span className="text-[10px] font-bold bg-zinc-100 dark:bg-zinc-800 px-2 py-1 rounded-full text-zinc-600 dark:text-zinc-400 border border-zinc-200/50 dark:border-zinc-700/50">
+        <span className="text-[10px] font-bold bg-accent px-2 py-1 rounded-full text-muted-foreground border border-border">
           {students.length} Pendentes
         </span>
       </div>
@@ -31,7 +31,7 @@ export default function TeacherAttentionCenter({ data }: Props) {
       <div className="flex flex-col gap-3">
         {students.length === 0 ? (
           <div className="text-center py-10 opacity-60">
-            <p className="text-xs font-bold text-zinc-500">Tudo em dia!</p>
+            <p className="text-xs font-bold text-muted-foreground">Tudo em dia!</p>
           </div>
         ) : (
           students.slice(0, 5).map((s) => (
@@ -39,15 +39,15 @@ export default function TeacherAttentionCenter({ data }: Props) {
               key={s.id}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="group flex items-center gap-3 p-3 rounded-2xl hover:bg-zinc-50/50 dark:hover:bg-zinc-950/40 transition-colors border border-transparent hover:border-zinc-200 dark:hover:border-zinc-800/80"
+              className="group flex items-center gap-3 p-3 rounded-card hover:bg-accent transition-colors border border-transparent hover:border-border"
             >
-              <div className="w-8 h-8 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-[10px] font-bold border border-zinc-200/40 dark:border-zinc-700/30">
+              <div className="w-8 h-8 rounded-full bg-accent flex items-center justify-center text-[10px] font-bold border border-border">
                 {s.name.charAt(0)}
               </div>
               
               <div className="flex-1 min-w-0">
-                <p className="text-xs font-bold text-zinc-900 dark:text-zinc-100 truncate">{s.name}</p>
-                <p className="text-[10px] text-zinc-500 truncate">{s.className} · {s.reason}</p>
+                <p className="text-xs font-bold text-foreground truncate">{s.name}</p>
+                <p className="text-[10px] text-muted-foreground truncate">{s.className} · {s.reason}</p>
               </div>
 
               <div className={cn("px-2 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-wider border", priorityStyles[s.priority as keyof typeof priorityStyles])}>
@@ -59,7 +59,7 @@ export default function TeacherAttentionCenter({ data }: Props) {
       </div>
       
       {students.length > 5 && (
-        <button className="w-full mt-4 py-2 text-[10px] font-bold text-zinc-500 dark:text-zinc-400 hover:text-zinc-750 dark:hover:text-zinc-200 uppercase tracking-widest flex items-center justify-center gap-1 transition-colors cursor-pointer">
+        <button className="w-full mt-4 py-2 text-[10px] font-bold text-muted-foreground hover:text-foreground uppercase tracking-widest flex items-center justify-center gap-1 transition-colors cursor-pointer">
           Ver todos os alertas <ChevronRight size={12} />
         </button>
       )}

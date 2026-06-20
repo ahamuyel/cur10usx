@@ -3,22 +3,22 @@
 import { useTranslation } from "@/lib/i18n"
 
 const statusColors: Record<string, string> = {
-  pendente: "bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-400",
+  pendente: "bg-amber text-amber-700 dark:bg-amber dark:text-amber-400",
   em_analise: "bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-400",
-  aprovada: "bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-400",
-  ativa: "bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-400",
-  matriculada: "bg-primary-100 text-primary-700 dark:bg-primary-950 dark:text-primary-400",
+  aprovada: "bg-emerald text-emerald-700 dark:bg-emerald dark:text-emerald-400",
+  ativa: "bg-emerald text-emerald-700 dark:bg-emerald dark:text-emerald-400",
+  matriculada: "bg-primary text-primary-foreground dark:bg-primary dark:text-primary-foreground",
   rejeitada: "bg-red-100 text-red-700 dark:bg-red-950 dark:text-red-400",
-  suspensa: "bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-400",
+  suspensa: "bg-muted text-foreground",
   // Ticket statuses
   aberto: "bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-400",
-  em_andamento: "bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-400",
-  resolvido: "bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-400",
-  arquivado: "bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-400",
+  em_andamento: "bg-amber text-amber-700 dark:bg-amber dark:text-amber-400",
+  resolvido: "bg-emerald text-emerald-700 dark:bg-emerald dark:text-emerald-400",
+  arquivado: "bg-muted text-foreground",
   // Import statuses
   processando: "bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-400",
-  concluida: "bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-400",
-  parcial: "bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-400",
+  concluida: "bg-emerald text-emerald-700 dark:bg-emerald dark:text-emerald-400",
+  parcial: "bg-amber text-amber-700 dark:bg-amber dark:text-amber-400",
   falhada: "bg-red-100 text-red-700 dark:bg-red-950 dark:text-red-400",
 }
 
@@ -47,10 +47,9 @@ export default function StatusBadge({ status }: { status: string }) {
   const label = statusLabels[status] || status
   return (
     <span
-      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${statusColors[status] || "bg-zinc-100 text-zinc-600"}`}
+      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${statusColors[status] || "bg-muted text-muted-foreground"}`}
     >
       {tUI(label)}
     </span>
   )
 }
-

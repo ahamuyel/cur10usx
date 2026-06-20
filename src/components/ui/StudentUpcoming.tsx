@@ -32,14 +32,14 @@ export default function StudentUpcoming({ exams, assignments }: Props) {
   ].sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime())
 
   return (
-    <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-5 shadow-sm">
+    <div className="bg-card rounded-card border border-border p-5 shadow-card">
       <div className="flex items-center gap-2 mb-4">
         <Calendar className="w-4 h-4 text-primary" />
-        <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">Próximos Eventos</h3>
+        <h3 className="text-sm font-semibold text-foreground">Próximos Eventos</h3>
       </div>
 
       {items.length === 0 ? (
-        <p className="text-sm text-zinc-400 text-center py-4">Nenhum evento próximo</p>
+        <p className="text-sm text-muted-foreground text-center py-4">Nenhum evento próximo</p>
       ) : (
         <div className="space-y-2">
           {items.slice(0, 6).map((item) => {
@@ -48,7 +48,7 @@ export default function StudentUpcoming({ exams, assignments }: Props) {
               <div
                 key={`${item.kind}-${item.id}`}
                 onClick={() => router.push(item.kind === "assignment" ? "/list/assignments" : "/list/exams")}
-                className="flex items-center gap-3 py-2.5 px-3 rounded-xl bg-zinc-50 dark:bg-zinc-800/50 cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-700/50 transition-colors"
+                className="flex items-center gap-3 py-2.5 px-3 rounded-xl bg-muted cursor-pointer hover:bg-accent transition-colors"
               >
                 <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
                   item.kind === "exam"
@@ -58,17 +58,17 @@ export default function StudentUpcoming({ exams, assignments }: Props) {
                   {item.kind === "exam" ? <FileText size={14} /> : <ClipboardList size={14} />}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100 truncate">
+                  <p className="text-sm font-medium text-foreground truncate">
                     {item.title}
                   </p>
-                  <p className="text-[11px] text-zinc-400">
+                  <p className="text-[11px] text-muted-foreground">
                     {item.subjectName} · {item.kind === "exam" ? "Prova" : "Tarefa"}
                   </p>
                 </div>
                 <span className={`text-xs font-semibold shrink-0 px-2 py-1 rounded-lg ${
                   date.urgent
                     ? "text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/30"
-                    : "text-zinc-500 bg-zinc-100 dark:bg-zinc-800"
+                    : "text-muted-foreground bg-accent"
                 }`}>
                   {date.text}
                 </span>

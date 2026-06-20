@@ -47,22 +47,22 @@ function scoreColor(score: number): string {
 export default function StudentRecentResults({ results }: StudentRecentResultsProps) {
   if (results.length === 0) {
     return (
-      <div className="bg-white dark:bg-zinc-900 rounded-3xl border border-zinc-200/50 dark:border-zinc-800 p-5 shadow-sm">
-        <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 mb-4">Últimas Avaliações</h3>
-        <p className="text-sm text-zinc-400 text-center py-6">Sem notas registadas</p>
+      <div className="bg-card rounded-card border border-border p-5 shadow-card">
+        <h3 className="text-sm font-semibold text-foreground mb-4">Últimas Avaliações</h3>
+        <p className="text-sm text-muted-foreground text-center py-6">Sem notas registadas</p>
       </div>
     )
   }
 
   return (
-    <div className="bg-white dark:bg-zinc-900 rounded-3xl border border-zinc-200/50 dark:border-zinc-800 p-5 shadow-sm">
-      <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 mb-4">Últimas Avaliações</h3>
+    <div className="bg-card rounded-card border border-border p-5 shadow-card">
+      <h3 className="text-sm font-semibold text-foreground mb-4">Últimas Avaliações</h3>
       <div className="space-y-2">
         {results.slice(0, 6).map((r) => {
           const config = typeConfig[r.type] || {
             label: r.type, icon: BookOpen,
-            bg: "bg-zinc-50 dark:bg-zinc-800/50",
-            badge: "bg-zinc-100 dark:bg-zinc-700 text-zinc-600 dark:text-zinc-400",
+            bg: "bg-muted",
+            badge: "bg-accent text-muted-foreground",
           }
           const Icon = config.icon
           return (
@@ -72,11 +72,11 @@ export default function StudentRecentResults({ results }: StudentRecentResultsPr
                   <span className={cn("text-[10px] font-bold px-1.5 py-0.5 rounded", config.badge)}>
                     {config.label}
                   </span>
-                  <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100 truncate">
+                  <span className="text-sm font-medium text-foreground truncate">
                     {r.subjectName}
                   </span>
                 </div>
-                <p className="text-[11px] text-zinc-400 ml-1">
+                <p className="text-[11px] text-muted-foreground ml-1">
                   {new Date(r.date).toLocaleDateString("pt-AO", { day: "2-digit", month: "long" })}
                 </p>
               </div>

@@ -95,7 +95,7 @@ export default function StudentAttentionPanel({ exams, assignments, pendingSubmi
 
   if (urgent.length === 0 && upcoming.length === 0 && info.length === 0) {
     return (
-      <div className="bg-white dark:bg-zinc-900 rounded-3xl border border-zinc-200/50 dark:border-zinc-800 p-5 shadow-sm">
+      <div className="bg-card rounded-card border border-border p-5 shadow-card">
         <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 mb-4">O que precisa da sua atenção</h3>
         <p className="text-sm text-zinc-400 text-center py-6">Nada urgente — tudo em dia 🎉</p>
       </div>

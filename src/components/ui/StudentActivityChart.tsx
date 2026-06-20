@@ -6,11 +6,7 @@ import { cn } from "@/lib/utils"
 
 interface Result {
   id: string
-  subjectName: string
-  score: number
-  type: string
   date: string
-  trimester: string | null
 }
 
 interface StudentActivityChartProps {
@@ -23,75 +19,56 @@ function getDayOfWeek(dateStr: string): number {
   return new Date(dateStr).getDay()
 }
 
-function barColor(count: number, maxCount: number): string {
-  if (maxCount === 0) return "bg-zinc-100 dark:bg-zinc-800"
-  const ratio = count / maxCount
-  if (ratio >= 0.75) return "bg-violet-500"
-  if (ratio >= 0.5) return "bg-violet-400"
-  if (ratio >= 0.25) return "bg-violet-300"
-  return count > 0 ? "bg-violet-200" : "bg-zinc-100 dark:bg-zinc-800"
-}
-
 export default function StudentActivityChart({ results }: StudentActivityChartProps) {
   const dayCount = Array(7).fill(0)
-  for (const r of results) {
-    dayCount[getDayOfWeek(r.date)]++
-  }
-
+  results.forEach(r => dayCount[getDayOfWeek(r.date)]++)
+  
   const maxCount = Math.max(...dayCount, 1)
 
-  if (results.length === 0) {
-    return (
-      <div className="bg-white dark:bg-zinc-900 rounded-3xl border border-zinc-200/50 dark:border-zinc-800 p-5 sm:p-6 shadow-sm h-full">
-        <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 mb-4">Actividade Avaliativa</h3>
-        <p className="text-sm text-zinc-400 text-center py-8">Sem resultados registados</p>
-      </div>
-    )
-  }
-
   return (
-    <div className="bg-white dark:bg-zinc-900 rounded-3xl border border-zinc-200/50 dark:border-zinc-800 p-5 sm:p-6 shadow-sm h-full">
-      <div className="flex items-center gap-2 mb-6">
-        <div className="w-8 h-8 rounded-xl bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center">
-          <BarChart3 size={15} className="text-zinc-600 dark:text-zinc-400" />
-        </div>
-        <div>
-          <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">Actividade Avaliativa</h3>
-          <p className="text-[11px] text-zinc-400">Distribuição por dia da semana</p>
+    <div className="bg-white/50 dark:bg-zinc-900/50 backdrop-blur-xl rounded-3xl border border-zinc-200/60 dark:border-zinc-800/60 p-6 shadow-xl shadow-zinc-200/20 dark:shadow-none h-full transition-all">
+      {/* Header com estilo mais limpo */}
+      <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-2xl bg-violet-500/10 flex items-center justify-center text-violet-600 dark:text-violet-400">
+            <BarChart3 size={18} />
+          </div>
+          <div>
+            <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100">Actividade Avaliativa</h3>
+            <p className="text-[10px] uppercase tracking-widest text-zinc-400 font-semibold">Distribuição semanal</p>
+          </div>
         </div>
       </div>
 
-      <div className="flex items-end gap-2 sm:gap-3 h-40">
+      <div className="flex items-end gap-3 h-40">
         {dayLabels.map((label, i) => {
           const count = dayCount[i]
           const barHeight = (count / maxCount) * 100
-          const today = new Date().getDay()
-          const isToday = i === today
+          const isToday = i === new Date().getDay()
 
           return (
-            <div key={i} className="flex-1 flex flex-col items-center gap-2 h-full justify-end">
-              <motion.span
-                initial={{ opacity: 0, y: -4 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 + i * 0.06 }}
-                className="text-[11px] font-bold text-zinc-500 dark:text-zinc-400 tabular-nums"
-              >
+            <div key={i} className="flex-1 flex flex-col items-center gap-3 h-full justify-end group">
+              <span className={cn(
+                "text-[10px] font-black tabular-nums transition-opacity",
+                count > 0 ? "opacity-100 text-zinc-900 dark:text-white" : "opacity-0"
+              )}>
                 {count}
-              </motion.span>
-              <div className="flex-1 w-full flex items-end justify-center">
+              </span>
+              
+              <div className="flex-1 w-full flex items-end justify-center relative">
                 <motion.div
                   initial={{ height: 0 }}
                   animate={{ height: `${Math.max(barHeight, count > 0 ? 8 : 4)}%` }}
-                  transition={{ duration: 0.6, delay: 0.2 + i * 0.08, ease: "easeOut" }}
+                  transition={{ duration: 0.8, delay: i * 0.05, ease: [0.22, 1, 0.36, 1] }}
                   className={cn(
-                    "w-full max-w-[32px] rounded-lg transition-colors",
-                    barColor(count, maxCount)
+                    "w-full max-w-[28px] rounded-t-lg transition-all duration-300",
+                    isToday ? "bg-violet-600 shadow-[0_0_15px_rgba(124,58,237,0.4)]" : "bg-violet-400/30 group-hover:bg-violet-400/60"
                   )}
-                  style={{ minHeight: count > 0 ? "8px" : "4px" }}
                 />
               </div>
+              
               <span className={cn(
-                "text-[10px] font-semibold",
+                "text-[10px] font-bold uppercase tracking-wider",
                 isToday ? "text-violet-600 dark:text-violet-400" : "text-zinc-400"
               )}>
                 {label}

@@ -31,7 +31,7 @@ type Announcement = {
 }
 
 const priorityBadge: Record<string, string> = {
-  informativo: "border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400",
+  informativo: "border-border bg-accent text-muted-foreground",
   importante: "border-amber-200 bg-amber-50/50 dark:border-amber-950/30 dark:bg-amber-950/10 text-amber-600 dark:text-amber-500",
   urgente: "border-rose-200 bg-rose-50/50 dark:border-rose-950/30 dark:bg-rose-950/10 text-rose-600 dark:text-rose-400",
 }
@@ -49,7 +49,6 @@ const AnnouncementListPage = () => {
   const role = session?.user?.role
   const canManage = role === "school_admin" || role === "teacher"
 
-  // Estado para alternância de visualização
   const [view, setView] = useState<"table" | "card">("table")
 
   const { data, totalPages, page, search, setSearch, setPage, filters, setFilters, sort, setSort, clearFilters, activeFilterCount, loading, refetch } = useEntityList<Announcement>({ 
@@ -89,16 +88,15 @@ const AnnouncementListPage = () => {
     }
   }
 
-  // Row Renderer para Visualização em Tabela
   const renderRow = (item: Announcement) => (
-    <tr key={item.id} className={`border-b border-zinc-200 dark:border-zinc-800/50 text-sm hover:bg-zinc-50 dark:hover:bg-zinc-900/40 transition-colors ${!item.isRead ? "bg-zinc-50/50 dark:bg-zinc-900/20 font-medium" : ""}`}>
+    <tr key={item.id} className={`border-b border-border/50 text-sm hover:bg-accent transition-colors ${!item.isRead ? "bg-accent/30 font-medium" : ""}`}>
       <td className="py-3 px-4">
         <button onClick={() => handleRead(item)} className="text-left block w-full focus:outline-hidden cursor-pointer group">
           <div className="flex items-center gap-2">
-            {!item.isRead && <div className="w-2 h-2 rounded-full bg-zinc-900 dark:bg-zinc-50 shrink-0" />}
-            <span className="font-semibold text-zinc-900 dark:text-zinc-50 group-hover:underline decoration-zinc-400">{item.title}</span>
+            {!item.isRead && <div className="w-2 h-2 rounded-full bg-foreground shrink-0" />}
+            <span className="font-semibold text-foreground group-hover:underline decoration-muted-foreground">{item.title}</span>
           </div>
-          <p className="text-xs text-zinc-500 dark:text-zinc-400 truncate max-w-md mt-0.5 font-normal">
+          <p className="text-xs text-muted-foreground truncate max-w-md mt-0.5 font-normal">
             {item.description}
           </p>
         </button>
@@ -109,11 +107,11 @@ const AnnouncementListPage = () => {
         </span>
       </td>
       <td className="py-3 px-4">
-        <span className="inline-flex items-center px-2 py-0.5 border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 rounded text-[10px] font-medium font-mono">
+        <span className="inline-flex items-center px-2 py-0.5 border border-border bg-accent text-muted-foreground rounded text-[10px] font-medium font-mono">
           {item.class?.name || item.course?.name || "Geral / Escola"}
         </span>
       </td>
-      <td className="hidden lg:table-cell py-3 px-4 text-zinc-500 dark:text-zinc-400 text-xs font-mono tracking-tight">
+      <td className="hidden lg:table-cell py-3 px-4 text-muted-foreground text-xs font-mono tracking-tight">
         {new Date(item.createdAt).toLocaleDateString("pt")}
       </td>
       <td className="py-3 px-4 text-right">
@@ -121,14 +119,14 @@ const AnnouncementListPage = () => {
           <div className="flex items-center gap-1 justify-end">
             <button
               onClick={() => setEditItem(item)}
-              className="w-8 h-8 flex items-center justify-center rounded-md border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors cursor-pointer"
+              className="w-8 h-8 flex items-center justify-center rounded-md border border-border bg-card text-muted-foreground hover:bg-accent transition-colors cursor-pointer"
               title="Editar Aviso"
             >
               <Pencil size={12} />
             </button>
             <button
               onClick={() => setDeleteItem(item)}
-              className="w-8 h-8 flex items-center justify-center rounded-md border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-zinc-600 dark:text-zinc-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-colors cursor-pointer"
+              className="w-8 h-8 flex items-center justify-center rounded-md border border-border bg-card text-muted-foreground hover:text-destructive hover:bg-destructive/5 transition-colors cursor-pointer"
               title="Eliminar Aviso"
             >
               <Trash2 size={12} />
@@ -140,16 +138,15 @@ const AnnouncementListPage = () => {
   )
 
   return (
-    <div className="w-full bg-white dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800 p-4 sm:p-6 shadow-xs">
+    <div className="w-full bg-card rounded-xl border border-border p-4 sm:p-6 shadow-card">
       
-      {/* ================= HEADER DO CONTROLADOR ================= */}
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center justify-between mb-6">
         <div className="min-w-0">
-          <h1 className="text-lg font-semibold tracking-tight text-zinc-900 dark:text-zinc-50 flex items-center gap-2">
-            <Megaphone size={18} className="text-zinc-400 dark:text-zinc-500" />
+          <h1 className="text-lg font-semibold tracking-tight text-foreground flex items-center gap-2">
+            <Megaphone size={18} className="text-muted-foreground" />
             Mural de Avisos
           </h1>
-          <p className="text-xs text-zinc-500 dark:text-zinc-400">Comunicações institucionais, diretivas e alertas globais ou por turmas.</p>
+          <p className="text-xs text-muted-foreground">Comunicações institucionais, diretivas e alertas globais ou por turmas.</p>
         </div>
 
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
@@ -162,18 +159,17 @@ const AnnouncementListPage = () => {
             <SortButton options={sortOptions} sort={sort} onChange={setSort} />
 
             {data.length > 0 && (
-              /* Seletor Dual View */
-              <div className="flex items-center rounded-lg border border-zinc-200 dark:border-zinc-800 p-0.5 bg-zinc-50 dark:bg-zinc-900 select-none">
+              <div className="flex items-center rounded-lg border border-border p-0.5 bg-accent select-none">
                 <button
                   onClick={() => setView("table")}
-                  className={`w-8 h-8 flex items-center justify-center rounded-md transition-all cursor-pointer ${view === "table" ? "bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-50 shadow-3xs" : "text-zinc-400 hover:text-zinc-600"}`}
+                  className={`w-8 h-8 flex items-center justify-center rounded-md transition-all cursor-pointer ${view === "table" ? "bg-card text-foreground shadow-card" : "text-muted-foreground hover:text-foreground"}`}
                   title="Visualização em Lista"
                 >
                   <List size={14} />
                 </button>
                 <button
                   onClick={() => setView("card")}
-                  className={`w-8 h-8 flex items-center justify-center rounded-md transition-all cursor-pointer ${view === "card" ? "bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-50 shadow-3xs" : "text-zinc-400 hover:text-zinc-600"}`}
+                  className={`w-8 h-8 flex items-center justify-center rounded-md transition-all cursor-pointer ${view === "card" ? "bg-card text-foreground shadow-card" : "text-muted-foreground hover:text-foreground"}`}
                   title="Visualização em Grelha"
                 >
                   <LayoutGrid size={14} />
@@ -184,7 +180,7 @@ const AnnouncementListPage = () => {
             {canManage && (
               <button
                 onClick={() => setCreateOpen(true)}
-                className="h-9 flex items-center justify-center gap-1.5 px-3.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 dark:bg-zinc-50 dark:hover:bg-zinc-200 text-white dark:text-zinc-950 font-medium text-xs shadow-3xs transition-colors cursor-pointer whitespace-nowrap"
+                className="h-9 flex items-center justify-center gap-1.5 px-3.5 rounded-lg bg-primary hover:bg-primary/90 dark:bg-primary dark:hover:bg-primary/90 text-primary-foreground font-medium text-xs shadow-card transition-colors cursor-pointer whitespace-nowrap"
               >
                 <Plus size={14} />
                 <span>Anunciar</span>
@@ -194,37 +190,34 @@ const AnnouncementListPage = () => {
         </div>
       </div>
 
-      {/* ================= DATA RENDER LIST CONTAINER ================= */}
       <div className="w-full">
         {loading ? (
           <div className="flex items-center justify-center py-20">
-            <Loader2 size={20} className="animate-spin text-zinc-400 dark:text-zinc-500" />
+            <Loader2 size={20} className="animate-spin text-muted-foreground" />
           </div>
         ) : data.length === 0 ? (
-          <div className="text-center py-16 text-zinc-400 dark:text-zinc-500 text-xs border border-dashed border-zinc-200 dark:border-zinc-800 rounded-xl bg-zinc-50/30 dark:bg-zinc-900/10">
+          <div className="text-center py-16 text-muted-foreground text-xs border border-dashed border-border rounded-xl bg-accent/30">
             Nenhum comunicado escolar localizado sob os critérios de pesquisa ativos.
           </div>
         ) : view === "table" ? (
-          /* TABLE CORE VIEW */
-          <div className="w-full overflow-x-auto rounded-lg border border-zinc-200 dark:border-zinc-800">
+          <div className="w-full overflow-x-auto rounded-lg border border-border">
             <Table columns={columns} renderRow={renderRow} data={data} />
           </div>
         ) : (
-          /* CARD CORE VIEW */
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {data.map((item) => (
               <div
                 key={item.id}
                 onClick={() => handleRead(item)}
-                className={`flex flex-col justify-between p-4 rounded-xl border bg-white dark:bg-zinc-900/30 hover:border-zinc-300 dark:hover:border-zinc-700 transition-all duration-200 cursor-pointer group relative ${!item.isRead ? "border-zinc-400 dark:border-zinc-500 ring-1 ring-zinc-100 dark:ring-zinc-800/30" : "border-zinc-200 dark:border-zinc-800"}`}
+                className={`flex flex-col justify-between p-4 rounded-xl border bg-card/30 hover:border-foreground/20 transition-all duration-200 cursor-pointer group relative ${!item.isRead ? "border-muted-foreground/50 ring-1 ring-muted-foreground/20" : "border-border"}`}
               >
                 <div>
                   <div className="flex items-start justify-between gap-3 mb-2.5">
                     <div className="flex items-start gap-1.5 min-w-0">
                       {!item.isRead && (
-                        <div className="w-2 h-2 rounded-full bg-zinc-900 dark:bg-zinc-50 shrink-0 mt-1.5" />
+                        <div className="w-2 h-2 rounded-full bg-foreground shrink-0 mt-1.5" />
                       )}
-                      <h3 className={`text-sm font-semibold text-zinc-900 dark:text-zinc-50 line-clamp-1 group-hover:underline decoration-zinc-400 ${!item.isRead ? "font-bold" : ""}`}>
+                      <h3 className={`text-sm font-semibold text-foreground line-clamp-1 group-hover:underline decoration-muted-foreground ${!item.isRead ? "font-bold" : ""}`}>
                         {item.title}
                       </h3>
                     </div>
@@ -233,20 +226,19 @@ const AnnouncementListPage = () => {
                     </span>
                   </div>
 
-                  <p className="text-xs text-zinc-500 dark:text-zinc-400 line-clamp-3 leading-relaxed mb-4">
+                  <p className="text-xs text-muted-foreground line-clamp-3 leading-relaxed mb-4">
                     {item.description}
                   </p>
                 </div>
 
-                {/* Painel Inferior de Metadados / Ações */}
-                <div className="pt-3 border-t border-zinc-100 dark:border-zinc-800/60 flex items-center justify-between text-[11px] text-zinc-400 dark:text-zinc-500">
+                <div className="pt-3 border-t border-border/60 flex items-center justify-between text-[11px] text-muted-foreground">
                   <div className="flex items-center gap-3 font-mono tracking-tight min-w-0 pr-2">
                     <div className="flex items-center gap-1 shrink-0">
                       <Calendar size={11} />
                       <span>{new Date(item.createdAt).toLocaleDateString("pt")}</span>
                     </div>
-                    <div className="border-l border-zinc-200 dark:border-zinc-800 h-2.5" />
-                    <span className="truncate border border-zinc-200 dark:border-zinc-800 px-1.5 py-0.2 rounded bg-zinc-50 dark:bg-zinc-900/50">
+                    <div className="border-l border-border h-2.5" />
+                    <span className="truncate border border-border px-1.5 py-0.2 rounded bg-accent/50">
                       {item.class?.name || item.course?.name || "Geral"}
                     </span>
                   </div>
@@ -255,14 +247,14 @@ const AnnouncementListPage = () => {
                     <div className="flex items-center gap-0.5 shrink-0 pl-1" onClick={(e) => e.stopPropagation()}>
                       <button
                         onClick={() => setEditItem(item)}
-                        className="w-6 h-6 flex items-center justify-center rounded text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 transition-colors cursor-pointer"
+                        className="w-6 h-6 flex items-center justify-center rounded text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
                         title="Editar"
                       >
                         <Pencil size={11} />
                       </button>
                       <button
                         onClick={() => setDeleteItem(item)}
-                        className="w-6 h-6 flex items-center justify-center rounded text-zinc-400 hover:text-rose-500 transition-colors cursor-pointer"
+                        className="w-6 h-6 flex items-center justify-center rounded text-muted-foreground hover:text-destructive transition-colors cursor-pointer"
                         title="Eliminar"
                       >
                         <Trash2 size={11} />
@@ -281,14 +273,12 @@ const AnnouncementListPage = () => {
         )}
       </div>
 
-      {/* Sistema de Paginação */}
       {!loading && data.length > 0 && (
-        <div className="mt-6 pt-4 border-t border-zinc-100 dark:border-zinc-800">
+        <div className="mt-6 pt-4 border-t border-border/60">
           <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
         </div>
       )}
 
-      {/* ================= DIALOG FORM MODAL SYSTEM ================= */}
       <FormModal open={createOpen} onClose={() => setCreateOpen(false)} title="Criar Novo Aviso Coletivo">
         <AnnouncementForm mode="create" onSuccess={() => { setCreateOpen(false); refetch() }} onCancel={() => setCreateOpen(false)} />
       </FormModal>
@@ -299,31 +289,30 @@ const AnnouncementListPage = () => {
         )}
       </FormModal>
 
-      {/* Detail Modal */}
       <FormModal open={!!detailItem} onClose={() => setDetailItem(null)} title={detailItem?.title || "Leitura de Aviso"}>
         {detailItem && (
           <div className="space-y-4">
-            <div className="flex flex-wrap items-center gap-2 pb-2 border-b border-zinc-100 dark:border-zinc-800 text-xs">
+            <div className="flex flex-wrap items-center gap-2 pb-2 border-b border-border text-xs">
               <span className={`inline-flex items-center px-2 py-0.5 rounded border text-[10px] font-medium uppercase tracking-tight ${priorityBadge[detailItem.priority] || priorityBadge.informativo}`}>
                 {detailItem.priority}
               </span>
-              <span className="text-zinc-400 font-mono flex items-center gap-1">
+              <span className="text-muted-foreground font-mono flex items-center gap-1">
                 <Calendar size={11} />
                 {new Date(detailItem.createdAt).toLocaleDateString("pt")}
               </span>
               {detailItem.author && (
-                <span className="text-zinc-400 flex items-center gap-1 border-l border-zinc-200 dark:border-zinc-800 pl-2">
+                <span className="text-muted-foreground flex items-center gap-1 border-l border-border pl-2">
                   <User size={11} />
                   <span>Emissor: {detailItem.author.name}</span>
                 </span>
               )}
             </div>
             
-            <div className="text-xs sm:text-sm text-zinc-700 dark:text-zinc-300 whitespace-pre-wrap leading-relaxed">
+            <div className="text-xs sm:text-sm text-foreground whitespace-pre-wrap leading-relaxed">
               {detailItem.description}
             </div>
             
-            <div className="flex items-center gap-3 text-[11px] text-zinc-400 dark:text-zinc-500 pt-3 border-t border-zinc-100 dark:border-zinc-800 font-mono">
+            <div className="flex items-center gap-3 text-[11px] text-muted-foreground pt-3 border-t border-border font-mono">
               <span className="flex items-center gap-1"><Eye size={12} /> {detailItem.readCount} confirmações de abertura</span>
             </div>
           </div>

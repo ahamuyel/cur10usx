@@ -36,23 +36,23 @@ function scoreBg(score: number) {
 
 export default function StudentRecentGrades({ grades }: Props) {
   return (
-    <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-5 shadow-sm">
+    <div className="bg-card rounded-card border border-border p-5 shadow-card">
       <div className="flex items-center gap-2 mb-4">
         <BookOpen className="w-4 h-4 text-primary" />
-        <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">Últimas Notas</h3>
+        <h3 className="text-sm font-semibold text-foreground">Últimas Notas</h3>
       </div>
 
       {grades.length === 0 ? (
-        <p className="text-sm text-zinc-400 text-center py-4">Sem notas recentes</p>
+        <p className="text-sm text-muted-foreground text-center py-4">Sem notas recentes</p>
       ) : (
         <div className="space-y-2">
           {grades.map((g) => (
-            <div key={g.id} className="flex items-center justify-between py-2.5 px-3 rounded-xl bg-zinc-50 dark:bg-zinc-800/50">
+            <div key={g.id} className="flex items-center justify-between py-2.5 px-3 rounded-xl bg-muted">
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100 truncate">
+                <p className="text-sm font-medium text-foreground truncate">
                   {g.subjectName}
                 </p>
-                <p className="text-[11px] text-zinc-400">
+                <p className="text-[11px] text-muted-foreground">
                   {typeLabels[g.type] || g.type} · {new Date(g.date).toLocaleDateString("pt-AO", { day: "2-digit", month: "short" })}
                 </p>
               </div>

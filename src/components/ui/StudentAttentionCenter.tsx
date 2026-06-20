@@ -147,10 +147,10 @@ export default function StudentAttentionCenter({
   }
 
   return (
-    <div className="bg-white dark:bg-zinc-900 rounded-3xl border border-zinc-200/50 dark:border-zinc-800 p-5 sm:p-6 shadow-sm">
+    <div className="bg-card rounded-card border border-border p-5 sm:p-6 shadow-card">
       <div className="flex items-center gap-2 mb-4">
         <AlertTriangle size={16} className="text-rose-500" />
-        <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">Centro de Atenção</h3>
+        <h3 className="text-sm font-semibold text-foreground">Centro de Atenção</h3>
       </div>
       <div className="space-y-2">
         {top.map((item, i) => {
@@ -173,8 +173,8 @@ export default function StudentAttentionCenter({
                 <Icon size={16} />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100">{item.message}</p>
-                <p className="text-[11px] text-zinc-400 truncate">{item.detail}</p>
+                <p className="text-sm font-medium text-foreground">{item.message}</p>
+                <p className="text-[11px] text-muted-foreground truncate">{item.detail}</p>
               </div>
               <div className={cn("text-[10px] font-bold px-2 py-1 rounded-lg shrink-0", cfg.badge)}>
                 {item.variant === "danger" ? "Urgente" : "Atenção"}

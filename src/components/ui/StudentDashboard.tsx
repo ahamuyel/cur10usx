@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
+import { motion } from "framer-motion"
 import { Loader2, AlertCircle, LayoutGrid, BarChart3 } from "lucide-react";
 
 import StudentHero from "./StudentHero";
@@ -130,7 +131,7 @@ export default function StudentDashboard({ studentId }: Props) {
   if (error) {
     return (
       <div className="flex items-center justify-center py-24 min-h-[60vh]">
-        <div className="flex items-center gap-3 text-rose-500 bg-rose-50/40 dark:bg-rose-950/10 px-6 py-4 rounded-3xl border border-rose-100 dark:border-rose-900/30 shadow-2xs backdrop-blur-md">
+        <div className="flex items-center gap-3 text-rose-500 bg-rose-50/40 dark:bg-rose-950/10 px-6 py-4 rounded-card border border-rose-100 dark:border-rose-900/30 shadow-2xs backdrop-blur-md">
           <AlertCircle size={18} className="shrink-0" />
           <span className="text-xs font-semibold tracking-tight">{error}</span>
         </div>
@@ -143,12 +144,12 @@ export default function StudentDashboard({ studentId }: Props) {
       <div className="flex flex-col items-center justify-center min-h-[75vh] gap-4">
         <div className="relative flex items-center justify-center">
           <Loader2
-            className="w-7 h-7 animate-spin text-violet-600 dark:text-violet-400"
+            className="w-7 h-7 animate-spin text-zinc-650 dark:text-zinc-400"
             strokeWidth={2.5}
           />
-          <div className="absolute w-12 h-12 rounded-full border border-violet-500/10 animate-ping opacity-25" />
+          <div className="absolute w-12 h-12 rounded-full border border-zinc-500/10 animate-ping opacity-25" />
         </div>
-        <p className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 tracking-widest uppercase">
+        <p className="text-[10px] font-bold text-muted-foreground tracking-widest uppercase">
           Cur10usX · Engine
         </p>
       </div>
@@ -220,7 +221,7 @@ export default function StudentDashboard({ studentId }: Props) {
           LAYER 4 — CONTEXTO DE APOIO & RENDIMENTO
           ═══════════════════════════════════════════════ */}
       <section className="space-y-3">
-        <div className="flex items-center gap-2 px-1 text-zinc-400 dark:text-zinc-500">
+        <div className="flex items-center gap-2 px-1 text-muted-foreground">
           <LayoutGrid size={14} />
           <h2 className="text-[10px] font-bold tracking-widest uppercase">
             Métricas por Disciplina
@@ -260,79 +261,95 @@ export default function StudentDashboard({ studentId }: Props) {
           <div className="lg:col-span-7 xl:col-span-8">
             <StudentActivityChart results={data.recentResults} />
           </div>
-          <div className="lg:col-span-5 xl:col-span-4">
-            <div className="bg-white dark:bg-zinc-900/40 rounded-3xl border border-zinc-100 dark:border-zinc-800/60 p-5 sm:p-6 shadow-xs h-full flex flex-col justify-between">
-              <div>
-                <div className="flex items-center gap-2 mb-4 text-zinc-400 dark:text-zinc-500">
-                  <BarChart3 size={14} />
-                  <h3 className="text-[10px] font-bold tracking-widest uppercase">
-                    Distribuição de Notas
-                  </h3>
-                </div>
-                <div className="space-y-3.5">
-                  {[
-                    {
-                      label: "Excelente (16-20)",
-                      value: data.scoreDistribution.excelente,
-                      color: "bg-emerald-500",
-                    },
-                    {
-                      label: "Bom (13-15)",
-                      value: data.scoreDistribution.bom,
-                      color: "bg-blue-500",
-                    },
-                    {
-                      label: "Suficiente (10-12)",
-                      value: data.scoreDistribution.suficiente,
-                      color: "bg-amber-500",
-                    },
-                    {
-                      label: "Insuficiente (<10)",
-                      value: data.scoreDistribution.insuficiente,
-                      color: "bg-rose-500",
-                    },
-                  ].map((cat) => {
-                    const percent =
-                      totalScores > 0
-                        ? Math.round((cat.value / totalScores) * 100)
-                        : 0;
-                    return (
-                      <div
-                        key={cat.label}
-                        className="flex items-center gap-3 group"
-                      >
-                        <div
-                          className={cn(
-                            "w-2 h-2 rounded-full shrink-0 transition-transform group-hover:scale-125",
-                            cat.color,
-                          )}
-                        />
-                        <span className="text-xs text-zinc-500 dark:text-zinc-400 flex-1 font-medium">
-                          {cat.label}
-                        </span>
-                        <div className="w-20 h-1 bg-zinc-100 dark:bg-zinc-800/80 rounded-full overflow-hidden">
-                          <div
-                            className={cn(
-                              "h-full rounded-full transition-all duration-500",
-                              cat.color,
-                            )}
-                            style={{ width: `${percent}%` }}
-                          />
-                        </div>
-                        <span className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 tabular-nums w-6 text-right">
-                          {cat.value}
-                        </span>
-                      </div>
-                    );
-                  })}
+          <div className="lg:col-span-5 xl:col-span-4 h-full">
+            <div className="bg-card rounded-card border border-border p-6 shadow-card h-full flex flex-col">
+              {/* Cabeçalho mais elegante */}
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-card bg-accent flex items-center justify-center text-muted-foreground border border-border">
+                    <BarChart3 size={18} />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-bold text-foreground">
+                      Desempenho Académico
+                    </h3>
+                    <p className="text-[10px] uppercase tracking-widest text-muted-foreground font-semibold">
+                      Distribuição de notas
+                    </p>
+                  </div>
                 </div>
               </div>
-              <div className="text-[10px] text-zinc-400 dark:text-zinc-500 mt-6 pt-3 border-t border-zinc-100 dark:border-zinc-800/40 font-medium">
-                Universo total de{" "}
-                <span className="font-bold text-zinc-600 dark:text-zinc-300 tabular-nums">
-                  {totalScores}
-                </span>{" "}
-                avaliações registadas.
+
+              {/* Área de Dados */}
+              <div className="space-y-4 flex-1">
+                {[
+                  {
+                    label: "Excelente",
+                    range: "16-20",
+                    value: data.scoreDistribution.excelente,
+                    color: "bg-emerald-500",
+                  },
+                  {
+                    label: "Bom",
+                    range: "13-15",
+                    value: data.scoreDistribution.bom,
+                    color: "bg-blue-500",
+                  },
+                  {
+                    label: "Suficiente",
+                    range: "10-12",
+                    value: data.scoreDistribution.suficiente,
+                    color: "bg-amber-500",
+                  },
+                  {
+                    label: "Insuficiente",
+                    range: "<10",
+                    value: data.scoreDistribution.insuficiente,
+                    color: "bg-rose-500",
+                  },
+                ].map((cat) => {
+                  const percent =
+                    totalScores > 0
+                      ? Math.round((cat.value / totalScores) * 100)
+                      : 0;
+                  return (
+                    <div key={cat.label} className="group relative">
+                      <div className="flex justify-between items-end mb-1.5">
+                        <div className="flex items-center gap-2">
+                          <span className="text-[11px] font-bold text-foreground">
+                            {cat.label}
+                          </span>
+                          <span className="text-[9px] text-muted-foreground">
+                            {cat.range}
+                          </span>
+                        </div>
+                        <span className="text-[11px] font-black text-foreground tabular-nums">
+                          {percent}%
+                        </span>
+                      </div>
+
+                      {/* Barra de progresso com animação */}
+                      <div className="w-full h-2 bg-muted rounded-full overflow-hidden">
+                        <motion.div
+                          initial={{ width: 0 }}
+                          animate={{ width: `${percent}%` }}
+                          transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+                          className={cn("h-full rounded-full", cat.color)}
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Footer com contador dinâmico */}
+              <div className="mt-6 pt-4 border-t border-border flex items-center justify-between">
+                <span className="text-[10px] text-muted-foreground font-medium">
+                  Universo total de avaliações
+                </span>
+                <div className="px-3 py-1 rounded-full bg-accent text-[10px] font-black text-foreground tabular-nums border border-border">
+                  {totalScores} registos
+                </div>
               </div>
             </div>
           </div>

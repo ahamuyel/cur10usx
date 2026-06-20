@@ -1,62 +1,65 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { Loader2, AlertCircle } from "lucide-react"
+import { useEffect, useState } from "react";
+import { Loader2, AlertCircle } from "lucide-react";
 
-import { useTeacherDashboard } from "@/hooks/useTeacherDashboard"
-import TeacherHero from "./TeacherHero"
-import TeacherAttentionCenter from "./TeacherAttentionCenter"
-import TeacherClassPerformance from "./TeacherClassPerformance"
-import TeacherUpcomingLessons from "./TeacherUpcomingLessons"
-import TeacherAssessmentCenter from "./TeacherAssessmentCenter"
-import TeacherStudentInsights from "./TeacherStudentInsights"
-import TeacherCalendarExperience from "./TeacherCalendarExperience"
-import TeacherAnnouncements from "./TeacherAnnouncements"
-import TeacherQuickActions from "./TeacherQuickActions"
-import TeacherAnalyticsSnapshot from "./TeacherAnalyticsSnapshot"
+import { useTeacherDashboard } from "@/hooks/useTeacherDashboard";
+import TeacherHero from "./TeacherHero";
+import TeacherAttentionCenter from "./TeacherAttentionCenter";
+import TeacherClassPerformance from "./TeacherClassPerformance";
+import TeacherUpcomingLessons from "./TeacherUpcomingLessons";
+import TeacherAssessmentCenter from "./TeacherAssessmentCenter";
+import TeacherStudentInsights from "./TeacherStudentInsights";
+import TeacherCalendarExperience from "./TeacherCalendarExperience";
+import TeacherAnnouncements from "./TeacherAnnouncements";
+import TeacherQuickActions from "./TeacherQuickActions";
+import TeacherAnalyticsSnapshot from "./TeacherAnalyticsSnapshot";
 
 export default function TeacherDashboard() {
-  const [teacherId, setTeacherId] = useState<string | null>(null)
-  const { data, error } = useTeacherDashboard(teacherId)
+  const [teacherId, setTeacherId] = useState<string | null>(null);
+  const { data, error } = useTeacherDashboard(teacherId);
 
   useEffect(() => {
     async function loadTeacher() {
       try {
-        const res = await fetch("/api/profile")
-        const json = await res.json()
+        const res = await fetch("/api/profile");
+        const json = await res.json();
         if (json.teacher?.id) {
-          setTeacherId(json.teacher.id)
+          setTeacherId(json.teacher.id);
         }
       } catch {
         // silently fail
       }
     }
-    loadTeacher()
-  }, [])
+    loadTeacher();
+  }, []);
 
   if (error) {
     return (
       <div className="flex items-center justify-center py-24 min-h-[60vh]">
-        <div className="flex items-center gap-3 text-rose-500 bg-rose-50/40 dark:bg-rose-950/10 px-6 py-4 rounded-3xl border border-rose-100 dark:border-rose-900/30 shadow-2xs backdrop-blur-md">
+        <div className="flex items-center gap-3 text-rose-500 bg-rose-50/40 dark:bg-rose-950/10 px-6 py-4 rounded-card border border-rose-100 dark:border-rose-900/30 shadow-2xs backdrop-blur-md">
           <AlertCircle size={18} className="shrink-0" />
           <span className="text-xs font-semibold tracking-tight">{error}</span>
         </div>
       </div>
-    )
+    );
   }
 
   if (!data) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[75vh] gap-4">
         <div className="relative flex items-center justify-center">
-          <Loader2 className="w-7 h-7 animate-spin text-violet-600 dark:text-violet-400" strokeWidth={2.5} />
-          <div className="absolute w-12 h-12 rounded-full border border-violet-500/10 animate-ping opacity-25" />
+          <Loader2
+            className="w-7 h-7 animate-spin text-zinc-650 dark:text-zinc-400"
+            strokeWidth={2.5}
+          />
+          <div className="absolute w-12 h-12 rounded-full border border-zinc-500/10 animate-ping opacity-25" />
         </div>
-        <p className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 tracking-widest uppercase">
+        <p className="text-[10px] font-bold text-muted-foreground tracking-widest uppercase">
           Cur10usX · Teacher Engine
         </p>
       </div>
-    )
+    );
   }
 
   return (
@@ -67,9 +70,16 @@ export default function TeacherDashboard() {
       </section>
 
       {/* SNAPSHOT + QUICK ACTIONS */}
-      <section className="space-y-6">
-        <TeacherAnalyticsSnapshot data={data} />
-        <TeacherQuickActions />
+      <section className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        {/* O Resumo Executivo ocupa 2 colunas no desktop */}
+        <div className="xl:col-span-2">
+          <TeacherAnalyticsSnapshot data={data} />
+        </div>
+
+        {/* As Ações Rápidas ocupam 1 coluna no desktop */}
+        <div className="xl:col-span-1">
+          <TeacherQuickActions />
+        </div>
       </section>
 
       {/* ATTENTION CENTER + CLASS PERFORMANCE */}
@@ -115,5 +125,5 @@ export default function TeacherDashboard() {
         </div>
       </section>
     </div>
-  )
+  );
 }

@@ -32,7 +32,7 @@ const Pagination = ({
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="flex items-center gap-1 py-1.5 px-2.5 sm:py-2 sm:px-3 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-xs sm:text-sm font-medium text-zinc-700 dark:text-zinc-300 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-zinc-200 dark:hover:bg-zinc-700 transition active:scale-95"
+        className="flex items-center gap-1 py-1.5 px-2.5 sm:py-2 sm:px-3 rounded-lg bg-muted text-xs sm:text-sm font-medium text-foreground disabled:opacity-40 disabled:cursor-not-allowed hover:bg-accent transition active:scale-95"
       >
         <ChevronLeft size={14} />
         <span className="hidden sm:inline">Anterior</span>
@@ -45,8 +45,8 @@ const Pagination = ({
             onClick={() => onPageChange(page)}
             className={`w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-lg text-xs sm:text-sm font-medium transition ${
               page === currentPage
-                ? "bg-primary text-white shadow-sm"
-                : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800"
+                ? "bg-primary text-primary-foreground shadow-card"
+                : "text-muted-foreground hover:bg-accent"
             }`}
           >
             {page}
@@ -57,7 +57,7 @@ const Pagination = ({
       <button
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="flex items-center gap-1 py-1.5 px-2.5 sm:py-2 sm:px-3 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-xs sm:text-sm font-medium text-zinc-700 dark:text-zinc-300 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-zinc-200 dark:hover:bg-zinc-700 transition active:scale-95"
+        className="flex items-center gap-1 py-1.5 px-2.5 sm:py-2 sm:px-3 rounded-lg bg-muted text-xs sm:text-sm font-medium text-foreground disabled:opacity-40 disabled:cursor-not-allowed hover:bg-accent transition active:scale-95"
       >
         <span className="hidden sm:inline">Próximo</span>
         <ChevronRight size={14} />

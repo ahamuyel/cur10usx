@@ -137,7 +137,7 @@ const Menu = () => {
                     : "text-muted-foreground hover:bg-accent hover:text-foreground"
                 }`}
                 style={isActive ? {
-                  backgroundColor: "color-mix(in srgb, var(--school-primary) 12%, transparent)",
+                  backgroundColor: "color-mix(in srgb, 12%, transparent)",
                   color: "var(--school-primary)",
                 } : undefined}
               >

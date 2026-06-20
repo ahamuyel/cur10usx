@@ -67,51 +67,50 @@ const ClassListPage = () => {
     }
   }
 
-  // Atualiza os filtros e força o reset para a primeira página para evitar desfasamento
   const handleFilterChange = (newFilters: Record<string, any>) => {
     setFilters(newFilters)
     setPage(1)
   }
 
   const renderRow = (item: Class) => (
-    <tr key={item.id} className="border-b border-zinc-200 dark:border-zinc-800/50 text-sm hover:bg-zinc-55 dark:hover:bg-zinc-900/40 transition-colors">
+    <tr key={item.id} className="border-b border-border/50 text-sm hover:bg-accent transition-colors">
       <td className="py-3 px-4">
-        <span className="font-semibold text-zinc-900 dark:text-zinc-50">{item.name}</span>
+        <span className="font-semibold text-foreground">{item.name}</span>
       </td>
       <td className="py-3 px-4">
-        <span className="px-2 py-0.5 bg-zinc-100 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 rounded text-[11px] font-medium border border-zinc-200/50 dark:border-zinc-700/30">
+        <span className="px-2 py-0.5 bg-accent text-foreground rounded text-[11px] font-medium border border-border/50">
           {item.grade}.ª classe
         </span>
       </td>
-      <td className="hidden md:table-cell py-3 px-4 text-zinc-600 dark:text-zinc-400">
+      <td className="hidden md:table-cell py-3 px-4 text-muted-foreground">
         <span className={`px-2 py-0.5 rounded text-[11px] font-medium border ${item.period === "pos_laboral" ? "bg-amber-500/5 text-amber-600 dark:text-amber-400 border-amber-500/10" : "bg-blue-500/5 text-blue-600 dark:text-blue-400 border-blue-500/10"}`}>
           {periodLabels[item.period || "regular"] || "Regular"}
         </span>
       </td>
-      <td className="hidden lg:table-cell py-3 px-4 text-zinc-600 dark:text-zinc-400">
+      <td className="hidden lg:table-cell py-3 px-4 text-muted-foreground">
         <div className="flex items-center gap-1.5 text-xs">
-          <Calendar size={13} className="text-zinc-400 shrink-0" />
+          <Calendar size={13} className="text-muted-foreground shrink-0" />
           <span className="truncate">{item.academicYear?.name || "\u2014"}</span>
         </div>
       </td>
-      <td className="hidden lg:table-cell py-3 px-4 text-zinc-500 dark:text-zinc-400 text-xs truncate max-w-[150px]">
+      <td className="hidden lg:table-cell py-3 px-4 text-muted-foreground text-xs truncate max-w-[150px]">
         {item.course?.name || "\u2014"}
       </td>
-      <td className="py-3 px-4 text-zinc-600 dark:text-zinc-400 tabular-nums text-xs font-medium">
+      <td className="py-3 px-4 text-muted-foreground tabular-nums text-xs font-medium">
         {item._count?.students ?? 0}
       </td>
       <td className="py-3 px-4">
         <div className="flex items-center gap-1.5 justify-end">
           <button
             onClick={() => setEditItem(item)}
-            className="w-8 h-8 flex items-center justify-center rounded-md border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-900 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-400 transition-colors cursor-pointer"
+            className="w-8 h-8 flex items-center justify-center rounded-md border border-border bg-card text-muted-foreground hover:bg-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring transition-colors cursor-pointer"
           >
             <Pencil size={13} />
           </button>
           {isAdmin && (
             <button
               onClick={() => setDeleteItem(item)}
-              className="w-8 h-8 flex items-center justify-center rounded-md border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-zinc-500 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-500/5 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-red-400 transition-colors cursor-pointer"
+              className="w-8 h-8 flex items-center justify-center rounded-md border border-border bg-card text-muted-foreground hover:text-red-600 dark:hover:text-red-400 hover:bg-red-500/5 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-red-400 transition-colors cursor-pointer"
             >
               <Trash2 size={13} />
             </button>
@@ -122,13 +121,12 @@ const ClassListPage = () => {
   )
 
   return (
-    <div className="w-full bg-white dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800 p-4 sm:p-6 shadow-xs">
+    <div className="w-full bg-card rounded-xl border border-border p-4 sm:p-6 shadow-card">
       
-      {/* ================= HEADER DO CONTROLADOR ================= */}
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center justify-between mb-6">
         <div className="min-w-0">
-          <h1 className="text-lg font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">Turmas</h1>
-          <p className="text-xs text-zinc-500 dark:text-zinc-400">Gere e monitorize as turmas ativas na instituição.</p>
+          <h1 className="text-lg font-semibold tracking-tight text-foreground">Turmas</h1>
+          <p className="text-xs text-muted-foreground">Gere e monitorize as turmas ativas na instituição.</p>
         </div>
         
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
@@ -140,7 +138,7 @@ const ClassListPage = () => {
             <select
               value={filters.academicYearId || ""}
               onChange={(e) => handleFilterChange({ ...filters, academicYearId: e.target.value })}
-              className="h-9 px-2.5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-zinc-700 dark:text-zinc-300 text-xs font-medium focus:outline-none focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-600 cursor-pointer"
+              className="h-9 px-2.5 rounded-lg border border-border bg-card text-foreground text-xs font-medium focus:outline-none focus:ring-1 focus:ring-ring cursor-pointer"
             >
               <option value="">Todos os anos</option>
               {academicYears.map(y => (
@@ -151,22 +149,21 @@ const ClassListPage = () => {
             <select
               value={filters.period || ""}
               onChange={(e) => handleFilterChange({ ...filters, period: e.target.value })}
-              className="h-9 px-2.5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-zinc-700 dark:text-zinc-300 text-xs font-medium focus:outline-none focus:ring-1 focus:ring-zinc-400 dark:focus:ring-zinc-600 cursor-pointer"
+              className="h-9 px-2.5 rounded-lg border border-border bg-card text-foreground text-xs font-medium focus:outline-none focus:ring-1 focus:ring-ring cursor-pointer"
             >
               <option value="">Todos os períodos</option>
               <option value="regular">Regular</option>
               <option value="pos_laboral">Pós-laboral</option>
             </select>
 
-            {/* Alternador de Visualização (Toggle Group Shadcn Style) */}
-            <div className="h-9 p-1 bg-zinc-100 dark:bg-zinc-900 rounded-lg inline-flex items-center border border-zinc-200/50 dark:border-zinc-800/50 select-none shrink-0">
+            <div className="h-9 p-1 bg-accent rounded-lg inline-flex items-center border border-border/50 select-none shrink-0">
               <button
                 onClick={() => setViewMode("list")}
                 className={cn(
                   "p-1.5 rounded-md transition-all cursor-pointer",
                   viewMode === "list" 
-                    ? "bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-50 shadow-3xs" 
-                    : "text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300"
+                    ? "bg-card text-foreground shadow-card" 
+                    : "text-muted-foreground hover:text-foreground"
                 )}
                 title="Visualização em lista"
               >
@@ -177,8 +174,8 @@ const ClassListPage = () => {
                 className={cn(
                   "p-1.5 rounded-md transition-all cursor-pointer",
                   viewMode === "card" 
-                    ? "bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-50 shadow-3xs" 
-                    : "text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300"
+                    ? "bg-card text-foreground shadow-card" 
+                    : "text-muted-foreground hover:text-foreground"
                 )}
                 title="Visualização em cards"
               >
@@ -189,7 +186,7 @@ const ClassListPage = () => {
             {isAdmin && (
               <button
                 onClick={() => setCreateOpen(true)}
-                className="h-9 flex items-center justify-center gap-1.5 px-3 rounded-lg bg-zinc-900 hover:bg-zinc-800 dark:bg-zinc-50 dark:hover:bg-zinc-200 text-white dark:text-zinc-950 font-medium text-xs shadow-3xs transition-colors cursor-pointer shrink-0"
+                className="h-9 flex items-center justify-center gap-1.5 px-3 rounded-lg bg-primary hover:bg-primary/90 dark:bg-primary dark:hover:bg-primary/90 text-primary-foreground font-medium text-xs shadow-card transition-colors cursor-pointer shrink-0"
               >
                 <Plus size={14} />
                 <span>Nova Turma</span>
@@ -199,31 +196,28 @@ const ClassListPage = () => {
         </div>
       </div>
 
-      {/* ================= ÁREA DE CONTEÚDO MUTÁVEL ================= */}
       {loading ? (
         <div className="flex items-center justify-center py-16">
-          <Loader2 size={20} className="animate-spin text-zinc-400 dark:text-zinc-500" />
+          <Loader2 size={20} className="animate-spin text-muted-foreground" />
         </div>
       ) : data.length === 0 ? (
-        <div className="text-center py-12 text-zinc-400 dark:text-zinc-500 text-xs border border-dashed border-zinc-200 dark:border-zinc-800 rounded-xl">
+        <div className="text-center py-12 text-muted-foreground text-xs border border-dashed border-border rounded-xl">
           Nenhuma turma encontrada.
         </div>
       ) : viewMode === "list" ? (
-        /* VISUALIZAÇÃO EM TABELA (NATIVA DO SHADCN) */
-        <div className="w-full overflow-x-auto rounded-lg border border-zinc-200 dark:border-zinc-800">
+        <div className="w-full overflow-x-auto rounded-lg border border-border">
           <Table columns={columns} renderRow={renderRow} data={data} />
         </div>
       ) : (
-        /* VISUALIZAÇÃO EM CARDS (GRID TOTALMENTE RESPONSIVO) */
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3.5 w-full">
           {data.map((item) => (
             <div 
               key={item.id} 
-              className="bg-white dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800 p-4 flex flex-col justify-between gap-4 shadow-3xs relative group hover:border-zinc-300 dark:hover:border-zinc-700 transition-colors"
+              className="bg-card rounded-xl border border-border p-4 flex flex-col justify-between gap-4 shadow-card relative group hover:border-foreground/20 transition-colors"
             >
               <div className="flex flex-col gap-1.5 min-w-0">
                 <div className="flex items-start justify-between gap-2">
-                  <h3 className="font-semibold text-zinc-900 dark:text-zinc-50 text-sm truncate">
+                  <h3 className="font-semibold text-foreground text-sm truncate">
                     {item.name}
                   </h3>
                   <span className={cn(
@@ -234,24 +228,24 @@ const ClassListPage = () => {
                   </span>
                 </div>
                 
-                <p className="text-[11px] text-zinc-400 dark:text-zinc-500 truncate font-medium">
+                <p className="text-[11px] text-muted-foreground truncate font-medium">
                   {item.course?.name || "Curso não definido"}
                 </p>
               </div>
 
-              <div className="grid grid-cols-2 gap-2 border-t border-b border-zinc-100 dark:border-zinc-900 py-2.5 my-0.5">
-                <div className="flex items-center gap-1.5 text-zinc-500 dark:text-zinc-400 min-w-0">
-                  <GraduationCap size={13} className="text-zinc-400 shrink-0" />
+              <div className="grid grid-cols-2 gap-2 border-t border-b border-border/60 py-2.5 my-0.5">
+                <div className="flex items-center gap-1.5 text-muted-foreground min-w-0">
+                  <GraduationCap size={13} className="text-muted-foreground shrink-0" />
                   <span className="text-[11px] font-medium truncate">{item.grade}.ª classe</span>
                 </div>
-                <div className="flex items-center gap-1.5 text-zinc-500 dark:text-zinc-400 min-w-0">
-                  <Users size={13} className="text-zinc-400 shrink-0" />
+                <div className="flex items-center gap-1.5 text-muted-foreground min-w-0">
+                  <Users size={13} className="text-muted-foreground shrink-0" />
                   <span className="text-[11px] font-mono tabular-nums truncate">{item._count?.students ?? 0} alunos</span>
                 </div>
               </div>
 
               <div className="flex items-center justify-between gap-4 w-full">
-                <div className="flex items-center gap-1 text-[10px] font-mono text-zinc-400 dark:text-zinc-500 truncate min-w-0">
+                <div className="flex items-center gap-1 text-[10px] font-mono text-muted-foreground truncate min-w-0">
                   <Calendar size={11} className="shrink-0" />
                   <span className="truncate">{item.academicYear?.name || "\u2014"}</span>
                 </div>
@@ -259,14 +253,14 @@ const ClassListPage = () => {
                 <div className="flex items-center gap-1 shrink-0">
                   <button
                     onClick={() => setEditItem(item)}
-                    className="w-7 h-7 flex items-center justify-center rounded bg-zinc-50 dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800 border border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 transition-colors cursor-pointer"
+                    className="w-7 h-7 flex items-center justify-center rounded bg-accent hover:bg-accent border border-border text-muted-foreground transition-colors cursor-pointer"
                   >
                     <Pencil size={11} />
                   </button>
                   {isAdmin && (
                     <button
                       onClick={() => setDeleteItem(item)}
-                      className="w-7 h-7 flex items-center justify-center rounded bg-zinc-50 dark:bg-zinc-900 text-zinc-400 hover:text-red-600 dark:hover:text-red-400 border border-zinc-200 dark:border-zinc-800 hover:border-red-500/10 transition-colors cursor-pointer"
+                      className="w-7 h-7 flex items-center justify-center rounded bg-accent text-muted-foreground hover:text-red-600 dark:hover:text-red-400 border border-border hover:border-red-500/10 transition-colors cursor-pointer"
                     >
                       <Trash2 size={11} />
                     </button>
@@ -278,14 +272,12 @@ const ClassListPage = () => {
         </div>
       )}
 
-      {/* ================= PAGINAÇÃO ================= */}
       {!loading && data.length > 0 && (
-        <div className="mt-6 pt-4 border-t border-zinc-200 dark:border-zinc-800">
+        <div className="mt-6 pt-4 border-t border-border">
           <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
         </div>
       )}
 
-      {/* ================= MODAIS DE FLUXO ================= */}
       <FormModal open={createOpen} onClose={() => setCreateOpen(false)} title="Nova Turma">
         <ClassForm mode="create" onSuccess={() => { setCreateOpen(false); refetch() }} onCancel={() => setCreateOpen(false)} />
       </FormModal>

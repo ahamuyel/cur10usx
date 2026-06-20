@@ -48,22 +48,22 @@ const DeleteConfirmModal = ({ open, onClose, onConfirm, itemName, title, message
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
       onClick={(e) => e.target === overlayRef.current && onClose()}
     >
-      <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-xl border border-zinc-200 dark:border-zinc-800 w-full max-w-sm animate-in fade-in zoom-in-95 duration-200">
-        <div className="flex items-center justify-between p-4 border-b border-zinc-100 dark:border-zinc-800">
-          <h2 className="text-lg font-bold text-rose-600">{title || "Confirmar exclusão"}</h2>
+      <div className="bg-card rounded-card shadow-card border border-border w-full max-w-sm animate-in fade-in zoom-in-95 duration-200">
+        <div className="flex items-center justify-between p-4 border-b border-border">
+          <h2 className="text-lg font-bold text-destructive">{title || "Confirmar exclusão"}</h2>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition"
+            className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent transition"
           >
             <X size={18} />
           </button>
         </div>
         <div className="p-4 sm:p-6">
-          <p className="text-sm text-zinc-600 dark:text-zinc-400 mb-6">
-            {message || (<>Tem certeza que deseja excluir <strong className="text-zinc-900 dark:text-zinc-100">{itemName}</strong>? Esta ação não pode ser desfeita.</>)}
+          <p className="text-sm text-muted-foreground mb-6">
+            {message || (<>Tem certeza que deseja excluir <strong className="text-foreground">{itemName}</strong>? Esta ação não pode ser desfeita.</>)}
           </p>
           {error && (
-            <div className="mb-4 p-3 rounded-xl bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-800 text-sm text-rose-600 dark:text-rose-400">
+            <div className="mb-4 p-3 rounded-xl bg-destructive/10 border border-border text-sm text-destructive">
               {error}
             </div>
           )}
@@ -71,14 +71,14 @@ const DeleteConfirmModal = ({ open, onClose, onConfirm, itemName, title, message
             <button
               onClick={onClose}
               disabled={loading}
-              className="px-4 py-2 rounded-xl text-sm font-medium text-zinc-600 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition"
+              className="px-4 py-2 rounded-xl text-sm font-medium text-muted-foreground bg-muted hover:bg-accent transition"
             >
               Cancelar
             </button>
             <button
               onClick={handleConfirm}
               disabled={loading}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white bg-rose-600 hover:bg-rose-700 transition disabled:opacity-50 shadow-lg shadow-rose-600/20"
+              className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white bg-rose hover:bg-rose-700 transition disabled:opacity-50 shadow-lg shadow-rose-600/20"
             >
               <Trash2 size={14} />
               {loading ? "A processar..." : (confirmLabel || "Excluir")}

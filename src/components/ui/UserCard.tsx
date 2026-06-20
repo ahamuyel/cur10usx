@@ -35,7 +35,7 @@ const UserCard = ({ type, count }: { type: string; count: number }) => {
   const Icon = config.icon
 
   return (
-    <div className={`${config.cardBg} rounded-2xl p-3 sm:p-4 shadow-sm hover:shadow-md transition-shadow`}>
+    <div className={`${config.cardBg} rounded-card p-3 sm:p-4 shadow-card hover:shadow-card transition-shadow`}>
       <div className="flex items-center justify-between mb-3 sm:mb-4">
         <div className={`p-2 sm:p-2.5 rounded-xl ${config.iconBg}`}>
           <Icon size={18} className="text-white" />

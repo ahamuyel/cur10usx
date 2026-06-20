@@ -34,13 +34,12 @@ const SubjectListPage = () => {
   }
 
   return (
-    <div className="w-full bg-white dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800 p-4 sm:p-6 shadow-xs">
+    <div className="w-full bg-card rounded-xl border border-border p-4 sm:p-6 shadow-card">
       
-      {/* ================= HEADER DO CONTROLADOR ================= */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center justify-between mb-6">
         <div className="min-w-0">
-          <h1 className="text-lg font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">Disciplinas</h1>
-          <p className="text-xs text-zinc-500 dark:text-zinc-400">Gere as disciplinas que compõem a matriz curricular.</p>
+          <h1 className="text-lg font-semibold tracking-tight text-foreground">Disciplinas</h1>
+          <p className="text-xs text-muted-foreground">Gere as disciplinas que compõem a matriz curricular.</p>
         </div>
         
         <div className="flex items-center gap-2 self-stretch sm:self-auto">
@@ -51,7 +50,7 @@ const SubjectListPage = () => {
           {isAdmin && (
             <button
               onClick={() => setCreateOpen(true)}
-              className="h-9 flex items-center justify-center gap-1.5 px-3 rounded-lg bg-zinc-900 hover:bg-zinc-800 dark:bg-zinc-50 dark:hover:bg-zinc-200 text-white dark:text-zinc-950 font-medium text-xs shadow-3xs transition-colors cursor-pointer shrink-0"
+              className="h-9 flex items-center justify-center gap-1.5 px-3 rounded-lg bg-primary hover:bg-primary/90 dark:bg-primary dark:hover:bg-primary/90 text-primary-foreground font-medium text-xs shadow-card transition-colors cursor-pointer shrink-0"
             >
               <Plus size={14} />
               <span>Adicionar</span>
@@ -60,13 +59,12 @@ const SubjectListPage = () => {
         </div>
       </div>
 
-      {/* ================= GRELHA DE CARDS EXCLUSIVA ================= */}
       {loading ? (
         <div className="flex items-center justify-center py-16">
-          <Loader2 size={20} className="animate-spin text-zinc-400 dark:text-zinc-500" />
+          <Loader2 size={20} className="animate-spin text-muted-foreground" />
         </div>
       ) : data.length === 0 ? (
-        <div className="text-center py-12 text-zinc-400 dark:text-zinc-500 text-xs border border-dashed border-zinc-200 dark:border-zinc-800 rounded-xl">
+        <div className="text-center py-12 text-muted-foreground text-xs border border-dashed border-border rounded-xl">
           Nenhuma disciplina encontrada.
         </div>
       ) : (
@@ -74,22 +72,21 @@ const SubjectListPage = () => {
           {data.map((item) => (
             <div 
               key={item.id}
-              className="bg-white dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800 p-3.5 flex items-center justify-between gap-4 shadow-3xs hover:border-zinc-300 dark:hover:border-zinc-700 transition-colors group"
+              className="bg-card rounded-xl border border-border p-3.5 flex items-center justify-between gap-4 shadow-card hover:border-foreground/20 transition-colors group"
             >
               <div className="flex items-center gap-3 min-w-0">
-                <div className="w-8 h-8 rounded-lg border border-zinc-200/60 dark:border-zinc-800/80 bg-zinc-50 dark:bg-zinc-900/50 flex items-center justify-center text-zinc-500 dark:text-zinc-400 shrink-0">
+                <div className="w-8 h-8 rounded-lg border border-border/60 bg-accent/50 flex items-center justify-center text-muted-foreground shrink-0">
                   <BookOpen size={14} />
                 </div>
-                <span className="font-semibold text-zinc-900 dark:text-zinc-50 text-sm truncate">
+                <span className="font-semibold text-foreground text-sm truncate">
                   {item.name}
                 </span>
               </div>
 
-              {/* Ações Rápidas Modulares */}
               <div className="flex items-center gap-1 shrink-0 opacity-90 sm:opacity-0 group-hover:opacity-100 transition-opacity">
                 <button
                   onClick={() => setEditItem(item)}
-                  className="w-7 h-7 flex items-center justify-center rounded bg-white dark:bg-zinc-950 hover:bg-zinc-50 dark:hover:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 transition-colors cursor-pointer"
+                  className="w-7 h-7 flex items-center justify-center rounded bg-card hover:bg-accent border border-border text-muted-foreground transition-colors cursor-pointer"
                   title="Editar"
                 >
                   <Pencil size={11} />
@@ -97,7 +94,7 @@ const SubjectListPage = () => {
                 {isAdmin && (
                   <button
                     onClick={() => setDeleteItem(item)}
-                    className="w-7 h-7 flex items-center justify-center rounded bg-white dark:bg-zinc-950 text-zinc-400 hover:text-red-600 dark:hover:text-red-400 border border-zinc-200 dark:border-zinc-800 hover:border-red-500/10 transition-colors cursor-pointer"
+                    className="w-7 h-7 flex items-center justify-center rounded bg-card text-muted-foreground hover:text-red-600 dark:hover:text-red-400 border border-border hover:border-red-500/10 transition-colors cursor-pointer"
                     title="Eliminar"
                   >
                     <Trash2 size={11} />
@@ -109,14 +106,12 @@ const SubjectListPage = () => {
         </div>
       )}
 
-      {/* ================= PAGINAÇÃO ================= */}
       {!loading && data.length > 0 && (
-        <div className="mt-6 pt-4 border-t border-zinc-200 dark:border-zinc-800">
+        <div className="mt-6 pt-4 border-t border-border">
           <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
         </div>
       )}
 
-      {/* ================= MODAIS DE FLUXO ================= */}
       <FormModal open={createOpen} onClose={() => setCreateOpen(false)} title="Nova Disciplina">
         <SubjectForm mode="create" onSuccess={() => { setCreateOpen(false); refetch() }} onCancel={() => setCreateOpen(false)} />
       </FormModal>
