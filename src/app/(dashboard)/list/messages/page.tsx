@@ -81,7 +81,7 @@ const MessageListPage = () => {
           <TableSearch value={search} onChange={setSearch} />
           <button
             onClick={() => setCreateOpen(true)}
-            className="h-9 flex items-center justify-center gap-1.5 px-4 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-xs shadow-3xs transition-colors"
+            className="h-9 flex items-center justify-center gap-1.5 px-4 rounded-lg bg-primary-600 hover:bg-primary-700 text-white font-medium text-xs shadow-3xs transition-colors"
           >
             <Send size={14} />
             <span>Nova</span>

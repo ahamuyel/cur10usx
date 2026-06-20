@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState, useCallback } from "react"
-import { Loader2, Search } from "lucide-react"
+import { Loader2, Search, LayoutGrid, List } from "lucide-react"
 import StatusBadge from "@/components/ui/StatusBadge"
 import Pagination from "@/components/ui/Pagination"
 
@@ -40,6 +40,7 @@ export default function AdminApplicationsPage() {
   const [total, setTotal] = useState(0)
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
+  const [viewMode, setViewMode] = useState<"table" | "card">("table")
 
   const fetchApplications = useCallback(async () => {
     setLoading(true)
@@ -64,13 +65,19 @@ export default function AdminApplicationsPage() {
 
   return (
     <div>
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">Solicitações</h1>
-        <p className="text-sm text-zinc-500">{total} solicitação(ões) em todas as escolas</p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">Solicitações</h1>
+          <p className="text-sm text-zinc-500">{total} solicitação(ões) em todas as escolas</p>
+        </div>
+        <div className="flex items-center gap-2 bg-white dark:bg-zinc-900 p-1 rounded-lg border border-zinc-200 dark:border-zinc-800">
+          <button onClick={() => setViewMode("table")} className={`p-2 rounded-md ${viewMode === "table" ? "bg-zinc-100 dark:bg-zinc-800 text-primary" : "text-zinc-400"}`}><List size={18} /></button>
+          <button onClick={() => setViewMode("card")} className={`p-2 rounded-md ${viewMode === "card" ? "bg-zinc-100 dark:bg-zinc-800 text-primary" : "text-zinc-400"}`}><LayoutGrid size={18} /></button>
+        </div>
       </div>
 
       {/* Filters */}
-      <div className="flex flex-wrap gap-3 mb-4">
+      <div className="flex flex-wrap gap-3 mb-6">
         <div className="flex items-center gap-2 px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-sm flex-1 min-w-[200px] max-w-xs">
           <Search size={14} className="text-zinc-400 shrink-0" />
           <input
@@ -86,11 +93,7 @@ export default function AdminApplicationsPage() {
             <button
               key={f.value}
               onClick={() => { setStatusFilter(f.value); setPage(1) }}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition whitespace-nowrap ${
-                statusFilter === f.value
-                  ? "bg-primary text-white"
-                  : "bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800"
-              }`}
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition ${statusFilter === f.value ? "bg-primary text-white" : "bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 text-zinc-600 dark:text-zinc-400"}`}
             >
               {f.label}
             </button>
@@ -98,53 +101,46 @@ export default function AdminApplicationsPage() {
         </div>
       </div>
 
-      {/* Table */}
       {loading ? (
-        <div className="flex justify-center py-16">
-          <Loader2 className="w-6 h-6 animate-spin text-primary" />
-        </div>
+        <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-primary" /></div>
       ) : applications.length === 0 ? (
         <div className="text-center py-16 text-zinc-400 text-sm">Nenhuma solicitação encontrada</div>
       ) : (
-        <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-zinc-200 dark:border-zinc-800 text-xs text-zinc-500 uppercase">
-                  <th className="text-left py-3 px-4 font-medium">Nome</th>
-                  <th className="text-left py-3 px-4 font-medium hidden sm:table-cell">Escola</th>
-                  <th className="text-left py-3 px-4 font-medium hidden md:table-cell">Papel</th>
-                  <th className="text-left py-3 px-4 font-medium">Status</th>
-                  <th className="text-left py-3 px-4 font-medium hidden md:table-cell">Data</th>
-                </tr>
-              </thead>
-              <tbody>
-                {applications.map((app) => (
-                  <tr key={app.id} className="border-b border-zinc-100 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition">
-                    <td className="px-4 py-3">
-                      <div className="font-medium text-zinc-900 dark:text-zinc-100">{app.name}</div>
-                      <div className="text-xs text-zinc-400">{app.email}</div>
-                    </td>
+        <>
+          {viewMode === "table" ? (
+            <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 overflow-hidden">
+              <table className="w-full text-sm">
+                <thead><tr className="border-b border-zinc-200 dark:border-zinc-800 text-xs text-zinc-500 uppercase"><th className="text-left py-3 px-4 font-medium">Nome</th><th className="text-left py-3 px-4 font-medium hidden sm:table-cell">Escola</th><th className="text-left py-3 px-4 font-medium hidden md:table-cell">Papel</th><th className="text-left py-3 px-4 font-medium">Status</th><th className="text-left py-3 px-4 font-medium hidden md:table-cell">Data</th></tr></thead>
+                <tbody>{applications.map((app) => (
+                  <tr key={app.id} className="border-b border-zinc-100 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800/50">
+                    <td className="px-4 py-3"><div className="font-medium">{app.name}</div><div className="text-xs text-zinc-400">{app.email}</div></td>
                     <td className="px-4 py-3 text-zinc-600 dark:text-zinc-400 text-xs hidden sm:table-cell">{app.school.name}</td>
-                    <td className="px-4 py-3 hidden md:table-cell">
-                      <span className="text-xs text-zinc-500">{roleLabels[app.role] || app.role}</span>
-                    </td>
+                    <td className="px-4 py-3 hidden md:table-cell"><span className="text-xs text-zinc-500">{roleLabels[app.role] || app.role}</span></td>
                     <td className="px-4 py-3"><StatusBadge status={app.status} /></td>
-                    <td className="px-4 py-3 text-xs text-zinc-500 hidden md:table-cell">
-                      {new Date(app.createdAt).toLocaleDateString("pt")}
-                    </td>
+                    <td className="px-4 py-3 text-xs text-zinc-500 hidden md:table-cell">{new Date(app.createdAt).toLocaleDateString("pt")}</td>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          {totalPages > 1 && (
-            <div className="px-4 border-t border-zinc-200 dark:border-zinc-800">
-              <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
+                ))}</tbody>
+              </table>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {applications.map((app) => (
+                <div key={app.id} className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-4 rounded-2xl flex flex-col gap-3">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h4 className="font-medium text-sm text-zinc-900 dark:text-zinc-100">{app.name}</h4>
+                      <p className="text-xs text-zinc-400">{app.email}</p>
+                    </div>
+                    <StatusBadge status={app.status} />
+                  </div>
+                  <div className="text-xs text-zinc-500">Escola: <span className="font-medium">{app.school.name}</span></div>
+                  <div className="text-xs text-zinc-500">Papel: <span className="font-medium">{roleLabels[app.role] || app.role}</span></div>
+                </div>
+              ))}
             </div>
           )}
-        </div>
+          {totalPages > 1 && <div className="mt-6"><Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} /></div>}
+        </>
       )}
     </div>
   )
