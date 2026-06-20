@@ -122,7 +122,7 @@ export default function SidebarMobile() {
 
       <div
         className={cn(
-          "md:hidden fixed top-0 left-0 bottom-0 z-50 w-72 bg-white dark:bg-zinc-950 border-r border-zinc-200 dark:border-zinc-800 transform transition-transform duration-300 ease-in-out flex flex-col",
+          "md:hidden fixed top-0 left-0 bottom-0 z-50 w-72 bg-white dark:bg-zinc-900 border-r border-zinc-200 dark:border-zinc-800 transform transition-transform duration-300 ease-in-out flex flex-col",
           mobileOpen ? "translate-x-0" : "-translate-x-full"
         )}
       >
@@ -132,7 +132,7 @@ export default function SidebarMobile() {
           </Link>
           <button
             onClick={() => setMobileOpen(false)}
-            className="p-1.5 rounded-lg text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-900 transition"
+            className="p-1.5 rounded-lg text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-900 transition cursor-pointer"
           >
             <X size={20} />
           </button>
@@ -145,7 +145,7 @@ export default function SidebarMobile() {
               <div key={group.title}>
                 <button
                   onClick={() => toggleGroup(group.title)}
-                  className="flex items-center gap-1.5 w-full px-2 mb-1 group"
+                  className="flex items-center gap-1.5 w-full px-2 mb-1 group cursor-pointer"
                 >
                   <ChevronDown
                     size={12}
@@ -179,7 +179,7 @@ export default function SidebarMobile() {
                           className={cn(
                             "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200",
                             isActive
-                              ? "bg-primary-50 dark:bg-primary-950/40 text-primary dark:text-primary-400"
+                              ? "bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 shadow-sm"
                               : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-900 hover:text-zinc-900 dark:hover:text-zinc-200"
                           )}
                         >
@@ -207,7 +207,7 @@ export default function SidebarMobile() {
           <div className="flex items-center gap-3 px-2 py-1.5 mb-2">
             <Avatar className="h-9 w-9 border border-zinc-200 dark:border-zinc-700">
               {userImage ? <AvatarImage src={userImage} alt={userName} /> : null}
-              <AvatarFallback className="text-xs font-semibold bg-primary-100 dark:bg-primary-950 text-primary dark:text-primary-400">
+              <AvatarFallback className="text-xs font-semibold bg-zinc-100 dark:bg-zinc-800 text-zinc-750 dark:text-zinc-350">
                 {userInitials}
               </AvatarFallback>
             </Avatar>
@@ -222,7 +222,7 @@ export default function SidebarMobile() {
           </div>
           <button
             onClick={() => { setMobileOpen(false); signOut({ callbackUrl: "/signin" }) }}
-            className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 transition-all duration-200 w-full"
+            className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 transition-all duration-200 w-full cursor-pointer"
           >
             <LogOut size={16} />
             Terminar Sessão
