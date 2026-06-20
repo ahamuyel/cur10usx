@@ -26,18 +26,18 @@ const AdminNavBar = () => {
   const title = getPageTitle(pathname)
 
   return (
-    <div className="md:hidden flex items-center justify-between px-4 py-3 bg-white dark:bg-zinc-950 border-b border-zinc-200 dark:border-zinc-800">
+    <div className="md:hidden flex items-center justify-between px-4 py-3 bg-background border-b border-border">
       <div className="flex items-center gap-3">
         <Link href="/admin" className="flex items-center gap-1.5">
-          <span className="font-bold text-zinc-900 dark:text-zinc-100 text-sm">
-            Cur10us<span className="text-primary dark:text-primary-400">X</span>
+          <span className="font-bold text-foreground text-sm">
+            Cur10us<span className="text-primary">X</span>
           </span>
         </Link>
-        <span className="text-zinc-300 dark:text-zinc-700">|</span>
-        <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">{title}</span>
+        <span className="text-border">|</span>
+        <span className="text-sm font-medium text-foreground">{title}</span>
       </div>
       <div className="flex items-center gap-2">
-        <span className="text-xs text-zinc-500 hidden min-[400px]:block">{session?.user?.name}</span>
+        <span className="text-xs text-muted-foreground hidden min-[400px]:block">{session?.user?.name}</span>
         <ThemeToggle />
       </div>
     </div>

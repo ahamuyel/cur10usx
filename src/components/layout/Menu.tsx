@@ -118,7 +118,7 @@ const Menu = () => {
     <div className="mt-4 text-sm">
       {menuItems.map((i) => (
         <div className="flex flex-col gap-2" key={i.title}>
-          <span className="hidden lg:block text-zinc-400 dark:text-zinc-500 font-light my-4 text-xs tracking-wider">
+          <span className="hidden lg:block text-muted-foreground font-light my-4 text-xs tracking-wider">
             {tUI(i.title)}
           </span>
           {i.items.map((item) => {
@@ -134,7 +134,7 @@ const Menu = () => {
                 className={`flex items-center justify-center lg:justify-start gap-4 py-2 rounded-lg md:px-2 transition-colors ${
                   isActive
                     ? ""
-                    : "text-zinc-500 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-zinc-100"
+                    : "text-muted-foreground hover:bg-accent hover:text-foreground"
                 }`}
                 style={isActive ? {
                   backgroundColor: "color-mix(in srgb, var(--school-primary) 12%, transparent)",
@@ -153,7 +153,7 @@ const Menu = () => {
       <div className="flex flex-col gap-2">
         <button
           onClick={() => signOut({ callbackUrl: "/signin" })}
-          className="flex items-center justify-center lg:justify-start gap-4 text-zinc-500 dark:text-zinc-400 py-2 rounded-lg md:px-2 hover:bg-red-50 dark:hover:bg-red-950/50 hover:text-red-600 dark:hover:text-red-400 transition-colors w-full"
+          className="flex items-center justify-center lg:justify-start gap-4 text-muted-foreground py-2 rounded-lg md:px-2 hover:bg-destructive/10 hover:text-destructive transition-colors w-full"
         >
           <LogOut size={20} />
           <span className="hidden lg:block">{tUI("Sair")}</span>

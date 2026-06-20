@@ -142,17 +142,17 @@ const MobileNav = () => {
 
       {/* Drawer */}
       <div
-        className={`md:hidden fixed top-0 left-0 bottom-0 z-50 w-72 bg-white dark:bg-zinc-950 border-r border-zinc-200 dark:border-zinc-800 transform transition-transform duration-300 ease-in-out ${
+        className={`md:hidden fixed top-0 left-0 bottom-0 z-50 w-72 bg-background border-r border-border transform transition-transform duration-300 ease-in-out ${
           drawerOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <div className="flex items-center justify-between p-4 border-b border-zinc-200 dark:border-zinc-800">
-          <Link href="/" onClick={() => setDrawerOpen(false)} className="font-bold text-zinc-900 dark:text-zinc-100">
-            Cur10us<span className="text-primary dark:text-primary-400">X</span>
+        <div className="flex items-center justify-between p-4 border-b border-border">
+          <Link href="/" onClick={() => setDrawerOpen(false)} className="font-bold text-foreground">
+            Cur10us<span className="text-primary">X</span>
           </Link>
           <button
             onClick={() => setDrawerOpen(false)}
-            className="p-1.5 rounded-lg text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-900 transition"
+            className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent transition"
           >
             <X size={20} />
           </button>
@@ -161,7 +161,7 @@ const MobileNav = () => {
         <div className="flex-1 overflow-y-auto styled-scroll px-3 py-2 max-h-[calc(100vh-130px)]">
           {allMenuItems.map((section) => (
             <div key={section.title} className="mb-2">
-              <span className="text-[10px] font-medium text-zinc-400 dark:text-zinc-500 uppercase tracking-wider px-2 py-2 block">
+              <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider px-2 py-2 block">
                 {section.title}
               </span>
               {section.items.map((item) => {
@@ -175,8 +175,8 @@ const MobileNav = () => {
                     href={href}
                     className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${
                       isActive
-                        ? "bg-primary-50 dark:bg-primary-950/50 text-primary dark:text-primary-400"
-                        : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-900 hover:text-zinc-900 dark:hover:text-zinc-200"
+                        ? "bg-accent text-accent-foreground"
+                        : "text-muted-foreground hover:bg-accent hover:text-foreground"
                     }`}
                   >
                     <Icon size={18} strokeWidth={isActive ? 2.5 : 2} />
@@ -188,10 +188,10 @@ const MobileNav = () => {
           ))}
         </div>
 
-        <div className="p-3 border-t border-zinc-200 dark:border-zinc-800">
+        <div className="p-3 border-t border-border">
           <button
             onClick={() => { setDrawerOpen(false); signOut({ callbackUrl: "/signin" }) }}
-            className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/50 transition-colors w-full"
+            className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-destructive hover:bg-destructive/10 transition-colors w-full"
           >
             <LogOut size={18} />
             Sair
@@ -200,7 +200,7 @@ const MobileNav = () => {
       </div>
 
       {/* Bottom bar */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-30 bg-white/95 dark:bg-zinc-950/95 backdrop-blur-md border-t border-zinc-200 dark:border-zinc-800 safe-area-bottom">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-30 bg-background/95 backdrop-blur-md border-t border-border safe-area-bottom">
         <div className="flex items-center justify-around px-2 py-2">
           {filteredNavItems.map((item) => {
             const Icon = item.icon
@@ -212,8 +212,8 @@ const MobileNav = () => {
                 href={href}
                 className={`flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl transition-colors min-w-[56px] ${
                   isActive
-                    ? "text-primary dark:text-primary-400"
-                    : "text-zinc-400 dark:text-zinc-500"
+                    ? "text-primary"
+                    : "text-muted-foreground"
                 }`}
               >
                 <Icon size={20} strokeWidth={isActive ? 2.5 : 2} />
@@ -227,14 +227,14 @@ const MobileNav = () => {
             href="/list/announcements"
             className={`flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl transition-colors min-w-[56px] relative ${
               pathname.startsWith("/list/announcements")
-                ? "text-primary dark:text-primary-400"
-                : "text-zinc-400 dark:text-zinc-500"
+                ? "text-primary"
+                : "text-muted-foreground"
             }`}
           >
             <div className="relative">
               <Bell size={20} />
               {unreadCount > 0 && (
-                <span className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-rose-500 text-white text-[8px] font-bold flex items-center justify-center">
+                <span className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-rose text-primary-foreground text-[8px] font-bold flex items-center justify-center">
                   {unreadCount > 9 ? "9+" : unreadCount}
                 </span>
               )}
@@ -247,8 +247,8 @@ const MobileNav = () => {
             onClick={() => setDrawerOpen(!drawerOpen)}
             className={`flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl transition-colors min-w-[56px] ${
               drawerOpen
-                ? "text-primary dark:text-primary-400"
-                : "text-zinc-400 dark:text-zinc-500"
+                ? "text-primary"
+                : "text-muted-foreground"
             }`}
           >
             <MenuIcon size={20} strokeWidth={drawerOpen ? 2.5 : 2} />
