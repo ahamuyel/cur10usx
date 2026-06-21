@@ -18,6 +18,7 @@ export type TeacherDashboardData = {
     attendanceRate: number
     assessmentsCompleted: number
     studentsAtRisk: number
+    unjustifiedAbsences: number
   }
   attentionStudents: {
     id: string

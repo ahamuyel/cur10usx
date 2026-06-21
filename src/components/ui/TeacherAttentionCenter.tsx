@@ -4,6 +4,7 @@ import { motion } from "framer-motion"
 import { AlertTriangle, ChevronRight, MessageSquare, FileEdit, User } from "lucide-react"
 import { cn } from "@/lib/utils"
 import type { TeacherDashboardData } from "@/hooks/useTeacherDashboard"
+import Link from "next/link"
 
 type Props = {
   data: NonNullable<TeacherDashboardData>
@@ -53,9 +54,9 @@ export default function TeacherAttentionCenter({ data }: Props) {
             {students.length}
           </span>
         </div>
-        <button className="text-[9px] font-bold text-primary dark:text-primary-400 flex items-center gap-1 hover:opacity-80 transition-opacity uppercase tracking-wider">
+        <Link href="/dashboard/teacher/at-risk-students" className="text-[9px] font-bold text-primary dark:text-primary-400 flex items-center gap-1 hover:opacity-80 transition-opacity uppercase tracking-wider cursor-pointer">
           Ver todos <ChevronRight size={10} />
-        </button>
+        </Link>
       </div>
 
       {students.length === 0 ? (
@@ -103,15 +104,27 @@ export default function TeacherAttentionCenter({ data }: Props) {
                 </div>
 
                 <div className="flex items-center gap-1 shrink-0">
-                  <button className="w-7 h-7 rounded-lg bg-white/60 dark:bg-zinc-900/40 border border-zinc-200/50 dark:border-zinc-700/40 flex items-center justify-center text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 hover:bg-white dark:hover:bg-zinc-800/60 transition-all" title="Ver aluno">
+                  <Link 
+                    href={`/list/students/${student.id}`} 
+                    className="w-7 h-7 rounded-lg bg-white/60 dark:bg-zinc-900/40 border border-zinc-200/50 dark:border-zinc-700/40 flex items-center justify-center text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 hover:bg-white dark:hover:bg-zinc-800/60 transition-all cursor-pointer" 
+                    title="Ver aluno"
+                  >
                     <User size={12} />
-                  </button>
-                  <button className="w-7 h-7 rounded-lg bg-white/60 dark:bg-zinc-900/40 border border-zinc-200/50 dark:border-zinc-700/40 flex items-center justify-center text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 hover:bg-white dark:hover:bg-zinc-800/60 transition-all" title="Enviar feedback">
+                  </Link>
+                  <Link 
+                    href={`/list/messages?new=true&to=${student.id}`} 
+                    className="w-7 h-7 rounded-lg bg-white/60 dark:bg-zinc-900/40 border border-zinc-200/50 dark:border-zinc-700/40 flex items-center justify-center text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 hover:bg-white dark:hover:bg-zinc-800/60 transition-all cursor-pointer" 
+                    title="Enviar feedback"
+                  >
                     <MessageSquare size={12} />
-                  </button>
-                  <button className="w-7 h-7 rounded-lg bg-white/60 dark:bg-zinc-900/40 border border-zinc-200/50 dark:border-zinc-700/40 flex items-center justify-center text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 hover:bg-white dark:hover:bg-zinc-800/60 transition-all" title="Registar observação">
+                  </Link>
+                  <Link 
+                    href={`/list/results?studentId=${student.id}`} 
+                    className="w-7 h-7 rounded-lg bg-white/60 dark:bg-zinc-900/40 border border-zinc-200/50 dark:border-zinc-700/40 flex items-center justify-center text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 hover:bg-white dark:hover:bg-zinc-800/60 transition-all cursor-pointer" 
+                    title="Registar observação"
+                  >
                     <FileEdit size={12} />
-                  </button>
+                  </Link>
                 </div>
               </motion.div>
             )
