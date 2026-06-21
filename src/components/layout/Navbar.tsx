@@ -17,6 +17,7 @@ import ThemeToggle from "@/components/ui/ThemeToggle"
 import NotificationDropdown from "@/components/ui/NotificationDropdown"
 import { on } from "@/hooks/useWebSocket"
 
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { useTranslation } from "@/lib/i18n"
 
 const roleLabels: Record<string, string> = {
@@ -270,14 +271,14 @@ const NavBar = () => {
             </span>
           </div>
 
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={userImage}
-            alt="User Avatar"
-            width={34}
-            height={34}
-            className="rounded-full object-cover border-2 border-zinc-200 dark:border-zinc-700 shrink-0 group-hover:border-primary-400 dark:group-hover:border-primary transition-colors w-[34px] h-[34px]"
-          />
+          <Avatar className="w-[34px] h-[34px] border-2 border-zinc-200 dark:border-zinc-700 group-hover:border-primary-400 dark:group-hover:border-primary transition-colors shrink-0">
+            {userImage && userImage !== "/avatar.png" ? (
+              <AvatarImage src={userImage} alt={userName} />
+            ) : null}
+            <AvatarFallback className="text-[10px] font-semibold text-zinc-600 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-800">
+              {userName?.charAt(0)?.toUpperCase() || "U"}
+            </AvatarFallback>
+          </Avatar>
         </Link>
       </div>
     </header>

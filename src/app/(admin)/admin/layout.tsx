@@ -27,7 +27,7 @@ import TwoFactorGate from "@/components/layout/TwoFactorGate"
 import { SidebarProvider, useSidebar } from "@/hooks/useSidebar"
 import { cn } from "@/lib/utils"
 import { usePlatformBranding } from "@/provider/platform-branding"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import {
   Tooltip,
@@ -200,6 +200,9 @@ function AdminSidebar() {
             <div className="flex items-center gap-2 px-2 py-1.5">
               <div className="flex items-center gap-2 flex-1 min-w-0">
                 <Avatar className="h-7 w-7 border border-zinc-200 dark:border-zinc-700">
+                  {session?.user?.image ? (
+                    <AvatarImage src={session.user.image} alt={session.user.name || ""} />
+                  ) : null}
                   <AvatarFallback className="text-[9px] font-semibold bg-primary-100 dark:bg-primary-950 text-primary dark:text-primary-400">
                     {session?.user?.name?.charAt(0)?.toUpperCase() || "A"}
                   </AvatarFallback>

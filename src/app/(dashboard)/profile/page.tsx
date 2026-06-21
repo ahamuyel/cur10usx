@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from "react"
 import { useSession } from "next-auth/react"
 import { Mail, Phone, MapPin, BookOpen, Users, GraduationCap, Loader2, Pencil, Check, X, Camera, Shield, Info, User } from "lucide-react"
+import AppAvatar from "@/components/ui/AppAvatar"
 
 const roleLabels: Record<string, string> = {
   super_admin: "Super Admin",
@@ -21,6 +22,31 @@ const ProfilePage = () => {
   const [uploading, setUploading] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [editForm, setEditForm] = useState({ name: "", phone: "", address: "", gender: "", dateOfBirth: "" })
+
+  const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setUploading(true)
+    try {
+      const formData = new FormData()
+      formData.append("file", file)
+      const res = await fetch("/api/profile/photo", {
+        method: "POST",
+        body: formData,
+      })
+      if (res.ok) {
+        const json = await res.json()
+        if (json.url) {
+          await updateSession()
+          window.location.reload()
+        }
+      }
+    } catch {
+      console.error("Upload failed")
+    } finally {
+      setUploading(false)
+    }
+  }
 
   useEffect(() => {
     fetch("/api/profile")
@@ -64,11 +90,17 @@ const ProfilePage = () => {
       {/* CARD DE CABEÇALHO */}
       <div className="bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 shadow-xs flex flex-col md:flex-row items-center gap-6">
         <div className="relative group cursor-pointer" onClick={() => fileInputRef.current?.click()}>
-          <img src={user.image || "/avatar.png"} className="w-24 h-24 rounded-full object-cover border border-zinc-200 dark:border-zinc-800" />
+          {uploading ? (
+            <div className="w-24 h-24 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center border border-zinc-200 dark:border-zinc-800">
+              <Loader2 className="w-6 h-6 animate-spin text-zinc-400" />
+            </div>
+          ) : (
+            <AppAvatar src={user.image} name={user.name} className="w-24 h-24 !rounded-full border border-zinc-200 dark:border-zinc-800" fallbackClassName="text-lg" />
+          )}
           <div className="absolute inset-0 rounded-full bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
             <Camera className="text-white" size={20} />
           </div>
-          <input ref={fileInputRef} type="file" className="hidden" />
+          <input ref={fileInputRef} type="file" accept="image/jpeg,image/png,image/webp" className="hidden" onChange={handlePhotoUpload} />
         </div>
         
         <div className="flex-1 text-center md:text-left">
