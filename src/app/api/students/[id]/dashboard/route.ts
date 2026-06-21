@@ -76,13 +76,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
       }),
     ])
 
-    // --- General average ---
-    const allScores = results.map((r) => r.score)
-    const generalAverage = allScores.length > 0
-      ? Math.round((allScores.reduce((a, b) => a + b, 0) / allScores.length) * 10) / 10
-      : 0
-
-    // --- Subject averages ---
+    // --- Subject averages (cada disciplina pesa igualmente) ---
     const subjectMap: Record<string, { name: string; scores: number[] }> = {}
     for (const r of results) {
       if (!subjectMap[r.subjectId]) {
@@ -96,6 +90,12 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
       average: Math.round((data.scores.reduce((a, b) => a + b, 0) / data.scores.length) * 10) / 10,
       count: data.scores.length,
     }))
+
+    // --- General average (média das médias — cada disciplina pesa igual) ---
+    const subjectAvgValues = subjectAverages.map((s) => s.average)
+    const generalAverage = subjectAvgValues.length > 0
+      ? Math.round((subjectAvgValues.reduce((a, b) => a + b, 0) / subjectAvgValues.length) * 10) / 10
+      : 0
 
     // --- Attendance summary ---
     const presente = attendances.filter((a) => a.status === "presente").length
@@ -180,6 +180,31 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
       ? trimesterEvolution[trimesterEvolution.length - 2].generalAverage
       : 0
 
+    // --- Subject trends (comparação trimestral por disciplina) ---
+    const subjectTrends: Record<string, { currentAverage: number; previousAverage: number; trend: number }> = {}
+    if (trimesterEvolution.length >= 2) {
+      const current = trimesterEvolution[trimesterEvolution.length - 1]
+      const previous = trimesterEvolution[trimesterEvolution.length - 2]
+      for (const [subjectName, avg] of Object.entries(current.subjects)) {
+        const prevAvg = previous.subjects[subjectName] ?? avg
+        subjectTrends[subjectName] = {
+          currentAverage: avg,
+          previousAverage: prevAvg,
+          trend: Math.round((avg - prevAvg) * 10) / 10,
+        }
+      }
+      // Subjects in previous but not in current
+      for (const [subjectName, prevAvg] of Object.entries(previous.subjects)) {
+        if (!subjectTrends[subjectName]) {
+          subjectTrends[subjectName] = {
+            currentAverage: prevAvg,
+            previousAverage: prevAvg,
+            trend: 0,
+          }
+        }
+      }
+    }
+
     // --- Score distribution ---
     const scoreDistribution = {
       excelente: results.filter((r) => r.score >= 16).length,
@@ -227,20 +252,24 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
         select: { studentId: true, score: true },
       })
 
-      const studentScoreMap: Record<string, number[]> = {}
+      // Group by subject per student (per-subject average, same as generalAverage)
+      const studentSubjectMap: Record<string, Record<string, number[]>> = {}
       for (const r of classResults) {
-        if (!studentScoreMap[r.studentId]) studentScoreMap[r.studentId] = []
-        studentScoreMap[r.studentId].push(r.score)
+        if (!studentSubjectMap[r.studentId]) studentSubjectMap[r.studentId] = {}
+        if (!studentSubjectMap[r.studentId][r.subjectId]) studentSubjectMap[r.studentId][r.subjectId] = []
+        studentSubjectMap[r.studentId][r.subjectId].push(r.score)
       }
 
-      const studentAverages: { studentId: string; average: number }[] = Object.entries(studentScoreMap).map(
-        ([studentId, scores]) => ({
-          studentId,
-          average:
-            scores.length > 0
-              ? Math.round((scores.reduce((a, b) => a + b, 0) / scores.length) * 10) / 10
-              : 0,
-        }),
+      const studentAverages: { studentId: string; average: number }[] = Object.entries(studentSubjectMap).map(
+        ([studentId, subjects]) => {
+          const subjectAvgs = Object.values(subjects).map(
+            (scores) => Math.round((scores.reduce((a, b) => a + b, 0) / scores.length) * 10) / 10,
+          )
+          const avg = subjectAvgs.length > 0
+            ? Math.round((subjectAvgs.reduce((a, b) => a + b, 0) / subjectAvgs.length) * 10) / 10
+            : 0
+          return { studentId, average: avg }
+        },
       )
 
       studentAverages.sort((a, b) => b.average - a.average)
@@ -282,6 +311,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
       subjectAverages,
       subjectsNeedingAttention,
       subjectLastScores,
+      subjectTrends,
       scoreDistribution,
       attendance: { total: totalAttendance, presente, ausente, atrasado },
       attendanceByMonth,
