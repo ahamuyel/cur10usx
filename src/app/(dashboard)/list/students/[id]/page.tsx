@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
 import Link from "next/link"
+import AppAvatar from "@/components/ui/AppAvatar"
 import { Loader2, GraduationCap, BarChart3, Clock, FileText } from "lucide-react"
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -51,14 +52,7 @@ export default function StudentPortfolioPage() {
       <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-sm">
         <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6">
           <div className="relative w-20 h-20 shrink-0">
-            {student.foto ? (
-              /* eslint-disable-next-line @next/next/no-img-element */
-              <img src={student.foto} alt={student.name} className="w-full h-full rounded-full object-cover border-4 border-zinc-200 dark:border-zinc-700" />
-            ) : (
-              <div className="w-full h-full rounded-full bg-indigo-100 dark:bg-indigo-950/40 flex items-center justify-center text-indigo-600 dark:text-indigo-400 text-2xl font-bold border-4 border-zinc-200 dark:border-zinc-700">
-                {student.name.charAt(0)}
-              </div>
-            )}
+            <AppAvatar src={student.foto} name={student.name} className="w-28 h-28 sm:w-32 sm:h-32 !rounded-full border-4 border-white dark:border-zinc-800 shadow-lg" fallbackClassName="text-2xl font-bold" />
           </div>
           <div className="flex-1 text-center sm:text-left">
             <h1 className="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-zinc-100">{student.name}</h1>
