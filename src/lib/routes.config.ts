@@ -24,6 +24,10 @@ import {
   HelpCircle,
   Upload,
   SlidersHorizontal,
+  Clock,
+  Briefcase,
+  ScrollText,
+  BarChart3,
   type LucideIcon,
 } from "lucide-react"
 import type { FeatureKey } from "./features"
@@ -125,6 +129,12 @@ export const navGroups: NavGroup[] = [
         roles: ["school_admin"],
         permission: "canManageStudents",
       },
+      {
+        icon: Briefcase,
+        label: "Funcionários",
+        href: "/list/employees",
+        roles: ["school_admin"],
+      },
     ],
   },
   {
@@ -174,6 +184,27 @@ export const navGroups: NavGroup[] = [
         roles: ["school_admin"],
         permission: "canManageResults",
         feature: "evaluationEngine",
+      },
+      {
+        icon: Clock,
+        label: "Assid. Professores",
+        href: "/list/teacher-attendance",
+        roles: ["school_admin", "teacher"],
+        permission: "canManageAttendance",
+      },
+      {
+        icon: ScrollText,
+        label: "Certificados",
+        href: "/list/certificates",
+        roles: ["school_admin", "teacher", "student", "parent"],
+      },
+      {
+        icon: BarChart3,
+        label: "Relatórios",
+        href: "/list/reports",
+        roles: ["school_admin", "teacher"],
+        permission: "canManageResults",
+        feature: "advancedReports",
       },
     ],
   },

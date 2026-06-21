@@ -144,7 +144,7 @@ export default function StudentDashboard({ studentId }: { studentId: string }) {
         <StudentCalendarExperience />
       </section>
     </div>
-  )
+  ) 
 }
 
 function DashboardLoader() {

@@ -32,6 +32,10 @@ import {
   Calculator,
   Scale,
   SlidersHorizontal,
+  Clock,
+  Briefcase,
+  ScrollText,
+  BarChart3,
 } from "lucide-react"
 import type { LucideIcon } from "lucide-react"
 import { isFeatureEnabled, menuFeatureMap, type FeatureKey } from "@/lib/features"
@@ -70,6 +74,10 @@ const menuItems: { title: string; items: MenuItem[] }[] = [
       { icon: UserPlus, label: "Matrículas", href: "/list/enrollments", visible: ["school_admin"], permission: "canManageStudents" },
       { icon: Calculator, label: "Avaliações", href: "/list/evaluation", visible: ["school_admin"], permission: "canManageResults", feature: "evaluationEngine" },
       { icon: Scale, label: "Recursos", href: "/list/recurso", visible: ["school_admin"], permission: "canManageResults", feature: "evaluationEngine" },
+      { icon: Clock, label: "Assid. Professores", href: "/list/teacher-attendance", visible: ["school_admin", "teacher"], permission: "canManageAttendance" },
+      { icon: Briefcase, label: "Funcionários", href: "/list/employees", visible: ["school_admin"] },
+      { icon: ScrollText, label: "Certificados", href: "/list/certificates", visible: ["school_admin", "teacher", "student", "parent"] },
+      { icon: BarChart3, label: "Relatórios", href: "/list/reports", visible: ["school_admin", "teacher"], permission: "canManageResults", feature: "advancedReports" },
     ],
   },
   {

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
+import { AttendanceStatus } from "@prisma/client"
 import { requirePermission, getSchoolId } from "@/lib/api-auth"
 import { getOrDefaultAcademicYearId } from "@/lib/academic-year"
 import { jsPDF } from "jspdf"
@@ -72,13 +73,22 @@ export async function GET(req: Request) {
     })
 
     // Aggregate per student
-    const statsMap = new Map<string, { presente: number; ausente: number; atrasado: number }>()
+    const statsMap = new Map<string, Record<AttendanceStatus, number>>()
     for (const student of students) {
-      statsMap.set(student.id, { presente: 0, ausente: 0, atrasado: 0 })
+      statsMap.set(student.id, {
+        presente: 0,
+        ausente: 0,
+        atrasado: 0,
+        falta_justificada: 0,
+        falta_injustificada: 0,
+        dispensa: 0,
+      })
     }
     for (const a of attendances) {
       const stats = statsMap.get(a.studentId)
-      if (stats) stats[a.status]++
+      if (stats) {
+        stats[a.status]++
+      }
     }
 
     // Build PDF
@@ -102,15 +112,18 @@ export async function GET(req: Request) {
     const head = ["N.º", "Aluno", "Presenças", "Faltas", "Atrasos", "% Assiduidade"]
     const body = students.map((student, idx) => {
       const stats = statsMap.get(student.id)!
-      const total = stats.presente + stats.ausente + stats.atrasado
-      const percentage = total > 0 ? Math.round(((stats.presente + stats.atrasado) / total) * 1000) / 10 : 0
+      const presencas = stats.presente + stats.dispensa
+      const faltas = stats.ausente + stats.falta_justificada + stats.falta_injustificada
+      const atrasos = stats.atrasado
+      const total = presencas + faltas + atrasos
+      const percentage = total > 0 ? Math.round(((presencas + atrasos) / total) * 1000) / 10 : 0
 
       return [
         idx + 1,
         student.name,
-        stats.presente,
-        stats.ausente,
-        stats.atrasado,
+        presencas,
+        faltas,
+        atrasos,
         total > 0 ? `${percentage}%` : "—",
       ]
     })
@@ -137,8 +150,11 @@ export async function GET(req: Request) {
     const totalStudents = students.length
     const allPercentages = students.map((s) => {
       const stats = statsMap.get(s.id)!
-      const total = stats.presente + stats.ausente + stats.atrasado
-      return total > 0 ? ((stats.presente + stats.atrasado) / total) * 100 : 0
+      const presencas = stats.presente + stats.dispensa
+      const faltas = stats.ausente + stats.falta_justificada + stats.falta_injustificada
+      const atrasos = stats.atrasado
+      const total = presencas + faltas + atrasos
+      return total > 0 ? ((presencas + atrasos) / total) * 100 : 0
     })
     const avgAttendance =
       allPercentages.length > 0
