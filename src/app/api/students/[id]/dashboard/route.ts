@@ -50,6 +50,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
       }),
       prisma.attendance.findMany({
         where: { studentId, schoolId: student.schoolId },
+        include: { lesson: { include: { subject: { select: { id: true, name: true } } } } },
         orderBy: { date: "asc" },
       }),
       prisma.exam.findMany({
@@ -101,12 +102,25 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     const ausente = attendances.filter((a) => a.status === "ausente").length
     const atrasado = attendances.filter((a) => a.status === "atrasado").length
     const totalAttendance = attendances.length
-    const attendancePercent = totalAttendance > 0
-      ? Math.round(((presente + atrasado) / totalAttendance) * 100)
-      : 0
+    const totalAbsences = ausente
 
-    // --- Attendance by month (for trend chart) ---
-    const attendanceByMonth: { month: string; presente: number; ausente: number; atrasado: number; percent: number }[] = []
+    // --- Absences by subject ---
+    const absencesBySubject: Record<string, number> = {}
+    for (const a of attendances) {
+      if (a.status === "ausente" && a.lesson?.subject?.name) {
+        const name = a.lesson.subject.name
+        absencesBySubject[name] = (absencesBySubject[name] || 0) + 1
+      }
+    }
+    const absencesBySubjectArray = Object.entries(absencesBySubject)
+      .map(([subjectName, count]) => ({ subjectName, count }))
+      .sort((a, b) => b.count - a.count)
+
+    // --- Subject with most absences ---
+    const subjectWithMostAbsences = absencesBySubjectArray[0]?.subjectName || null
+
+    // --- Attendance by month ---
+    const attendanceByMonth: { month: string; presente: number; ausente: number; atrasado: number }[] = []
     const monthMap: Record<string, { p: number; au: number; at: number }> = {}
     for (const a of attendances) {
       const d = new Date(a.date)
@@ -119,13 +133,11 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     const monthNames = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"]
     for (const [key, counts] of Object.entries(monthMap).sort()) {
       const monthIdx = parseInt(key.split("-")[1]) - 1
-      const total = counts.p + counts.au + counts.at
       attendanceByMonth.push({
         month: monthNames[monthIdx],
         presente: counts.p,
         ausente: counts.au,
         atrasado: counts.at,
-        percent: total > 0 ? Math.round(((counts.p + counts.at) / total) * 100) : 0,
       })
     }
 
@@ -241,8 +253,8 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
       classRank = rank
     }
 
-    // --- Attendance warning ---
-    const attendanceWarning = attendancePercent < 85
+    // --- Attendance warning (based on absences, not percentage) ---
+    const attendanceWarning = totalAbsences >= 5 || absencesBySubjectArray.some((s) => s.count >= 3)
 
     // --- Subjects needing attention (average < 10) ---
     const subjectsNeedingAttention = subjectAverages
@@ -261,15 +273,17 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
       previousAverage,
       classRank,
       classSize,
-      attendancePercent,
       attendanceWarning,
+      totalAbsences,
+      absencesBySubject: absencesBySubjectArray,
+      subjectWithMostAbsences,
       totalResults: results.length,
       pendingSubmissions,
       subjectAverages,
       subjectsNeedingAttention,
       subjectLastScores,
       scoreDistribution,
-      attendance: { total: totalAttendance, presente, ausente, atrasado, percent: attendancePercent },
+      attendance: { total: totalAttendance, presente, ausente, atrasado },
       attendanceByMonth,
       trimesterEvolution,
       recentResults,
