@@ -157,5 +157,9 @@ export const menuFeatureMap: Record<string, FeatureKey | undefined> = {
   "/list/academic-years": "yearTransition",
   "/list/evaluation": "evaluationEngine",
   "/list/recurso": "evaluationEngine",
+  "/list/teacher-attendance": "attendance",
+  "/list/certificates": "certificates",
+  "/list/reports": "advancedReports",
+  "/list/employees": undefined,
   "/settings/grading": "evaluationEngine",
 }

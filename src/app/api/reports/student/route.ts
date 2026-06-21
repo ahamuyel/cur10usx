@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
+import { AttendanceStatus } from "@prisma/client"
 import { requirePermission, getSchoolId } from "@/lib/api-auth"
 import { getOrDefaultAcademicYearId } from "@/lib/academic-year"
 import { jsPDF } from "jspdf"
@@ -145,13 +146,23 @@ export async function GET(req: Request) {
       select: { status: true },
     })
 
-    const attStats = { presente: 0, ausente: 0, atrasado: 0 }
+    const attStats: Record<AttendanceStatus, number> = {
+      presente: 0,
+      ausente: 0,
+      atrasado: 0,
+      falta_justificada: 0,
+      falta_injustificada: 0,
+      dispensa: 0,
+    }
     for (const a of attendances) {
       attStats[a.status]++
     }
-    const totalAtt = attStats.presente + attStats.ausente + attStats.atrasado
+    const presencas = attStats.presente + attStats.dispensa
+    const faltas = attStats.ausente + attStats.falta_justificada + attStats.falta_injustificada
+    const atrasos = attStats.atrasado
+    const totalAtt = presencas + faltas + atrasos
     const attPercentage = totalAtt > 0
-      ? Math.round(((attStats.presente + attStats.atrasado) / totalAtt) * 1000) / 10
+      ? Math.round(((presencas + atrasos) / totalAtt) * 1000) / 10
       : 0
 
     // Build PDF
@@ -197,9 +208,9 @@ export async function GET(req: Request) {
     doc.setFontSize(12)
     doc.text("Assiduidade", 14, attY)
     doc.setFontSize(10)
-    doc.text(`Presenças: ${attStats.presente}`, 14, attY + 8)
-    doc.text(`Faltas: ${attStats.ausente}`, 14, attY + 14)
-    doc.text(`Atrasos: ${attStats.atrasado}`, 14, attY + 20)
+    doc.text(`Presenças: ${presencas}`, 14, attY + 8)
+    doc.text(`Faltas: ${faltas}`, 14, attY + 14)
+    doc.text(`Atrasos: ${atrasos}`, 14, attY + 20)
     doc.text(`Percentagem de assiduidade: ${attPercentage}%`, 14, attY + 26)
 
     // Observation field
