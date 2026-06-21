@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation"
 import Link from "next/link"
-import { LayoutDashboard, TrendingUp, History, Calendar, Target } from "lucide-react"
+import { LayoutDashboard, History } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 interface StudentNavigationProps {
