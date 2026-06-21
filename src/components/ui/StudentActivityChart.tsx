@@ -61,7 +61,12 @@ export default function StudentActivityChart({ results }: StudentActivityChartPr
         </div>
       </div>
 
-      <div className="flex items-end gap-2 sm:gap-3 h-40">
+      <div className="relative flex items-end gap-2 sm:gap-3 h-40">
+        {results.length > 0 && (
+          <div className="absolute top-0 right-0 text-[9px] text-zinc-400 dark:text-zinc-500 leading-tight text-right">
+            <span className="font-semibold text-zinc-500 dark:text-zinc-400">{results.length}</span> avaliações
+          </div>
+        )}
         {dayLabels.map((label, i) => {
           const count = dayCount[i]
           const barHeight = (count / maxCount) * 100

@@ -249,7 +249,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
       const classStudentIds = classStudents.map((s) => s.id)
       const classResults = await prisma.result.findMany({
         where: { studentId: { in: classStudentIds }, schoolId: student.schoolId },
-        select: { studentId: true, score: true },
+        select: { studentId: true, score: true, subjectId: true },
       })
 
       // Group by subject per student (per-subject average, same as generalAverage)

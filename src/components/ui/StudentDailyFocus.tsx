@@ -71,8 +71,8 @@ function getStatusPhrase(
     return `Tens ${totalAbsences} faltas este período.${subjectWithMostAbsences ? ` A maioria em ${subjectWithMostAbsences}.` : ""}`
   if (hasSubjectIssues)
     return `${subjectsNeedingAttention.join(", ")} ${subjectsNeedingAttention.length > 1 ? "precisam" : "precisa"} de atenção.`
-  if (totalAbsences === 0 && trend > 0.5 && average >= 14) return "Presença perfeita e excelente evolução! 🎉"
-  if (trend > 0.5 && average >= 14) return "Excelente evolução. Mantém o ritmo."
+  if (totalAbsences === 0 && trend > 1.0 && average >= 14) return "Presença perfeita e excelente evolução."
+  if (trend > 1.0 && average >= 14) return "Excelente evolução. Mantém o ritmo."
   if (trend > 0) return "Estás a melhorar. Continua assim."
   if (totalAbsences === 0) return "Sem faltas registadas. Desempenho estável."
   return "Desempenho estável. Foca-te nas próximas metas."
@@ -167,11 +167,11 @@ export default function StudentDailyFocus({
           priority: "info",
           type: "target",
         })
-      } else if (trend > 0.5 && generalAverage >= 14) {
+        } else if (trend > 1.0 && generalAverage >= 14) {
         items.push({
           id: "maintain",
           icon: Sparkles,
-          title: "Presença perfeita! 🎉",
+          title: "Presença perfeita!",
           description: "Sem faltas registadas. Mantém o bom desempenho.",
           priority: "success",
           type: "success",

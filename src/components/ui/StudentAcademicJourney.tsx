@@ -24,9 +24,14 @@ export default function StudentAcademicJourney({ trimesters }: StudentAcademicJo
     const last = trimesters[trimesters.length - 1].generalAverage;
     const diff = last - first;
 
-    if (diff > 0.5) return { status: "improving", diff, text: "Estás a progredir de forma consistente. Continua assim!" };
-    if (Math.abs(diff) <= 0.5) return { status: "stable", diff, text: "A tua média mantém-se estável neste ciclo letivo." };
-    return { status: "dropping", diff, text: "A tua média registou uma quebra. Recomenda-se ajustar o método de estudo." };
+    if (diff > 1.0) return { status: "improving", diff, text: "Estás a progredir de forma consistente. Continua assim!" };
+    if (Math.abs(diff) <= 1.0) {
+      const values = trimesters.map((t) => t.generalAverage)
+      const isLinear = values.every((v) => Math.abs(v - values[0]) <= 0.5)
+      if (isLinear) return { status: "stable", diff, text: "Média estável sem oscilações significativas. Consistência é a chave." }
+      return { status: "stable", diff, text: "A tua média mantém-se estável neste ciclo letivo." }
+    }
+    return { status: "dropping", diff, text: "Quebra na média geral. Identifica as disciplinas com maior descida e ajusta o teu método de estudo." };
   }, [trimesters]);
 
   // Abreviação limpa dos labels para mobile
