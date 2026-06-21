@@ -10,7 +10,7 @@ interface StudentQuickStatsProps {
   classSize: number | null
   totalAbsences: number
   subjectWithMostAbsences: string | null
-  targetAverage: number
+  targetAverage: number | null
 }
 
 function scoreColor(score: number): string {
@@ -36,8 +36,8 @@ export default function StudentQuickStats({
 }: StudentQuickStatsProps) {
   const trend = generalAverage - previousAverage
   const trendUp = trend > 0
-  const targetDiff = generalAverage - targetAverage
-  const aboveTarget = targetDiff >= 0
+  const targetDiff = targetAverage !== null ? generalAverage - targetAverage : 0
+  const aboveTarget = targetAverage !== null && targetDiff >= 0
   const hasAbsences = totalAbsences > 0
   const highAbsences = totalAbsences >= 5
 
@@ -69,11 +69,11 @@ export default function StudentQuickStats({
       />
       <StatCard
         label="Meta"
-        value={targetAverage.toFixed(1)}
-        suffix={aboveTarget ? "atingida" : `falta ${Math.abs(targetDiff).toFixed(1)}`}
-        color={aboveTarget ? "text-emerald-600 dark:text-emerald-400" : "text-amber-600 dark:text-amber-400"}
-        barColor={aboveTarget ? "bg-emerald-500" : "bg-amber-500"}
-        percent={(generalAverage / targetAverage) * 100}
+        value={targetAverage !== null ? targetAverage.toFixed(1) : "—"}
+        suffix={targetAverage !== null ? (aboveTarget ? "atingida" : `falta ${Math.abs(targetDiff).toFixed(1)}`) : "não definida"}
+        color={aboveTarget ? "text-emerald-600 dark:text-emerald-400" : targetAverage !== null ? "text-amber-600 dark:text-amber-400" : "text-zinc-400"}
+        barColor={aboveTarget ? "bg-emerald-500" : targetAverage !== null ? "bg-amber-500" : "bg-zinc-300 dark:bg-zinc-600"}
+        percent={targetAverage !== null ? (generalAverage / targetAverage) * 100 : 0}
       />
       <div className="col-span-2 bg-white dark:bg-zinc-900/40 rounded-2xl border border-zinc-100 dark:border-zinc-800/60 p-4 flex items-center justify-between">
         <div className="flex items-center gap-3">

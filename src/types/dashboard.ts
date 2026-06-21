@@ -50,7 +50,7 @@ export interface DashboardData {
     class: { id: string; name: string; grade: number } | null
     targetAverage: number | null
   }
-  targetAverage: number
+  targetAverage: number | null
   generalAverage: number
   previousAverage: number
   classRank: number | null
