@@ -35,7 +35,7 @@ export default function StudentPrioritySubjects({
   subjectLastScores,
   targetAverage,
 }: StudentPrioritySubjectsProps) {
-  const { attention, highlights, noTarget } = useMemo(() => {
+  const { attention, highlights } = useMemo(() => {
     const withDiff = subjectAverages.map((s) => {
       const last = subjectLastScores[s.subjectId]
       const hasLastScore = last !== undefined
@@ -49,7 +49,6 @@ export default function StudentPrioritySubjects({
       return {
         attention: sorted.slice(0, 5),
         highlights: [...sorted].reverse().slice(0, 4),
-        noTarget: true,
       }
     }
 
@@ -61,7 +60,7 @@ export default function StudentPrioritySubjects({
       .filter((s) => s.average >= targetAverage)
       .slice(0, 4)
 
-    return { attention, highlights, noTarget: false }
+    return { attention, highlights }
   }, [subjectAverages, subjectLastScores, targetAverage])
 
   if (attention.length === 0 && highlights.length === 0) {
