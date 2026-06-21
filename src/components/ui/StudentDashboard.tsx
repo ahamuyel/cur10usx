@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { Loader2, AlertCircle } from "lucide-react"
 
 import StudentHero from "./StudentHero"
+import StudentNavigation from "./StudentNavigation"
 import StudentDailyFocus from "./StudentDailyFocus"
 import StudentPerformanceBreakdown from "./StudentPerformanceBreakdown"
 import StudentQuickStats from "./StudentQuickStats"
@@ -57,7 +58,7 @@ export default function StudentDashboard({ studentId }: { studentId: string }) {
 
   return (
     <div className="w-full space-y-10 animate-in fade-in duration-500 pb-16 px-1 max-w-[1600px] mx-auto">
-      <section className="space-y-6">
+      <section className="space-y-4">
         <StudentHero
           name={data.student.name}
           average={data.generalAverage}
@@ -67,6 +68,9 @@ export default function StudentDashboard({ studentId }: { studentId: string }) {
           statusPhrase={statusPhrase}
           targetAverage={data.targetAverage}
         />
+        <div className="flex justify-end">
+          <StudentNavigation studentId={studentId} />
+        </div>
       </section>
 
       <section>
