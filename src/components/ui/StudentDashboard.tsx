@@ -99,6 +99,7 @@ export default function StudentDashboard({ studentId }: { studentId: string }) {
         </div>
         <div className="lg:col-span-4">
           <StudentQuickStats
+            studentId={studentId}
             generalAverage={data.generalAverage}
             previousAverage={data.previousAverage}
             classRank={data.classRank}

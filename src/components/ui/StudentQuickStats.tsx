@@ -1,9 +1,11 @@
 "use client"
 
-import { TrendingUp, TrendingDown, Minus } from "lucide-react"
+import { TrendingUp, TrendingDown, Minus, Target, Users, ClipboardCheck } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { MetricCard } from "../dashboard/MetricCard"
 
 interface StudentQuickStatsProps {
+  studentId: string
   generalAverage: number
   previousAverage: number
   classRank: number | null
@@ -13,19 +15,8 @@ interface StudentQuickStatsProps {
   targetAverage: number | null
 }
 
-function scoreColor(score: number): string {
-  if (score >= 14) return "text-emerald-600 dark:text-emerald-400"
-  if (score >= 10) return "text-amber-600 dark:text-amber-400"
-  return "text-rose-600 dark:text-rose-400"
-}
-
-function scoreBg(score: number): string {
-  if (score >= 14) return "bg-emerald-500"
-  if (score >= 10) return "bg-amber-500"
-  return "bg-rose-500"
-}
-
 export default function StudentQuickStats({
+  studentId,
   generalAverage,
   previousAverage,
   classRank,
@@ -42,40 +33,41 @@ export default function StudentQuickStats({
   const highAbsences = totalAbsences >= 5
 
   return (
-    <div className="grid grid-cols-2 gap-3 h-full">
-      <StatCard
-        label="Média Geral"
-        value={generalAverage.toFixed(1)}
-        suffix="/20"
-        color={scoreColor(generalAverage)}
-        barColor={scoreBg(generalAverage)}
-        percent={(generalAverage / 20) * 100}
-      />
-      <StatCard
-        label="Ranking"
-        value={classRank ? `#${classRank}` : "—"}
-        suffix={classSize ? `de ${classSize}` : ""}
-        color="text-indigo-600 dark:text-indigo-400"
-        barColor="bg-indigo-500"
-        percent={classRank && classSize ? ((classSize - classRank + 1) / classSize) * 100 : 0}
-      />
-      <StatCard
-        label="Faltas"
-        value={`${totalAbsences}`}
-        suffix={hasAbsences ? (subjectWithMostAbsences ? `${subjectWithMostAbsences}` : "total") : "nenhuma"}
-        color={highAbsences ? "text-rose-600 dark:text-rose-400" : hasAbsences ? "text-amber-600 dark:text-amber-400" : "text-emerald-600 dark:text-emerald-400"}
-        barColor={highAbsences ? "bg-rose-500" : hasAbsences ? "bg-amber-500" : "bg-emerald-500"}
-        percent={Math.min((totalAbsences / 10) * 100, 100)}
-      />
-      <StatCard
-        label="Meta"
-        value={targetAverage !== null ? targetAverage.toFixed(1) : "—"}
-        suffix={targetAverage !== null ? (aboveTarget ? "atingida" : `falta ${Math.abs(targetDiff).toFixed(1)}`) : "não definida"}
-        color={aboveTarget ? "text-emerald-600 dark:text-emerald-400" : targetAverage !== null ? "text-amber-600 dark:text-amber-400" : "text-zinc-400"}
-        barColor={aboveTarget ? "bg-emerald-500" : targetAverage !== null ? "bg-amber-500" : "bg-zinc-300 dark:bg-zinc-600"}
-        percent={targetAverage !== null ? (generalAverage / targetAverage) * 100 : 0}
-      />
-      <div className="col-span-2 bg-white dark:bg-zinc-900/40 rounded-2xl border border-zinc-100 dark:border-zinc-800/60 p-4 flex items-center justify-between">
+    <div className="flex flex-col gap-4 h-full w-full">
+      <div className="grid grid-cols-2 gap-3">
+        <MetricCard
+          title="Média Geral"
+          value={generalAverage.toFixed(1)}
+          description="Em relação a 20"
+          variant={generalAverage >= 14 ? "success" : generalAverage >= 10 ? "info" : "warning"}
+          icon={<TrendingUp className="w-4 h-4 text-violet-500" />}
+          href={`/list/students/${studentId}/history`}
+        />
+        <MetricCard
+          title="Ranking"
+          value={classRank ? `#${classRank}` : "—"}
+          description={classSize ? `De ${classSize} alunos` : ""}
+          variant="info"
+          icon={<Users className="w-4 h-4 text-violet-500" />}
+        />
+        <MetricCard
+          title="Faltas"
+          value={totalAbsences}
+          description={subjectWithMostAbsences ? `Maioria em ${subjectWithMostAbsences}` : "Nenhuma falta"}
+          variant={highAbsences ? "warning" : hasAbsences ? "info" : "success"}
+          icon={<ClipboardCheck className="w-4 h-4 text-violet-500" />}
+          href="/list/justifications"
+        />
+        <MetricCard
+          title="Meta"
+          value={targetAverage !== null ? targetAverage.toFixed(1) : "—"}
+          description={targetAverage !== null ? (aboveTarget ? "Meta atingida!" : `Falta ${Math.abs(targetDiff).toFixed(1)} para a meta`) : "Sem meta definida"}
+          variant={aboveTarget ? "success" : targetAverage !== null ? "info" : "info"}
+          icon={<Target className="w-4 h-4 text-violet-500" />}
+        />
+      </div>
+
+      <div className="bg-white dark:bg-zinc-900/40 rounded-2xl border border-zinc-100 dark:border-zinc-800/60 p-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className={cn(
             "w-9 h-9 rounded-xl flex items-center justify-center border",
@@ -112,42 +104,6 @@ export default function StudentQuickStats({
               ? "quebra em relação ao período anterior"
               : "estável em relação ao período anterior"}
         </span>
-      </div>
-    </div>
-  )
-}
-
-function StatCard({
-  label,
-  value,
-  suffix,
-  color,
-  barColor,
-  percent,
-}: {
-  label: string
-  value: string
-  suffix?: string
-  color: string
-  barColor: string
-  percent: number
-}) {
-  return (
-    <div className="bg-white dark:bg-zinc-900/40 rounded-2xl border border-zinc-100 dark:border-zinc-800/60 p-4 flex flex-col justify-between">
-      <p className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest mb-2">
-        {label}
-      </p>
-      <div className="flex items-baseline gap-1">
-        <span className={cn("text-xl font-black tabular-nums", color)}>{value}</span>
-        {suffix && (
-          <span className="text-[10px] font-medium text-zinc-400 dark:text-zinc-500">{suffix}</span>
-        )}
-      </div>
-      <div className="h-1 w-full bg-zinc-100 dark:bg-zinc-800 rounded-full overflow-hidden mt-3">
-        <div
-          className={cn("h-full rounded-full transition-all duration-700", barColor)}
-          style={{ width: `${Math.min(Math.max(percent, 0), 100)}%` }}
-        />
       </div>
     </div>
   )
