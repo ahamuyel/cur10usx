@@ -22,12 +22,18 @@ interface Exam {
   date: string
 }
 
+interface AbsencesBySubject {
+  subjectName: string
+  count: number
+}
+
 interface StudentDailyFocusProps {
   subjectsNeedingAttention: string[]
   pendingSubmissions: number
   upcomingExams: Exam[]
-  attendanceWarning: boolean
-  attendancePercent: number
+  totalAbsences: number
+  absencesBySubject: AbsencesBySubject[]
+  subjectWithMostAbsences: string | null
   generalAverage: number
   previousAverage: number
   subjectAverages: SubjectAverage[]
@@ -51,22 +57,24 @@ function daysUntil(dateStr: string): number {
 function getStatusPhrase(
   average: number,
   previousAverage: number,
-  attendanceWarning: boolean,
+  totalAbsences: number,
+  subjectWithMostAbsences: string | null,
   subjectsNeedingAttention: string[],
 ): string {
   const trend = average - previousAverage
-  const hasIssues = attendanceWarning || subjectsNeedingAttention.length > 0
+  const hasAbsenceIssues = totalAbsences >= 5
+  const hasSubjectIssues = subjectsNeedingAttention.length > 0
 
-  if (hasIssues) {
-    if (attendanceWarning && subjectsNeedingAttention.length > 0)
-      return `Assiduidade abaixo da meta e ${subjectsNeedingAttention.length} disciplina${subjectsNeedingAttention.length > 1 ? "s" : ""} com média crítica.`
-    if (attendanceWarning)
-      return `Assiduidade abaixo do recomendado.`
+  if (hasAbsenceIssues && hasSubjectIssues)
+    return `Tens ${totalAbsences} faltas e ${subjectsNeedingAttention.length} disciplina${subjectsNeedingAttention.length > 1 ? "s" : ""} com média crítica.`
+  if (hasAbsenceIssues)
+    return `Tens ${totalAbsences} faltas este período.${subjectWithMostAbsences ? ` A maioria em ${subjectWithMostAbsences}.` : ""}`
+  if (hasSubjectIssues)
     return `${subjectsNeedingAttention.join(", ")} ${subjectsNeedingAttention.length > 1 ? "precisam" : "precisa"} de atenção.`
-  }
-
-  if (trend > 0.5 && average >= 14) return "Excelente evolução! Mantém o ritmo."
+  if (totalAbsences === 0 && trend > 0.5 && average >= 14) return "Presença perfeita e excelente evolução! 🎉"
+  if (trend > 0.5 && average >= 14) return "Excelente evolução. Mantém o ritmo."
   if (trend > 0) return "Estás a melhorar. Continua assim."
+  if (totalAbsences === 0) return "Sem faltas registadas. Desempenho estável."
   return "Desempenho estável. Foca-te nas próximas metas."
 }
 
@@ -74,8 +82,9 @@ export default function StudentDailyFocus({
   subjectsNeedingAttention,
   pendingSubmissions,
   upcomingExams,
-  attendanceWarning,
-  attendancePercent,
+  totalAbsences,
+  absencesBySubject,
+  subjectWithMostAbsences,
   generalAverage,
   previousAverage,
   subjectAverages,
@@ -120,18 +129,33 @@ export default function StudentDailyFocus({
       })
     }
 
-    if (attendanceWarning) {
+    if (totalAbsences >= 5) {
+      const worstSubject = absencesBySubject[0]
       items.push({
-        id: "attendance",
+        id: "absences",
         icon: Users,
-        title: "Assiduidade abaixo da meta",
-        description: `Presença: ${attendancePercent}%. Mínimo recomendado: 85%`,
+        title: `Tens ${totalAbsences} falta${totalAbsences > 1 ? "s" : ""} este período`,
+        description: worstSubject
+          ? `${worstSubject.subjectName} tem ${worstSubject.count} falta${worstSubject.count > 1 ? "s" : ""}. Evita novas ausências.`
+          : "Assiste a todas as aulas para não comprometer o teu aproveitamento.",
         priority: "critical",
-        type: "attendance",
+        type: "absences",
       })
+    } else if (totalAbsences > 0 && totalAbsences < 5) {
+      const worstSubject = absencesBySubject[0]
+      if (worstSubject) {
+        items.push({
+          id: "absences",
+          icon: Users,
+          title: `Tens ${totalAbsences} falta${totalAbsences > 1 ? "s" : ""} este período`,
+          description: `${worstSubject.subjectName} é a disciplina com mais ausências (${worstSubject.count}).`,
+          priority: "warning",
+          type: "absences",
+        })
+      }
     }
 
-    if (items.length === 0) {
+    if (items.length === 0 && totalAbsences === 0) {
       const trend = generalAverage - previousAverage
       const targetDiff = generalAverage - targetAverage
       if (targetDiff < 0) {
@@ -147,8 +171,8 @@ export default function StudentDailyFocus({
         items.push({
           id: "maintain",
           icon: Sparkles,
-          title: "Excelente desempenho!",
-          description: "Mantém o ritmo para continuar a evoluir.",
+          title: "Presença perfeita! 🎉",
+          description: "Sem faltas registadas. Mantém o bom desempenho.",
           priority: "success",
           type: "success",
         })
@@ -167,12 +191,12 @@ export default function StudentDailyFocus({
     return items.slice(0, 4)
   }, [
     pendingSubmissions, upcomingExams,
-    attendanceWarning, attendancePercent, generalAverage, previousAverage,
+    totalAbsences, absencesBySubject, generalAverage, previousAverage,
     subjectAverages, targetAverage,
   ])
 
   const statusPhrase = getStatusPhrase(
-    generalAverage, previousAverage, attendanceWarning, subjectsNeedingAttention,
+    generalAverage, previousAverage, totalAbsences, subjectWithMostAbsences, subjectsNeedingAttention,
   )
 
   const priorityColors = {

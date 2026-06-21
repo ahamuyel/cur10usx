@@ -1,6 +1,6 @@
 "use client"
 
-import { BarChart3, Layers } from "lucide-react"
+import { BarChart3, Layers, CalendarDays } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { motion } from "framer-motion"
 
@@ -11,16 +11,28 @@ interface ScoreDistribution {
   insuficiente: number
 }
 
+interface AbsenceBySubject {
+  subjectName: string
+  count: number
+}
+
+interface AttendanceByMonth {
+  month: string
+  ausente: number
+}
+
 interface StudentInsightsProps {
   scoreDistribution: ScoreDistribution
-  totalResults: number
-  subjectAverages: { subjectId: string; subjectName: string; average: number; count: number }[]
+  totalAbsences: number
+  absencesBySubject: AbsenceBySubject[]
+  attendanceByMonth: AttendanceByMonth[]
 }
 
 export default function StudentInsights({
   scoreDistribution,
-  totalResults,
-  subjectAverages,
+  totalAbsences,
+  absencesBySubject,
+  attendanceByMonth,
 }: StudentInsightsProps) {
   const cats = [
     { label: "Excelente (16-20)", val: scoreDistribution.excelente, color: "bg-emerald-500", textColor: "text-emerald-600 dark:text-emerald-400" },
@@ -29,14 +41,13 @@ export default function StudentInsights({
     { label: "Insuficiente (<10)", val: scoreDistribution.insuficiente, color: "bg-rose-500", textColor: "text-rose-600 dark:text-rose-400" },
   ]
 
-  const aboveThreshold = subjectAverages.filter((s) => s.average >= 10).length
-  const belowThreshold = subjectAverages.filter((s) => s.average < 10).length
-  const consistency = totalResults > 0
-    ? Math.round((aboveThreshold / subjectAverages.length) * 100)
-    : 0
-
   const total = Object.values(scoreDistribution).reduce((a, b) => a + b, 0)
   if (total === 0) return null
+
+  const recentAbsences = attendanceByMonth
+    .filter((m) => m.ausente > 0)
+    .slice(-3)
+    .reverse()
 
   return (
     <motion.div
@@ -51,7 +62,7 @@ export default function StudentInsights({
         <div>
           <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100">Insights Académicos</h3>
           <p className="text-[10px] font-medium text-zinc-400 dark:text-zinc-500">
-            Métricas analíticas e distribuição de notas
+            Distribuição de notas e histórico de faltas
           </p>
         </div>
       </div>
@@ -85,35 +96,57 @@ export default function StudentInsights({
 
         <div className="space-y-4">
           <h4 className="flex items-center gap-1.5 text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest">
-            <Layers size={12} /> Métricas de Consistência
+            <CalendarDays size={12} /> Histórico de Faltas
           </h4>
           <div className="space-y-3">
             <div className="flex items-center justify-between py-2 px-3 rounded-xl bg-zinc-50 dark:bg-zinc-800/20 border border-zinc-100 dark:border-zinc-800/40">
-              <span className="text-[11px] font-medium text-zinc-600 dark:text-zinc-400">Disciplinas acima de 10</span>
-              <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 tabular-nums">
-                {aboveThreshold}
+              <span className="text-[11px] font-medium text-zinc-600 dark:text-zinc-400">Total de faltas no período</span>
+              <span className={cn(
+                "text-xs font-bold tabular-nums",
+                totalAbsences >= 5 ? "text-rose-600 dark:text-rose-400"
+                  : totalAbsences > 0 ? "text-amber-600 dark:text-amber-400"
+                  : "text-emerald-600 dark:text-emerald-400"
+              )}>
+                {totalAbsences}
               </span>
             </div>
-            <div className="flex items-center justify-between py-2 px-3 rounded-xl bg-zinc-50 dark:bg-zinc-800/20 border border-zinc-100 dark:border-zinc-800/40">
-              <span className="text-[11px] font-medium text-zinc-600 dark:text-zinc-400">Disciplinas abaixo de 10</span>
-              <span className="text-xs font-bold text-rose-600 dark:text-rose-400 tabular-nums">
-                {belowThreshold}
-              </span>
-            </div>
-            <div className="flex items-center justify-between py-2 px-3 rounded-xl bg-zinc-50 dark:bg-zinc-800/20 border border-zinc-100 dark:border-zinc-800/40">
-              <span className="text-[11px] font-medium text-zinc-600 dark:text-zinc-400">Consistência</span>
-              <div className="flex items-center gap-2">
-                <div className="w-16 h-1.5 bg-zinc-200 dark:bg-zinc-700 rounded-full overflow-hidden">
-                  <div
-                    className="h-full rounded-full bg-violet-500"
-                    style={{ width: `${consistency}%` }}
-                  />
-                </div>
-                <span className="text-xs font-bold text-violet-600 dark:text-violet-400 tabular-nums">
-                  {consistency}%
-                </span>
+
+            {absencesBySubject.length > 0 && (
+              <div className="space-y-1.5 pt-1">
+                <p className="text-[10px] font-medium text-zinc-400 dark:text-zinc-500 px-1">Faltas por disciplina</p>
+                {absencesBySubject.slice(0, 4).map((s) => (
+                  <div key={s.subjectName} className="flex items-center justify-between py-1.5 px-3 rounded-xl bg-zinc-50/50 dark:bg-zinc-800/10 border border-zinc-100/50 dark:border-zinc-800/30">
+                    <span className="text-[11px] font-medium text-zinc-600 dark:text-zinc-400">{s.subjectName}</span>
+                    <span className={cn(
+                      "text-xs font-bold tabular-nums",
+                      s.count >= 3 ? "text-rose-600 dark:text-rose-400" : "text-amber-600 dark:text-amber-400"
+                    )}>
+                      {s.count} falta{s.count > 1 ? "s" : ""}
+                    </span>
+                  </div>
+                ))}
               </div>
-            </div>
+            )}
+
+            {recentAbsences.length > 0 && (
+              <div className="pt-1 border-t border-zinc-100 dark:border-zinc-800/40">
+                <p className="text-[10px] font-medium text-zinc-400 dark:text-zinc-500 mb-1">Faltas recentes</p>
+                {recentAbsences.map((m) => (
+                  <div key={m.month} className="flex items-center justify-between py-1 px-3">
+                    <span className="text-[11px] text-zinc-500 dark:text-zinc-400">{m.month}</span>
+                    <span className="text-[11px] font-semibold text-zinc-700 dark:text-zinc-300 tabular-nums">{m.ausente} falta{m.ausente > 1 ? "s" : ""}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {totalAbsences === 0 && (
+              <div className="py-4 text-center">
+                <p className="text-[11px] font-medium text-emerald-600 dark:text-emerald-400">
+                  Nenhuma falta registada este período. 🎉
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </div>

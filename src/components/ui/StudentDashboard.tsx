@@ -39,17 +39,19 @@ export default function StudentDashboard({ studentId }: { studentId: string }) {
   if (error || !data) return <DashboardError error={error} />
 
   const trend = data.generalAverage - data.previousAverage
+  const hasAbsenceIssues = data.totalAbsences >= 5
+  const hasSubjectIssues = data.subjectsNeedingAttention.length > 0
   const statusPhrase = (() => {
-    const hasIssues = data.attendanceWarning || data.subjectsNeedingAttention.length > 0
-    if (hasIssues) {
-      if (data.attendanceWarning && data.subjectsNeedingAttention.length > 0)
-        return `Assiduidade abaixo da meta e ${data.subjectsNeedingAttention.length} disciplina${data.subjectsNeedingAttention.length > 1 ? "s" : ""} com média crítica.`
-      if (data.attendanceWarning)
-        return `Assiduidade abaixo do recomendado.`
+    if (hasAbsenceIssues && hasSubjectIssues)
+      return `Tens ${data.totalAbsences} faltas e ${data.subjectsNeedingAttention.length} disciplina${data.subjectsNeedingAttention.length > 1 ? "s" : ""} com média crítica.`
+    if (hasAbsenceIssues)
+      return `Tens ${data.totalAbsences} faltas este período.${data.subjectWithMostAbsences ? ` A maioria em ${data.subjectWithMostAbsences}.` : ""}`
+    if (hasSubjectIssues)
       return `${data.subjectsNeedingAttention.join(", ")} ${data.subjectsNeedingAttention.length > 1 ? "precisam" : "precisa"} de atenção.`
-    }
+    if (data.totalAbsences === 0 && trend > 0.5 && data.generalAverage >= 14) return "Presença perfeita e excelente evolução."
     if (trend > 0.5 && data.generalAverage >= 14) return "Excelente evolução. Mantém o ritmo."
     if (trend > 0) return "Estás a melhorar. Continua assim."
+    if (data.totalAbsences === 0) return "Sem faltas registadas. Desempenho estável."
     return "Desempenho estável. Foca-te nas próximas metas."
   })()
 
@@ -72,8 +74,9 @@ export default function StudentDashboard({ studentId }: { studentId: string }) {
           subjectsNeedingAttention={data.subjectsNeedingAttention}
           pendingSubmissions={data.pendingSubmissions}
           upcomingExams={data.upcomingExams}
-          attendanceWarning={data.attendanceWarning}
-          attendancePercent={data.attendancePercent}
+          totalAbsences={data.totalAbsences}
+          absencesBySubject={data.absencesBySubject}
+          subjectWithMostAbsences={data.subjectWithMostAbsences}
           generalAverage={data.generalAverage}
           previousAverage={data.previousAverage}
           subjectAverages={data.subjectAverages}
@@ -96,7 +99,8 @@ export default function StudentDashboard({ studentId }: { studentId: string }) {
             previousAverage={data.previousAverage}
             classRank={data.classRank}
             classSize={data.classSize}
-            attendancePercent={data.attendancePercent}
+            totalAbsences={data.totalAbsences}
+            subjectWithMostAbsences={data.subjectWithMostAbsences}
             targetAverage={data.targetAverage}
           />
         </div>
@@ -126,8 +130,9 @@ export default function StudentDashboard({ studentId }: { studentId: string }) {
       <section>
         <StudentInsights
           scoreDistribution={data.scoreDistribution}
-          totalResults={data.totalResults}
-          subjectAverages={data.subjectAverages}
+          totalAbsences={data.totalAbsences}
+          absencesBySubject={data.absencesBySubject}
+          attendanceByMonth={data.attendanceByMonth}
         />
       </section>
 
