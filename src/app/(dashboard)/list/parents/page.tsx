@@ -9,6 +9,7 @@ import FormModal from "@/components/ui/FormModal"
 import DeleteConfirmModal from "@/components/ui/DeleteConfirmModal"
 import ParentForm from "@/components/forms/ParentForm"
 import { useEntityList } from "@/hooks/useEntityList"
+import AppAvatar from "@/components/ui/AppAvatar"
 import { Pencil, Trash2, SlidersHorizontal, ArrowUpDown, UserPlus, UserX, Loader2, LayoutGrid, List, Mail, Phone, MapPin } from "lucide-react"
 
 type Parent = {
@@ -73,14 +74,7 @@ const ParentListPage = () => {
       <td className="py-3 px-4">
         <div className="flex items-center gap-2.5">
           <div className="relative w-8 h-8 shrink-0 select-none">
-            {item.foto ? (
-              /* eslint-disable-next-line @next/next/no-img-element */
-              <img src={item.foto} alt={item.name} className="w-full h-full rounded-full object-cover" />
-            ) : (
-              <div className="w-full h-full rounded-full bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 flex items-center justify-center text-zinc-700 dark:text-zinc-300 text-xs font-bold">
-                {item.name.charAt(0).toUpperCase()}
-              </div>
-            )}
+            <AppAvatar src={item.foto} name={item.name} className="w-full h-full !rounded-full border border-zinc-200 dark:border-zinc-700" fallbackClassName="text-xs" />
           </div>
           <span className="font-semibold text-zinc-900 dark:text-zinc-50 truncate">
             {item.name}
@@ -226,14 +220,7 @@ const ParentListPage = () => {
                   {/* Bloco de Perfil de Cartão */}
                   <div className="flex items-center gap-3 mb-4">
                     <div className="relative w-10 h-10 shrink-0 select-none">
-                      {item.foto ? (
-                        /* eslint-disable-next-line @next/next/no-img-element */
-                        <img src={item.foto} alt={item.name} className="w-full h-full rounded-full object-cover border border-zinc-200 dark:border-zinc-800" />
-                      ) : (
-                        <div className="w-full h-full rounded-full bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 flex items-center justify-center text-zinc-700 dark:text-zinc-300 text-sm font-bold">
-                          {item.name.charAt(0).toUpperCase()}
-                        </div>
-                      )}
+                      <AppAvatar src={item.foto} name={item.name} className="w-full h-full !rounded-full border border-zinc-200 dark:border-zinc-700" fallbackClassName="text-sm" />
                     </div>
                     <div className="min-w-0 flex-1">
                       <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-50 truncate leading-snug">
