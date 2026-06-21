@@ -13,6 +13,7 @@ import {
 } from "lucide-react"
 import StatusBadge from "@/components/ui/StatusBadge"
 import ConfirmActionModal from "@/components/ui/ConfirmActionModal"
+import AppAvatar from "@/components/ui/AppAvatar"
 import { useTranslation } from "@/lib/i18n"
 
 /* ─── Labels e ícones ─── */
@@ -244,13 +245,7 @@ export default function MinhaAreaPage() {
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS1vcGFjaXR5PSIwLjA1IiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-30" />
         <div className="relative flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
           <div className="relative">
-            {user?.image ? (
-              <img src={user.image} alt={user.name || ""} className="w-16 h-16 sm:w-20 sm:h-20 rounded-full border-4 border-white/20 object-cover" />
-            ) : (
-              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-white/10 flex items-center justify-center border-4 border-white/20">
-                <User className="w-8 h-8 sm:w-10 sm:h-10 text-white/80" />
-              </div>
-            )}
+            <AppAvatar src={user?.image} name={user?.name} className="w-16 h-16 sm:w-20 sm:h-20 !rounded-full border-4 border-white/20" fallbackClassName="text-lg" />
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-sm text-white/70 font-medium">{greeting}!</p>
@@ -432,13 +427,7 @@ export default function MinhaAreaPage() {
           <div className="p-4 sm:p-6">
             <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
               <div className="flex items-center gap-4">
-                {user?.image ? (
-                  <img src={user.image} alt={user.name || ""} className="w-14 h-14 rounded-full object-cover border-2 border-zinc-200 dark:border-zinc-700" />
-                ) : (
-                  <div className="w-14 h-14 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center border-2 border-zinc-200 dark:border-zinc-700">
-                    <User size={24} className="text-zinc-400 dark:text-zinc-500" />
-                  </div>
-                )}
+                <AppAvatar src={user?.image} name={user?.name} className="w-16 h-16 sm:w-20 sm:h-20 !rounded-full border-4 border-white/20" fallbackClassName="text-lg" />
                 <div className="min-w-0">
                   <p className="font-medium text-zinc-900 dark:text-zinc-100 truncate">{user?.name}</p>
                   <p className="text-sm text-zinc-500 dark:text-zinc-400 truncate">{user?.email}</p>
