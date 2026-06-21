@@ -38,9 +38,10 @@ export default function StudentPrioritySubjects({
   const { attention, highlights } = useMemo(() => {
     const withDiff = subjectAverages.map((s) => {
       const last = subjectLastScores[s.subjectId]
-      const lastScore = last?.score ?? s.average
-      const diff = s.average - lastScore
-      return { ...s, diff, lastScore }
+      const hasLastScore = last !== undefined
+      const lastScore = hasLastScore ? last.score : s.average
+      const diff = hasLastScore ? s.average - last.score : 0
+      return { ...s, diff, lastScore, hasLastScore }
     })
 
     const sorted = [...withDiff].sort((a, b) => a.average - b.average)
@@ -111,14 +112,14 @@ function SubjectCard({
   s,
   index,
 }: {
-  s: SubjectAverage & { diff: number; lastScore: number }
+  s: SubjectAverage & { diff: number; lastScore: number; hasLastScore: boolean }
   index: number
 }) {
   const isGood = s.average >= 14
   const isWarning = s.average >= 10 && s.average < 14
   const percent = (s.average / 20) * 100
-  const trendUp = s.diff > 1.0
-  const trendDown = s.diff < -1.0
+  const trendUp = s.hasLastScore && s.diff > 1.0
+  const trendDown = s.hasLastScore && s.diff < -1.0
 
   return (
     <motion.div
@@ -170,11 +171,11 @@ function SubjectCard({
           <span className="flex items-center gap-0.5 text-[10px] font-bold text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-500/10 px-1.5 py-0.5 rounded-md">
             <ArrowDownRight size={10} />{s.diff.toFixed(1)}
           </span>
-        ) : (
+        ) : s.hasLastScore ? (
           <span className="text-[10px] font-medium text-zinc-400 dark:text-zinc-500">
             {s.lastScore.toFixed(0)}
           </span>
-        )}
+        ) : null}
       </div>
     </motion.div>
   )
