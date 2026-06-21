@@ -1,6 +1,6 @@
 "use client"
 
-import { TrendingUp, TrendingDown, Minus } from "lucide-react"
+import { TrendingUp, TrendingDown, Minus, AlertTriangle, CheckCircle2 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 interface StudentQuickStatsProps {
@@ -8,7 +8,8 @@ interface StudentQuickStatsProps {
   previousAverage: number
   classRank: number | null
   classSize: number | null
-  attendancePercent: number
+  totalAbsences: number
+  subjectWithMostAbsences: string | null
   targetAverage: number
 }
 
@@ -29,14 +30,16 @@ export default function StudentQuickStats({
   previousAverage,
   classRank,
   classSize,
-  attendancePercent,
+  totalAbsences,
+  subjectWithMostAbsences,
   targetAverage,
 }: StudentQuickStatsProps) {
   const trend = generalAverage - previousAverage
   const trendUp = trend > 0
   const targetDiff = generalAverage - targetAverage
   const aboveTarget = targetDiff >= 0
-  const attendanceOk = attendancePercent >= 85
+  const hasAbsences = totalAbsences > 0
+  const highAbsences = totalAbsences >= 5
 
   return (
     <div className="grid grid-cols-2 gap-3 h-full">
@@ -57,12 +60,12 @@ export default function StudentQuickStats({
         percent={classRank && classSize ? ((classSize - classRank + 1) / classSize) * 100 : 0}
       />
       <StatCard
-        label="Assiduidade"
-        value={`${attendancePercent}%`}
-        suffix={attendanceOk ? "OK" : "Atenção"}
-        color={attendanceOk ? "text-emerald-600 dark:text-emerald-400" : "text-rose-600 dark:text-rose-400"}
-        barColor={attendanceOk ? "bg-emerald-500" : "bg-rose-500"}
-        percent={attendancePercent}
+        label="Faltas"
+        value={`${totalAbsences}`}
+        suffix={hasAbsences ? (subjectWithMostAbsences ? `${subjectWithMostAbsences}` : "total") : "nenhuma"}
+        color={highAbsences ? "text-rose-600 dark:text-rose-400" : hasAbsences ? "text-amber-600 dark:text-amber-400" : "text-emerald-600 dark:text-emerald-400"}
+        barColor={highAbsences ? "bg-rose-500" : hasAbsences ? "bg-amber-500" : "bg-emerald-500"}
+        percent={Math.min((totalAbsences / 10) * 100, 100)}
       />
       <StatCard
         label="Meta"
