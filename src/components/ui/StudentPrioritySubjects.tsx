@@ -117,8 +117,8 @@ function SubjectCard({
   const isGood = s.average >= 14
   const isWarning = s.average >= 10 && s.average < 14
   const percent = (s.average / 20) * 100
-  const trendUp = s.diff > 0.5
-  const trendDown = s.diff < -0.5
+  const trendUp = s.diff > 1.0
+  const trendDown = s.diff < -1.0
 
   return (
     <motion.div
