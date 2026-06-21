@@ -37,7 +37,7 @@ interface StudentDailyFocusProps {
   generalAverage: number
   previousAverage: number
   subjectAverages: SubjectAverage[]
-  targetAverage: number
+  targetAverage: number | null
 }
 
 interface FocusItem {
@@ -94,7 +94,7 @@ export default function StudentDailyFocus({
     const items: FocusItem[] = []
 
     const worst = [...subjectAverages].sort((a, b) => a.average - b.average)[0]
-    if (worst && worst.average < targetAverage) {
+    if (worst && (targetAverage === null || worst.average < targetAverage)) {
       items.push({
         id: "worst-subject",
         icon: worst.average < 10 ? AlertTriangle : BookOpen,
@@ -157,17 +157,20 @@ export default function StudentDailyFocus({
 
     if (items.length === 0 && totalAbsences === 0) {
       const trend = generalAverage - previousAverage
-      const targetDiff = generalAverage - targetAverage
-      if (targetDiff < 0) {
-        items.push({
-          id: "target",
-          icon: Target,
-          title: `Falta ${Math.abs(targetDiff).toFixed(1)} para a meta`,
-          description: `Tens ${generalAverage.toFixed(1)} — objetivo: ${targetAverage.toFixed(1)}`,
-          priority: "info",
-          type: "target",
-        })
-        } else if (trend > 1.0 && generalAverage >= 14) {
+      if (targetAverage !== null) {
+        const targetDiff = generalAverage - targetAverage
+        if (targetDiff < 0) {
+          items.push({
+            id: "target",
+            icon: Target,
+            title: `Falta ${Math.abs(targetDiff).toFixed(1)} para a meta`,
+            description: `Tens ${generalAverage.toFixed(1)} — objetivo: ${targetAverage.toFixed(1)}`,
+            priority: "info",
+            type: "target",
+          })
+        }
+      }
+      if (items.length === 0 && trend > 1.0 && generalAverage >= 14) {
         items.push({
           id: "maintain",
           icon: Sparkles,

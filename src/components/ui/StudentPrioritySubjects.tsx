@@ -21,7 +21,7 @@ interface SubjectLastScore {
 interface StudentPrioritySubjectsProps {
   subjectAverages: SubjectAverage[]
   subjectLastScores: Record<string, SubjectLastScore>
-  targetAverage: number
+  targetAverage: number | null
 }
 
 function scoreBg(score: number): string {
@@ -35,7 +35,7 @@ export default function StudentPrioritySubjects({
   subjectLastScores,
   targetAverage,
 }: StudentPrioritySubjectsProps) {
-  const { attention, highlights } = useMemo(() => {
+  const { attention, highlights, noTarget } = useMemo(() => {
     const withDiff = subjectAverages.map((s) => {
       const last = subjectLastScores[s.subjectId]
       const hasLastScore = last !== undefined
@@ -43,6 +43,15 @@ export default function StudentPrioritySubjects({
       const diff = hasLastScore ? s.average - last.score : 0
       return { ...s, diff, lastScore, hasLastScore }
     })
+
+    if (targetAverage === null) {
+      const sorted = [...withDiff].sort((a, b) => a.average - b.average)
+      return {
+        attention: sorted.slice(0, 5),
+        highlights: [...sorted].reverse().slice(0, 4),
+        noTarget: true,
+      }
+    }
 
     const sorted = [...withDiff].sort((a, b) => a.average - b.average)
 
@@ -52,7 +61,7 @@ export default function StudentPrioritySubjects({
       .filter((s) => s.average >= targetAverage)
       .slice(0, 4)
 
-    return { attention, highlights }
+    return { attention, highlights, noTarget: false }
   }, [subjectAverages, subjectLastScores, targetAverage])
 
   if (attention.length === 0 && highlights.length === 0) {
