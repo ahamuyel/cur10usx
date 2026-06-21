@@ -43,16 +43,18 @@ export default function StudentAcademicAgenda({ exams, assignments }: Props) {
       const json = await res.json();
 
       // Mapeamento idêntico ao contrato da API que usavas no BigCalendar
-      const mapped: Lesson[] = (json.data || []).map((lesson: any) => ({
-        id: lesson.id || Math.random().toString(),
-        title: lesson.subject?.name || "Aula",
-        subjectName: lesson.subject?.name || "Aula",
-        date: lesson.day, // Garante que bate com "Segunda", "Terça", etc.
-        startTime: lesson.startTime,
-        endTime: lesson.endTime,
-        room: lesson.room,
-        teacher: lesson.teacher?.name,
-      }));
+      const mapped: Lesson[] = (json.data || [])
+        .filter((lesson: any) => lesson.id)
+        .map((lesson: any) => ({
+          id: lesson.id,
+          title: lesson.subject?.name || lesson.title || "",
+          subjectName: lesson.subject?.name || "",
+          date: lesson.day,
+          startTime: lesson.startTime,
+          endTime: lesson.endTime,
+          room: lesson.room,
+          teacher: lesson.teacher?.name,
+        }));
 
       setLessons(mapped);
     } catch (err) {
