@@ -24,12 +24,6 @@ interface StudentPrioritySubjectsProps {
   targetAverage: number
 }
 
-function scoreColor(score: number): string {
-  if (score >= 14) return "text-emerald-600 dark:text-emerald-400"
-  if (score >= 10) return "text-amber-600 dark:text-amber-400"
-  return "text-rose-600 dark:text-rose-400"
-}
-
 function scoreBg(score: number): string {
   if (score >= 14) return "bg-emerald-500"
   if (score >= 10) return "bg-amber-500"

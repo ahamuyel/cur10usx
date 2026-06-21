@@ -4,7 +4,7 @@ import { useMemo } from "react"
 import { motion } from "framer-motion"
 import {
   Target, AlertTriangle, Clock, ClipboardList, TrendingUp,
-  BookOpen, Users, ArrowRight, Sparkles,
+  BookOpen, Users, Sparkles,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -22,18 +22,10 @@ interface Exam {
   date: string
 }
 
-interface Assignment {
-  id: string
-  title: string
-  subjectName: string
-  dueDate: string
-}
-
 interface StudentDailyFocusProps {
   subjectsNeedingAttention: string[]
   pendingSubmissions: number
   upcomingExams: Exam[]
-  upcomingAssignments: Assignment[]
   attendanceWarning: boolean
   attendancePercent: number
   generalAverage: number
@@ -82,7 +74,6 @@ export default function StudentDailyFocus({
   subjectsNeedingAttention,
   pendingSubmissions,
   upcomingExams,
-  upcomingAssignments,
   attendanceWarning,
   attendancePercent,
   generalAverage,
@@ -175,7 +166,7 @@ export default function StudentDailyFocus({
 
     return items.slice(0, 4)
   }, [
-    subjectsNeedingAttention, pendingSubmissions, upcomingExams,
+    pendingSubmissions, upcomingExams,
     attendanceWarning, attendancePercent, generalAverage, previousAverage,
     subjectAverages, targetAverage,
   ])
