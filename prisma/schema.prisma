@@ -384,6 +384,8 @@ model Result {
   score           Float
   type            String
   date            DateTime
+  weight          Float?        @default(1)
+  observations    String?
   trimester       Trimester?
   academicYear    String?
   academicYearId  String?
