@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback, useRef } from "react"
 import { useSession } from "next-auth/react"
 import { Loader2, UserPlus, UserCheck, Trash2, Clock, UserX, Search, X, MessageSquare } from "lucide-react"
 import { useRouter } from "next/navigation"
+import AppAvatar from "@/components/ui/AppAvatar"
 import { useOnlineStatus } from "@/hooks/useOnlineStatus"
 
 type Friend = {
@@ -209,11 +210,7 @@ export default function FriendsPage() {
                     <div className="flex items-center gap-3">
                       <div className="relative">
                         <div className="w-10 h-10 rounded-full bg-indigo-100 dark:bg-indigo-950/40 flex items-center justify-center text-sm font-bold text-indigo-600 dark:text-indigo-400 overflow-hidden">
-                          {f.friend.image ? (
-                            <img src={f.friend.image} alt="" className="w-full h-full object-cover" />
-                          ) : (
-                            f.friend.name?.charAt(0).toUpperCase()
-                          )}
+                          <AppAvatar src={f.friend.image} name={f.friend.name} className="w-full h-full" fallbackClassName="text-xs" />
                         </div>
                         {online && (
                           <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-500 border-2 border-white dark:border-zinc-900" />
@@ -261,11 +258,7 @@ export default function FriendsPage() {
                 <div key={r.id} className="flex items-center justify-between p-3 rounded-xl bg-zinc-50 dark:bg-zinc-800/50">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-full bg-amber-100 dark:bg-amber-950/40 flex items-center justify-center text-sm font-bold text-amber-600 dark:text-amber-400 overflow-hidden">
-                      {r.requester.image ? (
-                        <img src={r.requester.image} alt="" className="w-full h-full object-cover" />
-                      ) : (
-                        r.requester.name?.charAt(0).toUpperCase()
-                      )}
+                      <AppAvatar src={r.requester.image} name={r.requester.name} className="w-full h-full" fallbackClassName="text-xs" />
                     </div>
                     <div>
                       <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100">{r.requester.name}</p>
@@ -353,11 +346,7 @@ export default function FriendsPage() {
                     <div className="flex items-center gap-3 min-w-0 flex-1">
                       <div className="relative flex-shrink-0">
                         <div className="w-10 h-10 rounded-full bg-indigo-100 dark:bg-indigo-950/40 flex items-center justify-center text-sm font-bold text-indigo-600 dark:text-indigo-400 overflow-hidden">
-                          {result.image ? (
-                            <img src={result.image} alt="" className="w-full h-full object-cover" />
-                          ) : (
-                            result.name?.charAt(0).toUpperCase()
-                          )}
+                          <AppAvatar src={result.image} name={result.name} className="w-full h-full" fallbackClassName="text-xs" />
                         </div>
                         {online && (
                           <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-500 border-2 border-white dark:border-zinc-900" />
