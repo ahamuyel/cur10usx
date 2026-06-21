@@ -25,7 +25,12 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
       }
     }
 
-    const [history, allResults, allAttendances, academicYears] = await Promise.all([
+    const studentRecord = await prisma.student.findUnique({
+      where: { id: studentId },
+      select: { classId: true },
+    })
+
+    const [history, allResults, allAttendances, academicYears, lessonsWithTeachers] = await Promise.all([
       prisma.academicHistory.findMany({
         where: { studentId },
         include: {
@@ -45,7 +50,10 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
         where: { studentId, schoolId },
         include: {
           lesson: {
-            include: { subject: { select: { id: true, name: true } } },
+            include: {
+              subject: { select: { id: true, name: true } },
+              teacher: { select: { name: true } },
+            },
           },
         },
         orderBy: { date: "desc" },
@@ -55,13 +63,31 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
         select: { id: true, name: true, startDate: true, endDate: true },
         orderBy: { startDate: "desc" },
       }),
+      prisma.lesson.findMany({
+        where: {
+          classId: studentRecord?.classId || undefined,
+          schoolId,
+        },
+        select: {
+          id: true,
+          subjectId: true,
+          teacher: { select: { id: true, name: true } },
+        },
+      }),
     ])
 
-    const subjectNames = await prisma.subject.findMany({
-      where: { schoolId },
-      select: { id: true, name: true },
-    })
-    const subjectNameMap = new Map(subjectNames.map((s) => [s.id, s.name]))
+    const subjectTeacherMap: Record<string, string | null> = {}
+    for (const lesson of lessonsWithTeachers) {
+      if (lesson.subjectId && lesson.teacher) {
+        subjectTeacherMap[lesson.subjectId] = lesson.teacher.name
+      }
+    }
+    const lessonCountBySubject: Record<string, number> = {}
+    for (const lesson of lessonsWithTeachers) {
+      if (lesson.subjectId) {
+        lessonCountBySubject[lesson.subjectId] = (lessonCountBySubject[lesson.subjectId] || 0) + 1
+      }
+    }
 
     const trimesterLabels: Record<string, string> = {
       primeiro: "1º Trimestre",
@@ -74,10 +100,13 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
     const resultsBySubject: Record<string, {
       subjectId: string
       subjectName: string
-      results: { id: string; score: number; type: string; date: string; trimester: string | null }[]
+      teacherName: string | null
+      totalLessons: number
+      results: { id: string; score: number; type: string; date: string; trimester: string | null; weight: number | null; observations: string | null }[]
       trimesterAverages: Record<string, number>
       totalAverage: number
       absences: number
+      absenceDates: string[]
     }> = {}
 
     for (const r of allResults) {
@@ -85,10 +114,13 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
         resultsBySubject[r.subjectId] = {
           subjectId: r.subjectId,
           subjectName: r.subject.name,
+          teacherName: subjectTeacherMap[r.subjectId] || null,
+          totalLessons: lessonCountBySubject[r.subjectId] || 0,
           results: [],
           trimesterAverages: {},
           totalAverage: 0,
           absences: 0,
+          absenceDates: [],
         }
       }
       resultsBySubject[r.subjectId].results.push({
@@ -97,13 +129,18 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
         type: r.type,
         date: r.date.toISOString(),
         trimester: r.trimester,
+        weight: r.weight,
+        observations: r.observations,
       })
     }
 
     for (const a of allAttendances) {
       const subjId = a.lesson?.subject?.id
       if (subjId && resultsBySubject[subjId]) {
-        if (a.status === "ausente") resultsBySubject[subjId].absences++
+        if (a.status === "ausente") {
+          resultsBySubject[subjId].absences++
+          resultsBySubject[subjId].absenceDates.push(a.date.toISOString())
+        }
       }
     }
 
@@ -241,10 +278,13 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
         subjects: Object.values(resultsBySubject).map((s) => ({
           subjectId: s.subjectId,
           subjectName: s.subjectName,
+          teacherName: s.teacherName,
+          totalLessons: s.totalLessons,
           totalAverage: s.totalAverage,
           trimesterAverages: s.trimesterAverages,
           results: s.results,
           absences: s.absences,
+          absenceDates: s.absenceDates,
         })),
         attendancesBySubject,
         trimesterEvolution: yearTrimesterEvolution,
