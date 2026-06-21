@@ -17,15 +17,20 @@ interface HistoryResult {
   type: string
   date: string
   trimester: string | null
+  weight: number | null
+  observations: string | null
 }
 
 interface HistorySubject {
   subjectId: string
   subjectName: string
+  teacherName: string | null
+  totalLessons: number
   totalAverage: number
   trimesterAverages: Record<string, number>
   results: HistoryResult[]
   absences: number
+  absenceDates: string[]
 }
 
 interface TrimesterEvo {
@@ -99,6 +104,7 @@ export default function StudentHistoryPage() {
   const [data, setData] = useState<HistoryData | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
+  const [selectedYear, setSelectedYear] = useState<string>("current")
   const [selectedTrimester, setSelectedTrimester] = useState<string>("all")
   const [selectedType, setSelectedType] = useState<string>("all")
   const [searchQuery, setSearchQuery] = useState("")
@@ -219,6 +225,17 @@ export default function StudentHistoryPage() {
         </div>
 
         <select
+          value={selectedYear}
+          onChange={(e) => setSelectedYear(e.target.value)}
+          className="text-[11px] font-medium bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-xl px-3 py-1.5 text-zinc-700 dark:text-zinc-300 focus:outline-none focus:ring-2 focus:ring-violet-500/30"
+        >
+          <option value="current">Ano Letivo Atual</option>
+          {data?.academicYears?.map((y) => (
+            <option key={y.id} value={y.id}>{y.name}</option>
+          ))}
+        </select>
+
+        <select
           value={selectedTrimester}
           onChange={(e) => setSelectedTrimester(e.target.value)}
           className="text-[11px] font-medium bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-xl px-3 py-1.5 text-zinc-700 dark:text-zinc-300 focus:outline-none focus:ring-2 focus:ring-violet-500/30"
@@ -330,17 +347,20 @@ export default function StudentHistoryPage() {
                       {subject.totalAverage.toFixed(0)}
                     </span>
                   </div>
-                  <div className="min-w-0">
-                    <p className="text-sm font-bold text-zinc-900 dark:text-zinc-100 truncate">
-                      {subject.subjectName}
-                    </p>
-                    <div className="flex items-center gap-3 text-[10px] text-zinc-400 mt-0.5">
-                      <span>{subject.results.length} avaliações</span>
-                      {subject.absences > 0 && (
-                        <span className="text-rose-500">{subject.absences} falta{subject.absences > 1 ? "s" : ""}</span>
-                      )}
+                    <div className="min-w-0">
+                      <p className="text-sm font-bold text-zinc-900 dark:text-zinc-100 truncate">
+                        {subject.subjectName}
+                      </p>
+                      <div className="flex items-center gap-3 text-[10px] text-zinc-400 mt-0.5">
+                        <span>{subject.results.length} avaliações</span>
+                        {subject.teacherName && (
+                          <span className="text-zinc-500">{subject.teacherName}</span>
+                        )}
+                        {subject.absences > 0 && (
+                          <span className="text-rose-500">{subject.absences} falta{subject.absences > 1 ? "s" : ""}</span>
+                        )}
+                      </div>
                     </div>
-                  </div>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
                   {isExpanded ? <ChevronDown size={16} className="text-zinc-400" /> : <ChevronRight size={16} className="text-zinc-400" />}
@@ -357,17 +377,44 @@ export default function StudentHistoryPage() {
                     className="overflow-hidden"
                   >
                     <div className="px-5 pb-5 space-y-5 border-t border-zinc-100 dark:border-zinc-800/40 pt-4">
+                      {/* Info row */}
+                      <div className="flex flex-wrap gap-4 text-[11px] text-zinc-500 dark:text-zinc-400">
+                        {subject.teacherName && (
+                          <div className="flex items-center gap-1.5">
+                            <Users size={12} className="shrink-0" />
+                            <span>Professor: <strong className="text-zinc-700 dark:text-zinc-300">{subject.teacherName}</strong></span>
+                          </div>
+                        )}
+                        {subject.totalLessons > 0 && (
+                          <div className="text-zinc-400">
+                            <span>{subject.absences} falta{subject.absences !== 1 ? "s" : ""} em {subject.totalLessons} aula{subject.totalLessons !== 1 ? "s" : ""}</span>
+                          </div>
+                        )}
+                      </div>
+
                       {/* Trimester averages */}
                       {triAvgs.length > 1 && (
-                        <div className="flex gap-3">
-                          {triAvgs.map((t) => (
-                            <div key={t.trimester} className="flex items-center gap-2 px-3 py-2 rounded-xl bg-zinc-50 dark:bg-zinc-800/20 border border-zinc-100 dark:border-zinc-800/40">
-                              <span className="text-[10px] font-medium text-zinc-400">{t.label}</span>
-                              <span className={cn("text-xs font-bold tabular-nums", scoreColor(t.average))}>
-                                {t.average.toFixed(1)}
-                              </span>
-                            </div>
-                          ))}
+                        <div>
+                          <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider mb-2">Evolução Trimestral</p>
+                          <div className="flex flex-wrap gap-2">
+                            {triAvgs.map((t, i) => {
+                              const prev = i > 0 ? t.average - triAvgs[i - 1].average : 0
+                              return (
+                                <div key={t.trimester} className="flex items-center gap-2 px-3 py-2 rounded-xl bg-zinc-50 dark:bg-zinc-800/20 border border-zinc-100 dark:border-zinc-800/40">
+                                  <span className="text-[10px] font-medium text-zinc-400">{t.label}</span>
+                                  <span className={cn("text-xs font-bold tabular-nums", scoreColor(t.average))}>
+                                    {t.average.toFixed(1)}
+                                  </span>
+                                  {prev !== 0 && (
+                                    <span className={cn("text-[9px] font-bold flex items-center gap-0.5", prev > 0 ? "text-emerald-500" : "text-rose-500")}>
+                                      {prev > 0 ? <TrendingUp size={8} /> : <TrendingDown size={8} />}
+                                      {prev > 0 ? "+" : ""}{prev.toFixed(1)}
+                                    </span>
+                                  )}
+                                </div>
+                              )
+                            })}
+                          </div>
                         </div>
                       )}
 
@@ -391,6 +438,16 @@ export default function StudentHistoryPage() {
                                 <span className="text-[10px] text-zinc-400 ml-2">
                                   {new Date(r.date).toLocaleDateString("pt-PT")}
                                 </span>
+                                {r.weight != null && r.weight !== 1 && (
+                                  <span className="text-[9px] text-zinc-400 ml-2 border border-zinc-200 dark:border-zinc-700 px-1 py-0.5 rounded">
+                                    peso: {Math.round(r.weight * 100)}%
+                                  </span>
+                                )}
+                                {r.observations && (
+                                  <p className="text-[9px] text-zinc-400 italic mt-0.5 leading-relaxed max-w-[320px] truncate">
+                                    {r.observations}
+                                  </p>
+                                )}
                               </div>
                             </div>
                             <div className="flex items-center gap-2 shrink-0">
@@ -401,6 +458,22 @@ export default function StudentHistoryPage() {
                           </div>
                         ))}
                       </div>
+
+                      {/* Absence dates */}
+                      {subject.absenceDates.length > 0 && (
+                        <div>
+                          <p className="text-[10px] font-bold text-rose-500 uppercase tracking-wider mb-2">
+                            Faltas
+                          </p>
+                          <div className="flex flex-wrap gap-1.5">
+                            {subject.absenceDates.map((d, i) => (
+                              <span key={i} className="text-[10px] font-medium text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-500/10 px-2 py-1 rounded-md border border-rose-100 dark:border-rose-900/20">
+                                {new Date(d).toLocaleDateString("pt-PT")}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </motion.div>
                 )}
