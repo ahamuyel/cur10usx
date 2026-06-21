@@ -25,22 +25,20 @@ export default function StudentHero({
     <motion.div 
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
-      className="relative overflow-hidden w-full bg-white dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800 rounded-3xl p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none transition-all duration-500"
+      className="relative overflow-hidden w-full bg-white dark:bg-zinc-900 border border-black/[0.08] dark:border-white/[0.08] rounded-3xl p-8 shadow-sm transition-colors duration-500"
     >
-      {/* Background animado com opacidade ajustada */}
       <div className="absolute inset-0 z-0 opacity-10 dark:opacity-20 pointer-events-none">
         <HeroBackgroundPaths />
       </div>
 
       <div className="relative z-10 flex flex-col md:flex-row gap-8 items-start justify-between">
-        
         <div className="space-y-1.5">
           <div className="flex items-center gap-2 text-zinc-400 dark:text-zinc-500 mb-2">
             <GraduationCap size={16} />
             <span className="text-[11px] font-bold tracking-[0.2em] uppercase">Dashboard Académico</span>
           </div>
           <h1 className="text-4xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100">
-            {greeting}, <span className="text-zinc-600 dark:text-zinc-400 font-medium">{name.split(" ")[0]}</span>
+            {greeting}, <span className="text-zinc-500 dark:text-zinc-400 font-medium">{name.split(" ")[0]}</span>
           </h1>
           <p className="text-zinc-500 dark:text-zinc-400 max-w-sm pt-2 text-sm leading-relaxed">
             O teu desempenho está a ser monitorizado. Mantém o foco e a consistência.
@@ -69,12 +67,13 @@ export default function StudentHero({
     </motion.div>
   )
 }
+
 function MetricCard({ icon, label, value, trend, isUp, isRank = false }: any) {
   return (
     <div className="flex-1 md:w-36 bg-zinc-50/50 dark:bg-zinc-800/30 p-5 rounded-2xl border border-black/[0.06] dark:border-white/[0.06] backdrop-blur-sm transition-all">
       <div className="flex justify-between items-center mb-3">
-        {/* Usamos border-black/[0.05] para o ícone, fica neutro em ambos os modos */}
-        <div className="p-1.5 bg-white dark:bg-zinc-900 rounded-lg shadow-sm border border-black/[0.05] dark:border-white/[0.05]">
+        {/* Ícone com borda neutra consistente */}
+        <div className="p-1.5 bg-white dark:bg-zinc-950/50 rounded-lg border border-black/[0.05] dark:border-white/[0.05] shadow-sm">
           {icon}
         </div>
         {!isRank && trend !== undefined && (
