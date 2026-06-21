@@ -3,6 +3,7 @@ import { useState, useEffect, useRef, useCallback } from "react"
 import { useParams, useRouter } from "next/navigation"
 import { useSession } from "next-auth/react"
 import { Loader2, Send, ArrowLeft, Check, CheckCheck } from "lucide-react"
+import AppAvatar from "@/components/ui/AppAvatar"
 import { on } from "@/hooks/useWebSocket"
 import { useOnlineStatus } from "@/hooks/useOnlineStatus"
 
@@ -184,11 +185,7 @@ export default function ChatConversationPage() {
             <>
               <div className="relative flex-shrink-0">
                 <div className="w-9 h-9 rounded-full bg-primary-100 dark:bg-primary-950/40 flex items-center justify-center text-sm font-bold text-primary dark:text-primary-400 overflow-hidden">
-                  {conversation.other.image ? (
-                    <img src={conversation.other.image} alt="" className="w-full h-full object-cover" />
-                  ) : (
-                    conversation.other.name?.charAt(0).toUpperCase()
-                  )}
+                  <AppAvatar src={conversation.other.image} name={conversation.other.name} className="w-full h-full" fallbackClassName="text-xs" />
                 </div>
                 {otherUserOnline && (
                   <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-500 border-2 border-white dark:border-zinc-900" />
