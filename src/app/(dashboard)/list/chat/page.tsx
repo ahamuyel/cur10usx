@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback } from "react"
 import Link from "next/link"
 import { useSession } from "next-auth/react"
 import { Loader2, MessageSquare, ArrowRight } from "lucide-react"
+import AppAvatar from "@/components/ui/AppAvatar"
 import { on } from "@/hooks/useWebSocket"
 import { useOnlineStatus } from "@/hooks/useOnlineStatus"
 
@@ -103,11 +104,7 @@ export default function ChatListPage() {
                 >
                   <div className="relative flex-shrink-0">
                     <div className="w-10 h-10 rounded-full bg-primary-100 dark:bg-primary-950/40 flex items-center justify-center text-sm font-bold text-primary dark:text-primary-400 overflow-hidden">
-                      {c.other.image ? (
-                        <img src={c.other.image} alt="" className="w-full h-full object-cover" />
-                      ) : (
-                        c.other.name?.charAt(0).toUpperCase()
-                      )}
+                      <AppAvatar src={c.other.image} name={c.other.name} className="w-full h-full" fallbackClassName="text-xs" />
                     </div>
                     {online && (
                       <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-white dark:border-zinc-900" />
