@@ -72,7 +72,6 @@ export default function StudentDashboard({ studentId }: { studentId: string }) {
           subjectsNeedingAttention={data.subjectsNeedingAttention}
           pendingSubmissions={data.pendingSubmissions}
           upcomingExams={data.upcomingExams}
-          upcomingAssignments={data.upcomingAssignments}
           attendanceWarning={data.attendanceWarning}
           attendancePercent={data.attendancePercent}
           generalAverage={data.generalAverage}
