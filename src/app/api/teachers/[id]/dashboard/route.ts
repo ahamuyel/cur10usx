@@ -110,6 +110,7 @@ export async function GET(
             date: true,
             status: true,
             classId: true,
+            justificationId: true,
           },
         }),
 
@@ -228,6 +229,10 @@ export async function GET(
 
     const atRiskCount = attentionStudents.filter((a) => a.priority === "crítica").length
 
+    const unjustifiedAbsencesCount = attendances.filter(
+      (a) => a.status === "ausente" && !a.justificationId
+    ).length
+
     return NextResponse.json({
       teacher: {
         id: teacher.id,
@@ -244,6 +249,7 @@ export async function GET(
         attendanceRate,
         assessmentsCompleted: publishedExams.length,
         studentsAtRisk: atRiskCount,
+        unjustifiedAbsences: unjustifiedAbsencesCount,
       },
       attentionStudents,
       classPerformance,

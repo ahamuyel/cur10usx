@@ -71,9 +71,15 @@ export async function middleware(req: NextRequest) {
 
     // Dashboard access control
     if (pathname.startsWith("/dashboard/")) {
-      const pathId = pathname.split("/")[2]
-      if (role !== "school_admin" && pathId !== id) {
-        return NextResponse.redirect(new URL(`/dashboard/${id}`, req.url))
+      if (pathname.startsWith("/dashboard/teacher/")) {
+        if (role !== "teacher" && role !== "school_admin") {
+          return NextResponse.redirect(new URL(`/dashboard/${id}`, req.url))
+        }
+      } else {
+        const pathId = pathname.split("/")[2]
+        if (role !== "school_admin" && pathId !== id) {
+          return NextResponse.redirect(new URL(`/dashboard/${id}`, req.url))
+        }
       }
     }
   }
