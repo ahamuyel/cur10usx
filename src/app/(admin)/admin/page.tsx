@@ -23,6 +23,7 @@ import {
 } from "recharts";
 import { cn } from "@/lib/utils";
 import StatusBadge from "@/components/ui/StatusBadge";
+import { MetricCard } from "@/components/dashboard/MetricCard";
 import { useTheme } from "@/provider/theme";
 
 // --- Helpers ---
@@ -122,31 +123,14 @@ export default function AdminDashboard() {
       {/* KPI Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
         {kpiCards.map((card, i) => (
-          <Link
+          <MetricCard
             key={i}
+            title={card.label}
+            value={card.value}
+            icon={<card.icon className="w-4 h-4 text-violet-500" />}
+            variant={card.label.includes("Pendente") || card.label.includes("Solicitações") ? "warning" : "info"}
             href={card.href}
-            className="block group transition-all duration-300 hover:-translate-y-1"
-          >
-            <div className="p-4 md:p-6 rounded-3xl border border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-zinc-900 shadow-sm hover:shadow-lg transition-all h-full min-w-0">
-              <div className="flex items-center gap-2 md:gap-3 mb-3 md:mb-4">
-                <div
-                  className={cn(
-                    "p-1.5 md:p-2 rounded-xl md:rounded-lg",
-                    card.bg,
-                    card.color,
-                  )}
-                >
-                  <card.icon size={16} className="md:size-[18px]" />
-                </div>
-                <p className="text-[9px] md:text-[10px] font-bold text-zinc-400 uppercase tracking-widest truncate">
-                  {card.label}
-                </p>
-              </div>
-              <p className="text-2xl md:text-3xl font-black tabular-nums text-zinc-900 dark:text-zinc-100">
-                {card.value}
-              </p>
-            </div>
-          </Link>
+          />
         ))}
       </div>
 
