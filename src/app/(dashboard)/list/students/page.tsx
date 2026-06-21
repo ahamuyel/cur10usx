@@ -13,6 +13,7 @@ import { useEntityList } from "@/hooks/useEntityList"
 import Link from "next/link"
 import FilterPanel from "@/components/ui/FilterPanel"
 import SortButton from "@/components/ui/SortButton"
+import AppAvatar from "@/components/ui/AppAvatar"
 import { Pencil, Trash2, UserPlus, UserX, ArrowRightLeft, Loader2, List, LayoutGrid, Phone, Mail, MapPin } from "lucide-react"
 
 type Student = {
@@ -116,14 +117,7 @@ const StudentListPage = () => {
       <td className="py-3 px-4">
         <div className="flex items-center gap-3 min-w-0">
           <div className="relative w-8 h-8 shrink-0 select-none">
-            {item.foto ? (
-              /* eslint-disable-next-line @next/next/no-img-element */
-              <img src={item.foto} alt={item.name} className="w-full h-full rounded-full object-cover border border-zinc-200/60 dark:border-zinc-800" />
-            ) : (
-              <div className="w-full h-full rounded-full bg-zinc-100 dark:bg-zinc-800 border border-zinc-200/40 dark:border-zinc-700/30 flex items-center justify-center text-zinc-700 dark:text-zinc-300 text-xs font-semibold">
-                {item.name.charAt(0).toUpperCase()}
-              </div>
-            )}
+            <AppAvatar src={item.foto} name={item.name} className="w-full h-full !rounded-full border border-zinc-200 dark:border-zinc-700" fallbackClassName="text-[10px]" />
           </div>
           <Link href={`/list/students/${item.id}`} className="font-semibold text-zinc-900 dark:text-zinc-50 truncate hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors">
             {item.name}
@@ -272,14 +266,7 @@ const StudentListPage = () => {
               {/* Topo do Card: Avatar, Nome e badge de Turma */}
               <div className="flex items-start gap-3 min-w-0">
                 <div className="relative w-10 h-10 shrink-0 select-none">
-                  {item.foto ? (
-                    /* eslint-disable-next-line @next/next/no-img-element */
-                    <img src={item.foto} alt={item.name} className="w-full h-full rounded-full object-cover border border-zinc-200/60 dark:border-zinc-800" />
-                  ) : (
-                    <div className="w-full h-full rounded-full bg-zinc-100 dark:bg-zinc-800 border border-zinc-200/40 dark:border-zinc-700/30 flex items-center justify-center text-zinc-700 dark:text-zinc-300 text-sm font-semibold">
-                      {item.name.charAt(0).toUpperCase()}
-                    </div>
-                  )}
+                  <AppAvatar src={item.foto} name={item.name} className="w-full h-full !rounded-full border border-zinc-200 dark:border-zinc-700" fallbackClassName="text-sm" />
                 </div>
                 
                 <div className="min-w-0 flex flex-col gap-1">
