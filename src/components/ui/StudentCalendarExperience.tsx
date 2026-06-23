@@ -148,6 +148,16 @@ export default function StudentCalendarExperience() {
 
   const { current, next } = currentAndNext
 
+  const daysMap: Record<number, string> = {
+    1: "Segunda", 2: "Terça", 3: "Quarta", 4: "Quinta", 5: "Sexta", 6: "Sábado", 0: "Domingo"
+  }
+  const currentDay = daysMap[now.getDay()]
+  const currentTime = moment(now).format("HH:mm")
+  const todayLessons = lessons
+    .filter(l => l.day === currentDay)
+    .sort((a, b) => a.startTime.localeCompare(b.startTime))
+  const nextLessonToday = todayLessons.find(l => l.startTime > currentTime)
+
   return (
     <div className="w-full space-y-8 animate-fade-in pb-20">
       {/* 1. SEÇÃO AGORA (CONTEXTO IMEDIATO) */}
@@ -240,13 +250,19 @@ export default function StudentCalendarExperience() {
               key="none"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="bg-zinc-50 dark:bg-zinc-900/40 border border-dashed border-zinc-200 dark:border-zinc-800 rounded-[2rem] p-10 text-center"
+              className="bg-zinc-50 dark:bg-zinc-900/40 border border-dashed border-zinc-200 dark:border-zinc-800 rounded-[2rem] px-6 py-3 flex items-center justify-center gap-4 min-h-[80px]"
             >
-              <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-zinc-100 dark:bg-zinc-800 text-zinc-400 mb-4">
-                <Target size={24} />
+              <div className="inline-flex items-center justify-center w-8 h-8 rounded-xl bg-zinc-100 dark:bg-zinc-800 text-zinc-400 flex-shrink-0">
+                <Target size={16} />
               </div>
-              <h2 className="text-base font-bold text-zinc-900 dark:text-white">Sem mais aulas hoje</h2>
-              <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">Aproveita para colocar as tuas tarefas em dia.</p>
+              <div className="text-left">
+                <h2 className="text-sm font-bold text-zinc-900 dark:text-white">Sem mais aulas hoje</h2>
+                {nextLessonToday && (
+                  <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
+                    Próxima: {nextLessonToday.subject.name}, {moment(nextLessonToday.startTime, "HH:mm").format("ddd DD MMM")}
+                  </p>
+                )}
+              </div>
             </motion.div>
           )}
         </AnimatePresence>

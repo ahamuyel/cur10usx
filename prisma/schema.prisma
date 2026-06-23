@@ -345,6 +345,7 @@ model Lesson {
   school         School        @relation(fields: [schoolId], references: [id], onDelete: Cascade)
   subject        Subject       @relation(fields: [subjectId], references: [id], onDelete: Cascade)
   teacher        Teacher       @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  lessonRecords  LessonRecord[]
 }
 
 model Exam {
@@ -1184,4 +1185,28 @@ model DocumentVerification {
 
   @@unique([schoolId, serialNumber])
   @@index([code])
+}
+
+// Registo de execução de uma aula prevista
+model LessonRecord {
+  id          String             @id @default(cuid())
+  lessonId    String
+  lesson      Lesson             @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  date        DateTime           // data real em que a aula deveria ter ocorrido
+  status      LessonRecordStatus @default(PENDING)
+  notes       String?            // observação do professor
+  adminNotes  String?            // observação do admin na validação
+  recordedBy  String             // userId do professor
+  validatedBy String?            // userId do admin
+  recordedAt  DateTime           @default(now())
+  validatedAt DateTime?
+
+  @@unique([lessonId, date])     // uma aula numa data = um registo
+}
+
+enum LessonRecordStatus {
+  PENDING             // professor registou, aguarda validação
+  REALIZADA           // admin validou
+  FALTOU              // admin marcou como falta
+  SUBSTITUIDA         // foi substituída por outro professor
 }

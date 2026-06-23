@@ -1,11 +1,11 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Users, Presentation, GraduationCap, AlertCircle, AlertTriangle } from "lucide-react"
+import { GraduationCap, Users, Presentation, AlertTriangle } from "lucide-react"
 import { MetricCard } from "../dashboard/MetricCard"
 
-type IndicatorType = "aproveitamento" | "assiduidade" | "alunosEmRisco" | "turmasMonitorizacao"
-
+// AdminHero já mostra: totalStudents, totalTeachers, totalClasses, highRiskStudents
+// Este componente mostra métricas de qualidade, não de volume — sem sobreposição.
 export default function GeneralIndicators({ briefing }: { briefing?: any }) {
   const [stats, setStats] = useState<any>(null)
   const [loading, setLoading] = useState(true)
@@ -15,48 +15,34 @@ export default function GeneralIndicators({ briefing }: { briefing?: any }) {
   useEffect(() => {
     if (briefing && !briefing.error && briefing.academic) {
       setStats({
-        aproveitamento: briefing.academic.aproveitamento,
-        assiduidade: briefing.academic.assiduidade,
-        alunosEmRisco: briefing.risk?.totalAtRisk || 0,
-        turmasMonitorizacao: briefing.classes?.totalUnderMonitoring || 0,
+        aproveitamento:       briefing.academic.aproveitamento,
+        evolution:            briefing.academic.evolution,
+        assiduidade:          briefing.academic.assiduidade,
+        turmasMonitorizacao:  briefing.classes?.totalUnderMonitoring ?? 0,
       })
       setLoading(false)
       requestAnimationFrame(() => setVisible(true))
       return
     }
-
-    if (briefing?.error) {
-      setError(true)
-      setLoading(false)
-      return
-    }
+    if (briefing?.error) { setError(true); setLoading(false); return }
 
     fetch("/api/school-stats")
-      .then(r => {
-        if (!r.ok) throw new Error()
-        return r.json()
-      })
-      .then(json => {
-        setStats(json)
-        requestAnimationFrame(() => setVisible(true))
-      })
+      .then(r => { if (!r.ok) throw new Error(); return r.json() })
+      .then(json => { setStats(json); requestAnimationFrame(() => setVisible(true)) })
       .catch(() => setError(true))
       .finally(() => setLoading(false))
   }, [briefing])
 
-  const gridLayoutClass = "grid grid-cols-1 @[240px]:grid-cols-2 @[580px]:grid-cols-4 gap-4 w-full"
+  const gridClass = "grid grid-cols-1 @[240px]:grid-cols-2 @[580px]:grid-cols-3 gap-4 w-full"
 
   if (loading) {
     return (
       <div className="@container w-full">
-        <div className={gridLayoutClass}>
-          {Array.from({ length: 4 }).map((_, i) => (
-            <div 
-              key={i} 
-              className="h-[106px] rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800/80 p-4 flex flex-col justify-between shadow-xs animate-pulse"
-            >
-              <div className="w-9 h-9 rounded-xl bg-zinc-100 dark:bg-zinc-800 shrink-0" />
-              <div className="space-y-1.5 w-full">
+        <div className={gridClass}>
+          {Array.from({ length: 3 }).map((_, i) => (
+            <div key={i} className="h-[106px] rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800/80 p-4 flex flex-col justify-between shadow-xs animate-pulse">
+              <div className="w-9 h-9 rounded-xl bg-zinc-100 dark:bg-zinc-800" />
+              <div className="space-y-1.5">
                 <div className="h-2.5 w-16 rounded bg-zinc-100 dark:bg-zinc-800" />
                 <div className="h-5 w-10 rounded bg-zinc-200 dark:bg-zinc-700" />
               </div>
@@ -67,31 +53,22 @@ export default function GeneralIndicators({ briefing }: { briefing?: any }) {
     )
   }
 
-  if (error) {
-    return (
-      <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-xs p-4 flex items-center gap-2.5">
-        <AlertTriangle size={16} className="text-rose-500 shrink-0" />
-        <p className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
-          Não foi possível carregar as métricas rápidas.
-        </p>
-      </div>
-    )
-  }
-
-  if (!stats) return null
+  if (error || !stats) return null
 
   const indicators = [
     {
-      key: "aproveitamento" as IndicatorType,
+      key: "aproveitamento",
       label: "Taxa de Aproveitamento",
       value: `${stats.aproveitamento}%`,
       icon: <GraduationCap className="w-4 h-4 text-violet-500" />,
       variant: stats.aproveitamento >= 70 ? ("success" as const) : ("warning" as const),
       href: "/list/results",
-      description: briefing?.academic?.evolution !== undefined ? `${briefing.academic.evolution > 0 ? "+" : ""}${briefing.academic.evolution}% em evolução` : undefined,
+      description: stats.evolution !== undefined
+        ? `${stats.evolution > 0 ? "+" : ""}${stats.evolution}% em evolução`
+        : undefined,
     },
     {
-      key: "assiduidade" as IndicatorType,
+      key: "assiduidade",
       label: "Assiduidade Global",
       value: `${stats.assiduidade}%`,
       icon: <Users className="w-4 h-4 text-violet-500" />,
@@ -99,15 +76,7 @@ export default function GeneralIndicators({ briefing }: { briefing?: any }) {
       href: "/list/attendance",
     },
     {
-      key: "alunosEmRisco" as IndicatorType,
-      label: "Alunos em Risco",
-      value: stats.alunosEmRisco,
-      icon: <AlertCircle className="w-4 h-4 text-rose-500" />,
-      variant: stats.alunosEmRisco > 0 ? ("warning" as const) : ("success" as const),
-      href: "/list/students",
-    },
-    {
-      key: "turmasMonitorizacao" as IndicatorType,
+      key: "turmasMonitorizacao",
       label: "Turmas sob Monitorização",
       value: stats.turmasMonitorizacao,
       icon: <Presentation className="w-4 h-4 text-violet-500" />,
@@ -118,8 +87,8 @@ export default function GeneralIndicators({ briefing }: { briefing?: any }) {
 
   return (
     <div className="@container w-full">
-      <div 
-        className={gridLayoutClass}
+      <div
+        className={gridClass}
         style={{
           opacity: visible ? 1 : 0,
           transform: visible ? "translateY(0)" : "translateY(4px)",
