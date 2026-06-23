@@ -4,16 +4,15 @@ import { useEffect, useState } from "react"
 import { Loader2, AlertCircle } from "lucide-react"
 
 import StudentHero from "./StudentHero"
-import StudentNavigation from "./StudentNavigation"
 import StudentDailyFocus from "./StudentDailyFocus"
 import StudentPerformanceBreakdown from "./StudentPerformanceBreakdown"
-import StudentQuickStats from "./StudentQuickStats"
 import StudentPrioritySubjects from "./StudentPrioritySubjects"
 import StudentAcademicAgenda from "./StudentAcademicAgenda"
 import StudentAcademicJourney from "./StudentAcademicJourney"
 import StudentActivityChart from "./StudentActivityChart"
 import StudentInsights from "./StudentInsights"
 import StudentCalendarExperience from "./StudentCalendarExperience"
+import StudentNavigation from "./StudentNavigation"
 
 export default function StudentDashboard({ studentId }: { studentId: string }) {
   const [data, setData] = useState<any>(null)
@@ -58,7 +57,7 @@ export default function StudentDashboard({ studentId }: { studentId: string }) {
 
   return (
     <div className="w-full space-y-10 animate-in fade-in duration-500 pb-16 px-1 max-w-[1600px] mx-auto">
-      <section className="space-y-4">
+      <section>
         <StudentHero
           name={data.student.name}
           average={data.generalAverage}
@@ -73,61 +72,51 @@ export default function StudentDashboard({ studentId }: { studentId: string }) {
         </div>
       </section>
 
-      <section>
-        <StudentDailyFocus
-          subjectsNeedingAttention={data.subjectsNeedingAttention}
-          pendingSubmissions={data.pendingSubmissions}
-          upcomingExams={data.upcomingExams}
-          totalAbsences={data.totalAbsences}
-          absencesBySubject={data.absencesBySubject}
-          subjectWithMostAbsences={data.subjectWithMostAbsences}
-          generalAverage={data.generalAverage}
-          previousAverage={data.previousAverage}
-          subjectAverages={data.subjectAverages}
-          targetAverage={data.targetAverage}
-        />
-      </section>
-
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
         <div className="lg:col-span-8">
-          <StudentPerformanceBreakdown
-            subjectAverages={data.subjectAverages}
-            subjectTrends={data.subjectTrends}
+          <StudentDailyFocus
+            subjectsNeedingAttention={data.subjectsNeedingAttention}
+            pendingSubmissions={data.pendingSubmissions}
+            upcomingExams={data.upcomingExams}
+            totalAbsences={data.totalAbsences}
+            absencesBySubject={data.absencesBySubject}
+            subjectWithMostAbsences={data.subjectWithMostAbsences}
             generalAverage={data.generalAverage}
             previousAverage={data.previousAverage}
+            subjectAverages={data.subjectAverages}
+            targetAverage={data.targetAverage}
           />
         </div>
         <div className="lg:col-span-4">
-          <StudentQuickStats
-            studentId={studentId}
-            generalAverage={data.generalAverage}
-            previousAverage={data.previousAverage}
-            classRank={data.classRank}
-            classSize={data.classSize}
-            totalAbsences={data.totalAbsences}
-            subjectWithMostAbsences={data.subjectWithMostAbsences}
+          <StudentPrioritySubjects
+            subjectAverages={data.subjectAverages}
+            subjectLastScores={data.subjectLastScores}
             targetAverage={data.targetAverage}
           />
         </div>
       </section>
 
       <section>
-        <StudentPrioritySubjects
+        <StudentPerformanceBreakdown
           subjectAverages={data.subjectAverages}
-          subjectLastScores={data.subjectLastScores}
-          targetAverage={data.targetAverage}
+          subjectTrends={data.subjectTrends}
+          generalAverage={data.generalAverage}
+          previousAverage={data.previousAverage}
         />
       </section>
 
       <section>
-        <StudentAcademicAgenda exams={data.upcomingExams} assignments={data.upcomingAssignments} />
+        <StudentCalendarExperience />
       </section>
 
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
-        <div className="lg:col-span-6">
+        <div className="lg:col-span-5">
+          <StudentAcademicAgenda exams={data.upcomingExams} assignments={data.upcomingAssignments} />
+        </div>
+        <div className="lg:col-span-4">
           <StudentAcademicJourney trimesters={data.trimesterEvolution} />
         </div>
-        <div className="lg:col-span-6">
+        <div className="lg:col-span-3">
           <StudentActivityChart results={data.recentResults} />
         </div>
       </section>
@@ -139,10 +128,6 @@ export default function StudentDashboard({ studentId }: { studentId: string }) {
           absencesBySubject={data.absencesBySubject}
           attendanceByMonth={data.attendanceByMonth}
         />
-      </section>
-
-      <section>
-        <StudentCalendarExperience />
       </section>
     </div>
   ) 

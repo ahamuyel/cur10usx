@@ -12,6 +12,16 @@ import TeacherUpcomingLessons from "./TeacherUpcomingLessons";
 import TeacherStudentInsights from "./TeacherStudentInsights";
 import TeacherCalendarExperience from "./TeacherCalendarExperience";
 import TeacherAnnouncements from "./TeacherAnnouncements";
+import TeacherLessonTracker from "../teacher/TeacherLessonTracker";
+
+// No tipo que descreve cada item de assessments.recentExams, adicionar:
+type ExamSummary = {
+  id: string
+  title: string
+  className: string
+  status: "pendente" | "agendado" | "publicado"
+  daysPending?: number   // só presente quando status === "pendente"; calculado no servidor
+}
 
 export default function TeacherDashboard() {
   const [teacherId, setTeacherId] = useState<string | null>(null);
@@ -60,8 +70,9 @@ export default function TeacherDashboard() {
           <TeacherStudentInsights data={data} />
         </div>
         <div className="lg:col-span-5 xl:col-span-4 space-y-6">
-          <TeacherCalendarExperience /> 
           <TeacherAnnouncements data={data} />
+          <TeacherLessonTracker />
+          <TeacherCalendarExperience /> 
         </div>
       </section>
     </div>

@@ -259,17 +259,25 @@ export async function GET(
         published: publishedExams.length,
         scheduled: exams.filter((e) => new Date(e.date) >= today).length,
         correctionDeadline: null,
-        recentExams: exams.slice(0, 10).map((e) => ({
-          id: e.id,
-          title: e.title || "Avaliação",
-          className: e.class.name,
-          date: e.date.toISOString(),
-          status: results.some((r) => r.examId === e.id)
-            ? ("publicado" as const)
-            : new Date(e.date) < today
-              ? ("pendente" as const)
-              : ("agendado" as const),
-        })),
+        recentExams: exams.slice(0, 10).map((e) => {
+          const examDate = new Date(e.date)
+          const isPending = !results.some((r) => r.examId === e.id) && examDate < today
+          const daysPending = isPending
+            ? Math.floor((today.getTime() - examDate.getTime()) / 86400000)
+            : undefined
+          return {
+            id: e.id,
+            title: e.title || "Avaliação",
+            className: e.class.name,
+            date: e.date.toISOString(),
+            daysPending,
+            status: results.some((r) => r.examId === e.id)
+              ? ("publicado" as const)
+              : examDate < today
+                ? ("pendente" as const)
+                : ("agendado" as const),
+          }
+        }),
       },
       studentInsights,
       recentAnnouncements: announcements.map((a) => ({

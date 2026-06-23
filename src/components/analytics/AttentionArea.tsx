@@ -1,7 +1,7 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { AlertTriangle, UserX, Inbox, ArrowRight, Bell, CheckCircle2 } from "lucide-react"
+import { useEffect, useState, useMemo } from "react"
+import { AlertTriangle, UserX, Inbox, ArrowRight, Bell, CheckCircle2, Lightbulb, ChevronRight } from "lucide-react"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
 
@@ -28,6 +28,32 @@ interface AlertItem {
   href: string
 }
 
+function computeInsight(briefing: any): string {
+  if (!briefing) return ""
+  const ap = briefing.academic?.aproveitamento
+  const ass = briefing.academic?.assiduidade
+  const status = briefing.academic?.status
+  const atRisk = briefing.risk?.totalAtRisk ?? 0
+  const monitoring = briefing.classes?.totalUnderMonitoring ?? 0
+  const critical = briefing.risk?.summary?.["Crítico"] ?? 0
+  const altoRisco = briefing.risk?.summary?.["Alto Risco"] ?? 0
+  const evolution = briefing.academic?.evolution ?? 0
+
+  if (!ap && !ass) return "Ainda não existem dados suficientes para gerar este insight."
+
+  const parts: string[] = []
+  if (critical > 0) parts.push(`${critical} aluno${critical > 1 ? "s" : ""} com absentismo crítico.`)
+  if (altoRisco > 0) parts.push(`${altoRisco} aluno${altoRisco > 1 ? "s" : ""} em alto risco pedagógico.`)
+  if (monitoring > 0) parts.push(`${monitoring} turma${monitoring > 1 ? "s" : ""} sob monitorização.`)
+  if (evolution !== 0) {
+    parts.push(`Aproveitamento médio ${evolution > 0 ? "subiu" : "desceu"} ${Math.abs(evolution)}% esta semana.`)
+  }
+  if (ap) parts.push(`Aproveitamento geral em ${ap}% (${(status || "sem dados").toLowerCase()}).`)
+  if (ass) parts.push(`Assiduidade geral em ${ass}%.`)
+
+  return parts.join(" ") || "Tudo dentro da normalidade."
+}
+
 export default function AttentionArea({ briefing }: { briefing?: any }) {
   const [loading, setLoading] = useState(true)
   const [visible, setVisible] = useState(false)
@@ -40,6 +66,8 @@ export default function AttentionArea({ briefing }: { briefing?: any }) {
       setLoading(false)
     }
   }, [briefing])
+
+  const insightText = useMemo(() => computeInsight(briefing), [briefing])
 
   if (loading || briefing?.error) {
     return (
@@ -116,6 +144,30 @@ export default function AttentionArea({ briefing }: { briefing?: any }) {
 
   return (
     <div className="bg-white dark:bg-zinc-900 rounded-3xl border border-zinc-200 dark:border-zinc-800 shadow-xs p-5 space-y-6">
+      {/* Banner de Insight Automático */}
+      {insightText && (
+        <div className="flex items-start gap-3 p-4 rounded-2xl bg-amber-50 dark:bg-amber-950/20 border-l-4 border-amber-400 dark:border-amber-500">
+          <div className="w-8 h-8 rounded-xl bg-amber-100 dark:bg-amber-950/40 flex items-center justify-center shrink-0">
+            <Lightbulb size={15} className="text-amber-600 dark:text-amber-400" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="text-xs font-semibold text-amber-900 dark:text-amber-200 mb-1">
+              Insight Automático
+            </p>
+            <p className="text-[11px] text-amber-800 dark:text-amber-300 leading-relaxed">
+              {insightText}
+            </p>
+            <Link
+              href="/analytics/pedagogical"
+              className="inline-flex items-center gap-1 mt-2 text-[10px] font-bold text-amber-700 dark:text-amber-400 hover:text-amber-800 dark:hover:text-amber-300 transition-colors uppercase tracking-wider"
+            >
+              Ver relatório completo <ChevronRight size={10} />
+            </Link>
+          </div>
+        </div>
+      )}
+
+      {/* Header de Acções Prioritárias */}
       <div className="flex items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <div className={cn(

@@ -1,8 +1,13 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Sparkles, TrendingUp, TrendingDown, BookOpen, GraduationCap, School } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { Sparkles, TrendingUp, TrendingDown, BookOpen, GraduationCap, ChevronRight } from "lucide-react"
+import Link from "next/link"
+
+// Zona 4 — secundário. Não compete por atenção com a Zona 2.
+// Mostra só 2 destaques + link para análise completa.
+// Se tiveres uma página /analytics/insights, aponta para lá.
+const VISIBLE_LIMIT = 2
 
 export default function PedagogicalInsights() {
   const [insights, setInsights] = useState<any[]>([])
@@ -11,40 +16,52 @@ export default function PedagogicalInsights() {
   useEffect(() => {
     fetch("/api/analytics/insights")
       .then(r => r.json())
-      .then(data => {
-        setInsights(data.insights || [])
-        setLoading(false)
-      })
-      .catch(() => setLoading(false))
+      .then(data => setInsights(data.insights ?? []))
+      .catch(() => {})
+      .finally(() => setLoading(false))
   }, [])
 
   if (loading || insights.length === 0) return null
 
   const getIcon = (icon: string) => {
     switch (icon) {
-      case "trending-up": return <TrendingUp size={14} className="text-emerald-500" />
+      case "trending-up":  return <TrendingUp  size={14} className="text-emerald-500" />
       case "trending-down": return <TrendingDown size={14} className="text-rose-500" />
-      case "book": return <BookOpen size={14} className="text-blue-500" />
-      case "graduation": return <GraduationCap size={14} className="text-indigo-500" />
-      default: return <Sparkles size={14} className="text-amber-500" />
+      case "book":         return <BookOpen     size={14} className="text-blue-500" />
+      case "graduation":   return <GraduationCap size={14} className="text-indigo-500" />
+      default:             return <Sparkles     size={14} className="text-amber-500" />
     }
   }
 
+  const visible  = insights.slice(0, VISIBLE_LIMIT)
+  const remaining = insights.length - VISIBLE_LIMIT
+
   return (
     <div className="bg-white dark:bg-zinc-900 rounded-3xl border border-zinc-200 dark:border-zinc-800 shadow-xs p-5 space-y-4">
-      <div className="flex items-center gap-3">
-        <div className="w-8 h-8 rounded-xl bg-amber-50/60 dark:bg-amber-950/30 border border-amber-100/80 dark:border-amber-900/20 flex items-center justify-center">
-          <Sparkles size={15} className="text-amber-600 dark:text-amber-400" />
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-xl bg-amber-50/60 dark:bg-amber-950/30 border border-amber-100/80 dark:border-amber-900/20 flex items-center justify-center">
+            <Sparkles size={15} className="text-amber-600 dark:text-amber-400" />
+          </div>
+          <div>
+            <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-50 tracking-tight">Insights Pedagógicos</h3>
+            <p className="text-[10px] text-zinc-400 dark:text-zinc-500 font-medium">Destaques automáticos da instituição</p>
+          </div>
         </div>
-        <div>
-          <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-50 tracking-tight">Insights Pedagógicos</h3>
-          <p className="text-[10px] text-zinc-400 dark:text-zinc-500 font-medium">Destaques automáticos da instituição</p>
-        </div>
+        {remaining > 0 && (
+          <Link
+            href="/analytics/insights"
+            className="text-[9px] font-bold text-primary dark:text-primary-400 flex items-center gap-1 hover:opacity-80 transition-opacity uppercase tracking-wider"
+          >
+            Ver todos (+{remaining}) <ChevronRight size={10} />
+          </Link>
+        )}
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-        {insights.map((insight, i) => (
-          <div 
+      {/* Apenas 2 visíveis na home — análise completa fica noutra página */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        {visible.map((insight, i) => (
+          <div
             key={i}
             className="flex items-start gap-3 p-3 rounded-2xl bg-zinc-50/50 dark:bg-zinc-950/20 border border-zinc-100/50 dark:border-zinc-800/20"
           >

@@ -19,7 +19,7 @@ export async function GET() {
 
     const schoolId = getSchoolId(session!)
 
-    const [health, risk, classHealth, pendingApplications, academicYear, lastSnapshot, activityInfo] = await Promise.all([
+    const [health, risk, classHealth, pendingApplications, academicYear, lastSnapshot, activityInfo, totalStudents, totalTeachers, totalClasses] = await Promise.all([
       computeAcademicHealth(schoolId),
       computeStudentRisk(schoolId),
       computeClassHealth(schoolId),
@@ -27,6 +27,9 @@ export async function GET() {
       getCurrentAcademicYear(schoolId),
       getLatestSnapshot(schoolId),
       getLastActivityInfo(schoolId),
+      prisma.student.count({ where: { schoolId } }),
+      prisma.teacher.count({ where: { schoolId } }),
+      prisma.class.count({ where: { schoolId } }),
     ])
 
     const evolution = lastSnapshot ? health.score - lastSnapshot.score : 0
@@ -37,6 +40,9 @@ export async function GET() {
         schoolName: session?.user?.name ?? "Escola",
       },
       academic: {
+        totalStudents,
+        totalTeachers,
+        totalClasses,
         aproveitamento: health.score,
         assiduidade: health.breakdown.attendance,
         status: health.status,
@@ -46,6 +52,12 @@ export async function GET() {
         totalAtRisk: risk.totalAtRisk,
         riskPercentage: risk.riskPercentage,
         summary: risk.summary,
+        students: risk.students.slice(0, 10).map((s) => ({
+          id: s.studentId,
+          name: s.studentName,
+          reason: s.motivoPrincipal,
+          level: s.riskLevel,
+        })),
       },
       classes: {
         totalUnderMonitoring: classHealth.atRiskCount + classHealth.criticalCount,
