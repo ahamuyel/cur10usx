@@ -6,6 +6,7 @@ import { useEffect, useState } from "react"
 import { Loader2, Users } from "lucide-react"
 
 import StudentDashboard from "@/components/ui/StudentDashboard"
+import ParentDashboard from "@/components/ui/ParentDashboard"
 import ExecutiveDashboard from "@/components/analytics/ExecutiveDashboard"
 import TeacherDashboard from "@/components/ui/TeacherDashboard" // Importando o novo dashboard isolado
 
@@ -88,7 +89,11 @@ export default function DashboardPage() {
         )}
 
         {studentId ? (
-          <StudentDashboard studentId={studentId} />
+          role === "parent" ? (
+            <ParentDashboard studentId={studentId} />
+          ) : (
+            <StudentDashboard studentId={studentId} />
+          )
         ) : (
           <div className="flex items-center justify-center min-h-[40vh]">
             <Loader2 className="w-5 h-5 animate-spin text-violet-500" />

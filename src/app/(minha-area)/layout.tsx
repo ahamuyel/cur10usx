@@ -7,7 +7,7 @@ import { LogOut, Loader2 } from "lucide-react"
 import ThemeToggle from "@/components/ui/ThemeToggle"
 import LocaleSwitcher from "@/components/landing/LocaleSwitcher"
 import { useTranslation } from "@/lib/i18n"
-import { on } from "@/hooks/useWebSocket"
+// import { on } from "@/hooks/useWebSocket"
 import { usePlatformBranding } from "@/provider/platform-branding"
 
 function MinhaAreaBrand() {
@@ -23,7 +23,7 @@ function MinhaAreaBrand() {
 }
 
 export default function MinhaAreaLayout({ children }: { children: React.ReactNode }) {
-  const { data: session, status, update } = useSession()
+  const { data: session, status } = useSession()
   const router = useRouter()
   const pathname = usePathname()
   const { t, locale } = useTranslation()
@@ -51,29 +51,29 @@ export default function MinhaAreaLayout({ children }: { children: React.ReactNod
   }, [status, user, isActive, router, pathname])
 
   // Poll session every 15s while in pending state to detect approval immediately
-  const pollingRef = useRef<ReturnType<typeof setInterval>>(undefined)
-  useEffect(() => {
-    if (status === "authenticated" && user && !isActive) {
-      pollingRef.current = setInterval(() => { update() }, 60000)
-    }
-    return () => {
-      if (pollingRef.current) clearInterval(pollingRef.current)
-    }
-  }, [status, user, isActive, update])
+  // const pollingRef = useRef<ReturnType<typeof setInterval>>(undefined)
+  // useEffect(() => {
+  //   if (status === "authenticated" && user && !isActive) {
+  //     pollingRef.current = setInterval(() => { update() }, 60000)
+  //   }
+  //   return () => {
+  //     if (pollingRef.current) clearInterval(pollingRef.current)
+  //   }
+  // }, [status, user, isActive, update])
 
-  // Listen for WebSocket "session-update" events to refresh immediately
-  useEffect(() => {
-    const unsub = on("session-update", () => { update() })
-    return unsub
-  }, [update])
+  // // Listen for WebSocket "session-update" events to refresh immediately
+  // useEffect(() => {
+  //   const unsub = on("session-update", () => { update() })
+  //   return unsub
+  // }, [update])
 
-  if (status === "loading") {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <Loader2 className="w-6 h-6 animate-spin text-primary" />
-      </div>
-    )
-  }
+  // if (status === "loading") {
+  //   return (
+  //     <div className="flex items-center justify-center min-h-screen">
+  //       <Loader2 className="w-6 h-6 animate-spin text-primary" />
+  //     </div>
+  //   )
+  // }
 
   // Hide content while redirecting to prevent flash
   // But allow change-password to render

@@ -97,17 +97,20 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
       ? Math.round((subjectAvgValues.reduce((a, b) => a + b, 0) / subjectAvgValues.length) * 10) / 10
       : 0
 
-    // --- Attendance summary ---
+    // --- Attendance summary (all statuses) ---
     const presente = attendances.filter((a) => a.status === "presente").length
-    const ausente = attendances.filter((a) => a.status === "ausente").length
     const atrasado = attendances.filter((a) => a.status === "atrasado").length
+    const faltaJustificada = attendances.filter((a) => a.status === "falta_justificada").length
+    const faltaInjustificada = attendances.filter((a) => a.status === "falta_injustificada").length
+    const ausente = attendances.filter((a) => a.status === "ausente").length
+    const dispensa = attendances.filter((a) => a.status === "dispensa").length
     const totalAttendance = attendances.length
-    const totalAbsences = ausente
+    const totalAbsences = ausente + faltaJustificada + faltaInjustificada
 
-    // --- Absences by subject ---
+    // --- Absences by subject (unjustified + justified + generic) ---
     const absencesBySubject: Record<string, number> = {}
     for (const a of attendances) {
-      if (a.status === "ausente" && a.lesson?.subject?.name) {
+      if ((a.status === "ausente" || a.status === "falta_justificada" || a.status === "falta_injustificada") && a.lesson?.subject?.name) {
         const name = a.lesson.subject.name
         absencesBySubject[name] = (absencesBySubject[name] || 0) + 1
       }
@@ -119,16 +122,18 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     // --- Subject with most absences ---
     const subjectWithMostAbsences = absencesBySubjectArray[0]?.subjectName || null
 
-    // --- Attendance by month ---
-    const attendanceByMonth: { month: string; presente: number; ausente: number; atrasado: number }[] = []
-    const monthMap: Record<string, { p: number; au: number; at: number }> = {}
+    // --- Attendance by month (improved) ---
+    const attendanceByMonth: { month: string; presente: number; ausente: number; atrasado: number; falta_justificada: number; falta_injustificada: number }[] = []
+    const monthMap: Record<string, { p: number; au: number; at: number; fj: number; fi: number }> = {}
     for (const a of attendances) {
       const d = new Date(a.date)
       const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`
-      if (!monthMap[key]) monthMap[key] = { p: 0, au: 0, at: 0 }
+      if (!monthMap[key]) monthMap[key] = { p: 0, au: 0, at: 0, fj: 0, fi: 0 }
       if (a.status === "presente") monthMap[key].p++
       else if (a.status === "ausente") monthMap[key].au++
       else if (a.status === "atrasado") monthMap[key].at++
+      else if (a.status === "falta_justificada") monthMap[key].fj++
+      else if (a.status === "falta_injustificada") monthMap[key].fi++
     }
     const monthNames = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"]
     for (const [key, counts] of Object.entries(monthMap).sort()) {
@@ -138,6 +143,8 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
         presente: counts.p,
         ausente: counts.au,
         atrasado: counts.at,
+        falta_justificada: counts.fj,
+        falta_injustificada: counts.fi,
       })
     }
 
@@ -283,7 +290,10 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     }
 
     // --- Attendance warning (based on absences, not percentage) ---
-    const attendanceWarning = totalAbsences >= 5 || absencesBySubjectArray.some((s) => s.count >= 3)
+    const attendanceWarning = totalAbsences >= 5 || faltaInjustificada >= 3 || absencesBySubjectArray.some((s) => s.count >= 3)
+    const attendancePercentage = totalAttendance > 0
+      ? Math.round(((totalAttendance - totalAbsences) / totalAttendance) * 100)
+      : 100
 
     // --- Subjects needing attention (average < 10) ---
     const subjectsNeedingAttention = subjectAverages
@@ -303,7 +313,10 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
       classRank,
       classSize,
       attendanceWarning,
+      attendancePercentage,
       totalAbsences,
+      faltaJustificada,
+      faltaInjustificada,
       absencesBySubject: absencesBySubjectArray,
       subjectWithMostAbsences,
       totalResults: results.length,
@@ -313,7 +326,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
       subjectLastScores,
       subjectTrends,
       scoreDistribution,
-      attendance: { total: totalAttendance, presente, ausente, atrasado },
+      attendance: { total: totalAttendance, presente, ausente, atrasado, faltaJustificada, faltaInjustificada, dispensa },
       attendanceByMonth,
       trimesterEvolution,
       recentResults,
