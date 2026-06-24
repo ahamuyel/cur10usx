@@ -9,14 +9,14 @@ import {
   ClipboardList, Sparkles, Send, ShieldCheck,
   User, Mail, Calendar, ExternalLink,
   BookOpen, BarChart3, Users, MessageSquare, Settings,
-  Loader2, X, ChevronDown,
+  Loader2, X, ChevronDown, Zap,
 } from "lucide-react"
 import StatusBadge from "@/components/ui/StatusBadge"
 import ConfirmActionModal from "@/components/ui/ConfirmActionModal"
 import AppAvatar from "@/components/ui/AppAvatar"
 import { useTranslation } from "@/lib/i18n"
-
-/* ─── Labels e ícones ─── */
+import { cn } from "@/lib/utils"
+import HeroBackgroundPaths from "@/components/ui/HeroBackgroundPaths"
 
 const roleLabels: Record<string, string> = {
   school_admin: "Administrador",
@@ -45,8 +45,6 @@ const ROLES_DISPONIVEIS = [
   { id: "parent", label: "Encarregado", desc: "Solicitar como encarregado de educação" },
 ]
 
-/* ─── Tipos ─── */
-
 type Application = {
   id: string
   status: string
@@ -73,8 +71,6 @@ type UserSchool = {
   status: string
 }
 
-/* ─── Página Principal ─── */
-
 export default function MinhaAreaPage() {
   const { tUI, locale } = useTranslation()
   const { data: session, status: sessionStatus } = useSession()
@@ -84,7 +80,6 @@ export default function MinhaAreaPage() {
   const [loading, setLoading] = useState(true)
   const [cancelTarget, setCancelTarget] = useState<string | null>(null)
 
-  // Modal de solicitação
   const [showModal, setShowModal] = useState(false)
   const [modalStep, setModalStep] = useState<"school" | "role" | "form" | "success">("school")
   const [selSchool, setSelSchool] = useState("")
@@ -92,7 +87,6 @@ export default function MinhaAreaPage() {
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState("")
 
-  // Form fields
   const [phone, setPhone] = useState("")
   const [gender, setGender] = useState("")
   const [docType, setDocType] = useState("")
@@ -102,7 +96,6 @@ export default function MinhaAreaPage() {
   const [teachingArea, setTeachingArea] = useState("")
   const [relationship, setRelationship] = useState("")
 
-  // Classes dynamically localized
   const classes = Array.from({ length: 12 }, (_, i) => {
     const val = i + 1
     const label = locale === "en"
@@ -113,7 +106,6 @@ export default function MinhaAreaPage() {
     return { value: val, label }
   })
 
-  // Carregar dados
   const loadData = useCallback(async () => {
     if (sessionStatus !== "authenticated") return
     try {
@@ -126,7 +118,6 @@ export default function MinhaAreaPage() {
       setSchools(Array.isArray(schs) ? schs : [])
       setUserSchools(Array.isArray(userSchs) ? userSchs : [])
     } catch {
-      // Silently fail
     } finally {
       setLoading(false)
     }
@@ -134,9 +125,7 @@ export default function MinhaAreaPage() {
 
   useEffect(() => { loadData() }, [loadData])
 
-  if (sessionStatus === "loading" || loading) {
-    return <SkeletonLoader />
-  }
+  if (sessionStatus === "loading" || loading) return <SkeletonLoader />
 
   const user = session?.user
   const hasActiveSchools = userSchools.length > 0
@@ -176,10 +165,6 @@ export default function MinhaAreaPage() {
 
     setSubmitting(true)
     try {
-      const modalMessagePT = `Solicitação via Minha Área — ${roleLabels[selRole] || selRole}`
-      const modalMessageEN = `Request via My Area — ${tUI(roleLabels[selRole] || selRole)}`
-      const modalMessageFR = `Demande via Mon Espace — ${tUI(roleLabels[selRole] || selRole)}`
-
       const res = await fetch("/api/applications", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -189,7 +174,7 @@ export default function MinhaAreaPage() {
           phone,
           role: selRole,
           schoolId: selSchool,
-          message: locale === "en" ? modalMessageEN : locale === "fr" ? modalMessageFR : modalMessagePT,
+          message: `Solicitação via Minha Área — ${roleLabels[selRole] || selRole}`,
           ...(selRole === "student" ? {
             gender,
             documentType: docType || undefined,
@@ -216,7 +201,7 @@ export default function MinhaAreaPage() {
     }
   }
 
-  const closeModal = () => { setShowModal(false); setModalStep("school"); }
+  const closeModal = () => { setShowModal(false); setModalStep("school") }
 
   const handleCancel = async () => {
     if (!cancelTarget) return
@@ -239,153 +224,167 @@ export default function MinhaAreaPage() {
   }))
 
   return (
-    <div className="space-y-8">
-      {/* 1. HERO */}
-      <section className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary-600 via-violet-600 to-purple-700 dark:from-primary-800 dark:via-violet-800 dark:to-purple-900 p-6 sm:p-8">
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS1vcGFjaXR5PSIwLjA1IiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-30" />
-        <div className="relative flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
-          <div className="relative">
-            <AppAvatar src={user?.image} name={user?.name} className="w-16 h-16 sm:w-20 sm:h-20 !rounded-full border-4 border-white/20" fallbackClassName="text-lg" />
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm text-white/70 font-medium">{greeting}!</p>
-            <h1 className="text-2xl sm:text-3xl font-bold text-white mt-1">{firstName}</h1>
-            <p className="text-xs sm:text-sm text-white/60 mt-1 truncate">{user?.email}</p>
-            <div className="flex flex-wrap gap-2 mt-3">
-              {userSchools.length > 0
-                ? [...new Set(userSchools.flatMap((s) => s.roles))].slice(0, 3).map((role) => {
-                    const Icon = roleIcons[role] || User
-                    return (
-                      <span key={role} className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-white text-xs font-medium backdrop-blur-sm">
-                        <Icon size={12} /> {tUI(roleLabels[role] || role)}
-                      </span>
-                    )
-                  })
-                : (
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-white text-xs font-medium backdrop-blur-sm">
-                    <AlertTriangle size={12} /> {tUI("Sem escola vinculada")}
-                  </span>
-                )
-              }
-            </div>
-            {hasActiveSchools && (
-              <Link href="/dashboard" className="inline-flex items-center gap-2 mt-4 px-4 py-2 rounded-xl bg-white/20 hover:bg-white/30 text-white text-sm font-medium transition backdrop-blur-sm">
-                {tUI("Ir para o painel")} <ExternalLink size={14} />
-              </Link>
-            )}
-          </div>
-          <div className="flex gap-3 sm:flex-col sm:gap-2 sm:items-end">
-            <StatCard label={tUI("Escolas")} value={userSchools.length} />
-            <StatCard label={tUI("Roles")} value={new Set(userSchools.flatMap((s) => s.roles)).size} />
-            {pendingCount > 0 && <StatCard label={tUI("Pendentes")} value={pendingCount} />}
-          </div>
-        </div>
-      </section>
+    <div className="max-w-3xl mx-auto space-y-6 p-4 sm:p-6">
 
-      {/* 2. ESCOLAS ACTIVAS */}
+      <section className="relative overflow-hidden rounded-2xl bg-zinc-950 p-5 sm:p-7 min-h-[280px] flex items-center">
+      
+      {/* Background Animado */}
+      <HeroBackgroundPaths />
+
+      {/* Conteúdo (Z-index superior) */}
+      <div className="relative z-10 w-full flex items-center gap-4">
+        <AppAvatar
+          src={user?.image}
+          name={user?.name}
+          className="w-14 h-14 sm:w-16 sm:h-16 !rounded-full border-2 border-white/20 shrink-0"
+          fallbackClassName="text-base"
+        />
+        
+        <div className="flex-1 min-w-0">
+          <p className="text-xs text-white/60 font-medium">{greeting}!</p>
+          <h1 className="text-xl sm:text-2xl font-semibold text-white leading-tight">{firstName}</h1>
+          <p className="text-xs text-white/50 mt-0.5 truncate">{user?.email}</p>
+          
+          <div className="flex flex-wrap gap-2 mt-2.5">
+            {hasActiveSchools
+              ? [...new Set(userSchools.flatMap((s) => s.roles))].slice(0, 3).map((role) => {
+                  const Icon = roleIcons[role] || User
+                  return (
+                    <span key={role} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/10 text-white text-xs font-medium border border-white/5">
+                      <Icon size={11} /> {tUI(roleLabels[role] || role)}
+                    </span>
+                  )
+                })
+              : (
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/5 text-white/70 text-xs font-medium border border-white/5">
+                  <AlertTriangle size={11} /> {tUI("Sem escola vinculada")}
+                </span>
+              )
+            }
+          </div>
+          
+          {hasActiveSchools && (
+            <Link href="/dashboard" className="inline-flex items-center gap-1.5 mt-3 px-3.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-medium transition backdrop-blur-sm border border-white/10">
+              {tUI("Ir para o painel")} <ExternalLink size={12} />
+            </Link>
+          )}
+        </div>
+
+        {/* Stats pills */}
+        <div className="flex flex-col gap-2 shrink-0">
+          <div className="flex items-center gap-2.5 px-3 py-2 rounded-xl bg-white/5 backdrop-blur-md border border-white/5">
+            <div>
+              <p className="text-lg font-semibold text-white leading-none">{userSchools.length}</p>
+              <p className="text-[11px] text-white/55 mt-0.5">{tUI("Escolas")}</p>
+            </div>
+          </div>
+          {pendingCount > 0 && (
+            <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/5 backdrop-blur-md border border-white/5">
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0 shadow-[0_0_8px_rgba(251,191,36,0.6)]" />
+              <div>
+                <p className="text-lg font-semibold text-white leading-none">{pendingCount}</p>
+                <p className="text-[11px] text-white/55 mt-0.5">{tUI("Pendente")}</p>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
+
+      {/* ── ESCOLAS ACTIVAS ── */}
       {hasActiveSchools && (
-        <section>
-          <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100 flex items-center gap-2 mb-4">
-            <School size={18} className="text-primary" /> {tUI("As minhas escolas")}
-          </h2>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <section className="space-y-3">
+          <SectionHeader icon={School} title={tUI("As minhas escolas")} />
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {userSchools.map((school) => <SchoolCard key={school.id} school={school} />)}
           </div>
         </section>
       )}
 
-      {/* 3. SOLICITAR — botão principal */}
-      {!hasActiveSchools && (
-        <section>
-          <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100 flex items-center gap-2 mb-4">
-            <UserPlus size={18} className="text-primary" /> {tUI("Solicitar vinculação")}
-          </h2>
-          {escolasDisponiveis.length === 0 ? (
-            <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-6 text-center">
-              <p className="text-sm text-zinc-500 dark:text-zinc-400">
-                {tUI("Não há escolas disponíveis para solicitar neste momento.")}
-              </p>
+      {/* ── SOLICITAR ── */}
+      {!hasActiveSchools && escolasDisponiveis.length > 0 && (
+        <section className="space-y-3">
+          <SectionHeader icon={UserPlus} title={tUI("Solicitar vinculação")} />
+          <div className="flex items-center justify-between gap-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl px-5 py-4">
+            <div className="min-w-0">
+              <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100">{tUI("Ainda não está vinculado a nenhuma escola")}</p>
+              <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">{tUI("Escolha uma escola e o role pretendido para solicitar acesso.")}</p>
             </div>
-          ) : (
-            <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-6 text-center">
-              <p className="text-sm text-zinc-500 dark:text-zinc-400 mb-4">
-                {tUI("Escolha uma escola e o role pretendido para solicitar vinculação")}
-              </p>
-              <button
-                onClick={openModal}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary hover:bg-primary-700 text-white text-sm font-medium transition shadow-lg shadow-primary/20"
-              >
-                <UserPlus size={16} /> {tUI("Nova solicitação")}
-              </button>
-            </div>
-          )}
+            <button
+              onClick={openModal}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-primary hover:bg-primary-700 text-white text-sm font-medium transition shadow-sm shadow-primary/20 shrink-0"
+            >
+              <UserPlus size={14} /> {tUI("Nova solicitação")}
+            </button>
+          </div>
         </section>
       )}
 
-      {/* 4. HISTÓRICO */}
-      <section>
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <ClipboardList size={18} className="text-primary" /> {tUI("Histórico de solicitações")}
-          </h2>
-          <span className="text-xs text-zinc-400 dark:text-zinc-500">
-            {applications.length} {applications.length === 1 ? tUI("solicitação") : tUI("solicitações")}
-          </span>
-        </div>
-
-        {applications.length === 0 ? (
-          <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-6 text-center">
-            <ClipboardList size={32} className="mx-auto text-zinc-400 dark:text-zinc-600 mb-3" />
-            <p className="text-sm text-zinc-500 dark:text-zinc-400">{tUI("Ainda não tem nenhuma solicitação.")}</p>
-          </div>
-        ) : (
-          <div className="space-y-3">
-            {applications.map((app) => (
-              <div key={app.id} className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-4">
-                <div className="flex items-start justify-between gap-3">
-                  <div className="min-w-0">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <span className="font-medium text-zinc-900 dark:text-zinc-100 text-sm">{app.school.name}</span>
-                      <StatusBadge status={app.status} />
-                    </div>
-                    <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
+      {/* ── HISTÓRICO ── */}
+      {applications.length > 0 && (
+        <section className="space-y-3">
+          <SectionHeader
+            icon={ClipboardList}
+            title={tUI("Histórico de solicitações")}
+            count={`${applications.length} ${applications.length === 1 ? tUI("solicitação") : tUI("solicitações")}`}
+          />
+          <div className="space-y-2">
+            {applications.map((app) => {
+              const isPending = app.status === "pendente" || app.status === "em_analise"
+              return (
+                <div key={app.id} className="flex items-center gap-3 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl px-4 py-3.5">
+                  <span className={cn(
+                    "w-2 h-2 rounded-full shrink-0 mt-0.5",
+                    app.status === "aprovado" ? "bg-emerald-500" :
+                    app.status === "rejeitado" ? "bg-red-500" :
+                    "bg-amber-400"
+                  )} />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100 truncate">{app.school.name}</p>
+                    <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
                       {tUI(roleLabels[app.role] || app.role)}
                       {app.school.city && ` · ${app.school.city}`}
                       {` · ${new Date(app.createdAt).toLocaleDateString(locale)}`}
                     </p>
                     {app.rejectReason && (
-                      <p className="text-xs text-red-600 dark:text-red-400 mt-2 bg-red-50 dark:bg-red-950/30 rounded-lg px-2.5 py-1.5 inline-block">
+                      <p className="text-xs text-red-600 dark:text-red-400 mt-1.5 bg-red-50 dark:bg-red-950/30 rounded-lg px-2.5 py-1 inline-block">
                         {tUI("Motivo:")} {app.rejectReason}
                       </p>
                     )}
                   </div>
-                  {(app.status === "pendente" || app.status === "em_analise") && (
-                    <button onClick={() => setCancelTarget(app.id)} className="text-xs text-red-600 dark:text-red-400 hover:underline shrink-0 font-medium">
+                  <StatusBadge status={app.status} />
+                  {isPending && (
+                    <button
+                      onClick={() => setCancelTarget(app.id)}
+                      className="text-xs text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 border border-zinc-200 dark:border-zinc-700 rounded-lg px-2.5 py-1 transition shrink-0"
+                    >
                       {tUI("Cancelar")}
                     </button>
                   )}
                 </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
-        )}
-      </section>
+        </section>
+      )}
 
-      {/* 5. RECURSOS RÁPIDOS */}
+      {/* ── ACÇÕES RÁPIDAS ── */}
       {quickActions.length > 0 && (
-        <section>
-          <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100 flex items-center gap-2 mb-4">
-            <Sparkles size={18} className="text-primary" /> {tUI("Acções rápidas")}
-          </h2>
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <section className="space-y-3">
+          <SectionHeader icon={Zap} title={tUI("Acções rápidas")} />
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {quickActions.map((action, i) => (
-              <Link key={i} href={action.href} className="group rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-4 flex items-center gap-3 hover:border-primary-300 dark:hover:border-primary-700 hover:shadow-md transition-all">
-                <div className="w-10 h-10 rounded-lg bg-primary-50 dark:bg-primary-950/50 flex items-center justify-center group-hover:bg-primary-100 dark:group-hover:bg-primary-950 transition-colors">
-                  <action.icon size={18} className="text-primary dark:text-primary-400" />
+              <Link
+                key={i}
+                href={action.href}
+                className="group flex flex-col items-center gap-2 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-4 text-center hover:border-primary/40 dark:hover:border-primary/40 hover:shadow-sm transition-all"
+              >
+                <div className="w-9 h-9 rounded-xl bg-primary/8 dark:bg-primary/10 flex items-center justify-center group-hover:bg-primary/12 transition-colors">
+                  <action.icon size={17} className="text-primary dark:text-primary-400" />
                 </div>
-                <div className="min-w-0">
-                  <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100 truncate">{action.label}</p>
-                  <p className="text-xs text-zinc-500 dark:text-zinc-400 truncate">{action.desc}</p>
+                <div>
+                  <p className="text-xs font-medium text-zinc-900 dark:text-zinc-100">{action.label}</p>
+                  <p className="text-[11px] text-zinc-500 dark:text-zinc-400 mt-0.5">{action.desc}</p>
                 </div>
               </Link>
             ))}
@@ -393,62 +392,64 @@ export default function MinhaAreaPage() {
         </section>
       )}
 
-      {/* 6. COMO FUNCIONA */}
-      {!hasActiveSchools && (
-        <section>
-          <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100 flex items-center gap-2 mb-4">
-            <Sparkles size={18} className="text-primary" /> {tUI("Como funciona")}
-          </h2>
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      {/* ── COMO FUNCIONA (só sem escolas E sem solicitações pendentes) ── */}
+      {!hasActiveSchools && pendingCount === 0 && (
+        <section className="space-y-3">
+          <SectionHeader icon={Sparkles} title={tUI("Como funciona")} />
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {[
               { icon: UserPlus, label: tUI("Criar conta"), desc: tUI("Registe-se na plataforma") },
               { icon: Send, label: tUI("Escolher escola"), desc: tUI("Seleccione escola e role") },
               { icon: Clock, label: tUI("Aguardar aprovação"), desc: tUI("A escola analisa o pedido") },
               { icon: ShieldCheck, label: tUI("Aceder"), desc: tUI("Acesso ao painel da escola") },
             ].map((step, i) => (
-              <div key={i} className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-4 text-center">
-                <div className="w-10 h-10 rounded-full bg-primary-100 dark:bg-primary-950 flex items-center justify-center mx-auto mb-3">
-                  <step.icon size={18} className="text-primary dark:text-primary-400" />
+              <div key={i} className="flex flex-col items-center gap-2 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-4 text-center">
+                <div className="w-9 h-9 rounded-xl bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center">
+                  <step.icon size={17} className="text-zinc-400 dark:text-zinc-500" />
                 </div>
-                <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100">{step.label}</p>
-                <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">{step.desc}</p>
+                <div>
+                  <p className="text-xs font-medium text-zinc-900 dark:text-zinc-100">{step.label}</p>
+                  <p className="text-[11px] text-zinc-500 dark:text-zinc-400 mt-0.5">{step.desc}</p>
+                </div>
               </div>
             ))}
           </div>
         </section>
       )}
 
-      {/* 7. A MINHA CONTA */}
-      <section>
-        <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100 flex items-center gap-2 mb-4">
-          <Settings size={18} className="text-primary" /> {tUI("A minha conta")}
-        </h2>
-        <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 overflow-hidden">
-          <div className="p-4 sm:p-6">
-            <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
-              <div className="flex items-center gap-4">
-                <AppAvatar src={user?.image} name={user?.name} className="w-16 h-16 sm:w-20 sm:h-20 !rounded-full border-4 border-white/20" fallbackClassName="text-lg" />
-                <div className="min-w-0">
-                  <p className="font-medium text-zinc-900 dark:text-zinc-100 truncate">{user?.name}</p>
-                  <p className="text-sm text-zinc-500 dark:text-zinc-400 truncate">{user?.email}</p>
-                </div>
-              </div>
-              <div className="flex-1 grid gap-3 sm:grid-cols-2">
-                <InfoItem icon={Mail} label={tUI("Provider")} value="Email" />
-                <InfoItem icon={Calendar} label={tUI("Registado em")} value={session?.expires ? new Date(session.expires).toLocaleDateString(locale) : "—"} />
-              </div>
+      <hr className="border-zinc-100 dark:border-zinc-800" />
+
+      {/* ── A MINHA CONTA ── */}
+      <section className="space-y-3">
+        <SectionHeader icon={Settings} title={tUI("A minha conta")} />
+        <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl px-5 py-4">
+          <div className="flex items-center gap-3">
+            <AppAvatar
+              src={user?.image}
+              name={user?.name}
+              className="w-10 h-10 !rounded-full shrink-0"
+              fallbackClassName="text-xs"
+            />
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100 truncate">{user?.name}</p>
+              <p className="text-xs text-zinc-500 dark:text-zinc-400 truncate">{user?.email}</p>
             </div>
+            <span className="text-xs text-zinc-500 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-lg shrink-0">
+              Email
+            </span>
           </div>
-          <div className="px-4 sm:px-6 py-3 bg-zinc-50 dark:bg-zinc-900/50 border-t border-zinc-200 dark:border-zinc-800 flex items-center justify-between">
-            <p className="text-xs text-zinc-500 dark:text-zinc-400">{tUI("Gerir as suas definições de conta")}</p>
-            <Link href="/change-password" className="inline-flex items-center gap-1.5 text-sm font-medium text-primary dark:text-primary-400 hover:underline">
-              {tUI("Alterar palavra-passe")} <ArrowRight size={14} />
+          <div className="flex items-center justify-between mt-4 pt-4 border-t border-zinc-100 dark:border-zinc-800">
+            <p className="text-xs text-zinc-400 dark:text-zinc-500">
+              {tUI("Registado em")} {session?.expires ? new Date(session.expires).toLocaleDateString(locale) : "—"}
+            </p>
+            <Link href="/change-password" className="inline-flex items-center gap-1 text-xs font-medium text-primary dark:text-primary-400 hover:underline">
+              {tUI("Alterar palavra-passe")} <ArrowRight size={12} />
             </Link>
           </div>
         </div>
       </section>
 
-      {/* Cancel modal */}
+      {/* ── CONFIRM CANCEL ── */}
       <ConfirmActionModal
         open={!!cancelTarget}
         onClose={() => setCancelTarget(null)}
@@ -459,22 +460,24 @@ export default function MinhaAreaPage() {
         confirmColor="red"
       />
 
-      {/* ═══════════════════════════════════════════
+      {/* ══════════════════════════════════════
           MODAL DE SOLICITAÇÃO
-         ═══════════════════════════════════════════ */}
+         ══════════════════════════════════════ */}
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50 backdrop-blur-sm p-0 sm:p-4" onClick={(e) => e.target === e.currentTarget && !submitting && closeModal()}>
+        <div
+          className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50 backdrop-blur-sm p-0 sm:p-4"
+          onClick={(e) => e.target === e.currentTarget && !submitting && closeModal()}
+        >
           <div className="w-full sm:max-w-lg bg-white dark:bg-zinc-900 rounded-t-2xl sm:rounded-2xl shadow-xl border border-zinc-200 dark:border-zinc-800 max-h-[90vh] overflow-y-auto">
-            {/* Header */}
-            <div className="flex items-center justify-between p-5 border-b border-zinc-200 dark:border-zinc-800">
-              <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-zinc-200 dark:border-zinc-800">
+              <h2 className="text-base font-semibold text-zinc-900 dark:text-zinc-100">
                 {modalStep === "school" && tUI("Escolha a escola")}
                 {modalStep === "role" && tUI("Escolha o role")}
-                {modalStep === "form" && `${tUI("Dados — ")} ${tUI(roleLabels[selRole] || selRole)}`}
+                {modalStep === "form" && `${tUI("Dados")} — ${tUI(roleLabels[selRole] || selRole)}`}
                 {modalStep === "success" && tUI("Solicitação enviada")}
               </h2>
               <button onClick={closeModal} disabled={submitting} className="p-1.5 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition">
-                <X size={18} className="text-zinc-400" />
+                <X size={16} className="text-zinc-400" />
               </button>
             </div>
 
@@ -494,7 +497,7 @@ export default function MinhaAreaPage() {
                         <option key={s.id} value={s.id}>{s.name}{s.city ? ` — ${s.city}` : ""}</option>
                       ))}
                     </select>
-                    <ChevronDown size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none" />
+                    <ChevronDown size={15} className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none" />
                   </div>
                   <button
                     onClick={handleNextStep}
@@ -517,16 +520,23 @@ export default function MinhaAreaPage() {
                         <button
                           key={id}
                           onClick={() => setSelRole(id)}
-                          className={`p-3 rounded-xl border text-center transition-all ${
+                          className={cn(
+                            "p-3 rounded-xl border text-center transition-all",
                             selRole === id
                               ? "border-primary bg-primary-50 dark:bg-primary-950/30 dark:border-primary-700"
                               : "border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/50 hover:border-primary-300 dark:hover:border-primary-600"
-                          }`}
+                          )}
                         >
-                          <div className={`w-8 h-8 rounded-lg mx-auto mb-1.5 flex items-center justify-center ${selRole === id ? "bg-primary-100 dark:bg-primary-950" : "bg-zinc-100 dark:bg-zinc-700"}`}>
+                          <div className={cn(
+                            "w-8 h-8 rounded-lg mx-auto mb-1.5 flex items-center justify-center",
+                            selRole === id ? "bg-primary-100 dark:bg-primary-950" : "bg-zinc-100 dark:bg-zinc-700"
+                          )}>
                             <Icon size={14} className={selRole === id ? "text-primary dark:text-primary-400" : "text-zinc-400 dark:text-zinc-500"} />
                           </div>
-                          <p className={`text-xs font-medium ${selRole === id ? "text-primary-700 dark:text-primary-300" : "text-zinc-600 dark:text-zinc-400"}`}>{tUI(label)}</p>
+                          <p className={cn(
+                            "text-xs font-medium",
+                            selRole === id ? "text-primary-700 dark:text-primary-300" : "text-zinc-600 dark:text-zinc-400"
+                          )}>{tUI(label)}</p>
                         </button>
                       )
                     })}
@@ -546,7 +556,7 @@ export default function MinhaAreaPage() {
                 </div>
               )}
 
-              {/* Step 3: Form por role */}
+              {/* Step 3: Form */}
               {modalStep === "form" && (
                 <div className="space-y-4">
                   {submitError && (
@@ -554,10 +564,8 @@ export default function MinhaAreaPage() {
                       {submitError}
                     </div>
                   )}
-
-                  {/* Campos comuns */}
                   <div>
-                    <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">{tUI("Telefone *")}</label>
+                    <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">{tUI("Telefone *")}</label>
                     <input
                       type="tel"
                       placeholder="+244 900 000 000"
@@ -567,11 +575,10 @@ export default function MinhaAreaPage() {
                     />
                   </div>
 
-                  {/* Campos específicos — Aluno */}
                   {selRole === "student" && (
                     <>
                       <div>
-                        <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">{tUI("Género *")}</label>
+                        <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">{tUI("Género *")}</label>
                         <select value={gender} onChange={(e) => setGender(e.target.value)} className="w-full h-10 px-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition appearance-none">
                           <option value="">{tUI("Seleccione...")}</option>
                           <option value="masculino">{tUI("Masculino")}</option>
@@ -580,7 +587,7 @@ export default function MinhaAreaPage() {
                       </div>
                       <div className="grid grid-cols-2 gap-3">
                         <div>
-                          <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">{tUI("Tipo de documento")}</label>
+                          <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">{tUI("Tipo de documento")}</label>
                           <select value={docType} onChange={(e) => setDocType(e.target.value)} className="w-full h-10 px-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition appearance-none">
                             <option value="">{tUI("Seleccione...")}</option>
                             <option value="BI">{tUI("BI")}</option>
@@ -588,16 +595,16 @@ export default function MinhaAreaPage() {
                           </select>
                         </div>
                         <div>
-                          <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">{tUI("Nº do documento")}</label>
+                          <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">{tUI("Nº do documento")}</label>
                           <input type="text" value={docNumber} onChange={(e) => setDocNumber(e.target.value)} className="w-full h-10 px-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition" />
                         </div>
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">{tUI("Data de nascimento")}</label>
+                        <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">{tUI("Data de nascimento")}</label>
                         <input type="date" value={dateOfBirth} onChange={(e) => setDateOfBirth(e.target.value)} className="w-full h-10 px-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition" />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">{tUI("Classe pretendida *")}</label>
+                        <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">{tUI("Classe pretendida *")}</label>
                         <select value={desiredGrade} onChange={(e) => setDesiredGrade(e.target.value)} className="w-full h-10 px-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition appearance-none">
                           <option value="">{tUI("Seleccione a classe...")}</option>
                           {classes.map((c) => <option key={c.value} value={c.value}>{c.label}</option>)}
@@ -606,35 +613,29 @@ export default function MinhaAreaPage() {
                     </>
                   )}
 
-                  {/* Campos específicos — Professor */}
                   {selRole === "teacher" && (
-                    <>
-                      <div>
-                        <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">{tUI("Área de ensino *")}</label>
-                        <input
-                          type="text"
-                          placeholder={tUI("Ex: Matemática, Física, Português")}
-                          value={teachingArea}
-                          onChange={(e) => setTeachingArea(e.target.value)}
-                          className="w-full h-10 px-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition"
-                        />
-                      </div>
-                    </>
+                    <div>
+                      <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">{tUI("Área de ensino *")}</label>
+                      <input
+                        type="text"
+                        placeholder={tUI("Ex: Matemática, Física, Português")}
+                        value={teachingArea}
+                        onChange={(e) => setTeachingArea(e.target.value)}
+                        className="w-full h-10 px-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition"
+                      />
+                    </div>
                   )}
 
-                  {/* Campos específicos — Encarregado */}
                   {selRole === "parent" && (
-                    <>
-                      <div>
-                        <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">{tUI("Parentesco *")}</label>
-                        <select value={relationship} onChange={(e) => setRelationship(e.target.value)} className="w-full h-10 px-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition appearance-none">
-                          <option value="">{tUI("Seleccione...")}</option>
-                          <option value="pai">{tUI("Pai")}</option>
-                          <option value="mae">{tUI("Mãe")}</option>
-                          <option value="tutor">{tUI("Tutor / Outro")}</option>
-                        </select>
-                      </div>
-                    </>
+                    <div>
+                      <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">{tUI("Parentesco *")}</label>
+                      <select value={relationship} onChange={(e) => setRelationship(e.target.value)} className="w-full h-10 px-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition appearance-none">
+                        <option value="">{tUI("Seleccione...")}</option>
+                        <option value="pai">{tUI("Pai")}</option>
+                        <option value="mae">{tUI("Mãe")}</option>
+                        <option value="tutor">{tUI("Tutor / Outro")}</option>
+                      </select>
+                    </div>
                   )}
 
                   <div className="flex gap-2 pt-2">
@@ -644,9 +645,12 @@ export default function MinhaAreaPage() {
                     <button
                       onClick={handleSubmit}
                       disabled={submitting}
-                      className="flex-1 h-10 flex items-center justify-center gap-2 rounded-xl bg-primary hover:bg-primary-700 text-white text-sm font-medium transition shadow-lg shadow-primary/20 disabled:opacity-50"
+                      className="flex-1 h-10 flex items-center justify-center gap-2 rounded-xl bg-primary hover:bg-primary-700 text-white text-sm font-medium transition shadow-sm shadow-primary/20 disabled:opacity-50"
                     >
-                      {submitting ? <><Loader2 size={16} className="animate-spin" /> {tUI("Enviando...")}</> : <><Send size={16} /> {tUI("Enviar solicitação")}</>}
+                      {submitting
+                        ? <><Loader2 size={14} className="animate-spin" /> {tUI("Enviando...")}</>
+                        : <><Send size={14} /> {tUI("Enviar solicitação")}</>
+                      }
                     </button>
                   </div>
                 </div>
@@ -654,12 +658,12 @@ export default function MinhaAreaPage() {
 
               {/* Step 4: Success */}
               {modalStep === "success" && (
-                <div className="text-center py-4">
-                  <CheckCircle className="w-12 h-12 text-emerald-600 dark:text-emerald-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 mb-2">{tUI("Solicitação enviada!")}</h3>
-                  <p className="text-sm text-zinc-500 dark:text-zinc-400 mb-6">
-                    {tUI("A sua solicitação foi enviada à escola. Aguarda aprovação.")}
-                  </p>
+                <div className="text-center py-6">
+                  <div className="w-14 h-14 rounded-full bg-emerald-100 dark:bg-emerald-950/40 flex items-center justify-center mx-auto mb-4">
+                    <CheckCircle size={28} className="text-emerald-600 dark:text-emerald-400" />
+                  </div>
+                  <h3 className="text-base font-semibold text-zinc-900 dark:text-zinc-100 mb-1">{tUI("Solicitação enviada!")}</h3>
+                  <p className="text-sm text-zinc-500 dark:text-zinc-400 mb-6">{tUI("A sua solicitação foi enviada à escola. Aguarda aprovação.")}</p>
                   <button onClick={closeModal} className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-primary hover:bg-primary-700 text-white text-sm font-medium transition">
                     {tUI("Fechar")}
                   </button>
@@ -673,32 +677,30 @@ export default function MinhaAreaPage() {
   )
 }
 
-/* ═══════════════════════════════════════════════════════════
-   Sub-componentes
-   ═══════════════════════════════════════════════════════════ */
+/* ── Sub-componentes ── */
 
-function SkeletonLoader() {
+function SectionHeader({ icon: Icon, title, count }: { icon: React.ElementType; title: string; count?: string }) {
   return (
-    <div className="space-y-8 animate-pulse">
-      <div className="rounded-2xl bg-zinc-200 dark:bg-zinc-800 h-40" />
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {[1, 2, 3].map((i) => <div key={i} className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-4 h-32" />)}
-      </div>
-      <div className="space-y-3">
-        {[1, 2].map((i) => <div key={i} className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-4 h-20" />)}
-      </div>
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        {[1, 2, 3, 4].map((i) => <div key={i} className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-4 h-16" />)}
-      </div>
+    <div className="flex items-center justify-between">
+      <h2 className="flex items-center gap-2 text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+        <Icon size={15} className="text-primary dark:text-primary-400 shrink-0" />
+        {title}
+      </h2>
+      {count && <span className="text-xs text-zinc-400 dark:text-zinc-500">{count}</span>}
     </div>
   )
 }
 
-function StatCard({ label, value }: { label: string; value: number }) {
+function SkeletonLoader() {
   return (
-    <div className="flex flex-col items-center px-3 py-2 rounded-xl bg-white/10 backdrop-blur-sm">
-      <span className="text-2xl font-bold text-white">{value}</span>
-      <span className="text-xs text-white/70">{label}</span>
+    <div className="max-w-3xl mx-auto space-y-6 p-4 sm:p-6 animate-pulse">
+      <div className="rounded-2xl bg-zinc-200 dark:bg-zinc-800 h-36" />
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {[1, 2].map((i) => <div key={i} className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 h-28" />)}
+      </div>
+      <div className="space-y-2">
+        {[1, 2].map((i) => <div key={i} className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 h-16" />)}
+      </div>
     </div>
   )
 }
@@ -706,36 +708,36 @@ function StatCard({ label, value }: { label: string; value: number }) {
 function SchoolCard({ school }: { school: UserSchool }) {
   const { tUI } = useTranslation()
   return (
-    <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 overflow-hidden hover:shadow-md transition-shadow">
+    <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl overflow-hidden hover:shadow-sm transition-shadow">
       <div className="p-4 border-b border-zinc-100 dark:border-zinc-800">
         <div className="flex items-start gap-3">
           {school.logo ? (
-            <img src={school.logo} alt={school.name} className="w-10 h-10 rounded-lg object-cover border border-zinc-200 dark:border-zinc-700" />
+            <img src={school.logo} alt={school.name} className="w-9 h-9 rounded-lg object-cover border border-zinc-200 dark:border-zinc-700 shrink-0" />
           ) : (
-            <div className="w-10 h-10 rounded-lg bg-primary-50 dark:bg-primary-950/50 flex items-center justify-center shrink-0">
-              <School size={18} className="text-primary dark:text-primary-400" />
+            <div className="w-9 h-9 rounded-lg bg-primary-50 dark:bg-primary-950/50 flex items-center justify-center shrink-0">
+              <School size={16} className="text-primary dark:text-primary-400" />
             </div>
           )}
           <div className="min-w-0 flex-1">
-            <p className="font-medium text-sm text-zinc-900 dark:text-zinc-100 truncate">{school.name}</p>
+            <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100 truncate">{school.name}</p>
             {school.city && <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">{school.city}</p>}
           </div>
           <StatusBadge status={school.status} />
         </div>
       </div>
-      <div className="p-4">
-        <div className="flex flex-wrap gap-1.5 mb-4">
+      <div className="px-4 py-3">
+        <div className="flex flex-wrap gap-1.5 mb-3">
           {[...new Set(school.roles)].map((role) => {
             const Icon = roleIcons[role] || User
             return (
-              <span key={role} className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-medium ${roleColors[role] || "text-zinc-600"} bg-zinc-100 dark:bg-zinc-800`}>
+              <span key={role} className={cn("inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-medium bg-zinc-100 dark:bg-zinc-800", roleColors[role] || "text-zinc-600")}>
                 <Icon size={10} /> {tUI(roleLabels[role] || role)}
               </span>
             )
           })}
         </div>
-        <Link href="/dashboard" className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-primary hover:bg-primary-700 text-white text-sm font-medium transition shadow-lg shadow-primary/20">
-          {tUI("Aceder ao painel")} <ExternalLink size={14} />
+        <Link href="/dashboard" className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-primary hover:bg-primary-700 text-white text-xs font-medium transition">
+          {tUI("Aceder ao painel")} <ExternalLink size={12} />
         </Link>
       </div>
     </div>
@@ -745,7 +747,7 @@ function SchoolCard({ school }: { school: UserSchool }) {
 function InfoItem({ icon: Icon, label, value }: { icon: React.ElementType; label: string; value: string }) {
   return (
     <div className="flex items-center gap-3 p-3 rounded-lg bg-zinc-50 dark:bg-zinc-800/50">
-      <Icon size={16} className="text-zinc-400 dark:text-zinc-500 shrink-0" />
+      <Icon size={14} className="text-zinc-400 dark:text-zinc-500 shrink-0" />
       <div className="min-w-0">
         <p className="text-xs text-zinc-500 dark:text-zinc-400">{label}</p>
         <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100 truncate">{value}</p>

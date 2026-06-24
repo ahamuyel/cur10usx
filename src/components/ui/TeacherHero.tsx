@@ -104,9 +104,9 @@ export default function TeacherHero({ data }: TeacherHeroProps) {
   // não são repetidos aqui.
   const quickActions = [
     { label: "Lançar nota", icon: PenLine, href: "/list/results/new" },
-    { label: "Registar presença", icon: ClipboardCheck, href: "/list/attendance/mark" },
-    { label: "Justificar falta", icon: FileWarning, href: "/list/attendance/justify" },
-    { label: "Criar avaliação", icon: FilePlus, href: "/list/exams/new" },
+    { label: "Registar presença", icon: ClipboardCheck, href: "/list/attendance" },
+    { label: "Justificar falta", icon: FileWarning, href: "/list/attendance" },
+    { label: "Criar avaliação", icon: FilePlus, href: "/list/exams" },
   ];
 
   return (

@@ -1,101 +1,80 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { Loader2, AlertCircle } from "lucide-react"
+import { useEffect, useState, Suspense, lazy } from "react";
+import { Loader2, AlertCircle } from "lucide-react";
 
-import StudentHero from "./StudentHero"
-import StudentDailyFocus from "./StudentDailyFocus"
-import StudentPerformanceBreakdown from "./StudentPerformanceBreakdown"
-import StudentPrioritySubjects from "./StudentPrioritySubjects"
-import StudentAcademicAgenda from "./StudentAcademicAgenda"
-import StudentAcademicJourney from "./StudentAcademicJourney"
-import StudentActivityChart from "./StudentActivityChart"
-import StudentInsights from "./StudentInsights"
-import StudentCalendarExperience from "./StudentCalendarExperience"
-import StudentNavigation from "./StudentNavigation"
+// Imports de componentes (assumindo que já existem nos seus paths)
+import StudentHero from "./StudentHero";
+import StudentDailyFocus from "./StudentDailyFocus";
+import StudentPrioritySubjects from "./StudentPrioritySubjects";
+import StudentPerformanceBreakdown from "./StudentPerformanceBreakdown";
+import StudentNavigation from "./StudentNavigation";
+
+// Lazy loading para componentes pesados (gráficos/calendários)
+const StudentCalendarExperience = lazy(() => import("./StudentCalendarExperience"));
+const StudentAcademicAgenda = lazy(() => import("./StudentAcademicAgenda"));
+const StudentAcademicJourney = lazy(() => import("./StudentAcademicJourney"));
+const StudentActivityChart = lazy(() => import("./StudentActivityChart"));
+const StudentInsights = lazy(() => import("./StudentInsights"));
 
 export default function StudentDashboard({ studentId }: { studentId: string }) {
-  const [data, setData] = useState<any>(null)
-  const [error, setError] = useState("")
-  const [loading, setLoading] = useState(true)
+  const [data, setData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const res = await fetch(`/api/students/${studentId}/dashboard`)
-        if (!res.ok) throw new Error("Dados indisponíveis")
-        const json = await res.json()
-        setData(json)
+        const res = await fetch(`/api/students/${studentId}/dashboard`);
+        if (!res.ok) throw new Error("Falha ao carregar dados");
+        const json = await res.json();
+        setData(json);
       } catch {
-        setError("Não foi possível carregar o ecossistema do estudante.")
+        setError("Não foi possível carregar o ecossistema do estudante.");
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
     }
-    fetchData()
-  }, [studentId])
+    fetchData();
+  }, [studentId]);
 
-  if (loading) return <DashboardLoader />
-  if (error || !data) return <DashboardError error={error} />
-
-  const trend = data.generalAverage - data.previousAverage
-  const hasAbsenceIssues = data.totalAbsences >= 5
-  const hasSubjectIssues = data.subjectsNeedingAttention.length > 0
-  const statusPhrase = (() => {
-    if (hasAbsenceIssues && hasSubjectIssues)
-      return `Tens ${data.totalAbsences} faltas e ${data.subjectsNeedingAttention.length} disciplina${data.subjectsNeedingAttention.length > 1 ? "s" : ""} com média crítica.`
-    if (hasAbsenceIssues)
-      return `Tens ${data.totalAbsences} faltas este período.${data.subjectWithMostAbsences ? ` A maioria em ${data.subjectWithMostAbsences}.` : ""}`
-    if (hasSubjectIssues)
-      return `${data.subjectsNeedingAttention.join(", ")} ${data.subjectsNeedingAttention.length > 1 ? "precisam" : "precisa"} de atenção.`
-    if (data.totalAbsences === 0 && trend > 1.0 && data.generalAverage >= 14) return "Presença perfeita e excelente evolução."
-    if (trend > 1.0 && data.generalAverage >= 14) return "Excelente evolução. Mantém o ritmo."
-    if (trend > 0) return "Estás a melhorar. Continua assim."
-    if (data.totalAbsences === 0) return "Sem faltas registadas. Desempenho estável."
-    return "Desempenho estável. Foca-te nas próximas metas."
-  })()
+  if (loading) return <DashboardLoader />;
+  if (error || !data) return <DashboardError error={error} />;
 
   return (
-    <div className="w-full space-y-10 animate-in fade-in duration-500 pb-16 px-1 max-w-[1600px] mx-auto">
-      <section>
+    <div className="w-full max-w-[1600px] mx-auto pb-20 px-4 space-y-8 animate-in fade-in duration-700">
+      
+      {/* HEADER SECTION */}
+      <section className="relative">
         <StudentHero
           name={data.student.name}
           average={data.generalAverage}
           previousAverage={data.previousAverage}
           classRank={data.classRank}
           classSize={data.classSize}
-          statusPhrase={statusPhrase}
+          statusPhrase={getDerivedStatusPhrase(data)}
           targetAverage={data.targetAverage}
         />
-        <div className="flex justify-end">
+        <div className="mt-4 flex justify-end">
           <StudentNavigation studentId={studentId} />
         </div>
       </section>
 
-      <section className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+      {/* CORE PERFORMANCE GRID */}
+      <section className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         <div className="lg:col-span-8">
-          <StudentDailyFocus
-            subjectsNeedingAttention={data.subjectsNeedingAttention}
-            pendingSubmissions={data.pendingSubmissions}
-            upcomingExams={data.upcomingExams}
-            totalAbsences={data.totalAbsences}
-            absencesBySubject={data.absencesBySubject}
-            subjectWithMostAbsences={data.subjectWithMostAbsences}
-            generalAverage={data.generalAverage}
-            previousAverage={data.previousAverage}
-            subjectAverages={data.subjectAverages}
-            targetAverage={data.targetAverage}
-          />
+          <StudentDailyFocus {...data} />
         </div>
         <div className="lg:col-span-4">
-          <StudentPrioritySubjects
-            subjectAverages={data.subjectAverages}
-            subjectLastScores={data.subjectLastScores}
-            targetAverage={data.targetAverage}
+          <StudentPrioritySubjects 
+            subjectAverages={data.subjectAverages} 
+            subjectLastScores={data.subjectLastScores} 
+            targetAverage={data.targetAverage} 
           />
         </div>
       </section>
 
+      {/* ANALYTICS LAYER */}
       <section>
         <StudentPerformanceBreakdown
           subjectAverages={data.subjectAverages}
@@ -105,50 +84,57 @@ export default function StudentDashboard({ studentId }: { studentId: string }) {
         />
       </section>
 
-      <section>
-        <StudentCalendarExperience />
-      </section>
+      {/* DYNAMIC MODULES (SUSPENSE) */}
+      <Suspense fallback={<div className="h-40 animate-pulse rounded-3xl bg-zinc-100" />}>
+        <section>
+          <StudentCalendarExperience />
+        </section>
 
-      <section className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
-        <div className="lg:col-span-5">
-          <StudentAcademicAgenda exams={data.upcomingExams} assignments={data.upcomingAssignments} />
-        </div>
-        <div className="lg:col-span-4">
-          <StudentAcademicJourney trimesters={data.trimesterEvolution} />
-        </div>
-        <div className="lg:col-span-3">
-          <StudentActivityChart results={data.recentResults} />
-        </div>
-      </section>
+        <section className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div className="lg:col-span-5"><StudentAcademicAgenda exams={data.upcomingExams} assignments={data.upcomingAssignments} /></div>
+          <div className="lg:col-span-4"><StudentAcademicJourney trimesters={data.trimesterEvolution} /></div>
+          <div className="lg:col-span-3"><StudentActivityChart results={data.recentResults} /></div>
+        </section>
 
-      <section>
-        <StudentInsights
-          scoreDistribution={data.scoreDistribution}
-          totalAbsences={data.totalAbsences}
-          absencesBySubject={data.absencesBySubject}
-          attendanceByMonth={data.attendanceByMonth}
-        />
-      </section>
+        <section>
+          <StudentInsights
+            scoreDistribution={data.scoreDistribution}
+            totalAbsences={data.totalAbsences}
+            absencesBySubject={data.absencesBySubject}
+            attendanceByMonth={data.attendanceByMonth}
+          />
+        </section>
+      </Suspense>
     </div>
-  ) 
+  );
+}
+
+// Helper para manter o componente principal limpo
+function getDerivedStatusPhrase(data: any) {
+  const trend = data.generalAverage - data.previousAverage;
+  if (data.totalAbsences >= 5) return `Atenção: ${data.totalAbsences} faltas registadas.`;
+  if (data.subjectsNeedingAttention.length > 0) return `${data.subjectsNeedingAttention[0]} precisa de foco imediato.`;
+  if (trend > 1) return "Excelente evolução académica!";
+  return "Desempenho estável, continua o foco.";
 }
 
 function DashboardLoader() {
   return (
     <div className="flex flex-col items-center justify-center min-h-[60vh] gap-3">
       <Loader2 className="w-8 h-8 animate-spin text-violet-500" />
-      <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">A carregar ecossistema...</span>
+      <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Sincronizando dados...</p>
     </div>
-  )
+  );
 }
 
 function DashboardError({ error }: { error: string }) {
   return (
-    <div className="flex items-center justify-center min-h-[60vh]">
-      <div className="flex items-center gap-3 bg-rose-50 dark:bg-rose-950/20 px-6 py-4 rounded-2xl border border-rose-200 dark:border-rose-900/50">
-        <AlertCircle className="text-rose-500" size={18} />
-        <span className="text-sm font-medium text-rose-700 dark:text-rose-400">{error}</span>
+    <div className="flex items-center justify-center min-h-[60vh] p-4 text-center">
+      <div className="max-w-md flex flex-col items-center gap-3">
+        <AlertCircle className="text-rose-500" size={32} />
+        <h2 className="text-sm font-bold text-zinc-900">Erro de Carregamento</h2>
+        <p className="text-xs text-zinc-500">{error}</p>
       </div>
     </div>
-  )
+  );
 }
