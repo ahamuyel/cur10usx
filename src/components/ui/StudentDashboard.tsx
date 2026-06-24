@@ -58,6 +58,20 @@ export default function StudentDashboard({ studentId }: { studentId: string }) {
 
   useEffect(() => { fetchData() }, [fetchData])
 
+  const insights = useMemo(() => {
+    if (!data) return []
+    const trend = data.generalAverage - data.previousAverage
+    const items: { type: "critical" | "warning" | "success" | "info"; title: string; description: string }[] = []
+    if (data.subjectsNeedingAttention.length >= 2) items.push({ type: "critical", title: `${data.subjectsNeedingAttention.length} disciplinas em risco`, description: `${data.subjectsNeedingAttention.slice(0, 3).join(", ")} com média abaixo de 10.` })
+    if (data.subjectsNeedingAttention.length === 1) items.push({ type: "warning", title: `${data.subjectsNeedingAttention[0]} precisa de atenção`, description: "Média abaixo de 10 valores." })
+    if (data.faltaInjustificada >= 3) items.push({ type: "critical", title: `${data.faltaInjustificada} faltas injustificadas`, description: "Faltas sem justificação podem comprometer o aproveitamento." })
+    if (data.totalAbsences >= 5 && data.faltaInjustificada < 3) items.push({ type: "warning", title: `${data.totalAbsences} faltas no total`, description: data.subjectWithMostAbsences ? `A maioria em ${data.subjectWithMostAbsences}.` : "Acompanhe a assiduidade." })
+    if (trend < -1) items.push({ type: "warning", title: `Queda de ${Math.abs(trend).toFixed(1)} pontos`, description: "O desempenho geral diminuiu." })
+    if (trend > 1 && data.generalAverage >= 14) items.push({ type: "success", title: `Melhoria de +${trend.toFixed(1)} pontos`, description: "Excelente evolução!" })
+    if (items.length === 0) items.push({ type: "success", title: "Tudo dentro do esperado", description: "Bom desempenho académico." })
+    return items.slice(0, 4)
+  }, [data])
+
   if (loading) return <div className="flex flex-col items-center justify-center min-h-[60vh] gap-3"><Loader2 className="w-8 h-8 animate-spin text-violet-500" /><p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">A carregar...</p></div>
   if (error || !data) return <div className="flex items-center justify-center min-h-[60vh] p-4 text-center"><AlertCircle className="text-rose-500" size={32} /><p className="text-xs text-zinc-500 mt-2">{error}</p></div>
 
@@ -70,18 +84,6 @@ export default function StudentDashboard({ studentId }: { studentId: string }) {
   const sortedSubjects = [...data.subjectAverages].sort((a, b) => b.average - a.average)
   const worstSubjects = [...sortedSubjects].reverse().slice(0, 3)
   const bestSubjects = sortedSubjects.slice(0, 3)
-
-  const insights = useMemo(() => {
-    const items: { type: "critical" | "warning" | "success" | "info"; title: string; description: string }[] = []
-    if (data.subjectsNeedingAttention.length >= 2) items.push({ type: "critical", title: `${data.subjectsNeedingAttention.length} disciplinas em risco`, description: `${data.subjectsNeedingAttention.slice(0, 3).join(", ")} com média abaixo de 10.` })
-    if (data.subjectsNeedingAttention.length === 1) items.push({ type: "warning", title: `${data.subjectsNeedingAttention[0]} precisa de atenção`, description: "Média abaixo de 10 valores." })
-    if (data.faltaInjustificada >= 3) items.push({ type: "critical", title: `${data.faltaInjustificada} faltas injustificadas`, description: "Faltas sem justificação podem comprometer o aproveitamento." })
-    if (data.totalAbsences >= 5 && data.faltaInjustificada < 3) items.push({ type: "warning", title: `${data.totalAbsences} faltas no total`, description: data.subjectWithMostAbsences ? `A maioria em ${data.subjectWithMostAbsences}.` : "Acompanhe a assiduidade." })
-    if (trend < -1) items.push({ type: "warning", title: `Queda de ${Math.abs(trend).toFixed(1)} pontos`, description: "O desempenho geral diminuiu." })
-    if (trend > 1 && data.generalAverage >= 14) items.push({ type: "success", title: `Melhoria de +${trend.toFixed(1)} pontos`, description: "Excelente evolução!" })
-    if (items.length === 0) items.push({ type: "success", title: "Tudo dentro do esperado", description: "Bom desempenho académico." })
-    return items.slice(0, 4)
-  }, [data, trend])
 
   const tabs = [
     { id: "overview", label: "Visão Geral", icon: <BarChart3 size={14} /> },
