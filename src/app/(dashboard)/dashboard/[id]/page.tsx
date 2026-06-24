@@ -7,8 +7,9 @@ import { Loader2, Users } from "lucide-react"
 
 import StudentDashboard from "@/components/ui/StudentDashboard"
 import ParentDashboard from "@/components/ui/ParentDashboard"
-import ExecutiveDashboard from "@/components/analytics/ExecutiveDashboard"
-import TeacherDashboard from "@/components/ui/TeacherDashboard" // Importando o novo dashboard isolado
+import SchoolAdminDashboard from "@/components/ui/SchoolAdminDashboard"
+import SuperAdminDashboard from "@/components/ui/SuperAdminDashboard"
+import TeacherDashboard from "@/components/ui/TeacherDashboard"
 
 export default function DashboardPage() {
   const { data: session, status } = useSession()
@@ -55,7 +56,16 @@ export default function DashboardPage() {
   if (role === "school_admin") {
     return (
       <div className="min-w-0 w-full animate-in fade-in duration-300">
-        <ExecutiveDashboard />
+        <SchoolAdminDashboard />
+      </div>
+    )
+  }
+
+  // ========== SUPER ADMIN DASHBOARD ==========
+  if (role === "super_admin") {
+    return (
+      <div className="min-w-0 w-full animate-in fade-in duration-300">
+        <SuperAdminDashboard />
       </div>
     )
   }

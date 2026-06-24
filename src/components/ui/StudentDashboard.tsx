@@ -4,7 +4,7 @@ import { useEffect, useState, useMemo, useCallback, Suspense, lazy } from "react
 import {
   Loader2, AlertCircle, BarChart3, BookOpen, Users, Target,
   TrendingUp, TrendingDown, GraduationCap, Award, Sparkles,
-  Calendar, Clock, FileText, CheckCircle, XCircle,
+  Calendar, Clock, FileText, CheckCircle, XCircle, Minus,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { motion } from "framer-motion"
