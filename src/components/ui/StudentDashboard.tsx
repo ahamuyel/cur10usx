@@ -17,6 +17,7 @@ import {
   InsightCard, SectionCard, SubjectRow, SummaryBadge,
 } from "@/components/dashboard/shared"
 import ShaderBackground from "./shader-background"
+import StudentHero from "./StudentHero"
 
 const StudentAcademicAgenda = lazy(() => import("./StudentAcademicAgenda"))
 const StudentActivityChart = lazy(() => import("./StudentActivityChart"))
@@ -99,7 +100,23 @@ export default function StudentDashboard({ studentId }: { studentId: string }) {
   return (
     <div className="w-full max-w-[1600px] mx-auto pb-20 px-4 space-y-6 animate-in fade-in duration-700">
       {/* Hero */}
-      <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
+      {/* <StudentHero/>
+       */}
+        <section>
+        <StudentHero
+          name={data.student.name}
+          average={data.generalAverage}
+          previousAverage={data.previousAverage}
+          classRank={data.classRank}
+          classSize={data.classSize}
+          // statusPhrase={statusPhrase}
+          // targetAverage={data.targetAverage}
+        />
+        {/* <div className="flex justify-end">
+          <StudentNavigation studentId={studentId} />
+        </div> */}
+      </section>
+      {/* <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
         className="relative overflow-hidden w-full bg-white dark:bg-zinc-900 border border-black/[0.08] dark:border-white/[0.08] rounded-3xl p-6 md:p-8 shadow-sm"
       >
         <ShaderBackground />
@@ -131,7 +148,8 @@ export default function StudentDashboard({ studentId }: { studentId: string }) {
             )}
           </div>
         </div>
-      </motion.div>
+      </motion.div> */}
+
 
       {/* Insights */}
       {insights.length > 0 && (
