@@ -3,7 +3,7 @@
 import { motion } from "framer-motion"
 import { GraduationCap, TrendingUp, TrendingDown, Target, Award, Sparkles } from "lucide-react"
 import { cn } from "@/lib/utils"
-import ShaderBackground from "./shader-background"
+import HeroBackgroundPaths from "./HeroBackgroundPaths"
 
 type StudentHeroProps = {
   name: string
@@ -32,7 +32,9 @@ export default function StudentHero({
       animate={{ opacity: 1, y: 0 }}
       className="relative overflow-hidden w-full bg-white dark:bg-zinc-900 border border-black/[0.08] dark:border-white/[0.08] rounded-3xl p-8 shadow-sm transition-colors duration-500"
     >
-      <ShaderBackground />
+      <div className="absolute inset-0 z-0 opacity-10 dark:opacity-20 pointer-events-none">
+        <HeroBackgroundPaths />
+      </div>
 
       <div className="relative z-10 flex flex-col md:flex-row gap-8 items-start justify-between">
         <div className="space-y-1.5 flex-1">
