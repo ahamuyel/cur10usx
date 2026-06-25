@@ -45,7 +45,7 @@ export async function GET(
     }
     const currentDay = daysMap[today.getDay()]
 
-    const [lessons, exams, assignments, students, attendances, results, announcements] =
+    const [lessons, exams, assignments, students, attendances, results, announcements, lessonRecords] =
       await Promise.all([
         prisma.lesson.findMany({
           where: {
@@ -144,6 +144,23 @@ export async function GET(
           orderBy: { createdAt: "desc" },
           take: 10,
         }),
+
+        prisma.lessonRecord.findMany({
+          where: {
+            lesson: {
+              teacherId: id,
+              schoolId: teacher.schoolId,
+            },
+          },
+          select: {
+            id: true,
+            date: true,
+            status: true,
+            recordedAt: true,
+            validatedAt: true,
+          },
+          orderBy: { date: "desc" },
+        }),
       ])
 
     const studentIds = students.map((s) => s.id)
@@ -233,6 +250,35 @@ export async function GET(
       (a) => a.status === "ausente" && !a.justificationId
     ).length
 
+    // Lesson validation stats
+    const totalRecorded = lessonRecords.length
+    const validatedCount = lessonRecords.filter((r) => r.status === "REALIZADA").length
+    const rejectedCount = lessonRecords.filter((r) => r.status === "REJEITADA").length
+    const pendingCount = lessonRecords.filter((r) => r.status === "PENDING").length
+    const noShowCount = lessonRecords.filter((r) => r.status === "FALTOU").length
+    const substituteCount = lessonRecords.filter((r) => r.status === "SUBSTITUIDA").length
+    const processedCount = validatedCount + rejectedCount + noShowCount + substituteCount
+    const validationRate = processedCount > 0 ? Math.round((validatedCount / processedCount) * 100) : 0
+
+    // Monthly history (last 6 months)
+    const monthlyMap = new Map<string, { validated: number; rejected: number; pending: number; total: number }>()
+    const sixMonthsAgo = new Date()
+    sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 5)
+    for (const r of lessonRecords) {
+      const d = new Date(r.date)
+      if (d < sixMonthsAgo) continue
+      const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`
+      if (!monthlyMap.has(key)) monthlyMap.set(key, { validated: 0, rejected: 0, pending: 0, total: 0 })
+      const entry = monthlyMap.get(key)!
+      entry.total++
+      if (r.status === "REALIZADA") entry.validated++
+      else if (r.status === "REJEITADA") entry.rejected++
+      else if (r.status === "PENDING") entry.pending++
+    }
+    const monthlyHistory = Array.from(monthlyMap.entries())
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([month, data]) => ({ month, ...data }))
+
     return NextResponse.json({
       teacher: {
         id: teacher.id,
@@ -290,6 +336,16 @@ export async function GET(
           : "escola") as "escola" | "coordenação" | "sistema",
         createdAt: a.createdAt.toISOString(),
       })),
+      lessonValidation: {
+        totalRecorded,
+        validatedCount,
+        rejectedCount,
+        pendingCount,
+        noShowCount,
+        substituteCount,
+        validationRate,
+        monthlyHistory,
+      },
     })
   } catch (error) {
     console.error(`[API Error] ${error}`)

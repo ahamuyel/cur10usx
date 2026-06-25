@@ -134,32 +134,33 @@ export function MetricCard({
   )
 }
 
-export function InsightCard({
-  type, icon, title, description,
-}: {
-  type: "critical" | "warning" | "success" | "info"
-  icon?: ReactNode
-  title: string
-  description: string
-}) {
+interface InsightCardProps {
+  type: "critical" | "warning" | "success" | "info";
+  icon?: ReactNode;
+  title: string;
+  description: string;
+}
+
+export function InsightCard({ type, icon, title, description }: InsightCardProps) {
   const colors = {
     critical: { bg: "bg-rose-50 dark:bg-rose-500/10", border: "border-rose-200 dark:border-rose-900/20", icon: "text-rose-500", title: "text-rose-800 dark:text-rose-300", desc: "text-rose-600/80 dark:text-rose-400/80" },
     warning: { bg: "bg-amber-50 dark:bg-amber-500/10", border: "border-amber-200 dark:border-amber-900/20", icon: "text-amber-500", title: "text-amber-800 dark:text-amber-300", desc: "text-amber-600/80 dark:text-amber-400/80" },
     success: { bg: "bg-emerald-50 dark:bg-emerald-500/10", border: "border-emerald-200 dark:border-emerald-900/20", icon: "text-emerald-500", title: "text-emerald-800 dark:text-emerald-300", desc: "text-emerald-600/80 dark:text-emerald-400/80" },
     info: { bg: "bg-blue-50 dark:bg-blue-500/10", border: "border-blue-200 dark:border-blue-900/20", icon: "text-blue-500", title: "text-blue-800 dark:text-blue-300", desc: "text-blue-600/80 dark:text-blue-400/80" },
-  }
-  const c = colors[type]
-  const DefaultIcon = type === "critical" ? XCircle : type === "warning" ? AlertTriangle : type === "success" ? CheckCircle : Info
+  };
+
+  const c = colors[type];
+  const IconComponent = type === "critical" ? XCircle : type === "warning" ? AlertTriangle : type === "success" ? CheckCircle : Info;
 
   return (
     <div className={cn("flex items-start gap-3 p-3.5 rounded-2xl border", c.bg, c.border)}>
-      {icon || <DefaultIcon size={16} className={cn("mt-0.5 shrink-0", c.icon)} />}
+      {icon ?? <IconComponent size={16} className={cn("mt-0.5 shrink-0", c.icon)} />}
       <div className="min-w-0">
-        <p className={cn("text-xs font-bold", c.title)}>{title}</p>
-        <p className={cn("text-[11px] font-medium", c.desc)}>{description}</p>
+        <p className={cn("text-xs font-bold uppercase tracking-wide", c.title)}>{title}</p>
+        <p className={cn("text-[11px] font-medium leading-relaxed", c.desc)}>{description}</p>
       </div>
     </div>
-  )
+  );
 }
 
 export function SectionCard({

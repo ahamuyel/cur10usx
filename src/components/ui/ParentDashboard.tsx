@@ -5,7 +5,7 @@ import {
   Loader2, TrendingUp, TrendingDown, Target,
   BookOpen, Users, Calendar, CheckCircle, XCircle, AlertCircle,
   Clock, Sparkles, BarChart3, AlertTriangle,
-  FileText, GraduationCap, ArrowUpRight, ArrowDownRight, Minus,
+  FileText, GraduationCap, ArrowUpRight, ArrowDownRight, Minus, History,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { motion } from "framer-motion"
@@ -14,12 +14,14 @@ import {
 } from "recharts"
 
 import {
-  DashboardTabs, DashboardTabContent, MetricCardGrid, MetricCard,
+  DashboardTabs, MetricCard,
   InsightCard, SectionCard, SubjectRow, SummaryBadge,
 } from "@/components/dashboard/shared"
+import ShaderBackground from "./shader-background"
 
 const StudentAcademicAgenda = lazy(() => import("./StudentAcademicAgenda"))
 const StudentActivityChart = lazy(() => import("./StudentActivityChart"))
+const AcademicHistoryTab = lazy(() => import("./AcademicHistoryTab"))
 
 interface SubjectAverage {
   subjectId: string
@@ -76,7 +78,7 @@ export default function ParentDashboard({ studentId }: { studentId: string }) {
   const [data, setData] = useState<DashboardData | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
-  const [activeTab, setActiveTab] = useState<"overview" | "attendance" | "subjects">("overview")
+  const [activeTab, setActiveTab] = useState<"overview" | "attendance" | "subjects" | "history">("overview")
 
   const fetchData = useCallback(async () => {
     setLoading(true)
@@ -170,6 +172,7 @@ export default function ParentDashboard({ studentId }: { studentId: string }) {
         animate={{ opacity: 1, y: 0 }}
         className="relative overflow-hidden w-full bg-white dark:bg-zinc-900 border border-black/[0.08] dark:border-white/[0.08] rounded-3xl p-6 md:p-8 shadow-sm"
       >
+        <ShaderBackground />
         <div className="relative z-10 flex flex-col md:flex-row gap-6 items-start justify-between">
           <div className="space-y-2 flex-1">
             <div className="flex items-center gap-2 text-zinc-400 dark:text-zinc-500 mb-1">
@@ -252,9 +255,10 @@ export default function ParentDashboard({ studentId }: { studentId: string }) {
           { id: "overview", label: "Visão Geral", icon: <BarChart3 size={14} /> },
           { id: "attendance", label: "Assiduidade", icon: <Users size={14} /> },
           { id: "subjects", label: "Disciplinas", icon: <BookOpen size={14} /> },
+          { id: "history", label: "Histórico", icon: <History size={14} /> },
         ]}
         activeTab={activeTab}
-        onTabChange={(id) => setActiveTab(id as "overview" | "attendance" | "subjects")}
+        onTabChange={(id) => setActiveTab(id as "overview" | "attendance" | "subjects" | "history")}
       />
 
       {/* Tab Content */}
@@ -266,6 +270,11 @@ export default function ParentDashboard({ studentId }: { studentId: string }) {
       )}
       {activeTab === "subjects" && (
         <SubjectsTab data={data} />
+      )}
+      {activeTab === "history" && (
+        <Suspense fallback={<div className="flex items-center justify-center min-h-[30vh]"><Loader2 className="w-6 h-6 animate-spin text-violet-500" /></div>}>
+          <AcademicHistoryTab studentId={studentId} />
+        </Suspense>
       )}
     </div>
   )
@@ -299,7 +308,7 @@ function HeroMetricCard({ icon, label, value, trend, trendUp, subtitle }: any) {
   )
 }
 
-function OverviewTab({ data, studentId, onNavigate }: { data: DashboardData; studentId: string; onNavigate: (tab: "overview" | "attendance" | "subjects") => void }) {
+function OverviewTab({ data, studentId, onNavigate }: { data: DashboardData; studentId: string; onNavigate: (tab: "overview" | "attendance" | "subjects" | "history") => void }) {
   const sortedSubjects = useMemo(() =>
     [...data.subjectAverages].sort((a, b) => b.average - a.average),
     [data.subjectAverages]

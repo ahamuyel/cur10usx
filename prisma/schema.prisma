@@ -1205,8 +1205,10 @@ model LessonRecord {
 }
 
 enum LessonRecordStatus {
+  AGENDADA            // aula agendada no horário, ainda não registada
   PENDING             // professor registou, aguarda validação
-  REALIZADA           // admin validou
+  REALIZADA           // admin validou (aula confirmada)
   FALTOU              // admin marcou como falta
+  REJEITADA           // admin rejeitou o registo com justificação
   SUBSTITUIDA         // foi substituída por outro professor
 }

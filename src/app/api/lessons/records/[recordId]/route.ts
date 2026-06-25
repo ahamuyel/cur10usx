@@ -4,7 +4,7 @@ import { requireRole, getSchoolId } from "@/lib/api-auth"
 import { z } from "zod"
 
 const updateRecordSchema = z.object({
-  status: z.enum(["REALIZADA", "FALTOU", "SUBSTITUIDA"]),
+  status: z.enum(["REALIZADA", "FALTOU", "REJEITADA", "SUBSTITUIDA"]),
   adminNotes: z.string().optional(),
 })
 
