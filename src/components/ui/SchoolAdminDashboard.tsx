@@ -3,7 +3,7 @@
 import { useEffect, useState, useMemo } from "react"
 import {
   Loader2, AlertCircle, BarChart3, BookOpen, Users, Target,
-  TrendingUp, TrendingDown, GraduationCap, Sparkles, FileText,
+  TrendingUp, GraduationCap, Sparkles,
   Building2, CreditCard, ShieldCheck,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -16,6 +16,9 @@ import {
   DashboardTabs, DashboardTabContent, MetricCardGrid, MetricCard,
   InsightCard, SectionCard, SummaryBadge,
 } from "@/components/dashboard/shared"
+import ShaderBackground from "./shader-background"
+
+import AdminHero from "../analytics/AdminHero"
 
 interface SchoolAdminData {
   schoolInfo: { academicYear: string; schoolName: string }
@@ -75,9 +78,11 @@ export default function SchoolAdminDashboard() {
   return (
     <div className="w-full max-w-[1600px] mx-auto pb-20 px-4 space-y-6 animate-in fade-in duration-700">
       {/* Hero */}
-      <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
+      {/* <AdminHero /> */}
+      {/* <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
         className="relative overflow-hidden w-full bg-white dark:bg-zinc-900 border border-black/[0.08] dark:border-white/[0.08] rounded-3xl p-6 md:p-8 shadow-sm"
       >
+        <ShaderBackground />
         <div className="relative z-10 flex flex-col md:flex-row gap-6 items-start justify-between">
           <div className="space-y-2 flex-1">
             <div className="flex items-center gap-2 text-zinc-400 dark:text-zinc-500 mb-1">
@@ -102,7 +107,7 @@ export default function SchoolAdminDashboard() {
             <HeroMetric icon={<Users size={18} className="text-indigo-600" />} label="Professores" value={`${a.totalTeachers}`} />
           </div>
         </div>
-      </motion.div>
+      </motion.div> */}
 
       {/* Insights */}
       {insights.length > 0 && (

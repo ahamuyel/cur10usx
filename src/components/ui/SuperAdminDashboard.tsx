@@ -2,8 +2,8 @@
 
 import { useEffect, useState, useMemo } from "react"
 import {
-  Loader2, AlertCircle, BarChart3, BookOpen, Users, Target,
-  TrendingUp, TrendingDown, GraduationCap, Sparkles, FileText,
+  Loader2, AlertCircle, BarChart3, BookOpen, Users,
+  TrendingUp, GraduationCap, Sparkles, FileText,
   Building2, Globe, Shield, CreditCard, Activity,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -16,6 +16,7 @@ import {
   DashboardTabs, DashboardTabContent, MetricCardGrid, MetricCard,
   InsightCard, SectionCard, SummaryBadge,
 } from "@/components/dashboard/shared"
+import ShaderBackground from "./shader-background"
 
 interface SuperAdminData {
   totalSchools: number
@@ -85,6 +86,7 @@ export default function SuperAdminDashboard() {
       <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
         className="relative overflow-hidden w-full bg-white dark:bg-zinc-900 border border-black/[0.08] dark:border-white/[0.08] rounded-3xl p-6 md:p-8 shadow-sm"
       >
+        <ShaderBackground />
         <div className="relative z-10 flex flex-col md:flex-row gap-6 items-start justify-between">
           <div className="space-y-2 flex-1">
             <div className="flex items-center gap-2 text-zinc-400 dark:text-zinc-500 mb-1">

@@ -4,10 +4,10 @@ import React, { useEffect, useState, useCallback } from "react"
 import { useSession } from "next-auth/react"
 import Link from "next/link"
 import {
-  Clock, AlertTriangle, CheckCircle,
+  Clock, AlertTriangle, CheckCircle, Building2,
   School, ArrowRight, UserPlus,
   ClipboardList, Sparkles, Send, ShieldCheck,
-  User, Mail, Calendar, ExternalLink,
+  User, Calendar, ExternalLink,
   BookOpen, BarChart3, Users, MessageSquare, Settings,
   Loader2, X, ChevronDown, Zap,
 } from "lucide-react"
@@ -16,7 +16,11 @@ import ConfirmActionModal from "@/components/ui/ConfirmActionModal"
 import AppAvatar from "@/components/ui/AppAvatar"
 import { useTranslation } from "@/lib/i18n"
 import { cn } from "@/lib/utils"
-import HeroBackgroundPaths from "@/components/ui/HeroBackgroundPaths"
+import ShaderBackground from "@/components/ui/shader-background"
+
+function toSlug(name: string) {
+  return name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "")
+}
 
 const roleLabels: Record<string, string> = {
   school_admin: "Administrador",
@@ -95,6 +99,27 @@ export default function MinhaAreaPage() {
   const [desiredGrade, setDesiredGrade] = useState("")
   const [teachingArea, setTeachingArea] = useState("")
   const [relationship, setRelationship] = useState("")
+
+  // School registration
+  const [showSchoolModal, setShowSchoolModal] = useState(false)
+  const [schoolName, setSchoolName] = useState("")
+  const [schoolSlug, setSchoolSlug] = useState("")
+  const [schoolEmailVal, setSchoolEmailVal] = useState("")
+  const [schoolPhone, setSchoolPhone] = useState("")
+  const [schoolAddress, setSchoolAddress] = useState("")
+  const [schoolCity, setSchoolCity] = useState("")
+  const [schoolProvincia, setSchoolProvincia] = useState("")
+  const [schoolNif, setSchoolNif] = useState("")
+  const [schoolSubmitting, setSchoolSubmitting] = useState(false)
+  const [schoolError, setSchoolError] = useState("")
+  const [schoolSuccess, setSchoolSuccess] = useState(false)
+  const [showSlugInput, setShowSlugInput] = useState(false)
+
+  function handleSchoolNameChange(value: string) {
+    setSchoolName(value); setSchoolSlug(toSlug(value))
+  }
+
+  const PROVINCIAS = ["Bengo", "Benguela", "Bié", "Cabinda", "Cuando Cubango", "Cuanza Norte", "Cuanza Sul", "Cunene", "Huambo", "Huíla", "Luanda", "Lunda Norte", "Lunda Sul", "Malanje", "Moxico", "Namibe", "Uíge", "Zaire"]
 
   const classes = Array.from({ length: 12 }, (_, i) => {
     const val = i + 1
@@ -213,6 +238,41 @@ export default function MinhaAreaPage() {
     }
   }
 
+  const handleSchoolSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setSchoolError("")
+    if (!schoolName.trim()) { setSchoolError(tUI("O nome da escola é obrigatório")); return }
+    if (!schoolEmailVal.trim()) { setSchoolError(tUI("O e-mail da escola é obrigatório")); return }
+    if (!schoolPhone.trim()) { setSchoolError(tUI("O telefone é obrigatório")); return }
+
+    setSchoolSubmitting(true)
+    try {
+      const res = await fetch("/api/school-registrations", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: schoolName.trim(),
+          email: schoolEmailVal.trim(),
+          phone: schoolPhone.trim(),
+          address: schoolAddress.trim(),
+          city: schoolCity.trim(),
+          provincia: schoolProvincia,
+          nif: schoolNif.trim() || null,
+        }),
+      })
+      const data = await res.json()
+      if (!res.ok) { setSchoolError(data.error || tUI("Erro ao registar escola")); return }
+
+      setSchoolSuccess(true)
+      const userSchs = await fetch("/api/user/schools").then((r) => r.json())
+      setUserSchools(Array.isArray(userSchs) ? userSchs : [])
+    } catch {
+      setSchoolError(tUI("Erro de conexão. Tente novamente."))
+    } finally {
+      setSchoolSubmitting(false)
+    }
+  }
+
   const firstName = user?.name?.split(" ")[0] || tUI("Utilizador")
   const hour = new Date().getHours()
   const greeting = hour < 12 ? tUI("Bom dia") : hour < 18 ? tUI("Boa tarde") : tUI("Boa noite")
@@ -229,7 +289,7 @@ export default function MinhaAreaPage() {
       <section className="relative overflow-hidden rounded-2xl bg-zinc-950 p-5 sm:p-7 min-h-[280px] flex items-center">
       
       {/* Background Animado */}
-      <HeroBackgroundPaths />
+      <ShaderBackground />
 
       {/* Conteúdo (Z-index superior) */}
       <div className="relative z-10 w-full flex items-center gap-4">
@@ -413,6 +473,27 @@ export default function MinhaAreaPage() {
                 </div>
               </div>
             ))}
+          </div>
+        </section>
+      )}
+
+      {/* ── REGISTAR NOVA ESCOLA ── */}
+      {!hasActiveSchools && (
+        <section className="space-y-3">
+          <SectionHeader icon={Building2} title={tUI("Registar Nova Escola")} />
+          <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl px-5 py-4">
+            <div className="flex items-center justify-between gap-4">
+              <div className="min-w-0">
+                <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100">{tUI("A sua escola ainda não está registada?")}</p>
+                <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">{tUI("Registe a sua escola na plataforma Cur10usX. Após análise, receberá acesso ao painel de administração.")}</p>
+              </div>
+              <button
+                onClick={() => { setShowSchoolModal(true); setSchoolSuccess(false); setSchoolError("") }}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-primary hover:bg-primary-700 text-white text-sm font-medium transition shadow-sm shadow-primary/20 shrink-0"
+              >
+                <Building2 size={14} /> {tUI("Registar escola")}
+              </button>
+            </div>
           </div>
         </section>
       )}
@@ -668,6 +749,174 @@ export default function MinhaAreaPage() {
                     {tUI("Fechar")}
                   </button>
                 </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ══════════════════════════════════════
+          MODAL DE REGISTO DE ESCOLA
+         ══════════════════════════════════════ */}
+      {showSchoolModal && (
+        <div
+          className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50 backdrop-blur-sm p-0 sm:p-4"
+          onClick={(e) => e.target === e.currentTarget && !schoolSubmitting && setShowSchoolModal(false)}
+        >
+          <div className="w-full sm:max-w-lg bg-white dark:bg-zinc-900 rounded-t-2xl sm:rounded-2xl shadow-xl border border-zinc-200 dark:border-zinc-800 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-zinc-200 dark:border-zinc-800">
+              <h2 className="text-base font-semibold text-zinc-900 dark:text-zinc-100">
+                {schoolSuccess ? tUI("Escola registada!") : tUI("Registar Nova Escola")}
+              </h2>
+              <button onClick={() => setShowSchoolModal(false)} disabled={schoolSubmitting} className="p-1.5 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition">
+                <X size={16} className="text-zinc-400" />
+              </button>
+            </div>
+
+            <div className="p-5">
+              {schoolSuccess ? (
+                <div className="text-center py-6">
+                  <div className="w-14 h-14 rounded-full bg-emerald-100 dark:bg-emerald-950/40 flex items-center justify-center mx-auto mb-4">
+                    <CheckCircle size={28} className="text-emerald-600 dark:text-emerald-400" />
+                  </div>
+                  <h3 className="text-base font-semibold text-zinc-900 dark:text-zinc-100 mb-1">{tUI("Escola registada com sucesso!")}</h3>
+                  <p className="text-sm text-zinc-500 dark:text-zinc-400 mb-6">{tUI("A sua escola foi registada e está pendente de análise. Receberá um e-mail quando for aprovada.")}</p>
+                  <button onClick={() => setShowSchoolModal(false)} className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-primary hover:bg-primary-700 text-white text-sm font-medium transition">
+                    {tUI("Fechar")}
+                  </button>
+                </div>
+              ) : (
+                <form onSubmit={handleSchoolSubmit} className="space-y-4">
+                  {schoolError && (
+                    <div className="p-3 rounded-xl bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 text-sm text-red-600 dark:text-red-400">
+                      {schoolError}
+                    </div>
+                  )}
+
+                  <div>
+                    <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">{tUI("Nome da escola *")}</label>
+                    <input
+                      type="text" placeholder={tUI("Colégio Exemplo")}
+                      value={schoolName}
+                      onChange={(e) => handleSchoolNameChange(e.target.value)}
+                      disabled={schoolSubmitting}
+                      className="w-full h-10 px-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition"
+                      autoFocus
+                    />
+                  </div>
+
+                  <div>
+                    <div className="flex items-center justify-between mb-1.5">
+                      <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300">{tUI("Slug (identificador único)")}</label>
+                      <button type="button" onClick={() => setShowSlugInput(!showSlugInput)}
+                        className="text-[10px] text-primary hover:underline font-medium"
+                      >
+                        {showSlugInput ? tUI("Auto") : tUI("Editar")}
+                      </button>
+                    </div>
+                    {showSlugInput ? (
+                      <input
+                        type="text" placeholder="colegio-exemplo"
+                        value={schoolSlug}
+                        onChange={(e) => setSchoolSlug(e.target.value)}
+                        disabled={schoolSubmitting}
+                        className="w-full h-10 px-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition"
+                      />
+                    ) : (
+                      <div className="w-full h-10 px-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-100 dark:bg-zinc-800/60 text-sm text-zinc-500 dark:text-zinc-400 flex items-center">
+                        {schoolSlug || "—"}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">{tUI("E-mail da escola *")}</label>
+                      <input
+                        type="email" placeholder="escola@exemplo.ao"
+                        value={schoolEmailVal}
+                        onChange={(e) => setSchoolEmailVal(e.target.value)}
+                        disabled={schoolSubmitting}
+                        className="w-full h-10 px-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">{tUI("Telefone *")}</label>
+                      <input
+                        type="tel" placeholder="+244 900 000 000"
+                        value={schoolPhone}
+                        onChange={(e) => setSchoolPhone(e.target.value)}
+                        disabled={schoolSubmitting}
+                        className="w-full h-10 px-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">{tUI("Endereço")}</label>
+                    <input
+                      type="text" placeholder={tUI("Rua, número, bairro")}
+                      value={schoolAddress}
+                      onChange={(e) => setSchoolAddress(e.target.value)}
+                      disabled={schoolSubmitting}
+                      className="w-full h-10 px-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">{tUI("Cidade")}</label>
+                      <input
+                        type="text" placeholder="Luanda"
+                        value={schoolCity}
+                        onChange={(e) => setSchoolCity(e.target.value)}
+                        disabled={schoolSubmitting}
+                        className="w-full h-10 px-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">{tUI("Província")}</label>
+                      <select
+                        value={schoolProvincia}
+                        onChange={(e) => setSchoolProvincia(e.target.value)}
+                        disabled={schoolSubmitting}
+                        className="w-full h-10 px-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition appearance-none"
+                      >
+                        <option value="">{tUI("Seleccione...")}</option>
+                        {PROVINCIAS.map((p) => (
+                          <option key={p} value={p}>{p}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">{tUI("NIF")} <span className="text-zinc-400">{tUI("(opcional)")}</span></label>
+                    <input
+                      type="text" placeholder="000000000"
+                      value={schoolNif}
+                      onChange={(e) => setSchoolNif(e.target.value)}
+                      disabled={schoolSubmitting}
+                      className="w-full h-10 px-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition"
+                    />
+                  </div>
+
+                  <div className="flex gap-2 pt-2">
+                    <button type="button" onClick={() => setShowSchoolModal(false)} disabled={schoolSubmitting}
+                      className="flex-1 h-10 rounded-xl border border-zinc-200 dark:border-zinc-700 text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition"
+                    >
+                      {tUI("Cancelar")}
+                    </button>
+                    <button type="submit" disabled={schoolSubmitting}
+                      className="flex-1 h-10 flex items-center justify-center gap-2 rounded-xl bg-primary hover:bg-primary-700 text-white text-sm font-medium transition shadow-sm shadow-primary/20 disabled:opacity-50"
+                    >
+                      {schoolSubmitting
+                        ? <><Loader2 size={14} className="animate-spin" /> {tUI("A registar...")}</>
+                        : <><Building2 size={14} /> {tUI("Registar escola")}</>
+                      }
+                    </button>
+                  </div>
+                </form>
               )}
             </div>
           </div>

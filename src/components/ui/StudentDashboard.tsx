@@ -4,7 +4,7 @@ import { useEffect, useState, useMemo, useCallback, Suspense, lazy } from "react
 import {
   Loader2, AlertCircle, BarChart3, BookOpen, Users, Target,
   TrendingUp, TrendingDown, GraduationCap, Award, Sparkles,
-  Calendar, Clock, FileText, CheckCircle, XCircle, Minus,
+  Calendar, Clock, FileText, CheckCircle, XCircle, Minus, History,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { motion } from "framer-motion"
@@ -16,9 +16,11 @@ import {
   DashboardTabs, DashboardTabContent, MetricCardGrid, MetricCard,
   InsightCard, SectionCard, SubjectRow, SummaryBadge,
 } from "@/components/dashboard/shared"
+import ShaderBackground from "./shader-background"
 
 const StudentAcademicAgenda = lazy(() => import("./StudentAcademicAgenda"))
 const StudentActivityChart = lazy(() => import("./StudentActivityChart"))
+const AcademicHistoryTab = lazy(() => import("./AcademicHistoryTab"))
 
 interface SubjectAverage { subjectId: string; subjectName: string; average: number; count: number }
 interface ScoreDistribution { excelente: number; bom: number; suficiente: number; insuficiente: number }
@@ -91,6 +93,7 @@ export default function StudentDashboard({ studentId }: { studentId: string }) {
     { id: "attendance", label: "Assiduidade", icon: <Users size={14} />, badge: data.totalAbsences || undefined },
     { id: "evaluations", label: "Avaliações", icon: <FileText size={14} />, badge: data.totalResults || undefined },
     { id: "goals", label: "Metas", icon: <Target size={14} /> },
+    { id: "history", label: "Histórico", icon: <History size={14} /> },
   ]
 
   return (
@@ -99,6 +102,7 @@ export default function StudentDashboard({ studentId }: { studentId: string }) {
       <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
         className="relative overflow-hidden w-full bg-white dark:bg-zinc-900 border border-black/[0.08] dark:border-white/[0.08] rounded-3xl p-6 md:p-8 shadow-sm"
       >
+        <ShaderBackground />
         <div className="relative z-10 flex flex-col md:flex-row gap-6 items-start justify-between">
           <div className="space-y-2 flex-1">
             <div className="flex items-center gap-2 text-zinc-400 dark:text-zinc-500 mb-1">
@@ -204,6 +208,13 @@ export default function StudentDashboard({ studentId }: { studentId: string }) {
       {/* Goals */}
       <DashboardTabContent id="goals" activeTab={activeTab}>
         <GoalsTab data={data} />
+      </DashboardTabContent>
+
+      {/* History */}
+      <DashboardTabContent id="history" activeTab={activeTab}>
+        <Suspense fallback={<div className="flex items-center justify-center min-h-[30vh]"><Loader2 className="w-6 h-6 animate-spin text-violet-500" /></div>}>
+          <AcademicHistoryTab studentId={studentId} />
+        </Suspense>
       </DashboardTabContent>
     </div>
   )

@@ -104,9 +104,9 @@ export default function TeacherHero({ data }: TeacherHeroProps) {
   // não são repetidos aqui.
   const quickActions = [
     { label: "Lançar nota", icon: PenLine, href: "/list/results/new" },
-    { label: "Registar presença", icon: ClipboardCheck, href: "/list/attendance" },
-    { label: "Justificar falta", icon: FileWarning, href: "/list/attendance" },
-    { label: "Criar avaliação", icon: FilePlus, href: "/list/exams" },
+    { label: "Registar presença", icon: ClipboardCheck, href: "/list/attendance/mark" },
+    { label: "Justificar falta", icon: FileWarning, href: "/list/attendance/justify" },
+    { label: "Criar avaliação", icon: FilePlus, href: "/list/exams/new" },
   ];
 
   return (
@@ -186,7 +186,7 @@ export default function TeacherHero({ data }: TeacherHeroProps) {
         </div>
 
         {/* Ações rápidas */}
-        <div>
+        {/* <div>
           <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-300 mb-4">Ações rápidas</p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {quickActions.map((a) => (
@@ -199,7 +199,7 @@ export default function TeacherHero({ data }: TeacherHeroProps) {
               </Link>
             ))}
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
