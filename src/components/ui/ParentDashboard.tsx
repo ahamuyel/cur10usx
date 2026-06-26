@@ -2,21 +2,26 @@
 
 import { useEffect, useState, useMemo, useCallback, Suspense, lazy } from "react"
 import {
-  Loader2, AlertTriangle, TrendingUp, TrendingDown, Minus, Target,
+  Loader2, TrendingUp, TrendingDown, Target,
   BookOpen, Users, Calendar, CheckCircle, XCircle, AlertCircle,
-  Clock, ArrowUpRight, ArrowDownRight, Sparkles, BarChart3,
-  FileText, GraduationCap,
+  Clock, Sparkles, BarChart3, AlertTriangle,
+  FileText, GraduationCap, ArrowUpRight, ArrowDownRight, Minus, History,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { motion } from "framer-motion"
 import {
   ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Cell,
-
 } from "recharts"
+
+import {
+  DashboardTabs, MetricCard,
+  InsightCard, SectionCard, SubjectRow, SummaryBadge,
+} from "@/components/dashboard/shared"
+import ShaderBackground from "./shader-background"
 
 const StudentAcademicAgenda = lazy(() => import("./StudentAcademicAgenda"))
 const StudentActivityChart = lazy(() => import("./StudentActivityChart"))
-const StudentNavigation = lazy(() => import("./StudentNavigation"))
+const AcademicHistoryTab = lazy(() => import("./AcademicHistoryTab"))
 
 interface SubjectAverage {
   subjectId: string
@@ -69,19 +74,11 @@ interface DashboardData {
   upcomingAssignments: { id: string; title: string; subjectName: string; dueDate: string }[]
 }
 
-interface Alert {
-  id: string
-  type: "critical" | "warning" | "success" | "info"
-  icon: typeof AlertTriangle
-  title: string
-  description: string
-}
-
 export default function ParentDashboard({ studentId }: { studentId: string }) {
   const [data, setData] = useState<DashboardData | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
-  const [activeTab, setActiveTab] = useState<"overview" | "attendance" | "subjects">("overview")
+  const [activeTab, setActiveTab] = useState<"overview" | "attendance" | "subjects" | "history">("overview")
 
   const fetchData = useCallback(async () => {
     setLoading(true)
@@ -103,93 +100,34 @@ export default function ParentDashboard({ studentId }: { studentId: string }) {
 
   useEffect(() => { fetchData() }, [fetchData])
 
-  const alerts = useMemo((): Alert[] => {
+  const alerts = useMemo(() => {
     if (!data) return []
-    const items: Alert[] = []
+    const items: { type: "critical" | "warning" | "success" | "info"; title: string; description: string }[] = []
     const trend = data.generalAverage - data.previousAverage
 
     if (data.subjectsNeedingAttention.length >= 2) {
-      items.push({
-        id: "multiple-risk",
-        type: "critical",
-        icon: AlertCircle,
-        title: `${data.subjectsNeedingAttention.length} disciplinas com média abaixo de 10`,
-        description: `${data.subjectsNeedingAttention.slice(0, 3).join(", ")} precisam de atenção urgente.`,
-      })
+      items.push({ type: "critical", title: `${data.subjectsNeedingAttention.length} disciplinas com média abaixo de 10`, description: `${data.subjectsNeedingAttention.slice(0, 3).join(", ")} precisam de atenção urgente.` })
+    } else if (data.subjectsNeedingAttention.length === 1) {
+      items.push({ type: "warning", title: `${data.subjectsNeedingAttention[0]} precisa de atenção`, description: "Média abaixo de 10 valores — acompanhe de perto." })
     }
-
-    if (data.subjectsNeedingAttention.length === 1) {
-      items.push({
-        id: "single-risk",
-        type: "warning",
-        icon: AlertTriangle,
-        title: `${data.subjectsNeedingAttention[0]} precisa de atenção`,
-        description: `Média abaixo de 10 valores — acompanhe de perto.`,
-      })
-    }
-
     if (data.faltaInjustificada >= 3) {
-      items.push({
-        id: "unjustified-absences",
-        type: "critical",
-        icon: XCircle,
-        title: `${data.faltaInjustificada} faltas injustificadas`,
-        description: "Faltas sem justificação podem comprometer o aproveitamento.",
-      })
+      items.push({ type: "critical", title: `${data.faltaInjustificada} faltas injustificadas`, description: "Faltas sem justificação podem comprometer o aproveitamento." })
     }
-
     if (data.totalAbsences >= 5 && data.faltaInjustificada < 3) {
-      items.push({
-        id: "total-absences",
-        type: "warning",
-        icon: Users,
-        title: `${data.totalAbsences} faltas no total`,
-        description: data.subjectWithMostAbsences
-          ? `A maioria em ${data.subjectWithMostAbsences}.`
-          : "Acompanhe a assiduidade do educando.",
-      })
+      items.push({ type: "warning", title: `${data.totalAbsences} faltas no total`, description: data.subjectWithMostAbsences ? `A maioria em ${data.subjectWithMostAbsences}.` : "Acompanhe a assiduidade do educando." })
     }
-
     if (trend < -1.0) {
-      items.push({
-        id: "performance-drop",
-        type: "warning",
-        icon: TrendingDown,
-        title: `Queda de ${Math.abs(trend).toFixed(1)} pontos na média`,
-        description: "O desempenho geral diminuiu em relação ao período anterior.",
-      })
+      items.push({ type: "warning", title: `Queda de ${Math.abs(trend).toFixed(1)} pontos na média`, description: "O desempenho geral diminuiu em relação ao período anterior." })
     }
-
     if (trend > 1.0 && data.generalAverage >= 14) {
-      items.push({
-        id: "improvement",
-        type: "success",
-        icon: TrendingUp,
-        title: `Melhoria de +${trend.toFixed(1)} pontos`,
-        description: "Excelente evolução! O educando está a melhorar.",
-      })
+      items.push({ type: "success", title: `Melhoria de +${trend.toFixed(1)} pontos`, description: "Excelente evolução! O educando está a melhorar." })
     }
-
     if (data.faltaJustificada > 0 && data.faltaInjustificada === 0 && data.totalAbsences < 5) {
-      items.push({
-        id: "justified-only",
-        type: "info",
-        icon: FileText,
-        title: `${data.faltaJustificada} falta${data.faltaJustificada > 1 ? "s" : ""} justificada${data.faltaJustificada > 1 ? "s" : ""}`,
-        description: "Todas as faltas foram devidamente justificadas.",
-      })
+      items.push({ type: "info", title: `${data.faltaJustificada} falta${data.faltaJustificada > 1 ? "s" : ""} justificada${data.faltaJustificada > 1 ? "s" : ""}`, description: "Todas as faltas foram devidamente justificadas." })
     }
-
     if (data.attendancePercentage >= 95 && data.generalAverage >= 14 && items.length === 0) {
-      items.push({
-        id: "all-good",
-        type: "success",
-        icon: Sparkles,
-        title: "Tudo dentro do esperado",
-        description: "Bom desempenho académico e assiduidade exemplar.",
-      })
+      items.push({ type: "success", title: "Tudo dentro do esperado", description: "Bom desempenho académico e assiduidade exemplar." })
     }
-
     return items.slice(0, 5)
   }, [data])
 
@@ -234,6 +172,7 @@ export default function ParentDashboard({ studentId }: { studentId: string }) {
         animate={{ opacity: 1, y: 0 }}
         className="relative overflow-hidden w-full bg-white dark:bg-zinc-900 border border-black/[0.08] dark:border-white/[0.08] rounded-3xl p-6 md:p-8 shadow-sm"
       >
+        <ShaderBackground />
         <div className="relative z-10 flex flex-col md:flex-row gap-6 items-start justify-between">
           <div className="space-y-2 flex-1">
             <div className="flex items-center gap-2 text-zinc-400 dark:text-zinc-500 mb-1">
@@ -305,39 +244,22 @@ export default function ParentDashboard({ studentId }: { studentId: string }) {
 
       {/* Alerts */}
       {alerts.length > 0 && (
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="space-y-2"
-        >
-          {alerts.map((alert) => (
-            <AlertCard key={alert.id} alert={alert} />
-          ))}
-        </motion.div>
+        <div className="space-y-2">
+          {alerts.map((alert, i) => <InsightCard key={i} {...alert} />)}
+        </div>
       )}
 
       {/* Tab Navigation */}
-      <div className="flex items-center gap-1 bg-zinc-100 dark:bg-zinc-800/40 p-1 rounded-xl w-fit">
-        {[
-          { id: "overview" as const, label: "Visão Geral", icon: BarChart3 },
-          { id: "attendance" as const, label: "Assiduidade", icon: Users },
-          { id: "subjects" as const, label: "Disciplinas", icon: BookOpen },
-        ].map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={cn(
-              "flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-bold transition-all",
-              activeTab === tab.id
-                ? "bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 shadow-sm"
-                : "text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-300"
-            )}
-          >
-            <tab.icon size={14} />
-            {tab.label}
-          </button>
-        ))}
-      </div>
+      <DashboardTabs
+        tabs={[
+          { id: "overview", label: "Visão Geral", icon: <BarChart3 size={14} /> },
+          { id: "attendance", label: "Assiduidade", icon: <Users size={14} /> },
+          { id: "subjects", label: "Disciplinas", icon: <BookOpen size={14} /> },
+          { id: "history", label: "Histórico", icon: <History size={14} /> },
+        ]}
+        activeTab={activeTab}
+        onTabChange={(id) => setActiveTab(id as "overview" | "attendance" | "subjects" | "history")}
+      />
 
       {/* Tab Content */}
       {activeTab === "overview" && (
@@ -349,21 +271,12 @@ export default function ParentDashboard({ studentId }: { studentId: string }) {
       {activeTab === "subjects" && (
         <SubjectsTab data={data} />
       )}
+      {activeTab === "history" && (
+        <Suspense fallback={<div className="flex items-center justify-center min-h-[30vh]"><Loader2 className="w-6 h-6 animate-spin text-violet-500" /></div>}>
+          <AcademicHistoryTab studentId={studentId} />
+        </Suspense>
+      )}
     </div>
-  )
-}
-
-function SummaryBadge({ label, value, color }: { label: string; value: string; color: "emerald" | "amber" | "rose" }) {
-  const colors = {
-    emerald: "bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-200/50 dark:border-emerald-900/20",
-    amber: "bg-amber-50 dark:bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-200/50 dark:border-amber-900/20",
-    rose: "bg-rose-50 dark:bg-rose-500/10 text-rose-700 dark:text-rose-400 border-rose-200/50 dark:border-rose-900/20",
-  }
-  return (
-    <span className={cn("inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10px] font-bold border", colors[color])}>
-      <span className="tabular-nums">{value}</span>
-      <span className="font-normal opacity-70">{label}</span>
-    </span>
   )
 }
 
@@ -395,51 +308,7 @@ function HeroMetricCard({ icon, label, value, trend, trendUp, subtitle }: any) {
   )
 }
 
-function AlertCard({ alert }: { alert: Alert }) {
-  const colors = {
-    critical: {
-      bg: "bg-rose-50 dark:bg-rose-500/10",
-      border: "border-rose-200 dark:border-rose-900/20",
-      icon: "text-rose-500",
-      text: "text-rose-800 dark:text-rose-300",
-      desc: "text-rose-600/80 dark:text-rose-400/80",
-    },
-    warning: {
-      bg: "bg-amber-50 dark:bg-amber-500/10",
-      border: "border-amber-200 dark:border-amber-900/20",
-      icon: "text-amber-500",
-      text: "text-amber-800 dark:text-amber-300",
-      desc: "text-amber-600/80 dark:text-amber-400/80",
-    },
-    success: {
-      bg: "bg-emerald-50 dark:bg-emerald-500/10",
-      border: "border-emerald-200 dark:border-emerald-900/20",
-      icon: "text-emerald-500",
-      text: "text-emerald-800 dark:text-emerald-300",
-      desc: "text-emerald-600/80 dark:text-emerald-400/80",
-    },
-    info: {
-      bg: "bg-blue-50 dark:bg-blue-500/10",
-      border: "border-blue-200 dark:border-blue-900/20",
-      icon: "text-blue-500",
-      text: "text-blue-800 dark:text-blue-300",
-      desc: "text-blue-600/80 dark:text-blue-400/80",
-    },
-  }
-  const c = colors[alert.type]
-
-  return (
-    <div className={cn("flex items-start gap-3 p-3.5 rounded-2xl border", c.bg, c.border)}>
-      <alert.icon size={16} className={cn("mt-0.5 shrink-0", c.icon)} />
-      <div className="min-w-0">
-        <p className={cn("text-xs font-bold", c.text)}>{alert.title}</p>
-        <p className={cn("text-[11px] font-medium", c.desc)}>{alert.description}</p>
-      </div>
-    </div>
-  )
-}
-
-function OverviewTab({ data, studentId, onNavigate }: { data: DashboardData; studentId: string; onNavigate: (tab: "overview" | "attendance" | "subjects") => void }) {
+function OverviewTab({ data, studentId, onNavigate }: { data: DashboardData; studentId: string; onNavigate: (tab: "overview" | "attendance" | "subjects" | "history") => void }) {
   const sortedSubjects = useMemo(() =>
     [...data.subjectAverages].sort((a, b) => b.average - a.average),
     [data.subjectAverages]
@@ -520,7 +389,9 @@ function OverviewTab({ data, studentId, onNavigate }: { data: DashboardData; stu
           ) : (
             <div className="space-y-2">
               {worstSubjects.map((s, i) => (
-                <SubjectRow key={s.subjectId} subject={s} index={i} />
+                <motion.div key={s.subjectId} initial={{ opacity: 0, x: -4 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.04 }}>
+                  <SubjectRow subjectName={s.subjectName} average={s.average} count={s.count} />
+                </motion.div>
               ))}
             </div>
           )}
@@ -541,7 +412,9 @@ function OverviewTab({ data, studentId, onNavigate }: { data: DashboardData; stu
           ) : (
             <div className="space-y-2">
               {bestSubjects.map((s, i) => (
-                <SubjectRow key={s.subjectId} subject={s} index={i} />
+                <motion.div key={s.subjectId} initial={{ opacity: 0, x: -4 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.04 }}>
+                  <SubjectRow subjectName={s.subjectName} average={s.average} count={s.count} />
+                </motion.div>
               ))}
             </div>
           )}
@@ -826,83 +699,6 @@ function SubjectTrendBadge({ trend }: { trend: number }) {
     <span className="text-[9px] font-medium text-zinc-400 bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded-md">
       estável
     </span>
-  )
-}
-
-function SubjectRow({ subject, index }: { subject: SubjectAverage; index: number }) {
-  const color = subject.average >= 14 ? "emerald" : subject.average >= 10 ? "amber" : "rose"
-  const colors = {
-    emerald: { bg: "bg-emerald-50 dark:bg-emerald-500/10", text: "text-emerald-600 dark:text-emerald-400", dot: "bg-emerald-500" },
-    amber: { bg: "bg-amber-50 dark:bg-amber-500/10", text: "text-amber-600 dark:text-amber-400", dot: "bg-amber-500" },
-    rose: { bg: "bg-rose-50 dark:bg-rose-500/10", text: "text-rose-600 dark:text-rose-400", dot: "bg-rose-500" },
-  }
-  const c = colors[color]
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, x: -4 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ delay: index * 0.04 }}
-      className="flex items-center justify-between py-2 px-3 rounded-xl bg-zinc-50/50 dark:bg-zinc-800/10 border border-zinc-100/50 dark:border-zinc-800/30"
-    >
-      <div className="flex items-center gap-2 min-w-0">
-        <span className={cn("w-1.5 h-1.5 rounded-full shrink-0", c.dot)} />
-        <span className="text-xs font-medium text-zinc-700 dark:text-zinc-300 truncate">{subject.subjectName}</span>
-      </div>
-      <span className={cn("text-xs font-bold tabular-nums", c.text)}>
-        {subject.average.toFixed(1)}
-      </span>
-    </motion.div>
-  )
-}
-
-function MetricCard({
-  icon, label, value, subtitle, trend, trendUp, color, onClick,
-}: {
-  icon: React.ReactNode
-  label: string
-  value: string
-  subtitle?: string
-  trend?: number
-  trendUp?: boolean
-  color: "emerald" | "amber" | "rose"
-  onClick?: () => void
-}) {
-  const colors = {
-    emerald: { bg: "bg-emerald-50 dark:bg-emerald-500/10", border: "border-emerald-100 dark:border-emerald-900/20", icon: "text-emerald-600 dark:text-emerald-400", badge: "text-emerald-700 dark:text-emerald-400 bg-emerald-500/10 dark:bg-emerald-500/10", value: "text-emerald-700 dark:text-emerald-300" },
-    amber: { bg: "bg-amber-50 dark:bg-amber-500/10", border: "border-amber-100 dark:border-amber-900/20", icon: "text-amber-600 dark:text-amber-400", badge: "text-amber-700 dark:text-amber-400 bg-amber-500/10 dark:bg-amber-500/10", value: "text-amber-700 dark:text-amber-300" },
-    rose: { bg: "bg-rose-50 dark:bg-rose-500/10", border: "border-rose-100 dark:border-rose-900/20", icon: "text-rose-600 dark:text-rose-400", badge: "text-rose-700 dark:text-rose-400 bg-rose-500/10 dark:bg-rose-500/10", value: "text-rose-700 dark:text-rose-300" },
-  }
-  const c = colors[color]
-
-  return (
-    <motion.button
-      whileHover={{ scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
-      onClick={onClick}
-      className={cn(
-        "flex flex-col p-4 rounded-2xl border text-left transition-all",
-        c.bg, c.border,
-        onClick ? "cursor-pointer" : "cursor-default",
-      )}
-    >
-      <div className="flex items-center justify-between mb-2">
-        <div className={cn("p-1.5 bg-white dark:bg-zinc-950/50 rounded-lg border shadow-sm", c.icon)}>
-          {icon}
-        </div>
-        {trend !== undefined && trendUp !== undefined && (
-          <span className={cn("flex items-center text-[9px] font-bold px-1.5 py-0.5 rounded-md", c.badge)}>
-            {trendUp ? <TrendingUp size={9} className="mr-0.5" /> : <TrendingDown size={9} className="mr-0.5" />}
-            {Math.abs(trend).toFixed(1)}
-          </span>
-        )}
-      </div>
-      <div className={cn("text-xl font-black tabular-nums", c.value)}>{value}</div>
-      <div className="text-[9px] text-zinc-500 dark:text-zinc-400 font-bold uppercase tracking-widest mt-0.5">{label}</div>
-      {subtitle && (
-        <div className="text-[8px] text-zinc-400 dark:text-zinc-500 font-medium mt-0.5 truncate">{subtitle}</div>
-      )}
-    </motion.button>
   )
 }
 

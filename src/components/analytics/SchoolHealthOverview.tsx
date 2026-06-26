@@ -45,7 +45,7 @@ export default function SchoolHealthOverview({ stats }: { stats: StatsProps | nu
   const teacherAttendanceVal = docenteAssiduidade ?? 100;
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
       {/* Aproveitamento — ring animado */}
       <div className="flex flex-col items-center justify-center p-5 rounded-3xl border bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md border-zinc-200 dark:border-zinc-800 transition-all hover:shadow-lg">
         <div className="relative w-20 h-20">
@@ -81,7 +81,7 @@ export default function SchoolHealthOverview({ stats }: { stats: StatsProps | nu
       </div>
 
       {/* Alunos em Risco — card de alerta */}
-      <Link
+      {/* <Link
         href="/list/students?risk=alto"
         className="flex flex-col items-center justify-center p-5 rounded-3xl border bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md border-zinc-200 dark:border-zinc-800 transition-all hover:shadow-lg group"
       >
@@ -100,7 +100,7 @@ export default function SchoolHealthOverview({ stats }: { stats: StatsProps | nu
             {risco > 0 ? `${risco} aluno${risco > 1 ? "s" : ""} em risco` : "Tudo bem"}
           </Badge>
         </div>
-      </Link>
+      </Link> */}
 
       {/* Turmas em Alerta — card de alerta */}
       <Link

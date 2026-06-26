@@ -12,7 +12,7 @@ type StudentHeroProps = {
   classRank?: number | null
   classSize?: number | null
   statusPhrase?: string
-  targetAverage?: number
+  targetAverage?: number | null
 }
 
 export default function StudentHero({
@@ -23,11 +23,11 @@ export default function StudentHero({
   const hour = new Date().getHours()
   const greeting = hour < 12 ? "Bom dia" : hour < 18 ? "Boa tarde" : "Boa noite"
 
-  const hasIssues = statusPhrase?.toLowerCase().includes("atenção") || statusPhrase?.toLowerCase().includes("crítica")
+  const hasIssues   = statusPhrase?.toLowerCase().includes("atenção") || statusPhrase?.toLowerCase().includes("crítica")
   const isExcellent = statusPhrase?.toLowerCase().includes("excelente")
-  
+
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       className="relative overflow-hidden w-full bg-white dark:bg-zinc-900 border border-black/[0.08] dark:border-white/[0.08] rounded-3xl p-8 shadow-sm transition-colors duration-500"
@@ -61,16 +61,16 @@ export default function StudentHero({
         </div>
 
         <div className="flex gap-3 w-full md:w-auto">
-          <MetricCard 
+          <MetricCard
             icon={<Award size={18} className="text-violet-600 dark:text-violet-400" />}
             label="Média Atual"
             value={average.toFixed(1)}
             trend={trend}
             isUp={trendUp}
           />
-          
+
           {classRank && classSize && (
-            <MetricCard 
+            <MetricCard
               icon={<Target size={18} className="text-indigo-600 dark:text-indigo-400" />}
               label="Posição"
               value={`#${classRank}`}
@@ -79,11 +79,13 @@ export default function StudentHero({
             />
           )}
 
-          {targetAverage !== undefined && (
+          {targetAverage != null && (
             <MetricCard
-              icon={average >= targetAverage ? <Sparkles size={18} className="text-emerald-600 dark:text-emerald-400" /> : <Target size={18} className="text-amber-600 dark:text-amber-400" />}
+              icon={average >= targetAverage
+                ? <Sparkles size={18} className="text-emerald-600 dark:text-emerald-400" />
+                : <Target size={18} className="text-amber-600 dark:text-amber-400" />}
               label="Meta"
-              value={`${targetAverage.toFixed(1)}`}
+              value={targetAverage.toFixed(1)}
               subtitle={average >= targetAverage ? "atingida" : `atual: ${average.toFixed(1)}`}
               isRank
             />
@@ -103,9 +105,9 @@ function MetricCard({ icon, label, value, trend, isUp, isRank = false, subtitle 
         </div>
         {!isRank && trend !== undefined && (
           <div className={cn(
-            "flex items-center text-[10px] font-bold px-1.5 py-0.5 rounded-md", 
-            isUp 
-              ? "text-emerald-700 bg-emerald-500/10 dark:text-emerald-400 dark:bg-emerald-500/10" 
+            "flex items-center text-[10px] font-bold px-1.5 py-0.5 rounded-md",
+            isUp
+              ? "text-emerald-700 bg-emerald-500/10 dark:text-emerald-400 dark:bg-emerald-500/10"
               : "text-rose-700 bg-rose-500/10 dark:text-rose-400 dark:bg-rose-500/10"
           )}>
             {isUp ? <TrendingUp size={10} className="mr-1" /> : <TrendingDown size={10} className="mr-1" />}
