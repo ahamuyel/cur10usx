@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { useTranslation } from "@/lib/i18n"
-import { GraduationCap } from "lucide-react"
+import Image from "next/image"
 import LocaleSwitcher from "./LocaleSwitcher"
 
 type Props = {
@@ -39,9 +39,20 @@ export default function Footer({ locale = "pt" }: Props) {
           {/* Brand column */}
           <div className="col-span-2 md:col-span-1">
             <div className="flex items-center gap-2.5 mb-4">
-              <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-neutral-900 dark:bg-white text-white dark:text-zinc-900">
-                <GraduationCap className="w-4 h-4" />
-              </div>
+              <Image
+                src="/blacklogo.png"
+                alt="Cur10usX"
+                width={32}
+                height={32}
+                className="rounded-lg dark:hidden"
+              />
+              <Image
+                src="/whitelogo.png"
+                alt="Cur10usX"
+                width={32}
+                height={32}
+                className="rounded-lg hidden dark:block"
+              />
               <span className="font-bold text-sm text-[var(--landing-text-primary)]">
                 Cur10usX
               </span>

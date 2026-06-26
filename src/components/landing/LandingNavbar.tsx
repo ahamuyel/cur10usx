@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
-import { Menu, X, Sun, Moon, GraduationCap } from "lucide-react"
+import Image from "next/image"
+import { Menu, X, Sun, Moon } from "lucide-react"
 import { useTheme } from "@/provider/theme"
 import type { PlatformBranding } from "@/types/landing"
 import { useTranslation } from "@/lib/i18n"
@@ -91,9 +92,20 @@ export default function LandingNavbar({
           
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 group shrink-0 select-none">
-            <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-neutral-900 dark:bg-white text-white dark:text-zinc-900 text-xs font-bold transition-transform group-hover:scale-105">
-              <GraduationCap className="w-4 h-4" />
-            </div>
+            <Image
+              src="/blacklogo.png"
+              alt="Cur10usX"
+              width={32}
+              height={32}
+              className="rounded-lg transition-transform group-hover:scale-105 dark:hidden"
+            />
+            <Image
+              src="/whitelogo.png"
+              alt="Cur10usX"
+              width={32}
+              height={32}
+              className="rounded-lg transition-transform group-hover:scale-105 hidden dark:block"
+            />
             <span className="font-bold text-sm tracking-tight text-[var(--landing-text-primary)] hidden sm:block">
               Cur10us<span className="text-primary">X</span>
             </span>

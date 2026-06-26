@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { getPlatformConfig } from "@/lib/platform-config"
-import { GraduationCap } from "lucide-react"
+import Image from "next/image"
 import { getServerLocale } from "@/lib/i18n/server"
 import LocaleSwitcher from "@/components/landing/LocaleSwitcher"
 
@@ -44,9 +44,20 @@ export default async function AuthLayout({
       <div className="relative flex-1 flex flex-col items-center justify-center px-4 py-8 sm:py-12">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2.5 mb-8 sm:mb-10 group">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-sm transition-transform group-hover:scale-105">
-            <GraduationCap className="w-5 h-5 text-white" />
-          </div>
+          <Image
+            src="/blacklogo.png"
+            alt="Cur10usX"
+            width={36}
+            height={36}
+            className="rounded-xl shadow-sm transition-transform group-hover:scale-105 dark:hidden"
+          />
+          <Image
+            src="/whitelogo.png"
+            alt="Cur10usX"
+            width={36}
+            height={36}
+            className="rounded-xl shadow-sm transition-transform group-hover:scale-105 hidden dark:block"
+          />
           <PlatformName />
         </Link>
 
