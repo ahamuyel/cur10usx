@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { getPlatformConfig } from "@/lib/platform-config"
-import { GraduationCap } from "lucide-react"
+import Image from "next/image"
 import { getServerLocale } from "@/lib/i18n/server"
 import { t } from "@/lib/i18n"
 import LocaleSwitcher from "@/components/landing/LocaleSwitcher"
@@ -34,9 +34,20 @@ export default async function PublicLayout({
       <header className="sticky top-0 z-50 backdrop-blur-md bg-zinc-50/80 dark:bg-black/80 border-b border-zinc-200 dark:border-zinc-800">
         <div className="max-w-3xl mx-auto flex items-center justify-between px-6 py-4">
           <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-7 h-7 rounded-lg bg-neutral-900 dark:bg-white text-white dark:text-zinc-900 flex items-center justify-center transition-transform group-hover:scale-105">
-              <GraduationCap className="w-4 h-4" />
-            </div>
+            <Image
+              src="/blacklogo.png"
+              alt="Cur10usX"
+              width={28}
+              height={28}
+              className="rounded-lg transition-transform group-hover:scale-105 dark:hidden"
+            />
+            <Image
+              src="/whitelogo.png"
+              alt="Cur10usX"
+              width={28}
+              height={28}
+              className="rounded-lg transition-transform group-hover:scale-105 hidden dark:block"
+            />
             <PublicBrand />
           </Link>
           <div className="flex items-center gap-3">

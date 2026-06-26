@@ -3,7 +3,8 @@
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { useEffect, useRef } from "react"
-import { Clock, GraduationCap } from "lucide-react"
+import Image from "next/image"
+import { Clock } from "lucide-react"
 import { on } from "@/hooks/useWebSocket"
 
 export default function PendingAccountGate({ children }: { children: React.ReactNode }) {
@@ -59,7 +60,8 @@ export default function PendingAccountGate({ children }: { children: React.React
             A sua escola está pendente de análise pela equipa Cur10usX. Receberá um e-mail quando a escola for aprovada e activada.
           </p>
           <div className="flex items-center justify-center gap-2 text-xs text-zinc-400">
-            <GraduationCap className="w-3.5 h-3.5" />
+            <Image src="/blacklogo.png" alt="Cur10usX" width={16} height={16} className="rounded dark:hidden" />
+            <Image src="/whitelogo.png" alt="Cur10usX" width={16} height={16} className="rounded hidden dark:block" />
             <span>Cur10usX — Plataforma de Gestão Escolar</span>
           </div>
         </div>
