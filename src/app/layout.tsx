@@ -29,6 +29,13 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: config.name,
     description: config.description || "Plataforma de gestão escolar",
+    icons: { icon: "/blacklogo.png" },
+    openGraph: {
+      title: config.name,
+      description: config.description || "Plataforma de gestão escolar",
+      siteName: config.name,
+      images: [{ url: "/blacklogo.png", width: 512, height: 512 }],
+    },
   };
 }
 
