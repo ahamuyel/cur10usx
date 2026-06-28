@@ -4,12 +4,12 @@ import { useTranslation } from "@/lib/i18n"
 import { Building2, Palette, BarChart3, Settings2 } from "lucide-react"
 import type { LandingStats } from "@/types/landing"
 
-type Props = { locale?: string; stats: LandingStats }
+type Props = { stats: LandingStats }
 
 const featureIcons = [Building2, Palette, BarChart3, Settings2]
 
-export default function MultiTenantSection({ locale = "pt" }: Props) {
-  const { t, tv } = useTranslation(locale)
+export default function MultiTenantSection(_props: Props) {
+  const { t, tv } = useTranslation()
 
   const features = tv("landing.multiTenant.features") as {
     title: string

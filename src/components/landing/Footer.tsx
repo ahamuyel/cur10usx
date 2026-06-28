@@ -5,9 +5,7 @@ import { useTranslation } from "@/lib/i18n"
 import Image from "next/image"
 import LocaleSwitcher from "./LocaleSwitcher"
 
-type Props = {
-  locale?: string
-}
+type Props = {}
 
 const socialLinks = [
   {
@@ -27,8 +25,8 @@ const socialLinks = [
   },
 ]
 
-export default function Footer({ locale = "pt" }: Props) {
-  const { t } = useTranslation(locale)
+export default function Footer(_props: Props) {
+  const { t, locale } = useTranslation()
   const year = new Date().getFullYear()
 
   return (

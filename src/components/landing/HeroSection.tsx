@@ -17,16 +17,14 @@ type Props = {
   branding?: PlatformBranding;
   schools?: SchoolLogo[];
   stats: LandingStats;
-  locale?: string;
 };
 
 export default function HeroSection({
   schools: rawSchools = [],
   stats,
-  locale = "pt",
 }: Props) {
   const router = useRouter();
-  const { t } = useTranslation(locale);
+  const { t } = useTranslation();
 
   const schools = Array.isArray(rawSchools) ? rawSchools : [];
 
@@ -78,7 +76,7 @@ export default function HeroSection({
               {[
                 { icon: School, value: stats.schools, label: t("landing.hero.stats_schools") },
                 { icon: Users, value: stats.students, label: t("landing.hero.stats_students") },
-                { icon: BarChart3, value: stats.results, label: t("landing.hero.stats_results") },
+                // { icon: BarChart3, value: stats.results, label: t("landing.hero.stats_results") },
               ].map(({ icon: Icon, value, label }) => (
                 <div
                   key={label}

@@ -11,16 +11,14 @@ import LocaleSwitcher from "./LocaleSwitcher"
 
 export default function LandingNavbar({
   branding,
-  locale = "pt",
 }: {
   branding: PlatformBranding
-  locale?: string
 }) {
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [activeSection, setActiveSection] = useState("")
   const menuRef = useRef<HTMLDivElement>(null)
-  const { t } = useTranslation(locale)
+  const { t, locale } = useTranslation()
   const { theme, toggleTheme } = useTheme()
 
   const navLinks = [

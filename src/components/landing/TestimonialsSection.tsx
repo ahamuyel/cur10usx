@@ -3,8 +3,6 @@
 import { useTranslation } from "@/lib/i18n"
 import { Quote } from "lucide-react"
 
-type Props = { locale?: string }
-
 type TestimonialItem = {
   quote: string
   author: string
@@ -12,8 +10,8 @@ type TestimonialItem = {
   school: string
 }
 
-export default function TestimonialsSection({ locale = "pt" }: Props) {
-  const { t, tv } = useTranslation(locale)
+export default function TestimonialsSection() {
+  const { t, tv } = useTranslation()
 
   const items = tv("landing.testimonials.items") as TestimonialItem[]
 
