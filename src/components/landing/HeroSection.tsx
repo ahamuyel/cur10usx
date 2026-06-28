@@ -1,12 +1,9 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import { useTranslation } from "@/lib/i18n";
 import { TheInfiniteGrid } from "@/components/ui/the-infinite-grid";
-import { InfiniteSlider } from "@/components/ui/infinite-slider";
-import { ProgressiveBlur } from "@/components/ui/progressive-blur";
-import { School, Users, BarChart3, Play } from "lucide-react";
+import { School, Users } from "lucide-react";
 import type {
   PlatformBranding,
   SchoolLogo,
@@ -35,13 +32,9 @@ export default function HeroSection({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="flex flex-col items-center text-center max-w-5xl mx-auto">
           <div className="flex flex-col items-center text-center">
-            {/* <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-zinc-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-sm text-xs text-zinc-500 dark:text-zinc-400 mb-8">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="font-semibold text-zinc-900 dark:text-zinc-100">
-                {stats.schools}
-              </span>
-              <span>escolas angolanas já utilizam</span>
-            </div> */}
+            <span className="text-xs text-[var(--landing-text-dim)] uppercase tracking-widest block mb-6">
+              {t("landing.hero.label")}
+            </span>
 
             <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl tracking-tight leading-[0.95] text-zinc-900 dark:text-zinc-50">
               {t("landing.hero.headline").split('\n').map((part, i, arr) => (
@@ -67,7 +60,6 @@ export default function HeroSection({
                 onClick={() => router.push("/signup")}
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl border border-zinc-200 dark:border-zinc-800 font-semibold hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-all"
               >
-                <Play size={14} className="fill-current" />
                 {t("landing.hero.explore")}
               </button>
             </div>
@@ -76,7 +68,6 @@ export default function HeroSection({
               {[
                 { icon: School, value: stats.schools, label: t("landing.hero.stats_schools") },
                 { icon: Users, value: stats.students, label: t("landing.hero.stats_students") },
-                // { icon: BarChart3, value: stats.results, label: t("landing.hero.stats_results") },
               ].map(({ icon: Icon, value, label }) => (
                 <div
                   key={label}
@@ -94,49 +85,6 @@ export default function HeroSection({
             </div>
           </div>
         </div>
-
-        {/* ── Logo carousel ───────────────────────────────────────────────── */}
-        {/* {schools.length > 0 && (
-          <div className="mt-20 md:mt-28">
-            <p className="text-center text-[10px] font-mono uppercase tracking-[0.25em] text-zinc-400 dark:text-zinc-600 mb-6">
-              {t("landing.hero.trusted_by")}
-            </p>
-
-            <div className="relative h-[50px] overflow-hidden">
-              <InfiniteSlider duration={35} gap={56}>
-                {schools.map((school, i) => (
-                  <div
-                    key={i}
-                    className="flex h-[50px] w-36 items-center justify-center grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-300"
-                  >
-                    {school.logo ? (
-                      <img
-                        src={school.logo}
-                        alt={school.name || "School Logo"}
-                        className="max-h-full max-w-full object-contain"
-                      />
-                    ) : (
-                      <span className="text-xs font-medium text-zinc-400">
-                        {school.name}
-                      </span>
-                    )}
-                  </div>
-                ))}
-              </InfiniteSlider>
-
-              <ProgressiveBlur
-                className="absolute left-0 top-0 h-full w-24 z-20 pointer-events-none"
-                direction="left"
-                blurIntensity={1}
-              />
-              <ProgressiveBlur
-                className="absolute right-0 top-0 h-full w-24 z-20 pointer-events-none"
-                direction="right"
-                blurIntensity={1}
-              />
-            </div>
-          </div>
-        )} */}
       </div>
     </TheInfiniteGrid>
   );

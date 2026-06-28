@@ -22,10 +22,9 @@ export default function LandingNavbar({
   const { theme, toggleTheme } = useTheme()
 
   const navLinks = [
-    { label: t("landing.nav.problems"), href: "#problems" },
-    { label: t("landing.nav.transformation"), href: "#transformation" },
-    { label: t("landing.nav.product"), href: "#produto" },
-    { label: t("landing.nav.benefits"), href: "#benefits" },
+    { label: t("landing.nav.how_it_works"), href: "#how-it-works" },
+    { label: t("landing.nav.product"), href: "#product" },
+    { label: t("landing.nav.about"), href: "#about" },
   ]
 
   useEffect(() => {

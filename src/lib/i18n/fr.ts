@@ -1,13 +1,9 @@
 const fr = {
   landing: {
     nav: {
-      problems: "Problème",
-      transformation: "Solution",
+      how_it_works: "Comment ça marche",
       product: "Produit",
-      ecosystem: "Écosystème",
-      benefits: "Avantages",
-      vision: "Vision",
-      trust: "Pourquoi Cur10usX",
+      about: "À propos",
       explore: "Explorer",
       demo: "Demander une démo",
       signin: "Connexion",
@@ -18,208 +14,122 @@ const fr = {
     },
 
     hero: {
-      badge: "Plateforme de gestion scolaire en Angola",
-      headline: "Toute votre école.\nEn temps réel.",
+      label: "De la salle de classe au futur · Angola",
+      headline: "L'école enregistre.\nL'élève grandit.",
       subheadline:
-        "Cur10usX est le système d’exploitation de l’éducation qui connecte élèves, enseignants et direction en temps réel.",
+        "cur10usx commence par la gestion scolaire — mais la destination est l'élève. Notes, présences, portfolio et parcours académique en un seul endroit, du premier jour d'école au marché du travail.",
       cta: "Demander une démo",
       explore: "Voir la plateforme",
-      stats: "écoles utilisent Cur10usX",
-      stats_schools: "écoles",
-      stats_students: "élèves",
-      stats_results: "évaluations",
-      trusted_by: "Écoles qui nous font confiance",
+      stats_schools: "écoles pilotes",
+      stats_students: "élèves inscrits",
     },
 
-    problem: {
-      tag: "Le Problème",
-      headline: "Les écoles manquent de clarté, pas de technologie.",
+    how_it_works: {
+      tag: "Comment ça marche",
+      headline: "L'école est la clé. L'élève est la destination.",
       description:
-        "Les informations scolaires sont dispersées entre tableurs, papier et WhatsApp.",
+        "cur10usx fonctionne à deux niveaux qui s'alimentent mutuellement. L'école fournit les données ; la plateforme transforme ces données en croissance réelle pour l'élève.",
+      level1_label: "NIVEAU 1",
+      level1_title: "L'école entre",
+      level1_desc:
+        "Gestion des élèves, classes, notes, absences et communication avec les parents — tout centralisé, sans papier ni tableurs.",
+      level2_label: "NIVEAU 2",
+      level2_title: "L'élève grandit",
+      level2_desc:
+        "Progrès académique visible, portfolio dynamique, gamification avec purpose — le parcours de l'élève documenté au-delà de l'école.",
+    },
+
+    school_features: {
+      tag: "Pour l'école",
+      headline: "Ce que l'école gagne aujourd'hui.",
+      description:
+        "Le système de gestion scolaire est le point d'entrée. Fonctionnel, direct, conçu pour le contexte angolais.",
       items: [
         {
-          title: "Données fragmentées",
+          side: "Élèves et classes",
+          title: "Registre centralisé",
           description:
-            "Notes et présences dispersées dans plusieurs systèmes.",
-          stat: "74%",
-          statLabel: "des directeurs passent +10h/semaine sur des tâches manuelles",
+            "Profil unique par élève avec historique académique, classe, parent et documents. Inscriptions en quelques minutes.",
         },
         {
-          title: "Communication chaotique",
+          side: "Notes et absences",
+          title: "Saisie par période",
           description:
-            "Les informations importantes se perdent facilement.",
-          stat: "3x",
-          statLabel: "plus de risque de perte d'information",
+            "Les enseignants saisissent directement sur la plateforme. Moyennes calculées automatiquement. Rapports de période en un clic.",
         },
         {
-          title: "Rapports lents",
+          side: "Parents",
+          title: "Tableau de bord dédié",
           description:
-            "La clôture des périodes prend des jours ou semaines.",
-          stat: "2+",
-          statLabel: "semaines pour générer les rapports",
+            "Accès aux progrès des enfants — notes, absences et communications — sans dépendre des groupes WhatsApp.",
         },
         {
-          title: "Faible visibilité",
+          side: "Migration",
+          title: "Importation Excel",
           description:
-            "Les problèmes sont détectés trop tard.",
-          stat: "60%",
-          statLabel: "des problèmes sont détectés tard",
+            "Les écoles avec des données existantes ne partent pas de zéro. Importation par lot avec validation.",
         },
       ],
     },
 
-    transformation: {
-      tag: "Solution",
-      headline: "Des processus dispersés à une école connectée.",
+    student_vision: {
+      tag: "Pour l'élève",
+      headline: "Ce que l'élève emporte au-delà de l'école.",
       description:
-        "Cur10usX centralise les opérations scolaires en temps réel.",
-      legacy: "Avant",
-      platform: "Avec Cur10usX",
-      steps: [
-        {
-          title: "Gestion des élèves",
-          before: {
-            title: "Manuel",
-            items: ["Dossiers papier", "Erreurs fréquentes", "Historique difficile"],
-            status: "Désorganisé",
-          },
-          after: {
-            title: "Centralisé",
-            items: ["Profil unique", "Inscription rapide", "Historique complet"],
-            status: "Organisé",
-          },
-        },
-        {
-          title: "Présences",
-          before: {
-            title: "Processus manuel",
-            items: ["Listes papier", "Informations retardées", "Parents non informés"],
-            status: "Manuel",
-          },
-          after: {
-            title: "Temps réel",
-            items: ["Mobile", "Alertes automatiques", "Rapports instantanés"],
-            status: "Automatique",
-          },
-        },
-        {
-          title: "Évaluations",
-          before: {
-            title: "Tableurs séparés",
-            items: ["Notes dispersées", "Erreurs de calcul", "Processus lent"],
-            status: "Sujet aux erreurs",
-          },
-          after: {
-            title: "Système intégré",
-            items: ["Notes centralisées", "Moyennes automatiques", "Rapports instantanés"],
-            status: "Précis",
-          },
-        },
-      ],
-    },
-
-    ecosystem: {
-      tag: "Écosystème",
-      headline: "Tout ce dont votre école a besoin.",
-      description:
-        "Cur10usX connecte tous les processus scolaires.",
-      capabilities: "Inclut",
-      modules: [
-        { id: "academic", title: "Élèves", description: "Historique complet." },
-        { id: "teachers", title: "Enseignants", description: "Gestion des classes." },
-        { id: "classes", title: "Classes", description: "Organisation complète." },
-        { id: "attendance", title: "Présences", description: "Suivi rapide." },
-        { id: "assessments", title: "Évaluations", description: "Notes et rapports." },
-        { id: "reporting", title: "Rapports", description: "Génération automatique." },
-        { id: "communication", title: "Communication", description: "École et parents." },
-        { id: "records", title: "Dossiers", description: "Historique académique." },
-      ],
-    },
-
-    benefits: {
-      tag: "Avantages",
-      headline: "Plus d'efficacité pour tous.",
-      description:
-        "Chaque utilisateur gagne du temps et de la clarté.",
+        "La plupart des plateformes traitent l'élève comme une donnée secondaire. Chez cur10usx, l'élève est le noyau.",
+      quote: "\"Un élève angolais passe des années à construire un parcours académique. Quand il quitte l'école, ce parcours disparaît. Pas de registre, pas de portfolio, pas de continuité. cur10usx existe pour changer cela.\"",
       items: [
         {
-          role: "Directeurs",
-          title: "Vision globale",
-          description: "Décisions basées sur des données.",
-          points: [
-            "Tableau de bord complet",
-            "Rapports instantanés",
-            "Décisions basées sur données",
-          ],
+          title: "Progrès visible",
+          description:
+            "Tableau de bord académique continu — l'élève voit où il est et où il va.",
         },
         {
-          role: "Enseignants",
-          title: "Moins de bureaucratie",
-          description: "Plus de temps pour enseigner.",
-          points: ["Notes rapides", "Présences simples", "Moins de tâches"],
+          title: "Portfolio dynamique",
+          description:
+            "Contrôlé par l'élève. Grandit avec lui, de l'école à l'emploi.",
         },
         {
-          role: "Élèves",
-          title: "Suivi continu",
-          description: "Meilleure visibilité du progrès.",
-          points: ["Progression claire", "Intervention rapide", "Transparence"],
+          title: "Gamification utile",
+          description:
+            "Points et réalisations liés à la performance réelle — pas aux clics.",
         },
         {
-          role: "Parents",
-          title: "Transparence totale",
-          description: "Suivi en temps réel.",
-          points: ["Alertes", "Notes", "Communication directe"],
+          title: "Transition accompagnée",
+          description:
+            "De la salle de classe au marché du travail, sans perdre l'historique.",
         },
       ],
     },
 
-    vision: {
-      tag: "Vision",
-      headline: "Les écoles intelligentes commencent par de bons systèmes.",
-      description:
-        "L'avenir dépend de décisions basées sur les données.",
-      points: [
-        { title: "Croissance organisée", description: "Évoluer sans perte de contrôle." },
-        { title: "Meilleures décisions", description: "Données en temps réel." },
-        { title: "Avenir durable", description: "Évolution continue." },
-      ],
-    },
-
-    trust: {
-      tag: "Pourquoi Cur10usX",
-      headline: "Moins de chaos. Plus de contrôle.",
-      description: "Les écoles choisissent Cur10usX pour sa simplicité.",
-      points: [
-        { title: "Gagner du temps", desc: "Automatisation des tâches." },
-        { title: "Organisation totale", desc: "Tout centralisé." },
-        { title: "Visibilité", desc: "Décisions en temps réel." },
-        { title: "Performance", desc: "Suivi des élèves." },
+    origin: {
+      tag: "À propos de cur10usx",
+      headline: "Né ici. Construit pour ici.",
+      paragraphs: [
+        "cur10usx a commencé au lycée — comme un système personnel de suivi académique, une pratique quotidienne de planification et d'enregistrement de sa propre évolution. Pas comme une idée commerciale, mais comme un besoin réel.",
+        "Des années plus tard, cette idée est devenue un produit logiciel, construit de toutes pièces à Luanda, avec une connaissance directe de ce qui manque dans le système éducatif angolais. Ce n'est pas une plateforme étrangère adaptée. C'est un produit créé par quelqu'un qui a étudié dans ce système et qui sait ce dont les élèves ont besoin.",
+        "La mission est simple : démocratiser l'accès aux outils de suivi académique pour tous les étudiants africains — quelle que soit l'école qu'ils fréquentent.",
       ],
     },
 
     cta: {
-      tag: "Avenir de l'éducation",
-      headline: "Moderniser une école commence par la clarté.",
+      tag: "Prochaine étape",
+      headline:
+        "L'école qui rejoint aujourd'hui donne à son élève un avantage réel.",
       description:
-        "Cur10usX transforme la gestion scolaire en temps réel.",
+        "Réservez une démo. Nous montrons la plateforme en fonctionnement avec des données réelles du contexte angolais.",
       button: "Demander une démo",
       free_account: "Créer un compte",
-      security: "Données sécurisées",
+      multicaixa: "Paiement via Multicaixa Express",
       setup: "Configuration rapide",
-      support: "Support dédié",
+      support: "Support en portugais",
     },
 
     footer: {
-      description:
-        "Plateforme de gestion scolaire centralisant les données.",
-      product: "PLATEFORME",
-      resources: "RESSOURCES",
-      company: "INSTITUTION",
-      contact: "CONTACT",
-      status: "Opérationnel",
-      copyright: "Cur10usX. Gestion scolaire.",
+      copyright: "cur10usx · Luanda, Angola",
       tos: "Conditions",
       privacy: "Confidentialité",
+      email: "suporte@cur10usx.com",
     },
   },
 

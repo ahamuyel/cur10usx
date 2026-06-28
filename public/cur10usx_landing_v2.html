@@ -1,0 +1,228 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+.lp { max-width: 720px; margin: 0 auto; padding: 0 1.5rem; font-family: var(--font-sans); color: var(--text-primary); }
+
+.nav { display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 0; border-bottom: 0.5px solid var(--border); }
+.nav-logo { font-size: 15px; font-weight: 500; letter-spacing: -0.3px; }
+.nav-links { display: flex; gap: 1.5rem; }
+.nav-links a { font-size: 13px; color: var(--text-secondary); text-decoration: none; }
+.nav-cta { font-size: 13px; font-weight: 500; background: var(--text-primary); color: var(--surface-2); border: none; padding: 7px 16px; border-radius: var(--radius); cursor: pointer; }
+
+.hero { padding: 4.5rem 0 3.5rem; }
+.hero-label { font-size: 11px; letter-spacing: 0.1em; color: var(--text-muted); text-transform: uppercase; margin-bottom: 1.5rem; }
+.hero-h1 { font-size: 38px; font-weight: 500; line-height: 1.18; letter-spacing: -0.6px; margin-bottom: 1.25rem; max-width: 560px; }
+.hero-h1 em { font-style: normal; color: var(--text-accent); }
+.hero-body { font-size: 16px; color: var(--text-secondary); line-height: 1.75; max-width: 460px; margin-bottom: 2rem; }
+.hero-actions { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.btn-p { background: var(--text-primary); color: var(--surface-2); font-size: 14px; font-weight: 500; padding: 10px 20px; border-radius: var(--radius); border: none; cursor: pointer; text-decoration: none; }
+.btn-s { background: transparent; color: var(--text-secondary); font-size: 14px; border: none; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 5px; padding: 10px 0; }
+.btn-s:hover { color: var(--text-primary); }
+
+.stats-row { display: flex; gap: 2.5rem; margin-top: 3rem; padding-top: 2rem; border-top: 0.5px solid var(--border); flex-wrap: wrap; }
+.stat { display: flex; flex-direction: column; gap: 3px; }
+.stat-n { font-size: 22px; font-weight: 500; }
+.stat-l { font-size: 12px; color: var(--text-muted); }
+
+.divider { border: none; border-top: 0.5px solid var(--border); margin: 0; }
+
+.section { padding: 3.5rem 0; }
+.eyebrow { font-size: 11px; letter-spacing: 0.1em; color: var(--text-muted); text-transform: uppercase; margin-bottom: 1rem; }
+.s-title { font-size: 24px; font-weight: 500; letter-spacing: -0.3px; line-height: 1.3; margin-bottom: 0.75rem; }
+.s-body { font-size: 15px; color: var(--text-secondary); line-height: 1.75; max-width: 500px; margin-bottom: 2rem; }
+
+.flow { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: var(--border); border: 0.5px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 0; }
+.flow-cell { background: var(--surface-1); padding: 1.25rem 1rem; }
+.flow-tag { font-size: 11px; color: var(--text-muted); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 0.5rem; }
+.flow-title { font-size: 14px; font-weight: 500; margin-bottom: 0.4rem; }
+.flow-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+.flow-arrow { display: flex; align-items: center; justify-content: center; background: var(--surface-1); font-size: 18px; color: var(--text-muted); }
+
+.feat-rows { display: flex; flex-direction: column; }
+.feat-row { display: grid; grid-template-columns: 130px 1fr; gap: 2rem; padding: 1.25rem 0; border-top: 0.5px solid var(--border); align-items: start; }
+.feat-row:first-child { border-top: none; padding-top: 0; }
+.feat-side { font-size: 13px; color: var(--text-muted); padding-top: 2px; }
+.feat-title { font-size: 15px; font-weight: 500; margin-bottom: 0.3rem; }
+.feat-desc { font-size: 14px; color: var(--text-secondary); line-height: 1.65; }
+
+.vision-block { border: 0.5px solid var(--border); border-radius: 12px; overflow: hidden; margin-top: 0; }
+.vision-quote { padding: 2rem 1.75rem; border-bottom: 0.5px solid var(--border); }
+.vision-quote p { font-family: var(--font-voice); font-size: 18px; line-height: 1.6; color: var(--text-primary); }
+.vision-meta { padding: 1.25rem 1.75rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1.25rem; }
+.vision-item-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.3rem; }
+.vision-item-val { font-size: 14px; color: var(--text-secondary); line-height: 1.6; }
+
+.origin { background: var(--surface-1); border: 0.5px solid var(--border); border-radius: 12px; padding: 1.75rem; }
+.origin p { font-size: 15px; color: var(--text-secondary); line-height: 1.8; }
+.origin p + p { margin-top: 1rem; }
+.origin strong { color: var(--text-primary); font-weight: 500; }
+
+.cta-final { padding: 3.5rem 0 4rem; border-top: 0.5px solid var(--border); }
+.cta-final .s-title { max-width: 420px; }
+.cta-trust { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-top: 1.5rem; }
+.trust-item { font-size: 12px; color: var(--text-muted); display: flex; align-items: center; gap: 5px; }
+
+.footer { padding: 1.5rem 0; border-top: 0.5px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; }
+.footer-l { font-size: 13px; color: var(--text-muted); }
+.footer-r { display: flex; gap: 1.5rem; }
+.footer-r a { font-size: 13px; color: var(--text-muted); text-decoration: none; }
+</style>
+
+<div class="lp">
+
+  <nav class="nav">
+    <span class="nav-logo">cur10usx</span>
+    <div class="nav-links">
+      <a href="#">Como funciona</a>
+      <a href="#">Produto</a>
+      <a href="#">Sobre</a>
+    </div>
+    <button class="nav-cta">Solicitar demo</button>
+  </nav>
+
+  <section class="hero">
+    <p class="hero-label">Da sala de aula ao futuro · Angola</p>
+    <h1 class="hero-h1">A escola regista.<br>O <em>aluno cresce.</em></h1>
+    <p class="hero-body">O cur10usx começa na gestão escolar — mas o destino é o aluno. Notas, presenças, portfólio e jornada académica num só lugar, do primeiro dia de escola até ao mercado de trabalho.</p>
+    <div class="hero-actions">
+      <a class="btn-p" href="#">Solicitar demonstração</a>
+      <a class="btn-s" href="#">Ver a plataforma <i class="ti ti-arrow-right" style="font-size:13px" aria-hidden="true"></i></a>
+    </div>
+    <div class="stats-row">
+      <div class="stat"><span class="stat-n">8</span><span class="stat-l">escolas piloto</span></div>
+      <div class="stat"><span class="stat-n">162</span><span class="stat-l">alunos registados</span></div>
+      <div class="stat"><span class="stat-n">24</span><span class="stat-l">avaliações lançadas</span></div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <section class="section">
+    <p class="eyebrow">Como funciona</p>
+    <h2 class="s-title">A escola é a chave. O aluno é o destino.</h2>
+    <p class="s-body">O cur10usx opera em dois níveis que se alimentam. A escola fornece os dados; a plataforma transforma esses dados em crescimento real para o aluno.</p>
+    <div class="flow">
+      <div class="flow-cell">
+        <p class="flow-tag">Nível 1</p>
+        <p class="flow-title">A escola entra</p>
+        <p class="flow-desc">Gestão de alunos, turmas, notas, faltas e comunicação com encarregados — tudo centralizado, sem papel nem planilhas.</p>
+      </div>
+      <div class="flow-cell" style="display:flex;align-items:center;justify-content:center;background:var(--surface-0);">
+        <i class="ti ti-arrow-right" style="font-size:20px;color:var(--text-muted)" aria-hidden="true"></i>
+      </div>
+      <div class="flow-cell">
+        <p class="flow-tag">Nível 2</p>
+        <p class="flow-title">O aluno cresce</p>
+        <p class="flow-desc">Progresso académico visível, portfólio dinâmico, gamificação com propósito — a jornada do aluno documentada além da escola.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <section class="section">
+    <p class="eyebrow">Para a escola</p>
+    <h2 class="s-title">O que a escola ganha hoje.</h2>
+    <p class="s-body">O sistema de gestão escolar é o ponto de entrada. Funcional, directo, feito para o contexto angolano.</p>
+    <div class="feat-rows">
+      <div class="feat-row">
+        <span class="feat-side">Alunos e turmas</span>
+        <div>
+          <p class="feat-title">Registo centralizado</p>
+          <p class="feat-desc">Perfil único por aluno com histórico académico, turma, encarregado e documentos. Matrículas feitas em minutos.</p>
+        </div>
+      </div>
+      <div class="feat-row">
+        <span class="feat-side">Notas e faltas</span>
+        <div>
+          <p class="feat-title">Lançamento por período</p>
+          <p class="feat-desc">Professores lançam directamente na plataforma. Médias calculadas automaticamente. Relatórios de período com um clique.</p>
+        </div>
+      </div>
+      <div class="feat-row">
+        <span class="feat-side">Encarregados</span>
+        <div>
+          <p class="feat-title">Painel dedicado</p>
+          <p class="feat-desc">Acesso ao progresso dos educandos — notas, faltas e comunicados — sem depender de grupos de WhatsApp.</p>
+        </div>
+      </div>
+      <div class="feat-row">
+        <span class="feat-side">Migração</span>
+        <div>
+          <p class="feat-title">Importação via Excel</p>
+          <p class="feat-desc">Escolas com dados existentes não começam do zero. Importação em lote com validação antes de confirmar.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <section class="section">
+    <p class="eyebrow">Para o aluno</p>
+    <h2 class="s-title">O que o aluno leva para além da escola.</h2>
+    <p class="s-body">A maioria das plataformas trata o aluno como dado secundário. No cur10usx, o aluno é o núcleo.</p>
+    <div class="vision-block">
+      <div class="vision-quote">
+        <p>"Um aluno angolano passa anos a construir um percurso académico. Quando sai da escola, esse percurso desaparece. Não há registo, não há portfólio, não há continuidade. O cur10usx existe para mudar isso."</p>
+      </div>
+      <div class="vision-meta">
+        <div>
+          <p class="vision-item-label">Progresso visível</p>
+          <p class="vision-item-val">Dashboard académico contínuo — o aluno vê onde está e para onde vai.</p>
+        </div>
+        <div>
+          <p class="vision-item-label">Portfólio dinâmico</p>
+          <p class="vision-item-val">Controlado pelo próprio aluno. Cresce com ele, da escola ao emprego.</p>
+        </div>
+        <div>
+          <p class="vision-item-label">Gamificação com propósito</p>
+          <p class="vision-item-val">Pontos e conquistas ligados a desempenho real — não a cliques.</p>
+        </div>
+        <div>
+          <p class="vision-item-label">Transição acompanhada</p>
+          <p class="vision-item-val">Da sala de aula ao mercado de trabalho, sem perder o historial.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <section class="section">
+    <p class="eyebrow">Sobre o cur10usx</p>
+    <h2 class="s-title">Nasceu aqui. Foi construído para aqui.</h2>
+    <div class="origin">
+      <p>O cur10usx começou ainda no ensino médio — como um sistema pessoal de acompanhamento académico, uma prática diária de planear e registar a própria evolução. Não como ideia de negócio, mas como necessidade real.</p>
+      <p>Anos depois, essa ideia foi transformada num produto de software, construído de raiz em <strong>Luanda</strong>, com conhecimento directo do que falta no sistema educativo angolano. Não é uma plataforma estrangeira adaptada. É um produto feito por alguém que estudou neste sistema e sabe o que os alunos precisam.</p>
+      <p>A missão é simples: <strong>democratizar o acesso a ferramentas de acompanhamento académico para todos os estudantes africanos</strong> — independentemente da escola onde estudam.</p>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <section class="cta-final">
+    <p class="eyebrow">Próximo passo</p>
+    <h2 class="s-title">A escola que entra hoje está a dar ao seu aluno uma vantagem real.</h2>
+    <p class="s-body">Marque uma demonstração. Mostramos a plataforma em funcionamento com dados reais do contexto angolano.</p>
+    <div class="hero-actions">
+      <a class="btn-p" href="#">Solicitar demonstração</a>
+      <a class="btn-s" href="#">Criar conta <i class="ti ti-arrow-right" style="font-size:13px" aria-hidden="true"></i></a>
+    </div>
+    <div class="cta-trust">
+      <span class="trust-item"><i class="ti ti-check" style="font-size:13px;color:var(--text-muted)" aria-hidden="true"></i> Pagamento via Multicaixa Express</span>
+      <span class="trust-item"><i class="ti ti-check" style="font-size:13px;color:var(--text-muted)" aria-hidden="true"></i> Configuração em dias</span>
+      <span class="trust-item"><i class="ti ti-check" style="font-size:13px;color:var(--text-muted)" aria-hidden="true"></i> Suporte em português</span>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <span class="footer-l">© 2026 cur10usx · Luanda, Angola</span>
+    <div class="footer-r">
+      <a href="#">Termos</a>
+      <a href="#">Privacidade</a>
+      <a href="mailto:suporte@cur10usx.com">suporte@cur10usx.com</a>
+    </div>
+  </footer>
+
+</div>

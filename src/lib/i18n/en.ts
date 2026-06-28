@@ -1,13 +1,9 @@
 const en = {
   landing: {
     nav: {
-      problems: "Problem",
-      transformation: "Solution",
+      how_it_works: "How it works",
       product: "Product",
-      ecosystem: "Ecosystem",
-      benefits: "Benefits",
-      vision: "Vision",
-      trust: "Why Cur10usX",
+      about: "About",
       explore: "Explore",
       demo: "Request Demo",
       signin: "Sign in",
@@ -18,245 +14,122 @@ const en = {
     },
 
     hero: {
-      badge: "School Management Platform in Angola",
-      headline: "Your entire school.\nIn real time.",
+      label: "From classroom to future · Angola",
+      headline: "The school records.\nThe student grows.",
       subheadline:
-        "Cur10usX is the operating system for education that connects students, teachers and administration with real-time academic data.",
+        "cur10usx starts with school management — but the destination is the student. Grades, attendance, portfolio and academic journey in one place, from the first day of school to the job market.",
       cta: "Request Demo",
       explore: "View Platform",
-      stats: "schools use Cur10usX",
-      stats_schools: "schools",
-      stats_students: "students",
-      stats_results: "assessments",
-      trusted_by: "Schools that trust us",
+      stats_schools: "pilot schools",
+      stats_students: "registered students",
     },
 
-    problem: {
-      tag: "The Problem",
-      headline: "Schools don’t lack technology. They lack clarity.",
+    how_it_works: {
+      tag: "How it works",
+      headline: "The school is the key. The student is the destination.",
       description:
-        "School information is scattered across spreadsheets, paper and WhatsApp, creating delays, errors and lack of visibility.",
+        "cur10usx operates on two levels that feed each other. The school provides the data; the platform turns that data into real student growth.",
+      level1_label: "LEVEL 1",
+      level1_title: "The school enters",
+      level1_desc:
+        "Student, class, grade, attendance and parent communication management — all centralised, no paper or spreadsheets.",
+      level2_label: "LEVEL 2",
+      level2_title: "The student grows",
+      level2_desc:
+        "Visible academic progress, dynamic portfolio, purposeful gamification — the student journey documented beyond school.",
+    },
+
+    school_features: {
+      tag: "For the school",
+      headline: "What the school gains today.",
+      description:
+        "The school management system is the entry point. Functional, straightforward, built for the Angolan context.",
       items: [
         {
-          title: "Fragmented data",
+          side: "Students & classes",
+          title: "Centralised records",
           description:
-            "Grades, attendance and records spread across multiple systems slow down management.",
-          stat: "74%",
-          statLabel: "of principals spend +10h/week on manual tasks",
+            "Single student profile with academic history, class, parent and documents. Enrolments done in minutes.",
         },
         {
-          title: "Chaotic communication",
+          side: "Grades & attendance",
+          title: "Period-based entry",
           description:
-            "Important information gets lost in WhatsApp groups and unstructured channels.",
-          stat: "3x",
-          statLabel: "higher risk of losing critical information",
+            "Teachers enter directly into the platform. Averages calculated automatically. One-click period reports.",
         },
         {
-          title: "Slow reporting",
+          side: "Parents",
+          title: "Dedicated dashboard",
           description:
-            "Term closing takes days or weeks due to manual consolidation.",
-          stat: "2+",
-          statLabel: "weeks to generate full reports",
+            "Access to student progress — grades, attendance and announcements — without relying on WhatsApp groups.",
         },
         {
-          title: "Low visibility",
+          side: "Migration",
+          title: "Excel import",
           description:
-            "Academic issues are detected too late to intervene effectively.",
-          stat: "60%",
-          statLabel: "of issues are identified too late",
+            "Schools with existing data don't start from scratch. Batch import with validation before confirming.",
         },
       ],
     },
 
-    transformation: {
-      tag: "Solution",
-      headline: "From scattered processes to a connected school.",
+    student_vision: {
+      tag: "For the student",
+      headline: "What the student takes beyond school.",
       description:
-        "Cur10usX centralizes school operations and turns data into real-time decisions.",
-      legacy: "Before",
-      platform: "With Cur10usX",
-      steps: [
-        {
-          title: "Student Management",
-          before: {
-            title: "Manual & scattered",
-            items: [
-              "Paper records",
-              "Frequent enrollment errors",
-              "Hard-to-access history",
-            ],
-            status: "Disorganized",
-          },
-          after: {
-            title: "Centralized",
-            items: [
-              "Single student profile",
-              "Fast digital enrollment",
-              "Full history always available",
-            ],
-            status: "Organized",
-          },
-        },
-        {
-          title: "Attendance",
-          before: {
-            title: "Manual process",
-            items: [
-              "Paper lists",
-              "Delayed information",
-              "Parents not updated in real time",
-            ],
-            status: "Manual",
-          },
-          after: {
-            title: "Real-time tracking",
-            items: [
-              "Mobile attendance marking",
-              "Automatic parent alerts",
-              "Instant reports",
-            ],
-            status: "Automated",
-          },
-        },
-        {
-          title: "Assessments",
-          before: {
-            title: "Separate spreadsheets",
-            items: [
-              "Scattered grades",
-              "Calculation errors",
-              "Slow closing process",
-            ],
-            status: "Error-prone",
-          },
-          after: {
-            title: "Integrated system",
-            items: [
-              "Centralized grades",
-              "Automatic averages",
-              "Instant reports",
-            ],
-            status: "Accurate",
-          },
-        },
-      ],
-    },
-
-    ecosystem: {
-      tag: "Ecosystem",
-      headline: "Everything your school needs. In one system.",
-      description:
-        "Cur10usX connects all school processes into a single intelligent ecosystem.",
-      capabilities: "Includes",
-      modules: [
-        { id: "academic", title: "Students", description: "Full academic history in one place." },
-        { id: "teachers", title: "Teachers", description: "Manage classes, subjects and performance." },
-        { id: "classes", title: "Classes", description: "Complete class and schedule organization." },
-        { id: "attendance", title: "Attendance", description: "Fast tracking with automatic alerts." },
-        { id: "assessments", title: "Assessments", description: "Grades, averages and reports." },
-        { id: "reporting", title: "Reports", description: "Automatic reports and transcripts." },
-        { id: "communication", title: "Communication", description: "Messages between school and parents." },
-        { id: "records", title: "Records", description: "Organized academic history." },
-      ],
-    },
-
-    benefits: {
-      tag: "Benefits",
-      headline: "More efficiency for everyone in the school.",
-      description:
-        "Every user gains time, clarity and control over education.",
+        "Most platforms treat the student as secondary data. At cur10usx, the student is the core.",
+      quote: "\"An Angolan student spends years building an academic record. When they leave school, that record disappears. No registry, no portfolio, no continuity. cur10usx exists to change that.\"",
       items: [
         {
-          role: "Principals",
-          title: "Full school overview",
-          description: "Make decisions based on real-time data.",
-          points: [
-            "Full institutional dashboard",
-            "Instant reporting",
-            "Data-driven decisions",
-          ],
+          title: "Visible progress",
+          description:
+            "Continuous academic dashboard — the student sees where they are and where they're going.",
         },
         {
-          role: "Teachers",
-          title: "Less bureaucracy",
-          description: "More teaching, less administration.",
-          points: [
-            "Fast grade entry",
-            "Simplified attendance",
-            "Less manual work",
-          ],
+          title: "Dynamic portfolio",
+          description:
+            "Controlled by the student. Grows with them, from school to employment.",
         },
         {
-          role: "Students",
-          title: "Continuous tracking",
-          description: "Better visibility of performance and progress.",
-          points: [
-            "Clear progress tracking",
-            "Early intervention",
-            "More transparency",
-          ],
+          title: "Purposeful gamification",
+          description:
+            "Points and achievements tied to real performance — not clicks.",
         },
         {
-          role: "Parents",
-          title: "Full transparency",
-          description: "Follow academic progress in real time.",
-          points: [
-            "Automatic alerts",
-            "Grades and attendance",
-            "Direct communication",
-          ],
+          title: "Guided transition",
+          description:
+            "From classroom to job market, without losing the history.",
         },
       ],
     },
 
-    vision: {
-      tag: "Vision",
-      headline: "Smarter schools start with better systems.",
-      description:
-        "The future of education depends on data-driven decisions.",
-      points: [
-        { title: "Organized growth", description: "Scale without losing control." },
-        { title: "Better decisions", description: "Real-time academic insights." },
-        { title: "Sustainable future", description: "Ready for continuous evolution." },
-      ],
-    },
-
-    trust: {
-      tag: "Why Cur10usX",
-      headline: "Less chaos. More control. Better outcomes.",
-      description:
-        "Schools choose Cur10usX for simplicity and impact.",
-      points: [
-        { title: "Save time", desc: "Automate repetitive tasks." },
-        { title: "Total organization", desc: "Everything in one system." },
-        { title: "More visibility", desc: "Real-time decisions." },
-        { title: "Better performance", desc: "Continuous student tracking." },
+    origin: {
+      tag: "About cur10usx",
+      headline: "Born here. Built for here.",
+      paragraphs: [
+        "cur10usx started in high school — as a personal academic tracking system, a daily practice of planning and recording one's own evolution. Not as a business idea, but as a real need.",
+        "Years later, that idea became a software product, built from scratch in Luanda, with firsthand knowledge of what is missing in the Angolan education system. It is not a foreign platform adapted. It is a product made by someone who studied in this system and knows what students need.",
+        "The mission is simple: democratise access to academic tracking tools for all African students — regardless of the school they attend.",
       ],
     },
 
     cta: {
-      tag: "Future of Education",
-      headline: "Modernizing a school starts with clarity.",
+      tag: "Next step",
+      headline:
+        "The school that joins today is giving its student a real advantage.",
       description:
-        "Cur10usX turns school management into real-time decisions.",
+        "Book a demo. We show the platform working with real data from the Angolan context.",
       button: "Request Demo",
       free_account: "Create Account",
-      security: "Secure encrypted data",
+      multicaixa: "Payment via Multicaixa Express",
       setup: "Setup in days",
-      support: "Dedicated support",
+      support: "Support in Portuguese",
     },
 
     footer: {
-      description:
-        "School management platform that centralizes data and simplifies operations.",
-      product: "PLATFORM",
-      resources: "RESOURCES",
-      company: "INSTITUTION",
-      contact: "CONTACT",
-      status: "Operational",
-      copyright: "Cur10usX. School Management.",
+      copyright: "cur10usx · Luanda, Angola",
       tos: "Terms",
       privacy: "Privacy",
+      email: "suporte@cur10usx.com",
     },
   },
 

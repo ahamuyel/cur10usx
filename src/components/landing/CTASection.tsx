@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation"
 import { useTranslation } from "@/lib/i18n"
-import { ArrowRight, ShieldCheck, Clock, Headphones } from "lucide-react"
+import { ArrowRight, CreditCard, Clock, Headphones } from "lucide-react"
 
 export default function CTASection() {
   const router = useRouter()
@@ -42,8 +42,8 @@ export default function CTASection() {
 
           <div className="inline-flex flex-wrap items-center justify-center gap-6 text-xs text-[var(--landing-text-dark-secondary)]">
             <div className="flex items-center gap-1.5">
-              <ShieldCheck size={14} className="text-emerald-500" />
-              {t("landing.cta.security")}
+              <CreditCard size={14} className="text-emerald-500" />
+              {t("landing.cta.multicaixa")}
             </div>
             <div className="flex items-center gap-1.5">
               <Clock size={14} className="text-emerald-500" />

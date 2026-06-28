@@ -1,87 +1,63 @@
-import { FileText, Clock, Settings, Rocket } from "lucide-react"
-import AnimateOnScroll from "./AnimateOnScroll"
+"use client"
 
-const steps = [
-  {
-    icon: FileText,
-    step: "1",
-    title: "Registe a sua escola",
-    description: "Preencha o formulário com os dados da escola e submeta a candidatura.",
-    color: "from-primary-500 to-primary-600",
-  },
-  {
-    icon: Clock,
-    step: "2",
-    title: "Aguarde aprovação",
-    description: "A nossa equipa analisa o pedido e aprova a sua escola na plataforma.",
-    color: "from-primary-500 to-primary-600",
-  },
-  {
-    icon: Settings,
-    step: "3",
-    title: "Configure o sistema",
-    description: "Adicione turmas, professores e alunos. Personalize as funcionalidades.",
-    color: "from-cyan-500 to-cyan-600",
-  },
-  {
-    icon: Rocket,
-    step: "4",
-    title: "Comece a gerir",
-    description: "Tudo pronto! Use os dashboards para acompanhar o dia-a-dia da escola.",
-    color: "from-emerald-500 to-emerald-600",
-  },
-]
+import { useTranslation } from "@/lib/i18n"
+import { ArrowRight } from "lucide-react"
 
 export default function HowItWorksSection() {
-  return (
-    <section id="como-funciona" className="py-28 px-6 relative overflow-hidden">
-      {/* Subtle background */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] rounded-full bg-primary-400/5 dark:bg-primary/5 blur-[120px]" />
-      </div>
+  const { t } = useTranslation()
 
-      <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-20">
-          <span className="inline-block text-sm font-medium text-primary dark:text-primary-400 bg-primary-50/80 dark:bg-primary-950/50 px-4 py-1.5 rounded-full border border-primary-200/50 dark:border-primary-800/50 mb-6">
-            Simples e rápido
+  return (
+    <section
+      id="how-it-works"
+      className="py-20 md:py-32 bg-[var(--landing-bg)] relative"
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-3xl mb-16 md:mb-20">
+          <span className="text-xs text-[var(--landing-text-dim)] uppercase tracking-widest block mb-3">
+            {t("landing.how_it_works.tag")}
           </span>
-          <h2 className="text-4xl sm:text-5xl font-bold mb-5 tracking-tight">
-            Como{" "}
-            <span className="bg-gradient-to-r from-primary-600 to-primary-600 dark:from-primary-400 dark:to-primary-400 bg-clip-text text-transparent">
-              funciona
-            </span>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[var(--landing-text-primary)] tracking-tight leading-none mb-6">
+            {t("landing.how_it_works.headline")}
           </h2>
-          <p className="text-lg text-zinc-500 dark:text-zinc-400 max-w-xl mx-auto">
-            Em 4 passos simples, a sua escola está pronta para usar o Cur10usX.
+          <p className="text-[var(--landing-text-secondary)] text-sm md:text-base leading-relaxed">
+            {t("landing.how_it_works.description")}
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative">
-          {/* Connecting line (desktop) */}
-          <div className="hidden lg:block absolute top-[52px] left-[12.5%] right-[12.5%] h-[2px] bg-gradient-to-r from-primary-300 via-primary-300 to-emerald-300 dark:from-primary-800 dark:via-primary-800 dark:to-emerald-800 rounded-full" />
+        <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-0 md:gap-0 items-stretch">
+          <div className="border border-[var(--landing-border)] bg-[var(--landing-bg-elevated)] p-8 rounded-xl md:rounded-r-none transition-all duration-300 hover:border-[var(--landing-border-strong)]">
+            <span className="text-[10px] font-semibold text-[var(--landing-text-dim)] uppercase tracking-widest block mb-3">
+              {t("landing.how_it_works.level1_label")}
+            </span>
+            <h3 className="text-lg font-bold text-[var(--landing-text-primary)] mb-3">
+              {t("landing.how_it_works.level1_title")}
+            </h3>
+            <p className="text-sm text-[var(--landing-text-secondary)] leading-relaxed">
+              {t("landing.how_it_works.level1_desc")}
+            </p>
+          </div>
 
-          {steps.map((item, i) => {
-            const Icon = item.icon
-            return (
-              <AnimateOnScroll key={item.step} delay={i * 120}>
-                <div className="relative text-center group">
-                  {/* Step number + icon */}
-                  <div className="relative inline-flex mb-6">
-                    <div className={`w-[72px] h-[72px] rounded-3xl bg-gradient-to-br ${item.color} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300 relative z-10`}>
-                      <Icon className="w-7 h-7 text-white" />
-                    </div>
-                    <span className="absolute -top-2 -right-2 w-7 h-7 rounded-full bg-white dark:bg-zinc-950 border-2 border-zinc-200 dark:border-zinc-700 flex items-center justify-center text-xs font-bold text-zinc-700 dark:text-zinc-300 z-20 shadow-sm">
-                      {item.step}
-                    </span>
-                  </div>
-                  <h3 className="font-bold text-lg mb-2">{item.title}</h3>
-                  <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed max-w-[240px] mx-auto">
-                    {item.description}
-                  </p>
-                </div>
-              </AnimateOnScroll>
-            )
-          })}
+          <div className="hidden md:flex items-center justify-center px-6">
+            <div className="w-10 h-10 rounded-full border border-[var(--landing-border)] bg-[var(--landing-bg-elevated)] flex items-center justify-center">
+              <ArrowRight size={18} className="text-[var(--landing-text-muted)]" />
+            </div>
+          </div>
+
+          <div className="border border-[var(--landing-border)] bg-[var(--landing-bg-elevated)] p-8 rounded-xl md:rounded-l-none transition-all duration-300 hover:border-[var(--landing-border-strong)] md:border-l-0">
+            <span className="text-[10px] font-semibold text-[var(--landing-text-dim)] uppercase tracking-widest block mb-3">
+              {t("landing.how_it_works.level2_label")}
+            </span>
+            <h3 className="text-lg font-bold text-[var(--landing-text-primary)] mb-3">
+              {t("landing.how_it_works.level2_title")}
+            </h3>
+            <p className="text-sm text-[var(--landing-text-secondary)] leading-relaxed">
+              {t("landing.how_it_works.level2_desc")}
+            </p>
+          </div>
+        </div>
+
+        <div className="flex md:hidden items-center justify-center my-2">
+          <ArrowRight size={18} className="text-[var(--landing-text-muted)] rotate-90" />
         </div>
       </div>
     </section>

@@ -1,17 +1,10 @@
 import { prisma } from "@/lib/prisma"
-import { getServerLocale } from "@/lib/i18n/server"
 import LandingNavbar from "@/components/landing/LandingNavbar"
 import HeroSection from "@/components/landing/HeroSection"
-import ProblemSection from "@/components/landing/ProblemSection"
-import TransformationSection from "@/components/landing/TransformationSection"
-import ProductEcosystem from "@/components/landing/ProductEcosystem"
-import ProductShowcase from "@/components/landing/ProductShowcase"
-import BenefitsSection from "@/components/landing/BenefitsSection"
-import StatsSection from "@/components/landing/StatsSection"
-import TestimonialsSection from "@/components/landing/TestimonialsSection"
-import TrustSection from "@/components/landing/TrustSection"
-import VisionSection from "@/components/landing/VisionSection"
-import FAQSection from "@/components/landing/FAQSection"
+import HowItWorksSection from "@/components/landing/HowItWorksSection"
+import SchoolFeaturesSection from "@/components/landing/SchoolFeaturesSection"
+import StudentVisionSection from "@/components/landing/StudentVisionSection"
+import OriginSection from "@/components/landing/OriginSection"
 import CTASection from "@/components/landing/CTASection"
 import Footer from "@/components/landing/Footer"
 import AnimateOnScroll from "@/components/landing/AnimateOnScroll"
@@ -76,47 +69,23 @@ async function getData(): Promise<{ stats: LandingStats; branding: PlatformBrand
 
 export default async function Home() {
   const { stats, branding, schools } = await getData()
-  const locale = await getServerLocale()
 
   return (
     <div className="min-h-screen bg-[var(--landing-bg)] text-[var(--landing-text-primary)] selection:bg-primary/20 landing-scrollbar pt-16">
       <LandingNavbar branding={branding} />
       <HeroSection branding={branding} schools={schools} stats={stats} />
       <AnimateOnScroll>
-        <ProblemSection />
+        <HowItWorksSection />
       </AnimateOnScroll>
-      {/* <AnimateOnScroll>
-        <StatsSection
-          schools={stats.schools}
-          students={stats.students}
-          teachers={stats.teachers}
-          classes={stats.classes}
-        />
-      </AnimateOnScroll> */}
       <AnimateOnScroll>
-        <TransformationSection />
+        <SchoolFeaturesSection />
       </AnimateOnScroll>
-      {/* <AnimateOnScroll>
-        <ProductShowcase />
-      </AnimateOnScroll> */}
-      {/* <AnimateOnScroll>
-        <ProductEcosystem />
-      </AnimateOnScroll> */}
-      {/* <AnimateOnScroll>
-        <BenefitsSection />
-      </AnimateOnScroll> */}
-      {/* <AnimateOnScroll>
-        <TestimonialsSection />
-      </AnimateOnScroll> */}
-      {/* <AnimateOnScroll>
-        <TrustSection />
-      </AnimateOnScroll> */}
       <AnimateOnScroll>
-        <VisionSection />
+        <StudentVisionSection />
       </AnimateOnScroll>
-      {/* <AnimateOnScroll>
-        <FAQSection />
-      </AnimateOnScroll> */}
+      <AnimateOnScroll>
+        <OriginSection />
+      </AnimateOnScroll>
       <CTASection />
       <Footer />
     </div>
