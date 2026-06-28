@@ -9,75 +9,74 @@ datasource db {
 }
 
 model School {
-  id                String                 @id @default(cuid())
-  name              String
-  slug              String                 @unique
-  nif               String?
-  email             String                 @unique
-  phone             String
-  address           String
-  city              String
-  provincia         String
-  logo              String?
-  primaryColor      String?
-  secondaryColor    String?
-  slogan            String?
-  contactEmail      String?
-  socialFacebook    String?
-  socialInstagram   String?
-  socialWhatsapp    String?
-  loginMessage      String?
-  footerText        String?
-  features          Json?
-  status            SchoolStatus           @default(pendente)
-  rejectReason      String?
-  // Theme settings
-  themePreset       String?                @default("moderno")
-  fontFamily        String?                @default("Inter")
-  fontSize          String?                @default("base")
-  fontWeight        String?                @default("normal")
-  borderRadius      String?                @default("lg")
-  shadowSize        String?                @default("md")
-  spacing           String?                @default("normal")
-  cardStyle         String?                @default("default")
-  buttonStyle       String?                @default("default")
-  layoutDensity     String?                @default("comfortable")
-  createdAt         DateTime               @default(now())
-  updatedAt         DateTime               @updatedAt
-  academicHistories AcademicHistory[]
-  academicYears     AcademicYear[]
-  adminPermissions  AdminPermission[]
-  announcements     Announcement[]
-  applications      Application[]
-  assignments       Assignment[]
-  submissions       AssignmentSubmission[]
-  attendances       Attendance[]
-  classes           Class[]
-  courses           Course[]
-  cycleCertificates CycleCertificate[]
-  enrollments       Enrollment[]
-  exams             Exam[]
-  gradingConfigs    GradingConfig[]
-  importJobs        ImportJob[]
-  lessons           Lesson[]
-  messages          Message[]
-  notifications     Notification[]
-  parents           Parent[]
-  results           Result[]
-  schoolClasses     SchoolClass[]
-  schoolCourses     SchoolCourse[]
-  schoolSubjects    SchoolSubject[]
-  students          Student[]
-  subjects          Subject[]
-  supportTickets    SupportTicket[]
-  teachers                Teacher[]
-  users                   User[]
+  id                      String                   @id @default(cuid())
+  name                    String
+  slug                    String                   @unique
+  nif                     String?
+  email                   String                   @unique
+  phone                   String
+  address                 String
+  city                    String
+  provincia               String
+  logo                    String?
+  primaryColor            String?
+  secondaryColor          String?
+  slogan                  String?
+  contactEmail            String?
+  socialFacebook          String?
+  socialInstagram         String?
+  socialWhatsapp          String?
+  loginMessage            String?
+  footerText              String?
+  features                Json?
+  status                  SchoolStatus             @default(pendente)
+  rejectReason            String?
+  createdAt               DateTime                 @default(now())
+  updatedAt               DateTime                 @updatedAt
+  themePreset             String?                  @default("moderno")
+  fontFamily              String?                  @default("Inter")
+  fontSize                String?                  @default("base")
+  fontWeight              String?                  @default("normal")
+  borderRadius            String?                  @default("lg")
+  shadowSize              String?                  @default("md")
+  spacing                 String?                  @default("normal")
+  cardStyle               String?                  @default("default")
+  buttonStyle             String?                  @default("default")
+  layoutDensity           String?                  @default("comfortable")
   academicHealthSnapshots AcademicHealthSnapshot[]
-  teacherAttendances      TeacherAttendance[]
-  justifications          Justification[]
-  employees               Employee[]
-  staffAttendances        StaffAttendance[]
+  academicHistories       AcademicHistory[]
+  academicYears           AcademicYear[]
+  adminPermissions        AdminPermission[]
+  announcements           Announcement[]
+  applications            Application[]
+  assignments             Assignment[]
+  submissions             AssignmentSubmission[]
+  attendances             Attendance[]
+  classes                 Class[]
+  courses                 Course[]
+  cycleCertificates       CycleCertificate[]
   documentVerifications   DocumentVerification[]
+  employees               Employee[]
+  enrollments             Enrollment[]
+  exams                   Exam[]
+  gradingConfigs          GradingConfig[]
+  importJobs              ImportJob[]
+  justifications          Justification[]
+  lessons                 Lesson[]
+  messages                Message[]
+  notifications           Notification[]
+  parents                 Parent[]
+  results                 Result[]
+  schoolClasses           SchoolClass[]
+  schoolCourses           SchoolCourse[]
+  schoolSubjects          SchoolSubject[]
+  staffAttendances        StaffAttendance[]
+  students                Student[]
+  subjects                Subject[]
+  supportTickets          SupportTicket[]
+  teachers                Teacher[]
+  teacherAttendances      TeacherAttendance[]
+  users                   User[]
 }
 
 model Application {
@@ -105,52 +104,51 @@ model Application {
 }
 
 model User {
-  id                     String                  @id @default(cuid())
-  name                   String
-  email                  String                  @unique
-  hashedPassword         String?
-  role                   Role                    @default(student)
-  image                  String?
-  isActive               Boolean                 @default(false)
-  provider               String?
-  providerId             String?
-  mustChangePassword     Boolean                 @default(false)
-  profileComplete        Boolean                 @default(true)
-  sessionVersion         Int                     @default(0)
-  emailVerified          Boolean                 @default(false)
-  twoFactorSecret        String?
-  twoFactorEnabled       Boolean                 @default(false)
-  twoFactorVerifiedAt    DateTime?
-  schoolId               String?
-  createdAt              DateTime                @default(now())
-  updatedAt              DateTime                @updatedAt
-  adminPermission        AdminPermission?
-  authoredAnnouncements  Announcement[]          @relation("AuthoredAnnouncements")
-  targetedAnnouncements  Announcement[]          @relation("TargetedAnnouncements")
-  announcementReads      AnnouncementRead[]
-  application            Application?
-  dashboardPreference    DashboardPreference?
-  emailVerificationToken EmailVerificationToken?
-  friendOf               Friend[]                @relation("FriendOf")
-  friends                Friend[]                @relation("UserFriends")
-  importJobs             ImportJob[]             @relation("UserImports")
-  sentMessages           Message[]               @relation("SentMessages")
-  receivedMessages       Message[]               @relation("ReceivedMessages")
-  notifications          Notification[]
-  parent                 Parent?
-  passwordResetTokens    PasswordResetToken[]
-  student                Student?
-  supportTickets         SupportTicket[]         @relation("UserTickets")
-  supportMessages        SupportTicketMessage[]  @relation("UserTicketMessages")
-  teacher                Teacher?
-  school                 School?                 @relation(fields: [schoolId], references: [id])
-  userPreference         UserPreference?
-  conversationsAsParticipant1 Conversation[]     @relation("ConversationParticipant1")
-  conversationsAsParticipant2 Conversation[]     @relation("ConversationParticipant2")
-  chatMessages           ChatMessage[]
-  reviewedJustifications Justification[]
-  employee               Employee?
-
+  id                          String                  @id @default(cuid())
+  name                        String
+  email                       String                  @unique
+  hashedPassword              String?
+  role                        Role                    @default(student)
+  image                       String?
+  isActive                    Boolean                 @default(false)
+  provider                    String?
+  providerId                  String?
+  mustChangePassword          Boolean                 @default(false)
+  profileComplete             Boolean                 @default(true)
+  schoolId                    String?
+  createdAt                   DateTime                @default(now())
+  updatedAt                   DateTime                @updatedAt
+  sessionVersion              Int                     @default(0)
+  emailVerified               Boolean                 @default(false)
+  twoFactorEnabled            Boolean                 @default(false)
+  twoFactorSecret             String?
+  twoFactorVerifiedAt         DateTime?
+  adminPermission             AdminPermission?
+  authoredAnnouncements       Announcement[]          @relation("AuthoredAnnouncements")
+  targetedAnnouncements       Announcement[]          @relation("TargetedAnnouncements")
+  announcementReads           AnnouncementRead[]
+  application                 Application?
+  chatMessages                ChatMessage[]
+  conversationsAsParticipant1 Conversation[]          @relation("ConversationParticipant1")
+  conversationsAsParticipant2 Conversation[]          @relation("ConversationParticipant2")
+  dashboardPreference         DashboardPreference?
+  emailVerificationToken      EmailVerificationToken?
+  employee                    Employee?
+  friendOf                    Friend[]                @relation("FriendOf")
+  friends                     Friend[]                @relation("UserFriends")
+  importJobs                  ImportJob[]             @relation("UserImports")
+  reviewedJustifications      Justification[]
+  sentMessages                Message[]               @relation("SentMessages")
+  receivedMessages            Message[]               @relation("ReceivedMessages")
+  notifications               Notification[]
+  parent                      Parent?
+  passwordResetTokens         PasswordResetToken[]
+  student                     Student?
+  supportTickets              SupportTicket[]         @relation("UserTickets")
+  supportMessages             SupportTicketMessage[]  @relation("UserTicketMessages")
+  teacher                     Teacher?
+  school                      School?                 @relation(fields: [schoolId], references: [id])
+  userPreference              UserPreference?
 }
 
 model PasswordResetToken {
@@ -170,24 +168,24 @@ model EmailVerificationToken {
 }
 
 model Teacher {
-  id              String           @id @default(cuid())
-  name            String
-  email           String           @unique
-  phone           String?
-  address         String?
-  foto            String?
-  userId          String?          @unique
-  schoolId        String
-  createdAt       DateTime         @default(now())
-  updatedAt         DateTime         @updatedAt
-  assignments     Assignment[]
-  exams           Exam[]
-  lessons         Lesson[]
-  school          School           @relation(fields: [schoolId], references: [id], onDelete: Cascade)
-  user            User?            @relation(fields: [userId], references: [id])
-  teacherClasses  TeacherClass[]
-  teacherSubjects TeacherSubject[]
+  id                 String              @id @default(cuid())
+  name               String
+  email              String              @unique
+  phone              String?
+  address            String?
+  foto               String?
+  userId             String?             @unique
+  schoolId           String
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  assignments        Assignment[]
+  exams              Exam[]
+  lessons            Lesson[]
+  school             School              @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  user               User?               @relation(fields: [userId], references: [id])
   teacherAttendances TeacherAttendance[]
+  teacherClasses     TeacherClass[]
+  teacherSubjects    TeacherSubject[]
 }
 
 model Student {
@@ -202,22 +200,22 @@ model Student {
   documentType      String?
   documentNumber    String?
   classId           String?
-  targetAverage     Float?                 @default(14.0)
   userId            String?                @unique
   schoolId          String
   createdAt         DateTime               @default(now())
   updatedAt         DateTime               @updatedAt
+  targetAverage     Float?                 @default(14.0)
   academicHistories AcademicHistory[]
   submissions       AssignmentSubmission[]
   attendances       Attendance[]
   cycleCertificates CycleCertificate[]
   enrollments       Enrollment[]
+  justifications    Justification[]
   results           Result[]
   class             Class?                 @relation(fields: [classId], references: [id])
   school            School                 @relation(fields: [schoolId], references: [id], onDelete: Cascade)
   user              User?                  @relation(fields: [userId], references: [id])
   parents           Parent[]               @relation("ParentStudents")
-  justifications    Justification[]
 }
 
 model Parent {
@@ -326,7 +324,7 @@ model TeacherClass {
 }
 
 model Lesson {
-  id             String        @id @default(cuid())
+  id             String         @id @default(cuid())
   day            String
   startTime      String
   endTime        String
@@ -337,14 +335,14 @@ model Lesson {
   teacherId      String
   academicYearId String?
   schoolId       String
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @default(now()) @updatedAt
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @default(now()) @updatedAt
   attendances    Attendance[]
-  academicYear   AcademicYear? @relation(fields: [academicYearId], references: [id])
-  class          Class         @relation(fields: [classId], references: [id], onDelete: Cascade)
-  school         School        @relation(fields: [schoolId], references: [id], onDelete: Cascade)
-  subject        Subject       @relation(fields: [subjectId], references: [id], onDelete: Cascade)
-  teacher        Teacher       @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  academicYear   AcademicYear?  @relation(fields: [academicYearId], references: [id])
+  class          Class          @relation(fields: [classId], references: [id], onDelete: Cascade)
+  school         School         @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  subject        Subject        @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  teacher        Teacher        @relation(fields: [teacherId], references: [id], onDelete: Cascade)
   lessonRecords  LessonRecord[]
 }
 
@@ -392,8 +390,6 @@ model Result {
   score           Float
   type            String
   date            DateTime
-  weight          Float?        @default(1)
-  observations    String?
   trimester       Trimester?
   academicYear    String?
   academicYearId  String?
@@ -402,32 +398,34 @@ model Result {
   examId          String?
   assignmentId    String?
   schoolId        String
-
-  @@unique([studentId, subjectId, trimester, academicYearId])
+  weight          Float?        @default(1.0)
+  observations    String?
   academicYearRef AcademicYear? @relation(fields: [academicYearId], references: [id])
   assignment      Assignment?   @relation(fields: [assignmentId], references: [id])
   exam            Exam?         @relation(fields: [examId], references: [id])
   school          School        @relation(fields: [schoolId], references: [id], onDelete: Cascade)
   student         Student       @relation(fields: [studentId], references: [id], onDelete: Cascade)
   subject         Subject       @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, subjectId, trimester, academicYearId])
 }
 
 model Attendance {
-  id               String           @id @default(cuid())
-  date             DateTime
-  status           AttendanceStatus
-  studentId        String
-  classId          String
-  lessonId         String?
-  academicYearId   String?
-  schoolId         String
-  justificationId  String?
-  academicYear     AcademicYear?    @relation(fields: [academicYearId], references: [id])
-  class            Class            @relation(fields: [classId], references: [id], onDelete: Cascade)
-  lesson           Lesson?          @relation(fields: [lessonId], references: [id])
-  school           School           @relation(fields: [schoolId], references: [id], onDelete: Cascade)
-  student          Student          @relation(fields: [studentId], references: [id], onDelete: Cascade)
-  justification    Justification?   @relation("JustificationAttendances", fields: [justificationId], references: [id])
+  id              String           @id @default(cuid())
+  date            DateTime
+  status          AttendanceStatus
+  studentId       String
+  classId         String
+  lessonId        String?
+  academicYearId  String?
+  schoolId        String
+  justificationId String?
+  academicYear    AcademicYear?    @relation(fields: [academicYearId], references: [id])
+  class           Class            @relation(fields: [classId], references: [id], onDelete: Cascade)
+  justification   Justification?   @relation("JustificationAttendances", fields: [justificationId], references: [id])
+  lesson          Lesson?          @relation(fields: [lessonId], references: [id])
+  school          School           @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  student         Student          @relation(fields: [studentId], references: [id], onDelete: Cascade)
 
   @@unique([studentId, date, classId, lessonId])
 }
@@ -448,14 +446,14 @@ model Message {
 }
 
 model Conversation {
-  id              String   @id @default(cuid())
-  participant1Id  String
-  participant2Id  String
-  lastMessageAt   DateTime?
-  createdAt       DateTime @default(now())
-  participant1    User     @relation("ConversationParticipant1", fields: [participant1Id], references: [id], onDelete: Cascade)
-  participant2    User     @relation("ConversationParticipant2", fields: [participant2Id], references: [id], onDelete: Cascade)
-  messages        ChatMessage[]
+  id             String        @id @default(cuid())
+  participant1Id String
+  participant2Id String
+  lastMessageAt  DateTime?
+  createdAt      DateTime      @default(now())
+  messages       ChatMessage[]
+  participant1   User          @relation("ConversationParticipant1", fields: [participant1Id], references: [id], onDelete: Cascade)
+  participant2   User          @relation("ConversationParticipant2", fields: [participant2Id], references: [id], onDelete: Cascade)
 
   @@unique([participant1Id, participant2Id])
   @@index([participant1Id])
@@ -463,15 +461,15 @@ model Conversation {
 }
 
 model ChatMessage {
-  id              String       @id @default(cuid())
-  conversationId  String
-  senderId        String
-  text            String
-  deliveredAt     DateTime?
-  readAt          DateTime?
-  createdAt       DateTime     @default(now())
-  conversation    Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
-  sender          User         @relation(fields: [senderId], references: [id], onDelete: Cascade)
+  id             String       @id @default(cuid())
+  conversationId String
+  senderId       String
+  text           String
+  readAt         DateTime?
+  createdAt      DateTime     @default(now())
+  deliveredAt    DateTime?
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender         User         @relation(fields: [senderId], references: [id], onDelete: Cascade)
 
   @@index([conversationId])
   @@index([senderId])
@@ -584,27 +582,27 @@ model SchoolClass {
 }
 
 model AcademicYear {
-  id                String             @id @default(cuid())
-  name              String
-  startDate         DateTime
-  endDate           DateTime
-  isCurrent         Boolean            @default(false)
-  status            AcademicYearStatus @default(aberto)
-  schoolId          String
-  createdAt         DateTime           @default(now())
-  updatedAt         DateTime           @updatedAt
-  academicHistories AcademicHistory[]
-  school            School             @relation(fields: [schoolId], references: [id], onDelete: Cascade)
-  assignments       Assignment[]
-  attendances       Attendance[]
-  classes           Class[]
-  cycleCertificates CycleCertificate[]
-  enrollments       Enrollment[]
-  exams             Exam[]
-  gradingConfigs    GradingConfig[]
+  id                      String                   @id @default(cuid())
+  name                    String
+  startDate               DateTime
+  endDate                 DateTime
+  isCurrent               Boolean                  @default(false)
+  status                  AcademicYearStatus       @default(aberto)
+  schoolId                String
+  createdAt               DateTime                 @default(now())
+  updatedAt               DateTime                 @updatedAt
+  academicHealthSnapshots AcademicHealthSnapshot[]
+  academicHistories       AcademicHistory[]
+  school                  School                   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  assignments             Assignment[]
+  attendances             Attendance[]
+  classes                 Class[]
+  cycleCertificates       CycleCertificate[]
+  enrollments             Enrollment[]
+  exams                   Exam[]
+  gradingConfigs          GradingConfig[]
   lessons                 Lesson[]
   results                 Result[]
-  academicHealthSnapshots AcademicHealthSnapshot[]
   teacherAttendances      TeacherAttendance[]
 
   @@unique([name, schoolId])
@@ -624,12 +622,12 @@ model GlobalGradingConfig {
   roundingMode           RoundingMode    @default(arredondar)
   roundingScale          Int             @default(1)
   recursoAllowed         Boolean         @default(true)
-  honorRollMinGrade      Float           @default(16)
-  honorRollNoAbsences    Boolean         @default(false)
-  honorRollMinAttendance Float?          @default(90)
   active                 Boolean         @default(true)
   createdAt              DateTime        @default(now())
   updatedAt              DateTime        @updatedAt
+  honorRollMinAttendance Float?          @default(90)
+  honorRollMinGrade      Float           @default(16)
+  honorRollNoAbsences    Boolean         @default(false)
   schoolConfigs          GradingConfig[]
 
   @@unique([classGrade, courseId])
@@ -653,11 +651,11 @@ model GradingConfig {
   roundingMode           RoundingMode         @default(arredondar)
   roundingScale          Int                  @default(1)
   recursoAllowed         Boolean              @default(true)
-  honorRollMinGrade      Float                @default(16)
-  honorRollNoAbsences    Boolean              @default(false)
-  honorRollMinAttendance Float?               @default(90)
   createdAt              DateTime             @default(now())
   updatedAt              DateTime             @updatedAt
+  honorRollMinAttendance Float?               @default(90)
+  honorRollMinGrade      Float                @default(16)
+  honorRollNoAbsences    Boolean              @default(false)
   academicYear           AcademicYear?        @relation(fields: [academicYearId], references: [id])
   course                 Course?              @relation(fields: [courseId], references: [id])
   globalGradingConfig    GlobalGradingConfig? @relation(fields: [globalGradingConfigId], references: [id])
@@ -855,7 +853,7 @@ model AcademicHistory {
 }
 
 model AcademicHealthSnapshot {
-  id                       String   @id @default(cuid())
+  id                       String        @id @default(cuid())
   schoolId                 String
   score                    Int
   status                   String
@@ -863,12 +861,12 @@ model AcademicHealthSnapshot {
   attendance               Int
   schoolActivity           Int
   administrativeEfficiency Int
-  snapshotDate             DateTime @default(now())
+  snapshotDate             DateTime      @default(now())
   periodStart              DateTime
   periodEnd                DateTime
   academicYearId           String?
-  school                   School         @relation(fields: [schoolId], references: [id], onDelete: Cascade)
-  academicYear             AcademicYear?  @relation(fields: [academicYearId], references: [id])
+  academicYear             AcademicYear? @relation(fields: [academicYearId], references: [id])
+  school                   School        @relation(fields: [schoolId], references: [id], onDelete: Cascade)
 
   @@index([schoolId, snapshotDate])
 }
@@ -926,6 +924,122 @@ model AuditLog {
   @@index([schoolId])
   @@index([entity, entityId])
   @@index([createdAt])
+}
+
+model TeacherAttendance {
+  id             String        @id @default(cuid())
+  date           DateTime
+  status         String
+  aulasPrevistas Int           @default(1)
+  teacherId      String
+  academicYearId String?
+  schoolId       String
+  academicYear   AcademicYear? @relation(fields: [academicYearId], references: [id])
+  school         School        @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  teacher        Teacher       @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+
+  @@unique([teacherId, date])
+}
+
+model Justification {
+  id                String              @id @default(cuid())
+  studentId         String
+  date              DateTime
+  reason            JustificationReason
+  reasonDescription String?
+  documentUrl       String?
+  status            JustificationStatus @default(pendente)
+  reviewedById      String?
+  reviewedAt        DateTime?
+  reviewNotes       String?
+  schoolId          String
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  attendances       Attendance[]        @relation("JustificationAttendances")
+  reviewedBy        User?               @relation(fields: [reviewedById], references: [id])
+  school            School              @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  student           Student             @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@index([studentId])
+  @@index([status])
+  @@index([schoolId])
+}
+
+model Employee {
+  id          String            @id @default(cuid())
+  name        String
+  email       String?           @unique
+  phone       String?
+  address     String?
+  foto        String?
+  role        EmployeeRole
+  department  String?
+  userId      String?           @unique
+  schoolId    String
+  isActive    Boolean           @default(true)
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  school      School            @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  user        User?             @relation(fields: [userId], references: [id])
+  attendances StaffAttendance[]
+
+  @@index([schoolId])
+}
+
+model StaffAttendance {
+  id            String    @id @default(cuid())
+  date          DateTime
+  entryTime     DateTime?
+  exitTime      DateTime?
+  status        String
+  justification String?
+  employeeId    String
+  schoolId      String
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  employee      Employee  @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  school        School    @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  @@unique([employeeId, date])
+  @@index([schoolId])
+}
+
+model DocumentVerification {
+  id           String       @id @default(cuid())
+  code         String       @unique
+  documentType DocumentType
+  studentName  String
+  studentId    String
+  className    String?
+  courseName   String?
+  academicYear String
+  schoolId     String
+  metadata     Json?
+  issuedAt     DateTime     @default(now())
+  expiresAt    DateTime?
+  verifiedAt   DateTime?
+  verifiedByIp String?
+  serialNumber Int
+  school       School       @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  @@unique([schoolId, serialNumber])
+  @@index([code])
+}
+
+model LessonRecord {
+  id          String             @id @default(cuid())
+  lessonId    String
+  date        DateTime
+  status      LessonRecordStatus @default(PENDING)
+  notes       String?
+  adminNotes  String?
+  recordedBy  String
+  validatedBy String?
+  recordedAt  DateTime           @default(now())
+  validatedAt DateTime?
+  lesson      Lesson             @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@unique([lessonId, date])
 }
 
 enum Role {
@@ -1045,22 +1159,6 @@ enum EnrollmentStatus {
   em_recurso
 }
 
-model TeacherAttendance {
-  id             String           @id @default(cuid())
-  date           DateTime
-  status         String           // 'leccionada', 'cancelada', 'atrasada', 'ausente'
-  aulasPrevistas Int              @default(1)
-  teacherId      String
-  academicYearId String?
-  schoolId       String
-  
-  teacher        Teacher          @relation(fields: [teacherId], references: [id], onDelete: Cascade)
-  academicYear   AcademicYear?    @relation(fields: [academicYearId], references: [id])
-  school         School           @relation(fields: [schoolId], references: [id], onDelete: Cascade)
-  
-  @@unique([teacherId, date])
-}
-
 enum JustificationStatus {
   pendente
   em_analise
@@ -1079,31 +1177,6 @@ enum JustificationReason {
   outro
 }
 
-model Justification {
-  id                String              @id @default(cuid())
-  studentId         String
-  date              DateTime
-  reason            JustificationReason
-  reasonDescription String?
-  documentUrl       String?
-  status            JustificationStatus @default(pendente)
-  reviewedById      String?
-  reviewedAt        DateTime?
-  reviewNotes       String?
-  schoolId          String
-  createdAt         DateTime            @default(now())
-  updatedAt         DateTime            @updatedAt
-
-  student           Student             @relation(fields: [studentId], references: [id], onDelete: Cascade)
-  reviewedBy        User?               @relation(fields: [reviewedById], references: [id])
-  school            School              @relation(fields: [schoolId], references: [id], onDelete: Cascade)
-  attendances       Attendance[]        @relation("JustificationAttendances")
-
-  @@index([studentId])
-  @@index([status])
-  @@index([schoolId])
-}
-
 enum EmployeeRole {
   secretaria
   tesouraria
@@ -1112,47 +1185,6 @@ enum EmployeeRole {
   coordenacao
   direcao
   outros
-}
-
-model Employee {
-  id              String             @id @default(cuid())
-  name            String
-  email           String?            @unique
-  phone           String?
-  address         String?
-  foto            String?
-  role            EmployeeRole
-  department      String?
-  userId          String?            @unique
-  schoolId        String
-  isActive        Boolean            @default(true)
-  createdAt       DateTime           @default(now())
-  updatedAt       DateTime           @updatedAt
-
-  user            User?              @relation(fields: [userId], references: [id])
-  school          School             @relation(fields: [schoolId], references: [id], onDelete: Cascade)
-  attendances     StaffAttendance[]
-
-  @@index([schoolId])
-}
-
-model StaffAttendance {
-  id             String           @id @default(cuid())
-  date           DateTime
-  entryTime      DateTime?
-  exitTime       DateTime?
-  status         String           // 'presente', 'ausente', 'atrasado', 'falta_justificada', 'dispensa'
-  justification  String?
-  employeeId     String
-  schoolId       String
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
-
-  employee       Employee         @relation(fields: [employeeId], references: [id], onDelete: Cascade)
-  school         School           @relation(fields: [schoolId], references: [id], onDelete: Cascade)
-
-  @@unique([employeeId, date])
-  @@index([schoolId])
 }
 
 enum DocumentType {
@@ -1164,51 +1196,11 @@ enum DocumentType {
   certificado_conclusao
 }
 
-model DocumentVerification {
-  id              String       @id @default(cuid())
-  code            String       @unique
-  documentType    DocumentType
-  studentName     String
-  studentId       String
-  className       String?
-  courseName      String?
-  academicYear    String
-  schoolId        String
-  metadata        Json?
-  issuedAt        DateTime     @default(now())
-  expiresAt       DateTime?
-  verifiedAt      DateTime?
-  verifiedByIp    String?
-  serialNumber    Int
-
-  school          School       @relation(fields: [schoolId], references: [id], onDelete: Cascade)
-
-  @@unique([schoolId, serialNumber])
-  @@index([code])
-}
-
-// Registo de execução de uma aula prevista
-model LessonRecord {
-  id          String             @id @default(cuid())
-  lessonId    String
-  lesson      Lesson             @relation(fields: [lessonId], references: [id], onDelete: Cascade)
-  date        DateTime           // data real em que a aula deveria ter ocorrido
-  status      LessonRecordStatus @default(PENDING)
-  notes       String?            // observação do professor
-  adminNotes  String?            // observação do admin na validação
-  recordedBy  String             // userId do professor
-  validatedBy String?            // userId do admin
-  recordedAt  DateTime           @default(now())
-  validatedAt DateTime?
-
-  @@unique([lessonId, date])     // uma aula numa data = um registo
-}
-
 enum LessonRecordStatus {
-  AGENDADA            // aula agendada no horário, ainda não registada
-  PENDING             // professor registou, aguarda validação
-  REALIZADA           // admin validou (aula confirmada)
-  FALTOU              // admin marcou como falta
-  REJEITADA           // admin rejeitou o registo com justificação
-  SUBSTITUIDA         // foi substituída por outro professor
+  PENDING
+  REALIZADA
+  FALTOU
+  SUBSTITUIDA
+  AGENDADA
+  REJEITADA
 }
