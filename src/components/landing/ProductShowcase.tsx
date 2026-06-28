@@ -4,8 +4,6 @@ import Image from "next/image"
 import { useTranslation } from "@/lib/i18n"
 import { BarChart3, Users, TrendingUp, Clock, ShieldCheck, Zap } from "lucide-react"
 
-type Props = { locale?: string }
-
 const highlights = [
   {
     icon: BarChart3,
@@ -29,8 +27,8 @@ const highlights = [
   },
 ]
 
-export default function ProductShowcase({ locale = "pt" }: Props) {
-  const { t } = useTranslation(locale)
+export default function ProductShowcase() {
+  const { t } = useTranslation()
 
   return (
     <section

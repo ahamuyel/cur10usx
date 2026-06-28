@@ -2,15 +2,13 @@
 
 import { useTranslation } from "@/lib/i18n"
 
-type Props = { locale?: string }
-
 type PointData = {
   title: string
   description: string
 }
 
-export default function VisionSection({ locale = "pt" }: Props) {
-  const { t, tv } = useTranslation(locale)
+export default function VisionSection() {
+  const { t, tv } = useTranslation()
 
   const points = tv("landing.vision.points") as PointData[]
 

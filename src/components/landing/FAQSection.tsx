@@ -4,15 +4,13 @@ import { useState } from "react"
 import { ChevronDown } from "lucide-react"
 import { useTranslation } from "@/lib/i18n"
 
-type Props = { locale?: string }
-
 type FAQItem = {
   q: string
   a: string
 }
 
-export default function FAQSection({ locale = "pt" }: Props) {
-  const { t, tv } = useTranslation(locale)
+export default function FAQSection() {
+  const { t, tv } = useTranslation()
   const [open, setOpen] = useState<number | null>(null)
 
   const items = tv("landing.faq.items") as FAQItem[]

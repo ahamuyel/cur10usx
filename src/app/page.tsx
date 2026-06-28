@@ -80,10 +80,10 @@ export default async function Home() {
 
   return (
     <div className="min-h-screen bg-[var(--landing-bg)] text-[var(--landing-text-primary)] selection:bg-primary/20 landing-scrollbar pt-16">
-      <LandingNavbar branding={branding} locale={locale} />
-      <HeroSection branding={branding} schools={schools} stats={stats} locale={locale} />
+      <LandingNavbar branding={branding} />
+      <HeroSection branding={branding} schools={schools} stats={stats} />
       <AnimateOnScroll>
-        <ProblemSection locale={locale} />
+        <ProblemSection />
       </AnimateOnScroll>
       {/* <AnimateOnScroll>
         <StatsSection
@@ -94,31 +94,31 @@ export default async function Home() {
         />
       </AnimateOnScroll> */}
       <AnimateOnScroll>
-        <TransformationSection locale={locale} />
+        <TransformationSection />
       </AnimateOnScroll>
       {/* <AnimateOnScroll>
-        <ProductShowcase locale={locale} />
+        <ProductShowcase />
       </AnimateOnScroll> */}
       {/* <AnimateOnScroll>
-        <ProductEcosystem locale={locale} />
+        <ProductEcosystem />
       </AnimateOnScroll> */}
       {/* <AnimateOnScroll>
-        <BenefitsSection locale={locale} />
+        <BenefitsSection />
       </AnimateOnScroll> */}
       {/* <AnimateOnScroll>
-        <TestimonialsSection locale={locale} />
+        <TestimonialsSection />
       </AnimateOnScroll> */}
       {/* <AnimateOnScroll>
-        <TrustSection locale={locale} />
+        <TrustSection />
       </AnimateOnScroll> */}
       <AnimateOnScroll>
-        <VisionSection locale={locale} />
+        <VisionSection />
       </AnimateOnScroll>
       {/* <AnimateOnScroll>
-        <FAQSection locale={locale} />
+        <FAQSection />
       </AnimateOnScroll> */}
-      <CTASection locale={locale} />
-      <Footer locale={locale} />
+      <CTASection />
+      <Footer />
     </div>
   )
 }

@@ -2,7 +2,7 @@
 
 import { useCallback, useState, useRef, useEffect } from "react"
 import { Globe, Check, ChevronDown, Sun, Moon } from "lucide-react"
-import { useSetLocale } from "@/provider/locale"
+import { useLocale, useSetLocale } from "@/provider/locale"
 
 const LOCALES = [
   { code: "pt", label: "Português", short: "PT" },
@@ -24,7 +24,9 @@ export default function LocaleSwitcher({
   const [isOpen, setIsOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
+  const contextLocale = useLocale()
   const setLocale = useSetLocale()
+  const activeLocaleCode = contextLocale || currentLocale
 
   const switchLocale = useCallback((code: string) => {
     setLocale(code)
@@ -48,7 +50,7 @@ export default function LocaleSwitcher({
     return () => document.removeEventListener("keydown", handleKeyDown)
   }, [])
 
-  const activeLocale = LOCALES.find((loc) => loc.code === currentLocale) || LOCALES[0]
+  const activeLocale = LOCALES.find((loc) => loc.code === activeLocaleCode) || LOCALES[0]
 
   return (
     <div className="relative" ref={dropdownRef}>
@@ -106,7 +108,7 @@ export default function LocaleSwitcher({
         </p>
         
         {LOCALES.map((loc) => {
-          const isActive = currentLocale === loc.code
+          const isActive = activeLocaleCode === loc.code
           return (
             <button
               key={loc.code}

@@ -4,10 +4,8 @@ import { useState } from "react"
 import { motion, AnimatePresence } from "motion/react"
 import { useTranslation } from "@/lib/i18n"
 
-type Props = { locale?: string }
-
-export default function TransformationSection({ locale = "pt" }: Props) {
-  const { t, tv } = useTranslation(locale)
+export default function TransformationSection() {
+  const { t, tv } = useTranslation()
   const [activeTab, setActiveTab] = useState<"legacy" | "curious">("curious")
 
   const steps = tv("landing.transformation.steps") as {
