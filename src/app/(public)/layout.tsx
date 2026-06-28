@@ -1,9 +1,7 @@
 import Link from "next/link"
 import { getPlatformConfig } from "@/lib/platform-config"
 import Image from "next/image"
-import { getServerLocale } from "@/lib/i18n/server"
-import { t } from "@/lib/i18n"
-import LocaleSwitcher from "@/components/landing/LocaleSwitcher"
+import PublicNav from "@/components/landing/PublicNav"
 
 async function PublicBrand() {
   let name = "Cur10usX"
@@ -23,12 +21,11 @@ async function PublicBrand() {
   return <span className="text-lg font-bold tracking-tight">{name}</span>
 }
 
-export default async function PublicLayout({
+export default function PublicLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  const locale = await getServerLocale()
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-black text-zinc-900 dark:text-zinc-100">
       <header className="sticky top-0 z-50 backdrop-blur-md bg-zinc-50/80 dark:bg-black/80 border-b border-zinc-200 dark:border-zinc-800">
@@ -50,21 +47,7 @@ export default async function PublicLayout({
             />
             <PublicBrand />
           </Link>
-          <div className="flex items-center gap-3">
-            <LocaleSwitcher currentLocale={locale} />
-            <Link
-              href="/signin"
-              className="hidden sm:inline-flex text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition"
-            >
-              {t(locale, "auth.login" as any)}
-            </Link>
-            <Link
-              href="/signup"
-              className="px-4 py-2 text-sm rounded-lg bg-primary text-white font-medium hover:bg-primary-700 transition shadow-sm"
-            >
-              {t(locale, "auth.signup" as any)}
-            </Link>
-          </div>
+          <PublicNav />
         </div>
       </header>
       <main className="max-w-3xl mx-auto px-6 py-12">{children}</main>

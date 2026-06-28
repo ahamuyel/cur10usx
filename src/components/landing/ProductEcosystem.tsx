@@ -3,8 +3,6 @@
 import { useTranslation } from "@/lib/i18n"
 import { Users, GraduationCap, ClipboardCheck, BarChart3, MessageSquare, FileText, Calendar, BookOpen, Building2, ShieldCheck } from "lucide-react"
 
-type Props = { locale?: string }
-
 const modules = [
   {
     icon: Users,
@@ -75,8 +73,8 @@ const profiles = [
   { name: "Pais", color: "bg-rose-500", x: "left-[85%]", y: "top-0" },
 ]
 
-export default function ProductEcosystem({ locale = "pt" }: Props) {
-  const { t } = useTranslation(locale)
+export default function ProductEcosystem() {
+  const { t } = useTranslation()
 
   return (
     <section

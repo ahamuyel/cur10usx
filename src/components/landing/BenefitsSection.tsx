@@ -3,8 +3,6 @@
 import { useTranslation } from "@/lib/i18n"
 import { Building2, GraduationCap, Users, Heart } from "lucide-react"
 
-type Props = { locale?: string }
-
 const personas = [
   {
     icon: Building2,
@@ -60,8 +58,8 @@ const personas = [
   },
 ]
 
-export default function BenefitsSection({ locale = "pt" }: Props) {
-  const { t } = useTranslation(locale)
+export default function BenefitsSection() {
+  const { t } = useTranslation()
 
   return (
     <section

@@ -139,7 +139,7 @@ export default function SignUpPage() {
       <AuthCard>
         <div className="p-6 sm:p-8">
           <AuthHeader
-            icon={UserPlus}
+            // icon={UserPlus}
             title={tUI("Criar conta")}
             subtitle={tUI("Junte-se à plataforma de gestão escolar Cur10usX")}
           />

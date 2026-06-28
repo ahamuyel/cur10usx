@@ -11,9 +11,11 @@ type DeepPartial<T> = T extends object ? {
 
 const translations: Record<string, DeepPartial<typeof pt>> = { pt, en, es, fr }
 
-type NestedKeyOf<T> = T extends object
-  ? { [K in keyof T & string]: T[K] extends object ? `${K}.${NestedKeyOf<T[K]>}` : K }[keyof T & string]
-  : never
+type NestedKeyOf<T> = T extends (infer U)[]
+  ? `${number}.${NestedKeyOf<U>}`
+  : T extends object
+    ? { [K in keyof T & string]: T[K] extends object ? `${K}.${NestedKeyOf<T[K]>}` : K }[keyof T & string]
+    : never
 
 export type TranslationKey = NestedKeyOf<typeof pt> | (string & {})
 
@@ -47,19 +49,19 @@ export function tv(locale: string, key: TranslationKey): unknown {
   return value
 }
 
-export function useTranslation(locale?: string) {
+export function useTranslation() {
   const context = useContext(LocaleContext)
-  const activeLocale = locale || context?.locale || "pt"
+  const locale = context?.locale || "pt"
 
-  const t_fn = useCallback((key: TranslationKey) => t(activeLocale, key), [activeLocale])
-  const tv_fn = useCallback((key: TranslationKey) => tv(activeLocale, key), [activeLocale])
-  const tUI_fn = useCallback((text: string) => tUI(activeLocale, text), [activeLocale])
+  const t_fn = useCallback((key: TranslationKey) => t(locale, key), [locale])
+  const tv_fn = useCallback((key: TranslationKey) => tv(locale, key), [locale])
+  const tUI_fn = useCallback((text: string) => tUI(locale, text), [locale])
 
   return {
     t: t_fn,
     tv: tv_fn,
     tUI: tUI_fn,
-    locale: activeLocale,
+    locale,
   }
 }
 

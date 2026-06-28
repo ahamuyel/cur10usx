@@ -12,10 +12,8 @@ type ProblemItem = {
 
 const icons = [FileSpreadsheet, MessageSquare, FileText, SearchX]
 
-type Props = { locale?: string }
-
-export default function ProblemSection({ locale = "pt" }: Props) {
-  const { t, tv } = useTranslation(locale)
+export default function ProblemSection() {
+  const { t, tv } = useTranslation()
   const problems = tv("landing.problem.items") as ProblemItem[]
 
   return (

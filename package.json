@@ -12,7 +12,8 @@
     "test:watch": "vitest",
     "db:migrate": "npx prisma migrate dev",
     "db:seed": "npx prisma db seed",
-    "db:studio": "npx prisma studio"
+    "db:studio": "npx prisma studio",
+    "validate:i18n": "tsx scripts/validate-translations.ts"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

@@ -2,15 +2,13 @@
 
 import { useTranslation } from "@/lib/i18n"
 
-type Props = { locale?: string }
-
 type PointData = {
   title: string
   desc: string
 }
 
-export default function TrustSection({ locale = "pt" }: Props) {
-  const { t, tv } = useTranslation(locale)
+export default function TrustSection() {
+  const { t, tv } = useTranslation()
 
   const points = tv("landing.trust.points") as PointData[]
 

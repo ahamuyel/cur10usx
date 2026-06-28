@@ -4,13 +4,9 @@ import { useRouter } from "next/navigation"
 import { useTranslation } from "@/lib/i18n"
 import { ArrowRight, ShieldCheck, Clock, Headphones } from "lucide-react"
 
-type Props = {
-  locale?: string
-}
-
-export default function CTASection({ locale = "pt" }: Props) {
+export default function CTASection() {
   const router = useRouter()
-  const { t } = useTranslation(locale)
+  const { t } = useTranslation()
 
   return (
     <section className="py-20 md:py-32 bg-[var(--landing-bg-dark)] relative overflow-hidden">
