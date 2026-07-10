@@ -29,8 +29,8 @@ export function TheInfiniteGrid({ children, className }: TheInfiniteGridProps) {
   const gridOffsetX = useMotionValue(0)
   const gridOffsetY = useMotionValue(0)
 
-  const speedX = 0.5
-  const speedY = 0.5
+  const speedX = 0.3
+  const speedY = 0.3
 
   useAnimationFrame(() => {
     const currentX = gridOffsetX.get()
@@ -39,7 +39,7 @@ export function TheInfiniteGrid({ children, className }: TheInfiniteGridProps) {
     gridOffsetY.set((currentY + speedY) % 40)
   })
 
-  const maskImage = useMotionTemplate`radial-gradient(300px circle at ${mouseX}px ${mouseY}px, black, transparent)`
+  const maskImage = useMotionTemplate`radial-gradient(400px circle at ${mouseX}px ${mouseY}px, black, transparent)`
 
   return (
     <div
@@ -50,20 +50,19 @@ export function TheInfiniteGrid({ children, className }: TheInfiniteGridProps) {
         className
       )}
     >
-      <div className="absolute inset-0 z-0 opacity-[0.05]">
+      <div className="absolute inset-0 z-0 opacity-[0.03]">
         <GridPattern offsetX={gridOffsetX} offsetY={gridOffsetY} />
       </div>
       <motion.div
-        className="absolute inset-0 z-0 opacity-40"
+        className="absolute inset-0 z-0 opacity-30"
         style={{ maskImage, WebkitMaskImage: maskImage }}
       >
         <GridPattern offsetX={gridOffsetX} offsetY={gridOffsetY} />
       </motion.div>
 
       <div className="absolute inset-0 pointer-events-none z-0">
-        <div className="absolute right-[-20%] top-[-20%] w-[40%] h-[40%] rounded-full bg-orange-500/40 dark:bg-orange-600/20 blur-[120px]" />
-        <div className="absolute right-[10%] top-[-10%] w-[20%] h-[20%] rounded-full bg-primary/30 blur-[100px]" />
-        <div className="absolute left-[-10%] bottom-[-20%] w-[40%] h-[40%] rounded-full bg-blue-500/40 dark:bg-blue-600/20 blur-[120px]" />
+        <div className="absolute right-[-10%] top-[-10%] w-[30%] h-[30%] rounded-full bg-primary/15 dark:bg-primary/10 blur-[120px]" />
+        <div className="absolute left-[-5%] bottom-[-15%] w-[35%] h-[35%] rounded-full bg-primary/10 dark:bg-primary/8 blur-[140px]" />
       </div>
 
       <div className="relative z-10 w-full">
@@ -89,7 +88,7 @@ const GridPattern = ({ offsetX, offsetY }: { offsetX: any; offsetY: any }) => {
             d="M 40 0 L 0 0 0 40"
             fill="none"
             stroke="currentColor"
-            strokeWidth="1"
+            strokeWidth="0.5"
             className="text-muted-foreground"
           />
         </motion.pattern>

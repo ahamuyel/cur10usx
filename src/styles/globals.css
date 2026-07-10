@@ -106,12 +106,12 @@
 
 :root {
   --color-background: #ffffff;
-  --color-foreground: #09090b;
+  --color-foreground: #0a0a0f;
 
-  /* School brand colors */
-  --school-primary: #6366f1;
+  /* School brand colors — refined deep indigo palette for institutional trust */
+  --school-primary: #312e81;
   --school-primary-light: #eef2ff;
-  --school-primary-dark: #312e81;
+  --school-primary-dark: #1e1b4b;
   --school-primary-50: #eef2ff;
   --school-primary-100: #e0e7ff;
   --school-primary-200: #c7d2fe;
@@ -123,8 +123,8 @@
   --school-primary-800: #3730a3;
   --school-primary-900: #312e81;
   --school-primary-950: #1e1b4b;
-  --school-secondary: #06B6D4;
-  --school-secondary-light: hsl(186, 94%, 95%);
+  --school-secondary: #575098;
+  --school-secondary-light: hsl(248, 25%, 95%);
 
   /* Typography */
   --school-font-family: 'Inter', sans-serif;
@@ -169,11 +169,11 @@
   --color-foreground: #fafafa;
   --school-card-bg: #09090b;
   --school-card-border: 1px solid #27272a;
-  --school-primary-light: #1e1b4b;
-  --school-primary-50: #1e1b4b;
+  --school-primary-light: #09090b;
+  --school-primary-50: #0a0a0f;
   --school-primary-100: #1e1b4b;
-  --school-primary-200: #312e81;
-  --school-primary-950: #eef2ff;
+  --school-primary-200: #2c2875;
+  --school-primary-950: #e0e7ff;
 }
 
 html, body {
@@ -302,6 +302,10 @@ body {
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
+.safe-area-top {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
 /* Calendar */
 .react-calendar__month-view__weekdays {
   border-bottom: none !important;
@@ -394,35 +398,46 @@ html, body {
   height: 400px;
   border-radius: 50%;
   filter: blur(140px);
-  opacity: 0.15;
+  opacity: 0.1;
   pointer-events: none;
-  background: radial-gradient(circle, var(--landing-orb-accent) 0%, transparent 70%);
+  background: radial-gradient(circle at center, var(--landing-orb-accent) 0%, transparent 70%);
 }
 
 @utility orb-green {
-  background: radial-gradient(circle, var(--landing-orb-green) 0%, transparent 70%);
+  background: radial-gradient(circle at center, var(--landing-orb-green) 0%, transparent 70%);
+}
+
+@utility orb-soft {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  filter: blur(160px);
+  opacity: 0.06;
+  pointer-events: none;
+  background: radial-gradient(circle at center, var(--school-primary-400) 0%, transparent 70%);
 }
 
 :root {
   --landing-bg: #ffffff;
-  --landing-bg-secondary: #fafafa;
-  --landing-bg-tertiary: #f4f4f5;
+  --landing-bg-secondary: #f8f8fa;
+  --landing-bg-tertiary: #f2f2f5;
   --landing-bg-elevated: #ffffff;
-  --landing-text-primary: #09090b;
+  --landing-text-primary: #0a0a0f;
   --landing-text-secondary: #52525b;
   --landing-text-muted: #71717a;
   --landing-text-dim: #a1a1aa;
   --landing-border: #e4e4e7;
   --landing-border-subtle: #f4f4f5;
   --landing-border-strong: #d4d4d8;
-  --landing-orb-accent: #818cf8;
-  --landing-orb-green: #10b981;
-  --landing-grid: rgba(0, 0, 0, 0.06);
-  --landing-grid-fine: rgba(0, 0, 0, 0.03);
-  --landing-overlay: rgba(0, 0, 0, 0.03);
+  --landing-orb-accent: #575098;
+  --landing-orb-green: #059669;
+  --landing-grid: rgba(0, 0, 0, 0.04);
+  --landing-grid-fine: rgba(0, 0, 0, 0.02);
+  --landing-overlay: rgba(49, 46, 129, 0.04);
   --landing-status-dot: #22c55e;
-  --landing-bg-dark: #09090b;
-  --landing-bg-dark-elevated: #111113;
+  --landing-bg-dark: #0a0a0f;
+  --landing-bg-dark-elevated: #111115;
   --landing-text-dark-primary: #fafafa;
   --landing-text-dark-secondary: #a1a1aa;
   --landing-border-dark: #27272a;
@@ -430,9 +445,9 @@ html, body {
 
 .dark {
   --landing-bg: #000000;
-  --landing-bg-secondary: #050505;
-  --landing-bg-tertiary: #09090b;
-  --landing-bg-elevated: #09090b;
+  --landing-bg-secondary: #050508;
+  --landing-bg-tertiary: #0a0a0f;
+  --landing-bg-elevated: #0a0a0f;
   --landing-text-primary: #fafafa;
   --landing-text-secondary: #a1a1aa;
   --landing-text-muted: #71717a;
@@ -440,14 +455,14 @@ html, body {
   --landing-border: #27272a;
   --landing-border-subtle: #18181b;
   --landing-border-strong: #3f3f46;
-  --landing-orb-accent: #818cf8;
-  --landing-orb-green: #10b981;
-  --landing-grid: rgba(255, 255, 255, 0.04);
-  --landing-grid-fine: rgba(255, 255, 255, 0.02);
-  --landing-overlay: rgba(255, 255, 255, 0.03);
+  --landing-orb-accent: #575098;
+  --landing-orb-green: #059669;
+  --landing-grid: rgba(255, 255, 255, 0.03);
+  --landing-grid-fine: rgba(255, 255, 255, 0.015);
+  --landing-overlay: rgba(87, 80, 152, 0.08);
   --landing-status-dot: #22c55e;
-  --landing-bg-dark: #09090b;
-  --landing-bg-dark-elevated: #111113;
+  --landing-bg-dark: #0a0a0f;
+  --landing-bg-dark-elevated: #111115;
   --landing-text-dark-primary: #fafafa;
   --landing-text-dark-secondary: #a1a1aa;
   --landing-border-dark: #27272a;

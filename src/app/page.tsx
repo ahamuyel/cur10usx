@@ -5,13 +5,9 @@ import HeroSection from "@/components/landing/HeroSection"
 import ProblemSection from "@/components/landing/ProblemSection"
 import TransformationSection from "@/components/landing/TransformationSection"
 import ProductEcosystem from "@/components/landing/ProductEcosystem"
-import ProductShowcase from "@/components/landing/ProductShowcase"
 import BenefitsSection from "@/components/landing/BenefitsSection"
-import StatsSection from "@/components/landing/StatsSection"
-import TestimonialsSection from "@/components/landing/TestimonialsSection"
 import TrustSection from "@/components/landing/TrustSection"
 import VisionSection from "@/components/landing/VisionSection"
-import FAQSection from "@/components/landing/FAQSection"
 import CTASection from "@/components/landing/CTASection"
 import Footer from "@/components/landing/Footer"
 import AnimateOnScroll from "@/components/landing/AnimateOnScroll"
@@ -79,44 +75,27 @@ export default async function Home() {
   const locale = await getServerLocale()
 
   return (
-    <div className="min-h-screen bg-[var(--landing-bg)] text-[var(--landing-text-primary)] selection:bg-primary/20 landing-scrollbar pt-16">
+    <div className="min-h-screen bg-[var(--landing-bg)] text-[var(--landing-text-primary)] selection:bg-primary/20 landing-scrollbar">
       <LandingNavbar branding={branding} />
       <HeroSection branding={branding} schools={schools} stats={stats} />
       <AnimateOnScroll>
         <ProblemSection />
       </AnimateOnScroll>
-      {/* <AnimateOnScroll>
-        <StatsSection
-          schools={stats.schools}
-          students={stats.students}
-          teachers={stats.teachers}
-          classes={stats.classes}
-        />
-      </AnimateOnScroll> */}
       <AnimateOnScroll>
         <TransformationSection />
       </AnimateOnScroll>
-      {/* <AnimateOnScroll>
-        <ProductShowcase />
-      </AnimateOnScroll> */}
-      {/* <AnimateOnScroll>
+      <AnimateOnScroll>
         <ProductEcosystem />
-      </AnimateOnScroll> */}
-      {/* <AnimateOnScroll>
+      </AnimateOnScroll>
+      <AnimateOnScroll>
         <BenefitsSection />
-      </AnimateOnScroll> */}
-      {/* <AnimateOnScroll>
-        <TestimonialsSection />
-      </AnimateOnScroll> */}
-      {/* <AnimateOnScroll>
+      </AnimateOnScroll>
+      <AnimateOnScroll>
         <TrustSection />
-      </AnimateOnScroll> */}
+      </AnimateOnScroll>
       <AnimateOnScroll>
         <VisionSection />
       </AnimateOnScroll>
-      {/* <AnimateOnScroll>
-        <FAQSection />
-      </AnimateOnScroll> */}
       <CTASection />
       <Footer />
     </div>
