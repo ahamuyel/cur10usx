@@ -2,12 +2,11 @@ const fr = {
   landing: {
     nav: {
       problems: "Problème",
-      transformation: "Solution",
-      product: "Produit",
+      transformation: "Transformation",
       ecosystem: "Écosystème",
       benefits: "Avantages",
+      trust: "Infrastructure",
       vision: "Vision",
-      trust: "Pourquoi Cur10usX",
       explore: "Explorer",
       demo: "Demander une démo",
       signin: "Connexion",
@@ -18,208 +17,156 @@ const fr = {
     },
 
     hero: {
-      badge: "Plateforme de gestion scolaire en Angola",
-      headline: "Toute votre école.\nEn temps réel.",
+      headline: "Le Système d'Exploitation\ndes Écoles Modernes.",
       subheadline:
-        "Cur10usX est le système d’exploitation de l’éducation qui connecte élèves, enseignants et direction en temps réel.",
+        "Cur10usX est l'infrastructure numérique qui connecte chaque processus de votre établissement — élèves, enseignants, parents et direction — en un seul écosystème en temps réel.",
       cta: "Demander une démo",
       explore: "Voir la plateforme",
-      stats: "écoles utilisent Cur10usX",
-      stats_schools: "écoles",
-      stats_students: "élèves",
-      stats_results: "évaluations",
-      trusted_by: "Écoles qui nous font confiance",
     },
 
     problem: {
       tag: "Le Problème",
-      headline: "Les écoles manquent de clarté, pas de technologie.",
+      headline: "Informations dispersées. Décisions retardées. Élèves défavorisés.",
       description:
-        "Les informations scolaires sont dispersées entre tableurs, papier et WhatsApp.",
+        "Les écoles accumulent des données dans des tableurs, du papier et des messages. Le problème n'est pas le manque de technologie — c'est le manque d'un système unifié.",
       items: [
         {
-          title: "Données fragmentées",
-          description:
-            "Notes et présences dispersées dans plusieurs systèmes.",
-          stat: "74%",
-          statLabel: "des directeurs passent +10h/semaine sur des tâches manuelles",
+          title: "Données Fragmentées",
+          description: "Notes, présences, dossiers et communications éparpillés dans des outils qui ne communiquent pas entre eux.",
         },
         {
-          title: "Communication chaotique",
-          description:
-            "Les informations importantes se perdent facilement.",
-          stat: "3x",
-          statLabel: "plus de risque de perte d'information",
+          title: "Complexité Administrative",
+          description: "Directeurs et enseignants passent des heures sur des tâches manuelles qui pourraient être résolues en secondes.",
         },
         {
-          title: "Rapports lents",
-          description:
-            "La clôture des périodes prend des jours ou semaines.",
-          stat: "2+",
-          statLabel: "semaines pour générer les rapports",
+          title: "Décisions Lentes",
+          description: "Sans visibilité en temps réel, les problèmes académiques sont détectés trop tard pour une intervention efficace.",
         },
         {
-          title: "Faible visibilité",
-          description:
-            "Les problèmes sont détectés trop tard.",
-          stat: "60%",
-          statLabel: "des problèmes sont détectés tard",
+          title: "Croissance Bloquée",
+          description: "Étendre les opérations sans système centralisé devient insoutenable. Le chaos administratif limite la croissance.",
         },
       ],
     },
 
     transformation: {
-      tag: "Solution",
-      headline: "Des processus dispersés à une école connectée.",
-      description:
-        "Cur10usX centralise les opérations scolaires en temps réel.",
-      legacy: "Avant",
-      platform: "Avec Cur10usX",
+      tag: "Transformation",
+      headline: "Du chaos dispersé à l'écosystème connecté.",
+      description: "Cur10usX unifie tous les processus scolaires. L'information circule. Les décisions s'accélèrent. L'école se transforme.",
+      tab_legacy: "Avant",
+      tab_platform: "Avec Cur10usX",
       steps: [
         {
           title: "Gestion des élèves",
-          before: {
-            title: "Manuel",
-            items: ["Dossiers papier", "Erreurs fréquentes", "Historique difficile"],
-            status: "Désorganisé",
-          },
-          after: {
-            title: "Centralisé",
-            items: ["Profil unique", "Inscription rapide", "Historique complet"],
-            status: "Organisé",
-          },
+          legacy_title: "Dossiers fragmentés",
+          legacy_items: ["Classeurs papier et archives physiques", "Erreurs fréquentes d'inscription manuelle", "Historique scolaire difficile d'accès"],
+          platform_title: "Intelligence centralisée",
+          platform_items: ["Profil unique et complet par élève", "Inscription numérique en secondes", "Historique complet en un clic"],
         },
         {
-          title: "Présences",
-          before: {
-            title: "Processus manuel",
-            items: ["Listes papier", "Informations retardées", "Parents non informés"],
-            status: "Manuel",
-          },
-          after: {
-            title: "Temps réel",
-            items: ["Mobile", "Alertes automatiques", "Rapports instantanés"],
-            status: "Automatique",
-          },
+          title: "Présences et communication",
+          legacy_title: "Processus aveugles",
+          legacy_items: ["Appel manuel qui prend du temps de cours", "Parents informés des absences des jours après", "Annonces perdues dans les groupes"],
+          platform_title: "Flux en temps réel",
+          platform_items: ["Pointage mobile en secondes", "Parents notifiés automatiquement", "Communication institutionnelle unifiée"],
         },
         {
-          title: "Évaluations",
-          before: {
-            title: "Tableurs séparés",
-            items: ["Notes dispersées", "Erreurs de calcul", "Processus lent"],
-            status: "Sujet aux erreurs",
-          },
-          after: {
-            title: "Système intégré",
-            items: ["Notes centralisées", "Moyennes automatiques", "Rapports instantanés"],
-            status: "Précis",
-          },
+          title: "Évaluations et résultats",
+          legacy_title: "Clôtures douloureuses",
+          legacy_items: ["Notes dispersées dans plusieurs fichiers", "Calculs manuels sujets aux erreurs", "Rapports qui prennent des semaines"],
+          platform_title: "Précision instantanée",
+          platform_items: ["Notes centralisées et sécurisées", "Calcul automatique des moyennes", "Rapports institutionnels en temps réel"],
         },
       ],
     },
 
     ecosystem: {
       tag: "Écosystème",
-      headline: "Tout ce dont votre école a besoin.",
-      description:
-        "Cur10usX connecte tous les processus scolaires.",
-      capabilities: "Inclut",
-      modules: [
-        { id: "academic", title: "Élèves", description: "Historique complet." },
-        { id: "teachers", title: "Enseignants", description: "Gestion des classes." },
-        { id: "classes", title: "Classes", description: "Organisation complète." },
-        { id: "attendance", title: "Présences", description: "Suivi rapide." },
-        { id: "assessments", title: "Évaluations", description: "Notes et rapports." },
-        { id: "reporting", title: "Rapports", description: "Génération automatique." },
-        { id: "communication", title: "Communication", description: "École et parents." },
-        { id: "records", title: "Dossiers", description: "Historique académique." },
+      headline: "Une plateforme. Toutes les connexions.",
+      description: "Cur10usX n'est pas un ensemble de modules isolés. C'est un écosystème où chaque personne, donnée et processus est connecté.",
+      items: [
+        { title: "Élèves", description: "Profils complets avec historique, documents et évolution académique." },
+        { title: "Enseignants", description: "Gestion des classes, matières, évaluations et communication." },
+        { title: "Classes", description: "Organisation, horaires et allocation des ressources." },
+        { title: "Présences", description: "Pointage rapide avec alertes automatiques aux parents." },
+        { title: "Évaluations", description: "Notes, moyennes, bulletins et rapports en flux continu." },
+        { title: "Rapports", description: "Documents institutionnels générés automatiquement." },
+        { title: "Communication", description: "Messages et notifications entre l'école et les familles." },
+        { title: "Parents", description: "Suivi en temps réel de la vie scolaire." },
       ],
     },
 
     benefits: {
-      tag: "Avantages",
-      headline: "Plus d'efficacité pour tous.",
-      description:
-        "Chaque utilisateur gagne du temps et de la clarté.",
+      tag: "Transformation par profil",
+      headline: "Avant et après Cur10usX.",
+      description: "Chaque personne dans la communauté scolaire vit une transformation différente.",
+      journey: "Avant",
+      outcome: "Après",
       items: [
         {
           role: "Directeurs",
-          title: "Vision globale",
-          description: "Décisions basées sur des données.",
-          points: [
-            "Tableau de bord complet",
-            "Rapports instantanés",
-            "Décisions basées sur données",
-          ],
+          before: "Tableurs, rapports manuels, aucune vue consolidée.",
+          after: "Tableau de bord complet en temps réel. Décisions stratégiques en minutes, pas en semaines.",
         },
         {
           role: "Enseignants",
-          title: "Moins de bureaucratie",
-          description: "Plus de temps pour enseigner.",
-          points: ["Notes rapides", "Présences simples", "Moins de tâches"],
-        },
-        {
-          role: "Élèves",
-          title: "Suivi continu",
-          description: "Meilleure visibilité du progrès.",
-          points: ["Progression claire", "Intervention rapide", "Transparence"],
+          before: "Bureaucratie, papier, appel manuel, notes dispersées.",
+          after: "Saisie rapide, communication intégrée, plus de temps pour enseigner.",
         },
         {
           role: "Parents",
-          title: "Transparence totale",
-          description: "Suivi en temps réel.",
-          points: ["Alertes", "Notes", "Communication directe"],
+          before: "Aucune visibilité, dépendance aux appels téléphoniques.",
+          after: "Notifications en temps réel. Présences, notes et infos sur votre téléphone.",
         },
+        {
+          role: "Élèves",
+          before: "Retour tardif, aucun suivi continu.",
+          after: "Progrès visible, intervention précoce, soutien personnalisé.",
+        },
+      ],
+    },
+
+    trust: {
+      tag: "Infrastructure",
+      headline: "Conçu pour les institutions. Évolutif à toute taille.",
+      description: "La confiance ne se gagne pas avec du marketing. Elle se gagne avec de l'ingénierie.",
+      points: [
+        { title: "Architecture Cloud-Native", desc: "Infrastructure moderne et évolutive dès le premier jour." },
+        { title: "Authentification Sécurisée", desc: "Authentification multifacteur et contrôle d'accès basé sur les rôles." },
+        { title: "Multi-Tenant", desc: "Chaque école isolée et sécurisée sur la même infrastructure." },
+        { title: "Sauvegardes Automatiques", desc: "Données protégées avec sauvegardes quotidiennes et récupération rapide." },
       ],
     },
 
     vision: {
       tag: "Vision",
-      headline: "Les écoles intelligentes commencent par de bons systèmes.",
-      description:
-        "L'avenir dépend de décisions basées sur les données.",
+      headline: "De meilleurs systèmes créent de meilleures écoles.",
+      description: "La technologie n'est pas l'objectif. C'est le moyen d'avoir des décisions plus rapides, des interventions plus précoces et des apprentissages plus profonds.",
       points: [
-        { title: "Croissance organisée", description: "Évoluer sans perte de contrôle." },
-        { title: "Meilleures décisions", description: "Données en temps réel." },
-        { title: "Avenir durable", description: "Évolution continue." },
-      ],
-    },
-
-    trust: {
-      tag: "Pourquoi Cur10usX",
-      headline: "Moins de chaos. Plus de contrôle.",
-      description: "Les écoles choisissent Cur10usX pour sa simplicité.",
-      points: [
-        { title: "Gagner du temps", desc: "Automatisation des tâches." },
-        { title: "Organisation totale", desc: "Tout centralisé." },
-        { title: "Visibilité", desc: "Décisions en temps réel." },
-        { title: "Performance", desc: "Suivi des élèves." },
+        { title: "Décisions Éclairées", description: "Direction et enseignants avec des données en temps réel pour agir avec confiance." },
+        { title: "Intervention Précoce", description: "Problèmes d'apprentissage détectés avant qu'ils ne deviennent critiques." },
+        { title: "Communication Efficace", description: "École et familles connectées par un flux d'information continu." },
       ],
     },
 
     cta: {
       tag: "Avenir de l'éducation",
-      headline: "Moderniser une école commence par la clarté.",
-      description:
-        "Cur10usX transforme la gestion scolaire en temps réel.",
+      headline: "C'est ainsi que les écoles devraient fonctionner.",
+      description: "Une plateforme. Tous les processus connectés. Des décisions en temps réel.",
       button: "Demander une démo",
-      free_account: "Créer un compte",
-      security: "Données sécurisées",
-      setup: "Configuration rapide",
-      support: "Support dédié",
+      explore: "Créer un compte gratuit",
     },
 
     footer: {
-      description:
-        "Plateforme de gestion scolaire centralisant les données.",
+      description: "Le système d'exploitation qui transforme les écoles en institutions connectées et intelligentes.",
       product: "PLATEFORME",
       resources: "RESSOURCES",
       company: "INSTITUTION",
-      contact: "CONTACT",
       status: "Opérationnel",
-      copyright: "Cur10usX. Gestion scolaire.",
+      copyright: "Cur10usX. Tous droits réservés.",
       tos: "Conditions",
       privacy: "Confidentialité",
+      contact: "suporte@cur10usx.com",
     },
   },
 

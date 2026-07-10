@@ -2,12 +2,11 @@ const en = {
   landing: {
     nav: {
       problems: "Problem",
-      transformation: "Solution",
-      product: "Product",
+      transformation: "Transformation",
       ecosystem: "Ecosystem",
       benefits: "Benefits",
+      trust: "Infrastructure",
       vision: "Vision",
-      trust: "Why Cur10usX",
       explore: "Explore",
       demo: "Request Demo",
       signin: "Sign in",
@@ -18,245 +17,156 @@ const en = {
     },
 
     hero: {
-      badge: "School Management Platform in Angola",
-      headline: "Your entire school.\nIn real time.",
+      headline: "The Operating System\nfor Modern Schools.",
       subheadline:
-        "Cur10usX is the operating system for education that connects students, teachers and administration with real-time academic data.",
+        "Cur10usX is the digital infrastructure that connects every process of your institution — students, teachers, parents and leadership — in a single real-time ecosystem.",
       cta: "Request Demo",
       explore: "View Platform",
-      stats: "schools use Cur10usX",
-      stats_schools: "schools",
-      stats_students: "students",
-      stats_results: "assessments",
-      trusted_by: "Schools that trust us",
     },
 
     problem: {
       tag: "The Problem",
-      headline: "Schools don’t lack technology. They lack clarity.",
+      headline: "Scattered information. Delayed decisions. Students left behind.",
       description:
-        "School information is scattered across spreadsheets, paper and WhatsApp, creating delays, errors and lack of visibility.",
+        "Schools accumulate data across spreadsheets, paper and messaging apps. The issue isn't a lack of technology — it's a lack of a unified system.",
       items: [
         {
-          title: "Fragmented data",
-          description:
-            "Grades, attendance and records spread across multiple systems slow down management.",
-          stat: "74%",
-          statLabel: "of principals spend +10h/week on manual tasks",
+          title: "Fragmented Data",
+          description: "Grades, attendance, records and communications scattered across tools that don't talk to each other.",
         },
         {
-          title: "Chaotic communication",
-          description:
-            "Important information gets lost in WhatsApp groups and unstructured channels.",
-          stat: "3x",
-          statLabel: "higher risk of losing critical information",
+          title: "Administrative Complexity",
+          description: "Directors and teachers spend hours on manual tasks that could be resolved in seconds.",
         },
         {
-          title: "Slow reporting",
-          description:
-            "Term closing takes days or weeks due to manual consolidation.",
-          stat: "2+",
-          statLabel: "weeks to generate full reports",
+          title: "Slow Decisions",
+          description: "Without real-time visibility, academic issues are detected too late for effective intervention.",
         },
         {
-          title: "Low visibility",
-          description:
-            "Academic issues are detected too late to intervene effectively.",
-          stat: "60%",
-          statLabel: "of issues are identified too late",
+          title: "Stalled Growth",
+          description: "Scaling operations without a centralized system becomes unsustainable. Administrative chaos limits growth.",
         },
       ],
     },
 
     transformation: {
-      tag: "Solution",
-      headline: "From scattered processes to a connected school.",
-      description:
-        "Cur10usX centralizes school operations and turns data into real-time decisions.",
-      legacy: "Before",
-      platform: "With Cur10usX",
+      tag: "Transformation",
+      headline: "From scattered chaos to a connected ecosystem.",
+      description: "Cur10usX unifies every school process. Information flows. Decisions accelerate. The school transforms.",
+      tab_legacy: "Before",
+      tab_platform: "With Cur10usX",
       steps: [
         {
           title: "Student Management",
-          before: {
-            title: "Manual & scattered",
-            items: [
-              "Paper records",
-              "Frequent enrollment errors",
-              "Hard-to-access history",
-            ],
-            status: "Disorganized",
-          },
-          after: {
-            title: "Centralized",
-            items: [
-              "Single student profile",
-              "Fast digital enrollment",
-              "Full history always available",
-            ],
-            status: "Organized",
-          },
+          legacy_title: "Fragmented Records",
+          legacy_items: ["Paper folders and physical archives", "Frequent manual enrollment errors", "Hard-to-access academic history"],
+          platform_title: "Central Intelligence",
+          platform_items: ["Complete single profile per student", "Digital enrollment in seconds", "Full history with one click"],
         },
         {
-          title: "Attendance",
-          before: {
-            title: "Manual process",
-            items: [
-              "Paper lists",
-              "Delayed information",
-              "Parents not updated in real time",
-            ],
-            status: "Manual",
-          },
-          after: {
-            title: "Real-time tracking",
-            items: [
-              "Mobile attendance marking",
-              "Automatic parent alerts",
-              "Instant reports",
-            ],
-            status: "Automated",
-          },
+          title: "Attendance & Communication",
+          legacy_title: "Blind Processes",
+          legacy_items: ["Manual roll call wastes class time", "Parents learn of absences days later", "Announcements lost in group chats"],
+          platform_title: "Real-Time Flow",
+          platform_items: ["Mobile marking in seconds", "Parents notified automatically", "Unified institutional communication"],
         },
         {
-          title: "Assessments",
-          before: {
-            title: "Separate spreadsheets",
-            items: [
-              "Scattered grades",
-              "Calculation errors",
-              "Slow closing process",
-            ],
-            status: "Error-prone",
-          },
-          after: {
-            title: "Integrated system",
-            items: [
-              "Centralized grades",
-              "Automatic averages",
-              "Instant reports",
-            ],
-            status: "Accurate",
-          },
+          title: "Assessments & Results",
+          legacy_title: "Painful Closing",
+          legacy_items: ["Grades scattered across files", "Manual calculations prone to errors", "Reports take weeks to consolidate"],
+          platform_title: "Instant Precision",
+          platform_items: ["Centralized and secure grades", "Automatic average calculations", "Real-time institutional reports"],
         },
       ],
     },
 
     ecosystem: {
       tag: "Ecosystem",
-      headline: "Everything your school needs. In one system.",
-      description:
-        "Cur10usX connects all school processes into a single intelligent ecosystem.",
-      capabilities: "Includes",
-      modules: [
-        { id: "academic", title: "Students", description: "Full academic history in one place." },
-        { id: "teachers", title: "Teachers", description: "Manage classes, subjects and performance." },
-        { id: "classes", title: "Classes", description: "Complete class and schedule organization." },
-        { id: "attendance", title: "Attendance", description: "Fast tracking with automatic alerts." },
-        { id: "assessments", title: "Assessments", description: "Grades, averages and reports." },
-        { id: "reporting", title: "Reports", description: "Automatic reports and transcripts." },
-        { id: "communication", title: "Communication", description: "Messages between school and parents." },
-        { id: "records", title: "Records", description: "Organized academic history." },
+      headline: "One platform. Every connection.",
+      description: "Cur10usX is not a collection of isolated modules. It is an ecosystem where every person, data point and process is connected.",
+      items: [
+        { title: "Students", description: "Complete profiles with history, documents and academic progress." },
+        { title: "Teachers", description: "Manage classes, subjects, assessments and communication." },
+        { title: "Classes", description: "Organization, schedules and resource allocation." },
+        { title: "Attendance", description: "Fast tracking with automatic parent alerts." },
+        { title: "Assessments", description: "Grades, averages, transcripts and reports in a continuous flow." },
+        { title: "Reports", description: "Institutional documents generated automatically." },
+        { title: "Communication", description: "Messages and notifications between school and families." },
+        { title: "Parents", description: "Real-time tracking of academic life." },
       ],
     },
 
     benefits: {
-      tag: "Benefits",
-      headline: "More efficiency for everyone in the school.",
-      description:
-        "Every user gains time, clarity and control over education.",
+      tag: "Transformation by Profile",
+      headline: "Before and after Cur10usX.",
+      description: "Every person in the school community experiences a different transformation.",
+      journey: "Before",
+      outcome: "After",
       items: [
         {
           role: "Principals",
-          title: "Full school overview",
-          description: "Make decisions based on real-time data.",
-          points: [
-            "Full institutional dashboard",
-            "Instant reporting",
-            "Data-driven decisions",
-          ],
+          before: "Spreadsheets, manual reports, no consolidated view.",
+          after: "Complete dashboard with real-time data. Strategic decisions in minutes, not weeks.",
         },
         {
           role: "Teachers",
-          title: "Less bureaucracy",
-          description: "More teaching, less administration.",
-          points: [
-            "Fast grade entry",
-            "Simplified attendance",
-            "Less manual work",
-          ],
-        },
-        {
-          role: "Students",
-          title: "Continuous tracking",
-          description: "Better visibility of performance and progress.",
-          points: [
-            "Clear progress tracking",
-            "Early intervention",
-            "More transparency",
-          ],
+          before: "Bureaucracy, paper, manual roll call, scattered grades.",
+          after: "Fast recording, integrated communication, more time to teach.",
         },
         {
           role: "Parents",
-          title: "Full transparency",
-          description: "Follow academic progress in real time.",
-          points: [
-            "Automatic alerts",
-            "Grades and attendance",
-            "Direct communication",
-          ],
+          before: "No visibility, depending on phone calls.",
+          after: "Real-time notifications. Attendance, grades and updates on your phone.",
         },
+        {
+          role: "Students",
+          before: "Late feedback, no continuous tracking.",
+          after: "Visible progress, early intervention, personalized support.",
+        },
+      ],
+    },
+
+    trust: {
+      tag: "Infrastructure",
+      headline: "Built for institutions. Scalable to any size.",
+      description: "Trust isn't earned with marketing. It's earned with engineering.",
+      points: [
+        { title: "Cloud-Native Architecture", desc: "Modern, scalable infrastructure from day one." },
+        { title: "Secure Authentication", desc: "Multi-factor authentication and role-based access control." },
+        { title: "Multi-Tenant", desc: "Every school isolated and secure on the same infrastructure." },
+        { title: "Automatic Backups", desc: "Data protected with daily backups and rapid recovery." },
       ],
     },
 
     vision: {
       tag: "Vision",
-      headline: "Smarter schools start with better systems.",
-      description:
-        "The future of education depends on data-driven decisions.",
+      headline: "Better systems create better schools.",
+      description: "Technology is not the goal. It is the means to faster decisions, earlier interventions and deeper learning.",
       points: [
-        { title: "Organized growth", description: "Scale without losing control." },
-        { title: "Better decisions", description: "Real-time academic insights." },
-        { title: "Sustainable future", description: "Ready for continuous evolution." },
-      ],
-    },
-
-    trust: {
-      tag: "Why Cur10usX",
-      headline: "Less chaos. More control. Better outcomes.",
-      description:
-        "Schools choose Cur10usX for simplicity and impact.",
-      points: [
-        { title: "Save time", desc: "Automate repetitive tasks." },
-        { title: "Total organization", desc: "Everything in one system." },
-        { title: "More visibility", desc: "Real-time decisions." },
-        { title: "Better performance", desc: "Continuous student tracking." },
+        { title: "Informed Decisions", description: "Leadership and teachers with real-time data to act with confidence." },
+        { title: "Early Intervention", description: "Learning issues detected before they become critical." },
+        { title: "Effective Communication", description: "School and families connected through continuous information flow." },
       ],
     },
 
     cta: {
       tag: "Future of Education",
-      headline: "Modernizing a school starts with clarity.",
-      description:
-        "Cur10usX turns school management into real-time decisions.",
+      headline: "This is how schools should work.",
+      description: "One platform. Every process connected. Real-time decisions.",
       button: "Request Demo",
-      free_account: "Create Account",
-      security: "Secure encrypted data",
-      setup: "Setup in days",
-      support: "Dedicated support",
+      explore: "Create Free Account",
     },
 
     footer: {
-      description:
-        "School management platform that centralizes data and simplifies operations.",
+      description: "The operating system that transforms schools into connected, intelligent institutions.",
       product: "PLATFORM",
       resources: "RESOURCES",
       company: "INSTITUTION",
-      contact: "CONTACT",
       status: "Operational",
-      copyright: "Cur10usX. School Management.",
+      copyright: "Cur10usX. All rights reserved.",
       tos: "Terms",
       privacy: "Privacy",
+      contact: "suporte@cur10usx.com",
     },
   },
 
