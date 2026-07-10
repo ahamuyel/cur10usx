@@ -9,19 +9,19 @@ export default function OriginSection() {
   return (
     <section
       id="about"
-      className="py-20 md:py-32 bg-[var(--landing-bg)] relative"
+      className="py-16 md:py-28 bg-[var(--landing-bg)] relative"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="max-w-3xl mb-10">
-          <span className="text-xs text-[var(--landing-text-dim)] uppercase tracking-widest block mb-3">
+        <div className="max-w-3xl mb-8 md:mb-10">
+          <span className="text-[10px] md:text-xs text-[var(--landing-text-dim)] uppercase tracking-widest block mb-3">
             {t("landing.origin.tag")}
           </span>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[var(--landing-text-primary)] tracking-tight leading-none mb-6">
+          <h2 className="text-2xl sm:text-3xl md:text-5xl font-extrabold text-[var(--landing-text-primary)] tracking-tight leading-tight md:leading-none mb-4 md:mb-6">
             {t("landing.origin.headline")}
           </h2>
         </div>
 
-        <div className="max-w-3xl border border-[var(--landing-border)] bg-[var(--landing-bg-elevated)] p-6 md:p-8 rounded-xl">
+        <div className="max-w-3xl border border-[var(--landing-border)] bg-[var(--landing-bg-elevated)] p-5 md:p-8 rounded-xl">
           {paragraphs.map((p, idx) => (
             <p
               key={idx}

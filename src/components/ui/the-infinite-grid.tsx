@@ -60,10 +60,10 @@ export function TheInfiniteGrid({ children, className }: TheInfiniteGridProps) {
         <GridPattern offsetX={gridOffsetX} offsetY={gridOffsetY} />
       </motion.div>
 
-      <div className="absolute inset-0 pointer-events-none z-0">
-        <div className="absolute right-[-20%] top-[-20%] w-[40%] h-[40%] rounded-full bg-orange-500/40 dark:bg-orange-600/20 blur-[120px]" />
-        <div className="absolute right-[10%] top-[-10%] w-[20%] h-[20%] rounded-full bg-primary/30 blur-[100px]" />
-        <div className="absolute left-[-10%] bottom-[-20%] w-[40%] h-[40%] rounded-full bg-blue-500/40 dark:bg-blue-600/20 blur-[120px]" />
+      <div className="absolute inset-0 pointer-events-none z-0 motion-reduce:hidden">
+        <div className="absolute right-[-20%] top-[-20%] w-[40%] h-[40%] rounded-full bg-amber-600/20 dark:bg-amber-700/15 blur-[120px]" />
+        <div className="absolute right-[10%] top-[-10%] w-[20%] h-[20%] rounded-full bg-primary/25 blur-[100px]" />
+        <div className="absolute left-[-10%] bottom-[-20%] w-[40%] h-[40%] rounded-full bg-primary/20 dark:bg-primary/15 blur-[120px]" />
       </div>
 
       <div className="relative z-10 w-full">

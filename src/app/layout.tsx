@@ -29,7 +29,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: config.name,
     description: config.description || "Plataforma de gestão escolar",
-    icons: { icon: "/blacklogo.png" },
+    icons: { icon: "/whitelogo.png" },
     openGraph: {
       title: config.name,
       description: config.description || "Plataforma de gestão escolar",

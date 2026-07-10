@@ -81,27 +81,27 @@ export default function LandingNavbar({
       className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 border-b ${
         scrolled
           ? "bg-[var(--landing-bg)]/80 backdrop-blur-md border-[var(--landing-border)] shadow-sm h-14"
-          : "bg-[var(--landing-bg)] border-transparent h-16"
+          : "bg-[var(--landing-bg)] border-transparent h-14 md:h-16"
       }`}
     >
       <div className="max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-full gap-2 lg:gap-4">
           
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group shrink-0 select-none">
+          <Link href="/" className="flex items-center gap-2 group shrink-0 select-none min-h-10">
             <Image
               src="/blacklogo.png"
               alt="Cur10usX"
-              width={32}
-              height={32}
-              className="rounded-lg transition-transform group-hover:scale-105 dark:hidden"
+              width={28}
+              height={28}
+              className="rounded-lg transition-transform group-hover:scale-105 dark:hidden md:w-[32px] md:h-[32px]"
             />
             <Image
               src="/whitelogo.png"
               alt="Cur10usX"
-              width={32}
-              height={32}
-              className="rounded-lg transition-transform group-hover:scale-105 hidden dark:block"
+              width={28}
+              height={28}
+              className="rounded-lg transition-transform group-hover:scale-105 hidden dark:block md:w-[32px] md:h-[32px]"
             />
             <span className="font-bold text-sm tracking-tight text-[var(--landing-text-primary)] hidden sm:block">
               Cur10us<span className="text-primary">X</span>
@@ -132,14 +132,6 @@ export default function LandingNavbar({
           <div className="hidden md:flex items-center gap-1 lg:gap-2 shrink-0">
             <LocaleSwitcher currentLocale={locale} theme={theme} toggleTheme={toggleTheme} />
             
-            {/* <button
-              onClick={toggleTheme}
-              className="p-1.5 lg:p-2 rounded-lg text-[var(--landing-text-muted)] hover:text-[var(--landing-text-primary)] hover:bg-[var(--landing-bg-tertiary)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary cursor-pointer"
-              aria-label="Alternar tema"
-            >
-              {theme === "light" ? <Moon size={16} /> : <Sun size={16} />}
-            </button> */}
-
             <div className="w-px h-5 bg-[var(--landing-border)] mx-0.5 lg:mx-1" />
             
             <Link
@@ -168,14 +160,14 @@ export default function LandingNavbar({
           <div className="flex md:hidden items-center gap-1">
             <button
               onClick={toggleTheme}
-              className="p-2 rounded-lg text-[var(--landing-text-muted)] hover:text-[var(--landing-text-primary)] hover:bg-[var(--landing-bg-tertiary)] transition-colors cursor-pointer"
+              className="p-2 rounded-lg text-[var(--landing-text-muted)] hover:text-[var(--landing-text-primary)] hover:bg-[var(--landing-bg-tertiary)] transition-colors cursor-pointer min-h-10 min-w-10 flex items-center justify-center"
               aria-label={t("landing.nav.theme_toggle")}
             >
               {theme === "light" ? <Moon size={18} /> : <Sun size={18} />}
             </button>
             <button
               onClick={() => setOpen(!open)}
-              className="p-2 rounded-lg text-[var(--landing-text-muted)] hover:text-[var(--landing-text-primary)] hover:bg-[var(--landing-bg-tertiary)] transition-all relative z-50 focus-visible:outline-none cursor-pointer"
+              className="p-2 rounded-lg text-[var(--landing-text-muted)] hover:text-[var(--landing-text-primary)] hover:bg-[var(--landing-bg-tertiary)] transition-all relative z-50 focus-visible:outline-none cursor-pointer min-h-10 min-w-10 flex items-center justify-center"
               aria-label={open ? t("landing.nav.menu_close") : t("landing.nav.menu_open")}
               aria-expanded={open}
             >
@@ -192,16 +184,16 @@ export default function LandingNavbar({
       {/* Mobile Menu */}
       <div
         ref={menuRef}
-        className={`md:hidden fixed inset-x-0 z-40 bg-[var(--landing-bg)] border-b border-[var(--landing-border)] shadow-2xl transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] flex flex-col justify-between overflow-y-auto subtle-scrollbar ${
-          scrolled ? "top-14" : "top-16"
+        className={`md:hidden fixed inset-x-0 z-40 bg-[var(--landing-bg)] border-b border-[var(--landing-border)] shadow-2xl transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] flex flex-col justify-between overflow-y-auto subtle-scrollbar  motion-reduce:transition-none ${
+          scrolled ? "top-14" : "top-14"
         } ${
           open 
-            ? "h-[calc(100vh-4rem)] opacity-100 pointer-events-auto translate-y-0" 
-            : "h-0 opacity-0 pointer-events-none -translate-y-2"
+            ? "max-h-[calc(100vh-3.5rem)] opacity-100 pointer-events-auto translate-y-0" 
+            : "max-h-0 opacity-0 pointer-events-none -translate-y-2"
         }`}
       >
-        <div className="flex flex-col justify-between h-full min-h-[calc(100vh-5rem)] w-full">
-          <div className="px-5 py-4 space-y-0.5">
+        <div className="flex flex-col justify-between min-h-[70vh] w-full">
+          <div className="px-4 py-3 space-y-0.5">
             {navLinks.map((link, index) => {
               const isActive = activeSection === link.href
               return (
@@ -212,7 +204,7 @@ export default function LandingNavbar({
                   style={{ 
                     transitionDelay: open ? `${index * 30}ms` : "0ms"
                   }}
-                  className={`block text-base font-medium transition-all duration-300 transform py-2.5 px-4 rounded-xl ${
+                  className={`block text-base font-medium transition-all duration-300 motion-reduce:transition-none py-3 px-4 rounded-xl ${
                     open ? "translate-x-0 opacity-100" : "-translate-x-4 opacity-0"
                   } ${
                     isActive
@@ -228,41 +220,39 @@ export default function LandingNavbar({
 
           <div 
             style={{ transitionDelay: open ? `${navLinks.length * 30}ms` : "0ms" }}
-            className={`px-5 pb-8 pt-4 border-t border-[var(--landing-border)] space-y-4 bg-[var(--landing-bg-tertiary)] transition-all duration-300 transform ${
+            className={`px-4 pb-6 pt-4 border-t border-[var(--landing-border)] space-y-3 bg-[var(--landing-bg-tertiary)] transition-all duration-300 motion-reduce:transition-none ${
               open ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
             }`}
           >
-            <div>
-              <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--landing-text-dim)] px-4 pb-2">
-                {t("landing.nav.account")}
-              </p>
-              <div className="grid grid-cols-2 gap-2">
-                <Link
-                  href="/signin"
-                  onClick={() => setOpen(false)}
-                  className="text-center text-sm font-medium text-[var(--landing-text-primary)] py-2.5 px-3 rounded-xl bg-[var(--landing-bg)] border border-[var(--landing-border)] hover:bg-[var(--landing-bg-tertiary)] transition"
-                >
-                  {t("landing.nav.signin")}
-                </Link>
-                <Link
-                  href="/signup"
-                  onClick={() => setOpen(false)}
-                  className="text-center text-sm font-medium text-[var(--landing-text-primary)] py-2.5 px-3 rounded-xl bg-[var(--landing-bg)] border border-[var(--landing-border)] hover:bg-[var(--landing-bg-tertiary)] transition"
-                >
-                  {t("landing.nav.explore")}
-                </Link>
-              </div>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--landing-text-dim)] px-4 pb-1">
+              {t("landing.nav.account")}
+            </p>
+            <div className="flex flex-col gap-2 px-4">
+              <Link
+                href="/signin"
+                onClick={() => setOpen(false)}
+                className="text-center text-sm font-medium text-[var(--landing-text-primary)] py-3 px-3 rounded-xl bg-[var(--landing-bg)] border border-[var(--landing-border)] hover:bg-[var(--landing-bg-tertiary)] transition"
+              >
+                {t("landing.nav.signin")}
+              </Link>
+              <Link
+                href="/signup"
+                onClick={() => setOpen(false)}
+                className="text-center text-sm font-medium text-[var(--landing-text-primary)] py-3 px-3 rounded-xl bg-[var(--landing-bg)] border border-[var(--landing-border)] hover:bg-[var(--landing-bg-tertiary)] transition"
+              >
+                {t("landing.nav.explore")}
+              </Link>
             </div>
 
             <Link
               href="/registar-escola"
               onClick={() => setOpen(false)}
-              className="block text-center text-sm font-semibold text-white dark:text-zinc-900 bg-neutral-900 dark:bg-white hover:bg-neutral-800 dark:hover:bg-zinc-200 px-4 py-3 rounded-xl transition shadow-lg active:scale-[0.99]"
+              className="block text-center text-sm font-semibold text-white dark:text-zinc-900 bg-neutral-900 dark:bg-white hover:bg-neutral-800 dark:hover:bg-zinc-200 px-4 py-3.5 rounded-xl transition shadow-lg active:scale-[0.99] mx-4"
             >
               {t("landing.nav.demo")}
             </Link>
 
-            <div className="pt-1 flex items-center justify-center">
+            <div className="pt-2 flex items-center justify-center">
               <LocaleSwitcher currentLocale={locale} theme={theme} toggleTheme={toggleTheme} />
             </div>
           </div>

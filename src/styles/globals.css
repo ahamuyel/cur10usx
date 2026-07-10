@@ -108,23 +108,23 @@
   --color-background: #ffffff;
   --color-foreground: #09090b;
 
-  /* School brand colors */
-  --school-primary: #6366f1;
-  --school-primary-light: #eef2ff;
-  --school-primary-dark: #312e81;
-  --school-primary-50: #eef2ff;
-  --school-primary-100: #e0e7ff;
-  --school-primary-200: #c7d2fe;
-  --school-primary-300: #a5b4fc;
-  --school-primary-400: #818cf8;
-  --school-primary-500: #6366f1;
-  --school-primary-600: #4f46e5;
-  --school-primary-700: #4338ca;
-  --school-primary-800: #3730a3;
-  --school-primary-900: #312e81;
-  --school-primary-950: #1e1b4b;
-  --school-secondary: #06B6D4;
-  --school-secondary-light: hsl(186, 94%, 95%);
+  /* School brand colors — muted slate-navy for institutional trust */
+  --school-primary: #3b4f6b;
+  --school-primary-light: #f0f3f7;
+  --school-primary-dark: #1e2f47;
+  --school-primary-50: #f0f3f7;
+  --school-primary-100: #d9e0ea;
+  --school-primary-200: #b3c0d4;
+  --school-primary-300: #8da0be;
+  --school-primary-400: #607a9f;
+  --school-primary-500: #3b4f6b;
+  --school-primary-600: #2d3f59;
+  --school-primary-700: #1e2f47;
+  --school-primary-800: #142237;
+  --school-primary-900: #0c1523;
+  --school-primary-950: #060a12;
+  --school-secondary: #607a9f;
+  --school-secondary-light: #f0f3f7;
 
   /* Typography */
   --school-font-family: 'Inter', sans-serif;
@@ -169,11 +169,11 @@
   --color-foreground: #fafafa;
   --school-card-bg: #09090b;
   --school-card-border: 1px solid #27272a;
-  --school-primary-light: #1e1b4b;
-  --school-primary-50: #1e1b4b;
-  --school-primary-100: #1e1b4b;
-  --school-primary-200: #312e81;
-  --school-primary-950: #eef2ff;
+  --school-primary-light: #142237;
+  --school-primary-50: #060a12;
+  --school-primary-100: #0c1523;
+  --school-primary-200: #142237;
+  --school-primary-950: #f0f3f7;
 }
 
 html, body {
@@ -375,6 +375,29 @@ html, body {
   to { opacity: 0; transform: scale(0.95); }
 }
 
+/* Animated underline for headline highlights */
+@keyframes draw-underline {
+  from { background-size: 0% 2px; }
+  to { background-size: 100% 2px; }
+}
+
+.highlight-underline {
+  display: inline;
+  background-image: linear-gradient(to right, var(--school-primary), var(--school-primary));
+  background-repeat: no-repeat;
+  background-position: bottom left;
+  background-size: 100% 2px;
+  padding-bottom: 2px;
+  animation: draw-underline 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .highlight-underline {
+    animation: none;
+    background-size: 100% 2px;
+  }
+}
+
 /* Landing page utilities */
 @utility grid-bg {
   background-image: linear-gradient(to right, var(--landing-grid) 1px, transparent 1px),
@@ -415,10 +438,10 @@ html, body {
   --landing-border: #e4e4e7;
   --landing-border-subtle: #f4f4f5;
   --landing-border-strong: #d4d4d8;
-  --landing-orb-accent: #818cf8;
+  --landing-orb-accent: #607a9f;
   --landing-orb-green: #10b981;
-  --landing-grid: rgba(0, 0, 0, 0.06);
-  --landing-grid-fine: rgba(0, 0, 0, 0.03);
+  --landing-grid: rgba(0, 0, 0, 0.04);
+  --landing-grid-fine: rgba(0, 0, 0, 0.02);
   --landing-overlay: rgba(0, 0, 0, 0.03);
   --landing-status-dot: #22c55e;
   --landing-bg-dark: #09090b;
@@ -440,9 +463,9 @@ html, body {
   --landing-border: #27272a;
   --landing-border-subtle: #18181b;
   --landing-border-strong: #3f3f46;
-  --landing-orb-accent: #818cf8;
+  --landing-orb-accent: #607a9f;
   --landing-orb-green: #10b981;
-  --landing-grid: rgba(255, 255, 255, 0.04);
+  --landing-grid: rgba(255, 255, 255, 0.03);
   --landing-grid-fine: rgba(255, 255, 255, 0.02);
   --landing-overlay: rgba(255, 255, 255, 0.03);
   --landing-status-dot: #22c55e;

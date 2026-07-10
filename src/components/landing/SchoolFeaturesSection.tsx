@@ -15,17 +15,17 @@ export default function SchoolFeaturesSection() {
   return (
     <section
       id="product"
-      className="py-20 md:py-32 bg-[var(--landing-bg-secondary)] relative"
+      className="py-16 md:py-28 bg-[var(--landing-bg-secondary)] relative"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="max-w-3xl mb-16 md:mb-20">
-          <span className="text-xs text-[var(--landing-text-dim)] uppercase tracking-widest block mb-3">
+        <div className="max-w-3xl mb-12 md:mb-20">
+          <span className="text-[10px] md:text-xs text-[var(--landing-text-dim)] uppercase tracking-widest block mb-3">
             {t("landing.school_features.tag")}
           </span>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[var(--landing-text-primary)] tracking-tight leading-none mb-6">
+          <h2 className="text-2xl sm:text-3xl md:text-5xl font-extrabold text-[var(--landing-text-primary)] tracking-tight leading-tight md:leading-none mb-4 md:mb-6">
             {t("landing.school_features.headline")}
           </h2>
-          <p className="text-[var(--landing-text-secondary)] text-sm md:text-base leading-relaxed">
+          <p className="text-sm md:text-base text-[var(--landing-text-secondary)] leading-relaxed max-w-xl">
             {t("landing.school_features.description")}
           </p>
         </div>
@@ -34,13 +34,13 @@ export default function SchoolFeaturesSection() {
           {items.map((item, idx) => (
             <div
               key={idx}
-              className="grid grid-cols-1 md:grid-cols-[140px_1fr] gap-4 md:gap-8 py-6 border-t border-[var(--landing-border)] first:border-t-0 first:pt-0"
+              className="grid grid-cols-1 md:grid-cols-[140px_1fr] gap-2 md:gap-8 py-5 md:py-6 border-t border-[var(--landing-border)] first:border-t-0 first:pt-0"
             >
-              <span className="text-xs text-[var(--landing-text-dim)] font-medium pt-0.5">
+              <span className="text-[11px] md:text-xs text-[var(--landing-text-dim)] font-medium">
                 {item.side}
               </span>
               <div>
-                <h3 className="text-base font-bold text-[var(--landing-text-primary)] mb-1.5">
+                <h3 className="text-sm md:text-base font-bold text-[var(--landing-text-primary)] mb-1 md:mb-1.5">
                   {item.title}
                 </h3>
                 <p className="text-sm text-[var(--landing-text-secondary)] leading-relaxed">
