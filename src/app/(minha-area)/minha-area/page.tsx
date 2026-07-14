@@ -493,7 +493,7 @@ export default function MinhaAreaPage() {
       {!hasActiveSchools && escolasDisponiveis.length > 0 && (
         <section className="space-y-3">
           <SectionHeader icon={UserPlus} title={tUI("Solicitar vinculação")} />
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl px-5 py-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl px-4 sm:px-5 py-4">
             <div className="min-w-0">
               <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
                 {tUI("Ainda não está vinculado a nenhuma escola")}
@@ -506,7 +506,7 @@ export default function MinhaAreaPage() {
             </div>
             <button
               onClick={openModal}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-primary hover:bg-primary-700 text-white text-sm font-medium transition shadow-sm shadow-primary/20 shrink-0"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-primary hover:bg-primary-700 text-white text-sm font-medium transition shadow-sm shadow-primary/20 shrink-0"
             >
               <UserPlus size={14} /> {tUI("Nova solicitação")}
             </button>
@@ -603,63 +603,12 @@ export default function MinhaAreaPage() {
         </section>
       )}
 
-      {/* ── COMO FUNCIONA (só sem escolas E sem solicitações pendentes) ── */}
-      {!hasActiveSchools && pendingCount === 0 && (
-        <section className="space-y-3">
-          <SectionHeader icon={Sparkles} title={tUI("Como funciona")} />
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            {[
-              {
-                icon: UserPlus,
-                label: tUI("Criar conta"),
-                desc: tUI("Registe-se na plataforma"),
-              },
-              {
-                icon: Send,
-                label: tUI("Escolher escola"),
-                desc: tUI("Seleccione escola e role"),
-              },
-              {
-                icon: Clock,
-                label: tUI("Aguardar aprovação"),
-                desc: tUI("A escola analisa o pedido"),
-              },
-              {
-                icon: ShieldCheck,
-                label: tUI("Aceder"),
-                desc: tUI("Acesso ao painel da escola"),
-              },
-            ].map((step, i) => (
-              <div
-                key={i}
-                className="flex flex-col items-center gap-2 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-4 text-center"
-              >
-                <div className="w-9 h-9 rounded-xl bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center">
-                  <step.icon
-                    size={17}
-                    className="text-zinc-400 dark:text-zinc-500"
-                  />
-                </div>
-                <div>
-                  <p className="text-xs font-medium text-zinc-900 dark:text-zinc-100">
-                    {step.label}
-                  </p>
-                  <p className="text-[11px] text-zinc-500 dark:text-zinc-400 mt-0.5">
-                    {step.desc}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
-
       {/* ── REGISTAR NOVA ESCOLA ── */}
       {!hasActiveSchools && (
         <section className="space-y-3">
           <SectionHeader icon={Building2} title={tUI("Registar Nova Escola")} />
-          <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl px-5 py-4">
-            <div className="flex items-center justify-between gap-4">
+          <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl px-4 sm:px-5 py-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div className="min-w-0">
                 <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
                   {tUI("A sua escola ainda não está registada?")}
@@ -676,7 +625,7 @@ export default function MinhaAreaPage() {
                   setSchoolSuccess(false);
                   setSchoolError("");
                 }}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-primary hover:bg-primary-700 text-white text-sm font-medium transition shadow-sm shadow-primary/20 shrink-0"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-primary hover:bg-primary-700 text-white text-sm font-medium transition shadow-sm shadow-primary/20 shrink-0"
               >
                 <Building2 size={14} /> {tUI("Registar escola")}
               </button>
@@ -1250,7 +1199,9 @@ export default function MinhaAreaPage() {
                   <div>
                     <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">
                       {tUI("NIF")}{" "}
-                      <span className="text-zinc-400 dark:text-zinc-500">{tUI("(opcional)")}</span>
+                      <span className="text-zinc-400 dark:text-zinc-500">
+                        {tUI("(opcional)")}
+                      </span>
                     </label>
                     <input
                       type="text"
