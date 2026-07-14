@@ -448,8 +448,8 @@ export default function MinhaAreaPage() {
             )}
           </div>
 
-          {/* Stats pills */}
-          <div className="flex flex-col gap-2 shrink-0">
+          {/* Stats pills — hidden on very small screens to prevent overflow */}
+          <div className="hidden sm:flex flex-col gap-2 shrink-0">
             <div className="flex items-center gap-2.5 px-3 py-2 rounded-xl bg-white/5 backdrop-blur-md border border-white/5">
               <div>
                 <p className="text-lg font-semibold text-white leading-none">
@@ -493,7 +493,7 @@ export default function MinhaAreaPage() {
       {!hasActiveSchools && escolasDisponiveis.length > 0 && (
         <section className="space-y-3">
           <SectionHeader icon={UserPlus} title={tUI("Solicitar vinculação")} />
-          <div className="flex items-center justify-between gap-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl px-5 py-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl px-5 py-4">
             <div className="min-w-0">
               <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
                 {tUI("Ainda não está vinculado a nenhuma escola")}
@@ -560,7 +560,7 @@ export default function MinhaAreaPage() {
                   {isPending && (
                     <button
                       onClick={() => setCancelTarget(app.id)}
-                      className="text-xs text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 border border-zinc-200 dark:border-zinc-700 rounded-lg px-2.5 py-1 transition shrink-0"
+                      className="text-xs text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 border border-zinc-200 dark:border-zinc-700 rounded-lg px-3 py-2 min-h-[44px] flex items-center transition shrink-0"
                     >
                       {tUI("Cancelar")}
                     </button>
@@ -764,7 +764,7 @@ export default function MinhaAreaPage() {
                 disabled={submitting}
                 className="p-1.5 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition"
               >
-                <X size={16} className="text-zinc-400" />
+                <X size={16} className="text-zinc-400 dark:text-zinc-500" />
               </button>
             </div>
 
@@ -795,7 +795,7 @@ export default function MinhaAreaPage() {
                     </select>
                     <ChevronDown
                       size={15}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 dark:text-zinc-500 pointer-events-none"
                     />
                   </div>
                   <button
@@ -1090,7 +1090,7 @@ export default function MinhaAreaPage() {
                 disabled={schoolSubmitting}
                 className="p-1.5 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition"
               >
-                <X size={16} className="text-zinc-400" />
+                <X size={16} className="text-zinc-400 dark:text-zinc-500" />
               </button>
             </div>
 
@@ -1149,7 +1149,7 @@ export default function MinhaAreaPage() {
                       <button
                         type="button"
                         onClick={() => setShowSlugInput(!showSlugInput)}
-                        className="text-[10px] text-primary hover:underline font-medium"
+                        className="text-[10px] text-primary dark:text-primary-400 hover:underline font-medium"
                       >
                         {showSlugInput ? tUI("Auto") : tUI("Editar")}
                       </button>
@@ -1250,7 +1250,7 @@ export default function MinhaAreaPage() {
                   <div>
                     <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">
                       {tUI("NIF")}{" "}
-                      <span className="text-zinc-400">{tUI("(opcional)")}</span>
+                      <span className="text-zinc-400 dark:text-zinc-500">{tUI("(opcional)")}</span>
                     </label>
                     <input
                       type="text"

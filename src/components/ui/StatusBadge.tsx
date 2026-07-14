@@ -47,7 +47,7 @@ export default function StatusBadge({ status }: { status: string }) {
   const label = statusLabels[status] || status
   return (
     <span
-      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${statusColors[status] || "bg-zinc-100 text-zinc-600"}`}
+      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${statusColors[status] || "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400"}`}
     >
       {tUI(label)}
     </span>
