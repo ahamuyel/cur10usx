@@ -28,6 +28,7 @@ export default function StudentAcademicAgenda({ exams, assignments }: Props) {
   const [lessons, setLessons] = useState<Lesson[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [mobileDayIndex, setMobileDayIndex] = useState(0);
 
   // Ingestão dinâmica de dados da API de Lições do Cur10usX
   const fetchLessons = useCallback(async () => {
@@ -83,70 +84,137 @@ export default function StudentAcademicAgenda({ exams, assignments }: Props) {
       </div>
 
       {/* CONTAINER BENTO GRID NATIVO */}
-      <div className="bg-white dark:bg-zinc-900/40 rounded-3xl border border-zinc-100 dark:border-zinc-800/60 p-5 shadow-xs overflow-x-auto">
-        <div className="min-w-[700px] space-y-4">
-          
-          {/* Linha dos Dias da Semana */}
-          <div className="grid grid-cols-5 gap-4 text-center border-b border-zinc-100 dark:border-zinc-800/40 pb-2">
-            {DAYS_OF_WEEK.map((day) => (
-              <div key={day} className="text-[11px] font-semibold text-zinc-400 dark:text-zinc-500 tracking-wide">
-                {day}
-              </div>
-            ))}
+      <div className="bg-white dark:bg-zinc-900/40 rounded-3xl border border-zinc-100 dark:border-zinc-800/60 p-5 shadow-xs">
+
+        {/* MOBILE: Day navigation */}
+        <div className="md:hidden flex items-center justify-between mb-4">
+          <button
+            onClick={() => setMobileDayIndex((i) => (i > 0 ? i - 1 : DAYS_OF_WEEK.length - 1))}
+            className="p-2 rounded-xl bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-100 dark:border-zinc-700/50 text-zinc-500 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+            aria-label="Dia anterior"
+          >
+            <ChevronLeft size={16} />
+          </button>
+          <div className="text-center">
+            <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">{DAYS_OF_WEEK[mobileDayIndex]}</p>
           </div>
+          <button
+            onClick={() => setMobileDayIndex((i) => (i < DAYS_OF_WEEK.length - 1 ? i + 1 : 0))}
+            className="p-2 rounded-xl bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-100 dark:border-zinc-700/50 text-zinc-500 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+            aria-label="Próximo dia"
+          >
+            <ChevronRight size={16} />
+          </button>
+        </div>
 
-          {/* Estado de Carregamento Assíncrono */}
-          {loading ? (
-            <div className="flex flex-col items-center justify-center py-20 gap-2 min-h-[280px]">
-              <Loader2 size={16} className="animate-spin text-violet-600 dark:text-violet-400" />
-              <p className="text-[10px] font-medium text-zinc-400 uppercase tracking-wider">Sincronizando aulas...</p>
-            </div>
-          ) : error ? (
-            <div className="flex flex-col items-center justify-center py-20 gap-2 min-h-[280px]">
-              <p className="text-xs font-semibold text-rose-500 dark:text-rose-400">Não foi possível carregar a agenda letiva.</p>
-            </div>
-          ) : (
-            /* O Canvas Flutuante das Aulas REAIS */
-            <div className="grid grid-cols-5 gap-4 items-start min-h-[280px]">
-              {DAYS_OF_WEEK.map((day) => {
+        {/* LOADING / ERROR states */}
+        {loading ? (
+          <div className="flex flex-col items-center justify-center py-20 gap-2 min-h-[200px]">
+            <Loader2 size={16} className="animate-spin text-violet-600 dark:text-violet-400" />
+            <p className="text-[10px] font-medium text-zinc-400 uppercase tracking-wider">Sincronizando aulas...</p>
+          </div>
+        ) : error ? (
+          <div className="flex flex-col items-center justify-center py-20 gap-2 min-h-[200px]">
+            <p className="text-xs font-semibold text-rose-500 dark:text-rose-400">Não foi possível carregar a agenda letiva.</p>
+          </div>
+        ) : (
+          <>
+            {/* MOBILE: Single day view */}
+            <div className="md:hidden min-h-[200px]">
+              {(() => {
+                const day = DAYS_OF_WEEK[mobileDayIndex];
                 const dayLessons = lessons.filter((l) => l.date === day);
-
                 return (
-                  <div key={day} className="space-y-3 h-full min-h-[100px] rounded-2xl bg-zinc-50/30 dark:bg-zinc-900/20 p-1">
+                  <div className="space-y-3">
                     {dayLessons.length > 0 ? (
                       dayLessons.map((lesson) => (
                         <button
                           key={lesson.id}
                           onClick={() => setSelectedLesson(lesson)}
-                          className="w-full text-left p-3.5 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800/80 shadow-2xs hover:border-violet-500/30 dark:hover:border-violet-400/30 transition-all duration-200 group active:scale-[0.98]"
+                          className="w-full text-left p-4 rounded-2xl bg-zinc-50/50 dark:bg-zinc-800/30 border border-zinc-100 dark:border-zinc-800/80 shadow-2xs hover:border-violet-500/30 dark:hover:border-violet-400/30 transition-all duration-200 group active:scale-[0.98]"
                         >
-                          <span className="text-[9px] font-bold text-violet-600 dark:text-violet-400 tabular-nums">
-                            {lesson.startTime} – {lesson.endTime}
-                          </span>
-                          <h4 className="text-xs font-semibold text-zinc-900 dark:text-zinc-100 tracking-tight mt-1 group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors line-clamp-2">
+                          <div className="flex items-center justify-between">
+                            <span className="text-[11px] font-bold text-violet-600 dark:text-violet-400 tabular-nums">
+                              {lesson.startTime} – {lesson.endTime}
+                            </span>
+                            {lesson.room && (
+                              <div className="flex items-center gap-1 text-[10px] text-zinc-400 dark:text-zinc-500 font-medium">
+                                <MapPin size={10} />
+                                <span className="truncate max-w-[80px]">{lesson.room.split("·")[0]}</span>
+                              </div>
+                            )}
+                          </div>
+                          <h4 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 tracking-tight mt-1.5 group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors line-clamp-2">
                             {lesson.title}
                           </h4>
-                          
-                          {lesson.room && (
-                            <div className="flex items-center gap-1 text-[10px] text-zinc-400 dark:text-zinc-500 font-medium mt-3">
-                              <MapPin size={10} />
-                              <span className="truncate">{lesson.room.split("·")[0]}</span>
+                          {lesson.teacher && (
+                            <div className="flex items-center gap-1 text-[10px] text-zinc-400 dark:text-zinc-500 font-medium mt-2">
+                              <User size={10} />
+                              <span className="truncate">{lesson.teacher}</span>
                             </div>
                           )}
                         </button>
                       ))
                     ) : (
-                      <div className="h-full flex items-center justify-center py-8">
-                        <span className="text-[10px] font-medium text-zinc-300 dark:text-zinc-700 italic">Sem aulas</span>
+                      <div className="h-full flex items-center justify-center py-12">
+                        <span className="text-xs font-medium text-zinc-300 dark:text-zinc-700 italic">Sem aulas neste dia</span>
                       </div>
                     )}
                   </div>
                 );
-              })}
+              })()}
             </div>
-          )}
 
-        </div>
+            {/* DESKTOP: Full week grid */}
+            <div className="hidden md:block">
+              {/* Header row */}
+              <div className="grid grid-cols-5 gap-4 text-center border-b border-zinc-100 dark:border-zinc-800/40 pb-2">
+                {DAYS_OF_WEEK.map((day) => (
+                  <div key={day} className="text-[11px] font-semibold text-zinc-400 dark:text-zinc-500 tracking-wide">
+                    {day}
+                  </div>
+                ))}
+              </div>
+              {/* Lessons grid */}
+              <div className="grid grid-cols-5 gap-4 items-start min-h-[280px] mt-4">
+                {DAYS_OF_WEEK.map((day) => {
+                  const dayLessons = lessons.filter((l) => l.date === day);
+                  return (
+                    <div key={day} className="space-y-3 h-full min-h-[100px] rounded-2xl bg-zinc-50/30 dark:bg-zinc-900/20 p-1">
+                      {dayLessons.length > 0 ? (
+                        dayLessons.map((lesson) => (
+                          <button
+                            key={lesson.id}
+                            onClick={() => setSelectedLesson(lesson)}
+                            className="w-full text-left p-3.5 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800/80 shadow-2xs hover:border-violet-500/30 dark:hover:border-violet-400/30 transition-all duration-200 group active:scale-[0.98]"
+                          >
+                            <span className="text-[9px] font-bold text-violet-600 dark:text-violet-400 tabular-nums">
+                              {lesson.startTime} – {lesson.endTime}
+                            </span>
+                            <h4 className="text-xs font-semibold text-zinc-900 dark:text-zinc-100 tracking-tight mt-1 group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors line-clamp-2">
+                              {lesson.title}
+                            </h4>
+                            {lesson.room && (
+                              <div className="flex items-center gap-1 text-[10px] text-zinc-400 dark:text-zinc-500 font-medium mt-3">
+                                <MapPin size={10} />
+                                <span className="truncate">{lesson.room.split("·")[0]}</span>
+                              </div>
+                            )}
+                          </button>
+                        ))
+                      ) : (
+                        <div className="h-full flex items-center justify-center py-8">
+                          <span className="text-[10px] font-medium text-zinc-300 dark:text-zinc-700 italic">Sem aulas</span>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </>
+        )}
+
       </div>
 
       {/* DETALHES DA AULA */}
