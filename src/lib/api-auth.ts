@@ -23,6 +23,11 @@ export async function requireRole(allowedRoles: string[], options?: RequireRoleO
     return { error: NextResponse.json({ error: "E-mail não verificado" }, { status: 403 }), session: null }
   }
 
+  // 2FA enforcement — if 2FA is enabled but not yet verified, reject the request
+  if (session.user.twoFactorEnabled && !session.user.twoFactorVerifiedAt) {
+    return { error: NextResponse.json({ error: "Verificação em dois passos necessária" }, { status: 403 }), session: null }
+  }
+
   const role = session.user.role
   if (!role || !allowedRoles.includes(role)) {
     return { error: NextResponse.json({ error: "Sem permissão" }, { status: 403 }), session: null }

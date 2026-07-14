@@ -29,6 +29,19 @@ export async function middleware(req: NextRequest) {
     if (!hasSession) {
       return NextResponse.json({ error: "Não autenticado" }, { status: 401 })
     }
+    // 2FA enforcement for API routes — use Edge-compatible JWT decode
+    // (Prisma is not available in Edge, so we decode the JWT directly)
+    const sessionCookie = req.cookies.get("authjs.session-token")?.value || req.cookies.get("next-auth.session-token")?.value
+    if (sessionCookie) {
+      try {
+        const payload = await decodeJwtPayload(sessionCookie)
+        if (payload?.twoFactorEnabled && !payload?.twoFactorVerifiedAt) {
+          return NextResponse.json({ error: "Verificação em dois passos necessária" }, { status: 403 })
+        }
+      } catch {
+        // If JWT decode fails, let the route handler deal with it
+      }
+    }
     return NextResponse.next()
   }
 
@@ -64,6 +77,15 @@ export async function middleware(req: NextRequest) {
   if (session?.user) {
     const { role, id } = session.user
 
+    // 2FA enforcement — if 2FA is enabled but not yet verified, block access
+    if (session.user.twoFactorEnabled && !session.user.twoFactorVerifiedAt) {
+      if (!pathname.startsWith("/signin/verify-2fa")) {
+        return NextResponse.redirect(
+          new URL(`/signin/verify-2fa?email=${encodeURIComponent(session.user.email || "")}`, req.url)
+        )
+      }
+    }
+
     // Super Admin should go to /admin
     if (role === "super_admin" && !pathname.startsWith("/admin") && !pathname.startsWith("/minha-area")) {
       return NextResponse.redirect(new URL("/admin", req.url))
@@ -94,6 +116,23 @@ function isValidRedirect(url: string): boolean {
   if (url.includes("@")) return false
   if (url.includes("..")) return false
   return true
+}
+
+// Decode JWT payload without verification (for Edge Runtime)
+// Used to check 2FA status — NextAuth already verified the token when setting the cookie
+async function decodeJwtPayload(token: string): Promise<Record<string, unknown> | null> {
+  try {
+    const parts = token.split(".")
+    if (parts.length !== 3) return null
+    const payload = parts[1]
+    // Base64url decode
+    const base64 = payload.replace(/-/g, "+").replace(/_/g, "/")
+    const padded = base64 + "=".repeat((4 - (base64.length % 4)) % 4)
+    const decoded = atob(padded)
+    return JSON.parse(decoded)
+  } catch {
+    return null
+  }
 }
 
 export const config = {

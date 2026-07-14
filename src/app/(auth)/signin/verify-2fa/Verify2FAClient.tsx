@@ -91,7 +91,7 @@ export default function Verify2FAClient() {
       const res = await fetch("/api/auth/2fa/verify-signin", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, token }),
+        body: JSON.stringify({ token }),
       })
       if (!res.ok) {
         const err = await res.json()

@@ -204,6 +204,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           updatedToken.sessionVersion = dbUser.sessionVersion;
           updatedToken.hasPassword = !!dbUser.hashedPassword;
           updatedToken.twoFactorEnabled = dbUser.twoFactorEnabled;
+          // Sync twoFactorVerifiedAt from DB to keep JWT in sync
+          updatedToken.twoFactorVerifiedAt = dbUser.twoFactorVerifiedAt
+            ? dbUser.twoFactorVerifiedAt.toISOString()
+            : null;
         }
       }
 
