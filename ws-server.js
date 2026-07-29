@@ -235,6 +235,12 @@ wss.on("connection", (ws, req) => {
       }
 
       if (msg.type === "broadcast") {
+        if (!ws.userId || ws.userRole !== "service") {
+          console.warn(`[WS] Unauthorized broadcast attempt from ${ip} (userId: ${ws.userId || "unauthenticated"}, role: ${ws.userRole || "none"})`)
+          ws.close(4003, "Unauthorized broadcast attempt")
+          return
+        }
+
         publishToRedis(msg)
         if (msg.target === "user") {
           broadcastToUser(msg.userId, msg.event, msg.payload)
