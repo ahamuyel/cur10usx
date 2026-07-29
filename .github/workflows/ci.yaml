@@ -14,9 +14,6 @@ jobs:
   quality:
     name: Lint, Type Check & Build
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./cur10us
 
     steps:
       - uses: actions/checkout@v4
@@ -25,7 +22,7 @@ jobs:
         with:
           node-version: 20
           cache: 'npm'
-          cache-dependency-path: cur10us/package-lock.json
+          cache-dependency-path: package-lock.json
 
       - name: Instalar dependências
         run: npm ci
@@ -64,8 +61,8 @@ jobs:
       - name: Build & Push
         uses: docker/build-push-action@v6
         with:
-          context: ./cur10us
-          file: ./cur10us/Dockerfile
+          context: .
+          file: containers/app/Dockerfile
           push: true
           cache-from: type=gha
           cache-to: type=gha,mode=max
