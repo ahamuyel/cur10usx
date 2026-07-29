@@ -22,6 +22,7 @@ const THEME_STYLES = {
 } as const;
 
 type Theme = keyof typeof THEME_STYLES;
+
 export default function AdminHero({ briefing }: { briefing: any }) {
   const adminName = briefing?.schoolInfo?.adminName ?? "Administrador";
   const academicYear = briefing?.schoolInfo?.academicYear ?? "N/A";
@@ -40,22 +41,25 @@ export default function AdminHero({ briefing }: { briefing: any }) {
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="relative w-full rounded-3xl p-5 md:p-8 overflow-hidden bg-white dark:bg-zinc-950 border border-zinc-100 dark:border-zinc-800 shadow-sm"
+      className="relative w-full rounded-[2rem] p-5 sm:p-6 md:p-8 overflow-hidden bg-white dark:bg-zinc-950 border border-zinc-100 dark:border-zinc-800/80 shadow-xs"
     >
-      <div className="absolute inset-0 z-0 opacity-20"><HeroBackgroundPaths /></div>
+      {/* Fundo dinâmico com melhor integração dark/light mode */}
+      <div className="absolute inset-0 z-0 opacity-15 dark:opacity-25 pointer-events-none transition-opacity duration-700">
+        <HeroBackgroundPaths />
+      </div>
 
       <div className="relative z-10">
         {/* Header Responsivo */}
-        <div className="mb-8">
-          <h1 className="text-xl md:text-3xl font-bold text-zinc-950 dark:text-white tracking-tight">
+        <div className="mb-6 md:mb-8">
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-zinc-950 dark:text-white tracking-tight leading-none">
             Olá, {adminName}
           </h1>
-          <p className="text-xs md:text-sm text-zinc-500 dark:text-zinc-400 mt-1">
+          <p className="text-[11px] sm:text-xs md:text-sm text-zinc-500 dark:text-zinc-400 mt-1.5 font-medium">
             Painel Executivo · Ano Lectivo {academicYear}
           </p>
         </div>
 
-        {/* Grid de Cards: Adaptável 2x2 para mobile e 4x1 para desktop */}
+        {/* Grid de Cards: 2 colunas no mobile, 4 em telas grandes */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
           {cards.map((card) => {
             const Icon = card.icon;
@@ -64,18 +68,18 @@ export default function AdminHero({ briefing }: { briefing: any }) {
             return (
               <Link key={card.id} href={card.href} className="group block outline-none">
                 <div className={cn(
-                  "flex flex-col p-4 rounded-2xl border transition-all duration-300 hover:shadow-md active:scale-[0.98]",
-                  "bg-white/50 dark:bg-zinc-900/50 border-zinc-200 dark:border-zinc-800 backdrop-blur-sm",
+                  "flex flex-col p-3.5 sm:p-4 rounded-2xl border transition-all duration-300 hover:shadow-sm active:scale-[0.98] h-full",
+                  "bg-white/60 dark:bg-zinc-900/40 border-zinc-200/80 dark:border-zinc-800/70 backdrop-blur-xs",
                   isRisk && "border-rose-200 dark:border-rose-900/50 bg-rose-50/50 dark:bg-rose-950/20"
                 )}>
                   <div className="flex items-center justify-between mb-2">
-                    <Icon className={cn("w-4 h-4 md:w-5 md:h-5", isRisk ? "text-rose-500" : "text-zinc-400")} />
-                    <ChevronRight size={14} className="opacity-30 group-hover:translate-x-1 transition-transform" />
+                    <Icon className={cn("w-4 h-4 md:w-5 md:h-5", isRisk ? "text-rose-500" : "text-zinc-400 dark:text-zinc-500")} />
+                    <ChevronRight size={14} className="opacity-30 group-hover:translate-x-1 transition-transform text-zinc-400 dark:text-zinc-300" />
                   </div>
-                  <p className="text-lg md:text-xl font-bold text-zinc-950 dark:text-white tabular-nums">
+                  <p className="text-base sm:text-lg md:text-xl font-black text-zinc-950 dark:text-white tabular-nums tracking-tight">
                     {String(card.v).padStart(2, "0")}
                   </p>
-                  <p className="text-[10px] md:text-xs font-semibold uppercase tracking-wider text-zinc-500 truncate mt-0.5">
+                  <p className="text-[9px] sm:text-[10px] md:text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 truncate mt-0.5">
                     {card.l}
                   </p>
                 </div>
@@ -84,19 +88,25 @@ export default function AdminHero({ briefing }: { briefing: any }) {
           })}
         </div>
 
-        {/* Ações Rápidas: Flex-wrap para garantir que nada quebre */}
-        <div className="border-t border-zinc-100 dark:border-white/10 pt-6">
-          <p className="text-xs font-bold uppercase tracking-wider text-zinc-400 mb-4">Ações rápidas</p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
+        {/* Ações Rápidas: Layout adaptável porbreakpoints */}
+        <div className="border-t border-zinc-100 dark:border-zinc-800/65 pt-6">
+          <p className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-zinc-400 mb-3.5">
+            Ações rápidas
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
             {[
               { label: "Adicionar Aluno", icon: UserPlus, href: "/list/students/new" },
               { label: "Adicionar Professor", icon: GraduationCap, href: "/list/teachers/new" },
               { label: "Criar Turma", icon: LayoutGrid, href: "/list/classes/new" },
               { label: "Comunicado", icon: Megaphone, href: "/list/announcements/new" },
             ].map((a) => (
-              <Link key={a.label} href={a.href} className="flex items-center gap-3 px-4 py-3 rounded-xl bg-zinc-50 dark:bg-zinc-900/50 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all border border-zinc-100 dark:border-zinc-800/50 group">
-                <a.icon size={16} className="text-indigo-500 shrink-0" />
-                <span className="text-xs sm:text-sm font-medium text-zinc-700 dark:text-zinc-300 truncate">
+              <Link 
+                key={a.label} 
+                href={a.href} 
+                className="flex items-center gap-3 px-4 py-3 rounded-xl bg-zinc-50/80 dark:bg-zinc-900/50 hover:bg-zinc-100 dark:hover:bg-zinc-800/80 transition-all border border-zinc-100 dark:border-zinc-800/50 group active:scale-[0.99]"
+              >
+                <a.icon size={16} className="text-violet-500 dark:text-violet-400 shrink-0 group-hover:scale-110 transition-transform" />
+                <span className="text-xs sm:text-sm font-semibold text-zinc-700 dark:text-zinc-300 truncate">
                   {a.label}
                 </span>
               </Link>

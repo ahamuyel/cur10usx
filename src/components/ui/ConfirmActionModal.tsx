@@ -51,10 +51,10 @@ const ConfirmActionModal = ({ open, onClose, onConfirm, title, message, confirmL
   return (
     <div
       ref={overlayRef}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50 backdrop-blur-sm p-0 sm:p-4"
       onClick={(e) => e.target === overlayRef.current && !loading && onClose()}
     >
-      <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-xl border border-zinc-200 dark:border-zinc-800 w-full max-w-sm animate-in fade-in zoom-in-95 duration-200">
+      <div className="bg-white dark:bg-zinc-900 rounded-t-2xl sm:rounded-2xl shadow-xl border border-zinc-200 dark:border-zinc-800 w-full max-w-sm animate-in fade-in zoom-in-95 duration-200">
         <div className="flex items-center justify-between p-4 border-b border-zinc-100 dark:border-zinc-800">
           <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">{title}</h2>
           <button

@@ -83,7 +83,7 @@ export default function MinhaAreaLayout({ children }: { children: React.ReactNod
   )) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <Loader2 className="w-6 h-6 animate-spin text-primary" />
+        <Loader2 className="w-6 h-6 animate-spin text-primary dark:text-primary-400" />
       </div>
     )
   }
