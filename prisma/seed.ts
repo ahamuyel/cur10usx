@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client"
 import { hash } from "bcryptjs"
+import crypto from "crypto"
 
 const prisma = new PrismaClient()
 
@@ -7,14 +8,26 @@ async function main() {
   console.log("=== Seed Cur10usX ===\n")
 
   // ─── 1. Super Admin ────────────────────────────────────────────
-  const hashedPassword = await hash("cur10usx", 12)
+  const isProduction = process.env.NODE_ENV === "production"
+  const adminEmail = process.env.SUPER_ADMIN_EMAIL || "admin@cur10usx.com"
+  let adminPassword = process.env.SUPER_ADMIN_PASSWORD
+
+  if (!adminPassword) {
+    if (isProduction) {
+      throw new Error("FALHA DE SEGURANÇA: A variável de ambiente SUPER_ADMIN_PASSWORD é obrigatória para o seed em produção.")
+    }
+    // Gerar password aleatória forte para ambiente de desenvolvimento local
+    adminPassword = crypto.randomBytes(16).toString("hex")
+  }
+
+  const hashedPassword = await hash(adminPassword, 12)
 
   await prisma.user.upsert({
-    where: { email: "cur10usxcompany@gmail.com" },
+    where: { email: adminEmail },
     update: { hashedPassword, role: "super_admin", isActive: true, emailVerified: true, provider: "credentials" },
     create: {
       name: "Super Admin",
-      email: "cur10usxcompany@gmail.com",
+      email: adminEmail,
       hashedPassword,
       role: "super_admin",
       isActive: true,
@@ -22,7 +35,14 @@ async function main() {
       provider: "credentials",
     },
   })
-  console.log("✓ Super Admin: cur10usxcompany@gmail.com / cur10usx")
+
+  if (!isProduction) {
+    console.log(`✓ Super Admin configurado com sucesso!`)
+    console.log(`  Email: ${adminEmail}`)
+    console.log(`  Password temporária local: ${adminPassword}\n`)
+  } else {
+    console.log(`✓ Super Admin configurado com sucesso para: ${adminEmail}\n`)
+  }
 
   // ─── 2. Platform Config ────────────────────────────────────────
   await prisma.platformConfig.upsert({

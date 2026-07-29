@@ -19,4 +19,4 @@ npx prisma db seed
 
 echo ""
 echo "=== Base de dados resetada com sucesso! ==="
-echo "Login: super@cur10usx.com / cur10usx"
+echo "Consulte os logs do seed acima para as credenciais geradas."
