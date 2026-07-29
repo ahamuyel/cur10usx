@@ -1,6 +1,6 @@
 import { cookies } from "next/headers"
 import { NextResponse } from "next/server"
-import { createHash, randomBytes } from "crypto"
+import { createHash, randomBytes, timingSafeEqual } from "crypto"
 
 const CSRF_COOKIE_NAME = "csrf-token"
 const CSRF_HEADER_NAME = "x-csrf-token"
@@ -56,7 +56,13 @@ export async function validateCsrfToken(req: Request): Promise<boolean> {
   }
 
   const hashedHeaderToken = hashToken(headerToken)
-  return hashedCookieToken === hashedHeaderToken
+  const bufA = Buffer.from(hashedCookieToken, "hex")
+  const bufB = Buffer.from(hashedHeaderToken, "hex")
+  if (bufA.length !== bufB.length || bufA.length === 0) {
+    return false
+  }
+
+  return timingSafeEqual(bufA, bufB)
 }
 
 /**

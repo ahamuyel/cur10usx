@@ -28,16 +28,29 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Ficheiro demasiado grande. Máximo 2MB" }, { status: 400 })
     }
 
+    // Magic bytes verification to prevent MIME spoofing
+    const arrayBuffer = await file.arrayBuffer()
+    const header = new Uint8Array(arrayBuffer.slice(0, 12))
+    const isJpeg = header[0] === 0xFF && header[1] === 0xD8 && header[2] === 0xFF
+    const isPng = header[0] === 0x89 && header[1] === 0x50 && header[2] === 0x4E && header[3] === 0x47
+    const isWebp = header[0] === 0x52 && header[1] === 0x49 && header[2] === 0x46 && header[3] === 0x46 &&
+                   header[8] === 0x57 && header[9] === 0x45 && header[10] === 0x42 && header[11] === 0x50
+
+    if (!isJpeg && !isPng && !isWebp) {
+      return NextResponse.json({ error: "Conteúdo do ficheiro inválido. Apenas imagens JPEG, PNG ou WebP reais são aceites." }, { status: 400 })
+    }
+
     // Get current user to find old photo URL
     const user = await prisma.user.findUnique({
       where: { id: session.user.id },
       select: { image: true, role: true },
     })
 
-    // Upload to Vercel Blob
+    // Upload to Vercel Blob using verified buffer
     const ext = file.name.split(".").pop() || "jpg"
     const filename = `profiles/${session.user.id}-${Date.now()}.${ext}`
-    const blob = await put(filename, file, { access: "public", addRandomSuffix: true })
+    const verifiedFile = new File([arrayBuffer], file.name, { type: file.type })
+    const blob = await put(filename, verifiedFile, { access: "public", addRandomSuffix: true })
     const photoUrl = blob.url
 
     // Delete old blob if it was a Vercel Blob URL

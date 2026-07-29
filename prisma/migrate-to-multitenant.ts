@@ -6,6 +6,7 @@
  */
 import { PrismaClient } from "@prisma/client"
 import { hash } from "bcryptjs"
+import crypto from "crypto"
 
 const prisma = new PrismaClient()
 
@@ -59,19 +60,34 @@ async function main() {
   console.log("  All existing users activated")
 
   // 8. Create super_admin user
-  const hashedPassword = await hash("cur10usx", 12)
+  const isProduction = process.env.NODE_ENV === "production"
+  const adminEmail = process.env.SUPER_ADMIN_EMAIL || "super@cur10usx.com"
+  let adminPassword = process.env.SUPER_ADMIN_PASSWORD
+
+  if (!adminPassword) {
+    if (isProduction) {
+      throw new Error("FALHA DE SEGURANÇA: A variável de ambiente SUPER_ADMIN_PASSWORD é obrigatória para o script em produção.")
+    }
+    adminPassword = crypto.randomBytes(16).toString("hex")
+  }
+
+  const hashedPassword = await hash(adminPassword, 12)
   await prisma.user.upsert({
-    where: { email: "super@cur10usx.com" },
-    update: { role: "super_admin", isActive: true },
+    where: { email: adminEmail },
+    update: { role: "super_admin", isActive: true, hashedPassword },
     create: {
       name: "Super Admin",
-      email: "super@cur10usx.com",
+      email: adminEmail,
       hashedPassword,
       role: "super_admin",
       isActive: true,
     },
   })
-  console.log("  Super admin created: super@cur10usx.com")
+  if (!isProduction) {
+    console.log(`  Super admin criado: ${adminEmail} (password temporária: ${adminPassword})`)
+  } else {
+    console.log(`  Super admin criado/atualizado: ${adminEmail}`)
+  }
 
   console.log("\nMigration complete!")
 }
