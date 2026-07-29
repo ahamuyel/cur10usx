@@ -1,0 +1,6 @@
+# Configuração do pre-commit com Gitleaks para prevenção de vazamento de segredos
+repos:
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.18.2
+    hooks:
+      - id: gitleaks
