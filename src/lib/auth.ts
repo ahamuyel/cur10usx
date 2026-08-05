@@ -178,6 +178,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           },
         });
 
+        if (!dbUser) {
+          return null as any
+        }
+
         if (dbUser) {
           // Session invalidation — if sessionVersion changed (password reset, etc.), discard token
           if (dbUser.sessionVersion !== (updatedToken.sessionVersion as number)) {
