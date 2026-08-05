@@ -9,6 +9,8 @@ export async function GET(req: Request) {
     if (authError) return authError
 
     const schoolId = getSchoolId(session!)
+    const role = session!.user.role
+    const userId = session!.user.id
     const { searchParams } = new URL(req.url)
     const studentId = searchParams.get("studentId") || ""
     const trimester = searchParams.get("trimester") || ""
@@ -29,6 +31,36 @@ export async function GET(req: Request) {
       ...(trimester ? { trimester } : {}),
       ...(academicYear ? { academicYear } : {}),
       ...(academicYearId ? { academicYearId } : {}),
+    }
+
+    // Student: own results only (ignore studentId from searchParams)
+    if (role === "student") {
+      const student = await prisma.student.findFirst({ where: { userId, schoolId }, select: { id: true } })
+      where.studentId = student?.id ?? "none"
+    }
+
+    // Parent: children's results only
+    if (role === "parent") {
+      const parent = await prisma.parent.findFirst({
+        where: { userId, schoolId },
+        select: { students: { select: { id: true } } },
+      })
+      where.studentId = parent ? { in: parent.students.map((s) => s.id) } : "none"
+    }
+
+    // Teacher: only students in their classes and subjects they teach
+    if (role === "teacher") {
+      const teacher = await prisma.teacher.findFirst({
+        where: { userId, schoolId },
+        include: { teacherClasses: true, teacherSubjects: true },
+      })
+      if (!teacher) {
+        where.subjectId = "none"
+        where.student = { classId: "none" }
+      } else {
+        where.subjectId = { in: teacher.teacherSubjects.map((ts) => ts.subjectId) }
+        where.student = { classId: { in: teacher.teacherClasses.map((tc) => tc.classId) } }
+      }
     }
 
     const results = await prisma.result.findMany({
