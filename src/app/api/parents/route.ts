@@ -8,7 +8,7 @@ import { sendTempCredentials } from "@/lib/email"
 
 export async function GET(req: Request) {
   try {
-    const { error: authError, session } = await requirePermission(["school_admin", "teacher", "student", "parent"], "canManageParents", { requireSchool: true })
+    const { error: authError, session } = await requirePermission(["school_admin", "teacher"], "canManageParents", { requireSchool: true })
     if (authError) return authError
 
     const schoolId = getSchoolId(session!)

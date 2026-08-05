@@ -5,7 +5,7 @@ import { updateParentSchema } from "@/lib/validations/entities"
 
 export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const { error: authError, session } = await requirePermission(["school_admin", "teacher", "student", "parent"], undefined, { requireSchool: true })
+    const { error: authError, session } = await requirePermission(["school_admin"], "canManageParents", { requireSchool: true })
     if (authError) return authError
 
     const schoolId = getSchoolId(session!)
