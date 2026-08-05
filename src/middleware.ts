@@ -18,7 +18,7 @@ export async function middleware(req: NextRequest) {
   }
 
   // API routes — auth is enforced per-route via requireRole/requirePermission
-  const publicApiPrefixes = ["/api/auth/", "/api/applications/status", "/api/platform/status", "/api/schools/public", "/api/health"]
+  const publicApiPrefixes = ["/api/auth/", "/api/applications/status", "/api/platform/status", "/api/schools/public", "/api/health", "/api/cron/snapshot"]
   if (pathname.startsWith("/api/")) {
     if (publicApiPrefixes.some((p) => pathname.startsWith(p))) {
       return NextResponse.next()

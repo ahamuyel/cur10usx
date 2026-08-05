@@ -1,8 +1,23 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { requestSnapshot } from "@/lib/snapshot-queue"
+import { createHash, timingSafeEqual } from "crypto"
 
-export async function GET() {
+function isAuthorized(req: Request): boolean {
+  const header = req.headers.get("authorization") || ""
+  const token = header.startsWith("Bearer ") ? header.slice(7) : ""
+  const expected = process.env.CRON_SECRET || ""
+  if (!expected) return false
+  const a = createHash("sha256").update(token).digest()
+  const b = createHash("sha256").update(expected).digest()
+  return a.length === b.length && timingSafeEqual(a, b)
+}
+
+export async function GET(req: Request) {
+  if (!isAuthorized(req)) {
+    return NextResponse.json({ error: "Não autorizado" }, { status: 401 })
+  }
+
   try {
     const schools = await prisma.school.findMany({
       where: { status: "ativa" },
