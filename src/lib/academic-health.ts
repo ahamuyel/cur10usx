@@ -1,5 +1,13 @@
 import { prisma } from "@/lib/prisma"
 import { getCurrentAcademicYear } from "@/lib/academic-year"
+import {
+  getHealthStatus,
+  calculateAcademicPerformance,
+  calculateAttendancePercentage,
+  calculateGlobalHealthScore,
+} from "@/lib/score"
+
+export { getHealthStatus }
 
 export interface AcademicHealthBreakdown {
   academicPerformance: number
@@ -9,17 +17,10 @@ export interface AcademicHealthBreakdown {
 }
 
 export interface AcademicHealthResult {
-  score: number // Aproveitamento Global (Desempenho + Assiduidade)
+  score: number // Aproveitamento Global (40/30/20/10: Desempenho + Assiduidade + Actividade + Administrativo)
   status: string
   breakdown: AcademicHealthBreakdown
   operationalScore: number // Eficiência Operacional (Actividade + Administrativo)
-}
-
-export function getHealthStatus(score: number): string {
-  if (score >= 90) return "Excelente"
-  if (score >= 75) return "Boa"
-  if (score >= 60) return "Atenção"
-  return "Crítica"
 }
 
 export async function computeAcademicHealth(schoolId: string): Promise<AcademicHealthResult> {
@@ -90,22 +91,17 @@ export async function computeAcademicHealth(schoolId: string): Promise<AcademicH
     prisma.student.count({ where: { schoolId } }),
   ])
 
-  // 1. Aproveitamento Académico (50% do Score Global se usarmos apenas Pedagógico)
+  // 1. Aproveitamento Académico (40% do Score Global segundo spec)
   const averageGrade = avgResult._avg.score ?? 0
-  const academicPerformance = averageGrade > 0
-    ? Math.round((averageGrade / 20) * 100)
-    : 0
+  const academicPerformance = calculateAcademicPerformance(averageGrade)
 
-  // 2. Assiduidade (50% do Score Global se usarmos apenas Pedagógico)
+  // 2. Assiduidade (30% do Score Global segundo spec)
   const presente = attendanceCounts.find(a => a.status === "presente")?._count ?? 0
   const atrasado = attendanceCounts.find(a => a.status === "atrasado")?._count ?? 0
   const totalAttendance = attendanceCounts.reduce((sum, a) => sum + a._count, 0)
-  const attendance = totalAttendance > 0
-    ? Math.round(((presente + atrasado) / totalAttendance) * 100)
-    : 0
+  const attendance = calculateAttendancePercentage(presente, atrasado, totalAttendance)
 
-
-  // 3. Actividade Escolar (Parte da Eficiência Operacional)
+  // 3. Actividade Escolar (20% do Score Global segundo spec)
   const activityMetrics: number[] = []
 
   // Submission completion rate
@@ -126,33 +122,31 @@ export async function computeAcademicHealth(schoolId: string): Promise<AcademicH
     ? Math.round(activityMetrics.reduce((a, b) => a + b, 0) / activityMetrics.length)
     : 0
 
-  // 4. Eficiência Administrativa (Parte da Eficiência Operacional)
+  // 4. Eficiência Administrativa (10% do Score Global segundo spec)
   const totalPending = pendingApplications
   const pendingRatio = totalStudents > 0 ? totalPending / totalStudents : 0
   const administrativeEfficiency = Math.round(Math.max(0, 100 - pendingRatio * 100))
 
-  // NOVO CÁLCULO:
-  // Score Global (Pedagógico) = 50% Aproveitamento + 50% Assiduidade
-  const globalScore = Math.round(
-    academicPerformance * 0.50 +
-    attendance * 0.50
-  )
+  const breakdown: AcademicHealthBreakdown = {
+    academicPerformance: Math.min(100, Math.max(0, academicPerformance)),
+    attendance: Math.min(100, Math.max(0, attendance)),
+    schoolActivity: Math.min(100, Math.max(0, schoolActivity)),
+    administrativeEfficiency: Math.min(100, Math.max(0, administrativeEfficiency)),
+  }
 
-  // Score Operacional = 60% Actividade + 40% Administração
+  // Score Global Alinhado com a Spec: 40/30/20/10
+  const globalScore = calculateGlobalHealthScore(breakdown)
+
+  // Score Operacional: 60% Actividade + 40% Administração
   const operationalScore = Math.round(
     schoolActivity * 0.60 +
     administrativeEfficiency * 0.40
   )
 
   return {
-    score: Math.min(100, Math.max(0, globalScore)),
+    score: globalScore,
     status: getHealthStatus(globalScore),
     operationalScore: Math.min(100, Math.max(0, operationalScore)),
-    breakdown: {
-      academicPerformance: Math.min(100, Math.max(0, academicPerformance)),
-      attendance: Math.min(100, Math.max(0, attendance)),
-      schoolActivity: Math.min(100, Math.max(0, schoolActivity)),
-      administrativeEfficiency: Math.min(100, Math.max(0, administrativeEfficiency)),
-    },
+    breakdown,
   }
 }

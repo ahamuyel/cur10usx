@@ -1,6 +1,12 @@
 import { prisma } from "@/lib/prisma"
 import { getCurrentAcademicYear } from "@/lib/academic-year"
-import { getHealthStatus } from "@/lib/academic-health"
+import {
+  getHealthStatus,
+  calculateAcademicPerformance,
+  calculateAttendancePercentage,
+  calculateSubmissionRate,
+  calculateClassHealthScore,
+} from "@/lib/score"
 
 export type ClassRiskLevel = "Baixo Risco" | "Moderado" | "Alto Risco" | "Crítico" | "Sem dados"
 
@@ -89,28 +95,23 @@ export async function computeClassHealth(schoolId: string): Promise<ClassHealthS
     ])
 
     const averageGrade = avgResult._avg.score ?? 0
-    const academicPerformance = averageGrade > 0
-      ? Math.round((averageGrade / 20) * 100)
-      : 0
+    const academicPerformance = calculateAcademicPerformance(averageGrade)
 
     const presente = attendanceCounts.find(a => a.status === "presente")?._count ?? 0
+    const atrasado = attendanceCounts.find(a => a.status === "atrasado")?._count ?? 0
     const totalAttendance = attendanceCounts.reduce((s, a) => s + a._count, 0)
-    const attendance = totalAttendance > 0
-      ? Math.round((presente / totalAttendance) * 100)
-      : 0
+    const attendance = calculateAttendancePercentage(presente, atrasado, totalAttendance)
 
     const submitted = submissionData
       .filter(s => s.status === "entregue" || s.status === "avaliada")
       .reduce((s, a) => s + a._count, 0)
     const totalSubmissions = submissionData.reduce((s, a) => s + a._count, 0)
-    const submissionRate = totalSubmissions > 0
-      ? Math.round((submitted / totalSubmissions) * 100)
-      : 0
+    const submissionRate = calculateSubmissionRate(submitted, totalSubmissions)
 
-    const score = Math.round(
-      academicPerformance * 0.40 +
-      attendance * 0.40 +
-      submissionRate * 0.20
+    const score = calculateClassHealthScore(
+      academicPerformance,
+      attendance,
+      submissionRate
     )
 
     // Determinar motivo principal de monitorização

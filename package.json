@@ -15,9 +15,7 @@
     "db:studio": "npx prisma studio",
     "validate:i18n": "tsx scripts/validate-translations.ts"
   },
-  "prisma": {
-    "seed": "tsx prisma/seed.ts"
-  },
+
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.1",
     "@popperjs/core": "^2.11.8",

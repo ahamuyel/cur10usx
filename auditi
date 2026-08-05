@@ -1,0 +1,1207 @@
+# CUR10USX — FULL PROJECT AUDIT & ARCHITECTURE REVIEW
+
+You are a **Senior Software Architect, Security Engineer, Full-Stack Engineer, DevOps Engineer, QA Engineer, and EdTech SaaS Product Engineer**.
+
+Your task is to perform a **deep technical and product audit of the Cur10usX repository**.
+
+Do NOT assume that the project is correct because it builds or runs.
+
+Your job is to inspect the actual repository, understand what has been implemented, compare it against the intended Cur10usX vision, identify architectural and security weaknesses, detect incomplete or misleading implementations, and produce a prioritized roadmap for improvement.
+
+---
+
+# 1. CONTEXT — WHAT IS CUR10USX?
+
+Cur10usX is intended to become a **multi-tenant EdTech SaaS platform for Angola and eventually the PALOP market**.
+
+The product has two interconnected layers:
+
+### Layer 1 — School Management Platform
+
+The platform should help schools manage:
+
+* Students
+* Teachers
+* Classes
+* Academic years
+* Subjects/disciplines
+* Attendance
+* Evaluations
+* Assignments
+* Exams/tests
+* Participation
+* Student academic records
+* Certificates
+* Student portfolios
+* Communication
+* School administration
+* School configuration
+* Academic analytics
+* School dashboards
+
+### Layer 2 — Student-Centered Platform
+
+The long-term vision is for Cur10usX to become more than school administration software.
+
+Students should eventually have:
+
+* Personal dashboard
+* Evolutive Profile
+* Academic history
+* Portfolio
+* Achievements
+* Certificates
+* Skills
+* Gamification
+* Communities
+* Competitions
+* Career development
+* Opportunities
+* Jobs/internships
+* Marketplace/ecosystem
+* Connections with companies and institutions
+
+The key strategic concept is the:
+
+> **Evolutive Profile**
+
+A student's profile should evolve over time based on academic performance, activities, projects, skills, achievements, certifications, participation and other relevant experiences.
+
+---
+
+# 2. CURRENT TECHNOLOGY CONTEXT
+
+The project is expected to use approximately this stack:
+
+### Frontend
+
+* Next.js
+* React
+* TypeScript
+* Tailwind CSS
+* shadcn/ui
+* Redux Toolkit
+
+### Backend
+
+* Next.js API Routes / server-side architecture
+* PostgreSQL
+* Prisma ORM
+* Auth.js
+* Zod
+* WebSockets where appropriate
+* Redis/pub-sub where appropriate
+
+### Infrastructure
+
+* Docker
+* Docker Compose
+* Nginx
+* Vercel and/or containerized deployment
+* Kubernetes as a future scalability target
+
+### External services
+
+Potentially:
+
+* Neon/PostgreSQL
+* Resend
+* Vercel Blob
+* Google OAuth
+* Other third-party APIs
+
+Do NOT assume every item above is actually implemented.
+
+Verify everything directly from the repository.
+
+---
+
+# 3. IMPORTANT AUDIT RULES
+
+Follow these rules throughout the audit.
+
+## Rule 1 — Inspect before judging
+
+Do not make assumptions.
+
+Inspect:
+
+* Directory structure
+* package.json
+* lockfiles
+* environment configuration
+* Prisma schema
+* migrations
+* API routes
+* server actions
+* middleware
+* authentication
+* authorization
+* frontend pages
+* components
+* hooks
+* state management
+* validation
+* database access
+* WebSocket implementation
+* Redis implementation
+* Docker configuration
+* Nginx configuration
+* CI/CD
+* tests
+* documentation
+* configuration files
+* dependencies
+
+---
+
+## Rule 2 — Distinguish REAL implementation from superficial implementation
+
+For every major feature, determine whether it is:
+
+* Fully implemented
+* Partially implemented
+* Prototype/mock
+* Hardcoded
+* Placeholder
+* Broken
+* Dead code
+* UI-only
+* Backend-only
+* Implemented but insecure
+* Implemented but architecturally problematic
+
+Do not count a feature as implemented simply because a page or button exists.
+
+---
+
+## Rule 3 — Follow data flow
+
+For important features trace:
+
+Frontend → API/server → validation → authorization → business logic → database → response → frontend.
+
+Identify:
+
+* duplicated logic
+* missing validation
+* missing authorization
+* insecure data exposure
+* N+1 queries
+* unnecessary database calls
+* race conditions
+* inconsistent transactions
+* incorrect caching
+* inefficient queries
+* business logic in the wrong layer
+
+---
+
+## Rule 4 — Multi-tenancy is critical
+
+Cur10usX is intended to be a **multi-tenant SaaS**.
+
+Audit tenant isolation extremely carefully.
+
+Determine:
+
+* How schools/tenants are represented
+* How users belong to schools
+* How tenant context is determined
+* Whether every query is tenant-scoped
+* Whether API endpoints verify tenant ownership
+* Whether IDs can be manipulated to access another school's data
+* Whether a student from School A could access School B data
+* Whether teachers/admins can cross tenant boundaries
+* Whether uploaded files are tenant-isolated
+* Whether analytics are tenant-isolated
+* Whether caching is tenant-aware
+* Whether WebSocket channels are tenant-aware
+
+Look specifically for:
+
+* IDOR
+* Broken Access Control
+* horizontal privilege escalation
+* vertical privilege escalation
+* tenant escape
+
+This is one of the highest-priority areas of the audit.
+
+---
+
+# 4. SECURITY AUDIT
+
+Perform a serious security review.
+
+Use OWASP principles, especially:
+
+* OWASP Top 10
+* OWASP API Security Top 10
+* Authentication
+* Authorization
+* Session management
+* Access control
+* Input validation
+* Output encoding
+* Injection
+* SQL injection
+* XSS
+* CSRF
+* SSRF
+* IDOR
+* Mass assignment
+* Privilege escalation
+* Rate limiting
+* Brute-force protection
+* Account enumeration
+* Password security
+* OAuth security
+* 2FA security
+* Token/session security
+* Secrets management
+* File upload security
+* Path traversal
+* WebSocket security
+* Redis security
+* CORS
+* CSP
+* Security headers
+* Cookie configuration
+* HTTPS assumptions
+* Error leakage
+* Logging of sensitive information
+* PII exposure
+* Sensitive data exposure
+
+Check:
+
+### Authentication
+
+* Login
+* Registration
+* Password reset
+* Email verification
+* Google OAuth
+* Sessions
+* 2FA
+* Logout
+* Session invalidation
+* Account recovery
+
+### Authorization
+
+Audit all roles.
+
+Determine whether authorization is centralized or scattered.
+
+Look for patterns such as:
+
+```ts
+if (user.role === "ADMIN")
+```
+
+and determine whether they are sufficient.
+
+Verify authorization at the **server boundary**, not only in the UI.
+
+---
+
+# 5. DATABASE AUDIT
+
+Inspect the complete Prisma schema.
+
+Analyze:
+
+* Models
+* Relationships
+* Foreign keys
+* Cascading behavior
+* Unique constraints
+* Composite indexes
+* Nullable fields
+* Enum design
+* Soft deletes
+* Audit fields
+* Timestamps
+* Tenant relationships
+* Data ownership
+* Referential integrity
+
+Look for:
+
+* Missing indexes
+* Incorrect indexes
+* Missing unique constraints
+* Redundant fields
+* duplicated data
+* dangerous cascades
+* weak relational modeling
+* unnecessary denormalization
+* excessive normalization
+* N+1 patterns
+* inefficient Prisma queries
+
+Pay particular attention to:
+
+* Student
+* Teacher
+* School
+* Class
+* Subject
+* Evaluation
+* Attendance
+* Portfolio
+* Certificate
+* User
+* Role/permission
+* Academic year
+
+---
+
+# 6. ARCHITECTURE AUDIT
+
+Determine the actual architecture currently used.
+
+Evaluate whether the architecture can evolve from:
+
+### MVP
+
+to:
+
+### 10 schools
+
+to:
+
+### 100 schools
+
+to:
+
+### 1,000+ schools
+
+to:
+
+### PALOP-scale SaaS
+
+Analyze:
+
+* Separation of concerns
+* Domain boundaries
+* API architecture
+* Business logic placement
+* Database access layer
+* Services
+* Repositories
+* Validation
+* DTOs
+* Error handling
+* Dependency management
+* Configuration management
+* Observability
+* Caching
+* Background jobs
+* Events
+* WebSockets
+* Redis
+* Storage
+* Email
+* External integrations
+
+Determine whether the current architecture is:
+
+* Appropriate for the current MVP
+* Over-engineered
+* Under-engineered
+* Difficult to maintain
+* Difficult to test
+* Difficult to scale
+
+Do NOT recommend microservices simply because the project may eventually scale.
+
+Prefer a strong modular monolith unless the repository contains a concrete reason to split services.
+
+---
+
+# 7. NEXT.JS AUDIT
+
+Inspect the Next.js architecture carefully.
+
+Evaluate:
+
+* App Router
+* Server Components
+* Client Components
+* Server Actions
+* API Routes
+* Middleware
+* Route handlers
+* Loading states
+* Error boundaries
+* Metadata
+* Caching
+* Revalidation
+* Data fetching
+* Server-side authorization
+* Client-side state
+* Redux usage
+* Hydration
+* Bundle size
+* Dynamic imports
+* Rendering strategy
+
+Identify:
+
+* unnecessary client components
+* server/client boundary mistakes
+* duplicated API calls
+* excessive Redux usage
+* business logic inside components
+* business logic inside API routes
+* duplicated fetching
+* unnecessary state
+* security checks performed only client-side
+
+---
+
+# 8. CODE QUALITY AUDIT
+
+Review the codebase for:
+
+* SOLID violations
+* DRY violations
+* KISS violations
+* excessive complexity
+* duplicated logic
+* giant components
+* giant API handlers
+* giant functions
+* unclear naming
+* inconsistent naming
+* bad abstractions
+* unnecessary abstractions
+* dead code
+* unreachable code
+* commented-out code
+* magic numbers
+* magic strings
+* weak typing
+* excessive `any`
+* unsafe type assertions
+* poor error handling
+* inconsistent response formats
+* inconsistent validation
+* inconsistent logging
+
+Identify the **10 worst code-quality problems**.
+
+For each one provide:
+
+* File
+* Function/component
+* Problem
+* Why it matters
+* Recommended refactor
+* Priority
+
+---
+
+# 9. API AUDIT
+
+Build an inventory of all backend/API endpoints.
+
+For each endpoint determine:
+
+* HTTP method
+* Purpose
+* Authentication required?
+* Role required?
+* Tenant isolation?
+* Input validation?
+* Output validation?
+* Database operations
+* Rate limiting?
+* Error handling?
+* Potential vulnerabilities
+* Complexity
+* Performance concerns
+
+Pay particular attention to:
+
+* `/api/*`
+* route handlers
+* server actions
+* admin endpoints
+* school management
+* student data
+* teacher data
+* analytics
+* evaluation
+* portfolio
+* certificates
+* communication
+* authentication
+
+Identify endpoints that may expose more data than necessary.
+
+---
+
+# 10. PERFORMANCE AUDIT
+
+Look for:
+
+* N+1 queries
+* unnecessary queries
+* repeated queries
+* large payloads
+* unoptimized Prisma queries
+* missing indexes
+* expensive aggregations
+* unnecessary server rendering
+* unnecessary client rendering
+* excessive JavaScript
+* large dependencies
+* inefficient loops
+* sequential async operations that could be parallel
+* unnecessary WebSocket traffic
+* inefficient Redis usage
+
+Analyze especially dashboard pages and academic analytics.
+
+Estimate where possible:
+
+* Query complexity
+* Request complexity
+* Potential bottlenecks
+
+---
+
+# 11. ACADEMIC HEALTH SCORE AUDIT
+
+There is an Academic Health Score concept.
+
+The current intended weighting is approximately:
+
+* 40% academic performance
+* 30% attendance
+* 20% participation
+* 10% other factors
+
+Audit the implementation.
+
+Determine:
+
+1. Where the score is calculated
+2. Whether the calculation is centralized
+3. Whether the formula matches the intended product behavior
+4. Whether the data sources are correct
+5. Whether all evaluation types are considered
+6. Whether the calculation is scalable
+7. Whether it produces consistent results
+8. Whether it can evolve into a proper analytics engine
+
+Identify whether this logic belongs in:
+
+* UI
+* API route
+* service/domain layer
+* database
+* analytics pipeline
+
+Recommend the best architecture.
+
+---
+
+# 12. PRODUCT ALIGNMENT AUDIT
+
+Compare the repository against the intended Cur10usX product.
+
+Create a matrix:
+
+| Product Capability    | Expected  | Actual | Status | Evidence |
+| --------------------- | --------- | ------ | ------ | -------- |
+| Authentication        | Yes       | ?      |        |          |
+| Multi-tenancy         | Yes       | ?      |        |          |
+| School management     | Yes       | ?      |        |          |
+| Students              | Yes       | ?      |        |          |
+| Teachers              | Yes       | ?      |        |          |
+| Classes               | Yes       | ?      |        |          |
+| Subjects              | Yes       | ?      |        |          |
+| Attendance            | Yes       | ?      |        |          |
+| Evaluations           | Yes       | ?      |        |          |
+| Assignments           | Yes       | ?      |        |          |
+| Participation         | Yes       | ?      |        |          |
+| Portfolio             | Yes       | ?      |        |          |
+| Certificates          | Yes       | ?      |        |          |
+| Communication         | Yes       | ?      |        |          |
+| Analytics             | Yes       | ?      |        |          |
+| Academic Health Score | Yes       | ?      |        |          |
+| Evolutive Profile     | Strategic | ?      |        |          |
+| Gamification          | Future    | ?      |        |          |
+| Communities           | Future    | ?      |        |          |
+| Competitions          | Future    | ?      |        |          |
+| Career development    | Future    | ?      |        |          |
+| Opportunities         | Future    | ?      |        |          |
+| Marketplace           | Future    | ?      |        |          |
+
+Do not assume future features need to be implemented now.
+
+Instead determine whether the **current architecture makes those future capabilities easy or difficult to add**.
+
+---
+
+# 13. UX / PRODUCT ENGINEERING AUDIT
+
+Inspect the UI and determine:
+
+* Is the UX consistent?
+* Are loading states present?
+* Are errors handled?
+* Are empty states present?
+* Are permissions reflected correctly?
+* Are forms validated?
+* Are destructive actions protected?
+* Is the dashboard understandable?
+* Are important actions discoverable?
+* Is accessibility considered?
+* Is mobile responsiveness acceptable?
+* Is the design system consistent?
+
+Do not focus only on aesthetics.
+
+Focus on product usability and correctness.
+
+---
+
+# 14. TESTING AUDIT
+
+Determine:
+
+* What tests exist?
+* Unit tests?
+* Integration tests?
+* E2E tests?
+* API tests?
+* Authentication tests?
+* Authorization tests?
+* Multi-tenancy tests?
+* Database tests?
+
+Identify the most dangerous missing tests.
+
+Prioritize tests around:
+
+1. Authentication
+2. Authorization
+3. Tenant isolation
+4. Student data
+5. Academic calculations
+6. School administration
+7. Critical mutations
+
+Recommend a realistic testing strategy.
+
+Do not recommend 100% coverage as a goal without justification.
+
+---
+
+# 15. DEVOPS / INFRASTRUCTURE AUDIT
+
+Inspect:
+
+* Dockerfile
+* docker-compose
+* Nginx
+* environment configuration
+* deployment configuration
+* CI/CD
+* health checks
+* database migrations
+* database backups
+* logging
+* monitoring
+* secrets
+* production configuration
+
+Determine whether the project can be safely deployed.
+
+Check for:
+
+* secrets committed to Git
+* insecure defaults
+* production/debug configuration
+* excessive container privileges
+* unnecessary exposed ports
+* weak Docker practices
+* missing health checks
+* missing resource limits
+* missing backups
+* migration risks
+
+---
+
+# 16. DEPENDENCY AUDIT
+
+Inspect `package.json` and lockfiles.
+
+Identify:
+
+* outdated dependencies
+* deprecated packages
+* unnecessary dependencies
+* duplicate libraries
+* security vulnerabilities
+* dependency conflicts
+* packages that should be removed
+* packages that introduce unnecessary complexity
+
+Do not blindly recommend upgrading everything.
+
+For each critical dependency issue explain:
+
+* Current package
+* Problem
+* Risk
+* Recommended action
+* Breaking-change risk
+
+---
+
+# 17. DOCUMENTATION AUDIT
+
+Evaluate:
+
+* README
+* architecture documentation
+* environment setup
+* database setup
+* deployment documentation
+* API documentation
+* development workflow
+
+Determine whether another developer could clone the repository and understand how the system works.
+
+Identify missing documentation.
+
+---
+
+# 18. FIND ARCHITECTURAL SMELLS
+
+Explicitly search for:
+
+* God components
+* God API routes
+* God services
+* circular dependencies
+* tight coupling
+* duplicated business rules
+* hidden side effects
+* business logic in UI
+* database logic in UI
+* authorization logic scattered everywhere
+* inconsistent tenant filtering
+* duplicated validation
+* duplicated types
+* overuse of global state
+* excessive abstraction
+* premature microservices
+* infrastructure leaking into domain logic
+
+---
+
+# 19. SECURITY SEVERITY
+
+Classify security issues using:
+
+### CRITICAL
+
+Immediate serious compromise/data exposure possible.
+
+### HIGH
+
+Serious vulnerability or authorization problem.
+
+### MEDIUM
+
+Meaningful security or reliability risk.
+
+### LOW
+
+Hardening or best-practice issue.
+
+### INFO
+
+Improvement or recommendation.
+
+---
+
+# 20. TECHNICAL DEBT
+
+Create a technical debt register.
+
+For each item:
+
+* Problem
+* Location
+* Impact
+* Difficulty
+* Risk if ignored
+* Recommended solution
+
+Rank by:
+
+`Impact × Risk × Urgency`
+
+---
+
+# 21. FINAL SCORE
+
+Give independent scores from 0–10 for:
+
+* Product alignment
+* Architecture
+* Security
+* Multi-tenancy
+* Code quality
+* Database design
+* API design
+* Performance
+* Testing
+* DevOps
+* UX engineering
+* Scalability
+* Maintainability
+
+Then calculate an overall score.
+
+Explain why.
+
+Do not inflate the score.
+
+---
+
+# 22. FINAL REPORT FORMAT
+
+Your final response MUST follow this structure:
+
+## Executive Summary
+
+Maximum 10–15 paragraphs.
+
+Explain:
+
+* What is good
+* What is dangerous
+* What is missing
+* Whether the current architecture is suitable
+* Whether the product is ready for real schools
+* The biggest risks
+
+---
+
+## 1. Repository Overview
+
+Show:
+
+* Architecture
+* Major modules
+* Technology stack
+* Database
+* Authentication
+* Infrastructure
+
+---
+
+## 2. Product Alignment
+
+Provide the feature matrix.
+
+---
+
+## 3. Architecture Assessment
+
+Explain:
+
+* Current architecture
+* Strengths
+* Weaknesses
+* Architectural risks
+* Recommended target architecture
+
+---
+
+## 4. Security Audit
+
+Create a table:
+
+| Severity | Issue | Location | Impact | Recommendation |
+| -------- | ----- | -------- | ------ | -------------- |
+
+Prioritize the most dangerous problems first.
+
+---
+
+## 5. Multi-Tenancy Audit
+
+This section must be extremely detailed.
+
+Show exactly how tenant isolation currently works.
+
+Identify every possible tenant escape vector.
+
+---
+
+## 6. Database Audit
+
+Include:
+
+* Schema strengths
+* Schema problems
+* Missing indexes
+* Relationship problems
+* Query risks
+* Recommendations
+
+---
+
+## 7. API Audit
+
+Show important endpoints and their security/architecture status.
+
+---
+
+## 8. Code Quality
+
+Identify the 10 biggest code-quality problems.
+
+---
+
+## 9. Performance
+
+Identify the biggest bottlenecks.
+
+---
+
+## 10. Testing
+
+Explain current test coverage and what must be tested next.
+
+---
+
+## 11. DevOps
+
+Evaluate production readiness.
+
+---
+
+## 12. Technical Debt
+
+Provide prioritized technical debt.
+
+---
+
+# 23. CRITICAL FINDINGS
+
+Create a section:
+
+## 🚨 Fix Immediately
+
+List the 5–15 most important issues that should be fixed before adding major new features.
+
+For each:
+
+* Severity
+* File
+* Problem
+* Risk
+* Fix
+
+---
+
+# 24. PRIORITIZED ROADMAP
+
+Create:
+
+### Phase 0 — Emergency Fixes
+
+Security and data-integrity problems.
+
+### Phase 1 — Foundation
+
+Architecture, authorization, multi-tenancy, validation, database.
+
+### Phase 2 — Quality
+
+Testing, refactoring, observability, documentation.
+
+### Phase 3 — Performance
+
+Queries, caching, rendering, infrastructure.
+
+### Phase 4 — Product Evolution
+
+Prepare architecture for:
+
+* Evolutive Profile
+* Gamification
+* Communities
+* Competitions
+* Career
+* Opportunities
+* Marketplace
+
+For each phase estimate:
+
+* Priority
+* Complexity
+* Dependencies
+* Expected impact
+
+---
+
+# 25. TARGET ARCHITECTURE
+
+After auditing the actual repository, propose a **Target Architecture for Cur10usX**.
+
+Do not propose technologies simply because they are popular.
+
+Explain:
+
+* Frontend architecture
+* Backend architecture
+* Domain boundaries
+* Authentication
+* Authorization
+* Multi-tenancy
+* Database
+* Caching
+* WebSockets
+* Background jobs
+* File storage
+* Email
+* Analytics
+* Observability
+* CI/CD
+* Infrastructure
+
+Prefer a **modular monolith** unless there is a strong reason for another architecture.
+
+---
+
+# 26. DO NOT REWRITE EVERYTHING
+
+This is extremely important.
+
+Do NOT recommend rewriting the entire project unless the evidence clearly demonstrates that the current architecture is fundamentally unsalvageable.
+
+Prefer:
+
+* Incremental refactoring
+* Modularization
+* Security hardening
+* Extraction of services
+* Better boundaries
+* Tests before risky refactors
+* Database improvements
+* Controlled migrations
+
+The goal is to make Cur10usX **production-grade**, not to create unnecessary work.
+
+---
+
+# 27. EVIDENCE REQUIREMENT
+
+Every important finding must contain concrete evidence.
+
+Whenever possible provide:
+
+* File path
+* Function/component
+* Relevant code pattern
+* Why it is problematic
+* Recommended solution
+
+Example:
+
+`app/api/students/[id]/route.ts`
+
+Problem:
+
+Student is fetched only by `id` without verifying `schoolId`.
+
+Risk:
+
+A user who knows another student's ID may access another tenant's data.
+
+Recommendation:
+
+Resolve tenant context from authenticated session and enforce:
+
+`student.schoolId === session.user.schoolId`
+
+Do not fabricate file names or findings.
+
+If you cannot verify something, explicitly say:
+
+> "Not verified from repository."
+
+---
+
+# 28. FINAL VERDICT
+
+End the report with:
+
+## Is Cur10usX ready for real schools?
+
+Choose one:
+
+* ❌ No — major security/architecture problems
+* ⚠️ Not yet — functional but requires important hardening
+* 🟡 Pilot-ready — suitable for controlled pilot deployment
+* 🟢 Production-ready — acceptable for real users
+* 🟢 Production-ready at scale — architecture is ready for significant growth
+
+Then explain exactly why.
+
+Also answer:
+
+### "What should Alberto and the team do NEXT?"
+
+Give a **top 10 action list**, ordered by priority.
+
+---
+
+# IMPORTANT
+
+Do not merely generate a generic software audit.
+
+This must be an **evidence-based audit of the actual Cur10usX repository**.
+
+Inspect the code deeply.
+
+Challenge assumptions.
+
+Look for security vulnerabilities.
+
+Look for architectural inconsistencies.
+
+Look for fake/incomplete features.
+
+Look for hidden technical debt.
+
+Look for tenant isolation failures.
+
+Look for performance bottlenecks.
+
+Look for places where the current implementation will make the future Cur10usX vision difficult to build.
+
+Be honest and critical.
+
+The objective is not to praise the project.
+
+The objective is to determine:
+
+> **"Is the current Cur10usX codebase a solid foundation for the EdTech SaaS platform we want to build?"**
+
+And if not:
+
+> **"What exactly must we change, in what order, and why?"**
