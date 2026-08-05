@@ -37,6 +37,16 @@ export async function requireRole(allowedRoles: string[], options?: RequireRoleO
     return { error: NextResponse.json({ error: "Escola não associada" }, { status: 403 }), session: null }
   }
 
+  // Block access for school-bound users whose school is not active
+  // (pendente/aprovada/suspensa/rejeitada). super_admin is exempt.
+  if (
+    options?.requireSchool &&
+    session.user.role !== "super_admin" &&
+    session.user.schoolStatus !== "ativa"
+  ) {
+    return { error: NextResponse.json({ error: "Escola não ativa" }, { status: 403 }), session: null }
+  }
+
   return { error: null, session }
 }
 

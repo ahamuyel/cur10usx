@@ -1,6 +1,17 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { auth } from "@/lib/auth"
+import { rateLimit } from "@/lib/rate-limit"
+
+const registerLimiter = rateLimit({ maxRequests: 3, windowMs: 60 * 60 * 1000, key: "school-registrations" })
+
+function getIp(req: Request): string {
+  return (
+    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    req.headers.get("x-real-ip") ||
+    "unknown"
+  )
+}
 
 function toSlug(name: string) {
   return name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "")
@@ -13,6 +24,21 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Não autenticado" }, { status: 401 })
     }
 
+    if (session.user.twoFactorEnabled && !session.user.twoFactorVerifiedAt) {
+      return NextResponse.json({ error: "Verificação em dois passos necessária" }, { status: 403 })
+    }
+
+    const ip = getIp(req)
+    const limit = await registerLimiter(ip)
+    if (!limit.success) {
+      return NextResponse.json({ error: "Demasiadas tentativas. Tente novamente mais tarde." }, { status: 429 })
+    }
+
+    // Only unaffiliated students may found a school
+    if (session.user.role !== "student" || session.user.schoolId) {
+      return NextResponse.json({ error: "Sem permissão para registar uma escola" }, { status: 403 })
+    }
+
     const { name, email, phone, address, city, provincia, nif } = await req.json()
     const slug = toSlug(name)
 
@@ -23,6 +49,11 @@ export async function POST(req: Request) {
     const user = await prisma.user.findUnique({ where: { id: session.user.id } })
     if (!user) {
       return NextResponse.json({ error: "Utilizador não encontrado" }, { status: 404 })
+    }
+
+    // Re-check against fresh DB state — the session may be stale
+    if (user.role !== "student" || user.schoolId) {
+      return NextResponse.json({ error: "Sem permissão para registar uma escola" }, { status: 403 })
     }
 
     const existingSlug = await prisma.school.findUnique({ where: { slug } })
