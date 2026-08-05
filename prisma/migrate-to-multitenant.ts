@@ -59,7 +59,13 @@ async function main() {
   console.log("  All existing users activated")
 
   // 8. Create super_admin user
-  const hashedPassword = await hash("cur10usx", 12)
+  const migrationAdminPassword = process.env.MIGRATION_SUPER_ADMIN_PASSWORD
+  if (!migrationAdminPassword) {
+    throw new Error(
+      "FALHA DE SEGURANÇA: a variável de ambiente MIGRATION_SUPER_ADMIN_PASSWORD é obrigatória para o script de migração.",
+    )
+  }
+  const hashedPassword = await hash(migrationAdminPassword, 12)
   await prisma.user.upsert({
     where: { email: "super@cur10usx.com" },
     update: { role: "super_admin", isActive: true },

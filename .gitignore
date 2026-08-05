@@ -52,4 +52,4 @@ k8s/
 .vercel/
 
 # Docker (opcional, depende do teu fluxo)
-docker-compose.override.yml*.tsbuildinfo
+docker-compose.override.yml
