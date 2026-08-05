@@ -16,9 +16,15 @@ export async function GET(req: Request) {
       return NextResponse.json({ data: [] })
     }
 
-    // Search users by name or email (case-insensitive)
+    const schoolId = session.user.schoolId
+    if (!schoolId) {
+      return NextResponse.json({ data: [] })
+    }
+
+    // Search users by name or email (case-insensitive) — scoped to the same school
     const users = await prisma.user.findMany({
       where: {
+        schoolId,
         OR: [
           { name: { contains: q, mode: "insensitive" } },
           { email: { contains: q, mode: "insensitive" } },
