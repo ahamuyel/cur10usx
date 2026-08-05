@@ -15,24 +15,43 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
     const { id: studentId } = await params
     const role = session!.user.role
 
-    if (role === "student") {
-      const student = await prisma.student.findFirst({
+    const studentRecord = await prisma.student.findUnique({
+      where: { id: studentId },
+      select: { schoolId: true, classId: true, userId: true },
+    })
+
+    if (!studentRecord || studentRecord.schoolId !== schoolId) {
+      return NextResponse.json({ error: "Aluno não encontrado" }, { status: 404 })
+    }
+
+    if (role === "student" && studentRecord.userId !== session!.user.id) {
+      return NextResponse.json({ error: "Sem permissão" }, { status: 403 })
+    }
+
+    if (role === "parent") {
+      const parent = await prisma.parent.findFirst({
         where: { userId: session!.user.id, schoolId },
-        select: { id: true },
+        select: { students: { select: { id: true } } },
       })
-      if (!student || student.id !== studentId) {
+      if (!parent || !parent.students.some((s) => s.id === studentId)) {
         return NextResponse.json({ error: "Sem permissão" }, { status: 403 })
       }
     }
 
-    const studentRecord = await prisma.student.findUnique({
-      where: { id: studentId },
-      select: { classId: true },
-    })
+    if (role === "teacher") {
+      const teacher = await prisma.teacher.findFirst({
+        where: { userId: session!.user.id, schoolId },
+        include: { teacherClasses: true },
+      })
+      const hasClass = teacher?.teacherClasses.some((tc) => tc.classId === studentRecord.classId)
+      if (!teacher || !hasClass) {
+        return NextResponse.json({ error: "Sem permissão" }, { status: 403 })
+      }
+    }
 
     const [history, allResults, allAttendances, academicYears, lessonsWithTeachers] = await Promise.all([
       prisma.academicHistory.findMany({
-        where: { studentId },
+        where: { studentId, schoolId },
         include: {
           academicYear: { select: { id: true, name: true, startDate: true, endDate: true } },
           school: { select: { id: true, name: true } },
