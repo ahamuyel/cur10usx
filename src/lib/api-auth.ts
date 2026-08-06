@@ -42,9 +42,10 @@ export async function requireRole(allowedRoles: string[], options?: RequireRoleO
   if (
     options?.requireSchool &&
     session.user.role !== "super_admin" &&
-    session.user.schoolStatus !== "ativa"
+    session.user.schoolStatus !== "ativa" &&
+    session.user.schoolStatus !== "aprovada"
   ) {
-    return { error: NextResponse.json({ error: "Escola não ativa" }, { status: 403 }), session: null }
+    return { error: NextResponse.json({ error: "Escola não ativa ou pendente de aprovação" }, { status: 403 }), session: null }
   }
 
   return { error: null, session }

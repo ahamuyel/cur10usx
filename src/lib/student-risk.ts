@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma"
 import { getCurrentAcademicYear } from "@/lib/academic-year"
+import { calculateAttendancePercentage } from "@/lib/score"
 
 export type RiskLevel = "Baixo Risco" | "Moderado" | "Alto Risco" | "Crítico"
 
@@ -80,9 +81,8 @@ export async function computeStudentRisk(schoolId: string): Promise<StudentRiskS
 
     const totalAttendance = student.attendances.length
     const presente = student.attendances.filter(a => a.status === "presente").length
-    const attendance = totalAttendance > 0
-      ? Math.round((presente / totalAttendance) * 100)
-      : 0
+    const atrasado = student.attendances.filter(a => a.status === "atrasado").length
+    const attendance = calculateAttendancePercentage(presente, atrasado, totalAttendance)
 
     const submitted = student.submissions.filter(
       s => s.status === "entregue" || s.status === "avaliada"

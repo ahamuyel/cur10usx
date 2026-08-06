@@ -144,10 +144,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
 
     async jwt(params) {
-      const { token, trigger, session } = params;
-      
-      // Call base light JWT callback first
-      let updatedToken = await authConfig.callbacks!.jwt!(params);
+      const updatedToken = await authConfig.callbacks!.jwt!(params);
 
       // Refresh from DB on every request to keep token in sync with latest user data
       // (approvals, role changes, school associations, etc.)

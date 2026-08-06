@@ -8,6 +8,7 @@ on:
 
 env:
   DATABASE_URL: ${{ secrets.DATABASE_URL || 'postgresql://dummy:dummy@localhost:5432/dummy' }}
+  DIRECT_DATABASE_URL: ${{ secrets.DIRECT_DATABASE_URL || 'postgresql://dummy:dummy@localhost:5432/dummy' }}
 
 jobs:
   # ── 1. QUALIDADE ──────────────────────────────────────────────
