@@ -53,3 +53,5 @@ k8s/
 
 # Docker (opcional, depende do teu fluxo)
 docker-compose.override.yml
+secrets/
+

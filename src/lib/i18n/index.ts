@@ -22,7 +22,9 @@ export type TranslationKey = NestedKeyOf<typeof pt> | (string & {})
 export const LOCALE_COOKIE = "cur10usx_locale"
 
 export function getTranslation(locale: string = "pt") {
-  return translations[locale] || translations.pt
+  const selected = translations[locale]
+  if (!selected || locale === "pt") return translations.pt
+  return { ...translations.pt, ...selected }
 }
 
 export function t(locale: string, key: TranslationKey): string {
