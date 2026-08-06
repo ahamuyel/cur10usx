@@ -27,6 +27,55 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
       return NextResponse.json({ error: "Aviso não encontrado" }, { status: 404 })
     }
 
+    const role = session!.user.role
+
+    if (role === "student" || role === "parent") {
+      const now = new Date()
+      const isPublished = (announcement.publishedAt && announcement.publishedAt <= now) ||
+        (!announcement.publishedAt && (!announcement.scheduledAt || announcement.scheduledAt <= now))
+
+      if (!isPublished) {
+        return NextResponse.json({ error: "Aviso não encontrado" }, { status: 404 })
+      }
+
+      if (role === "student") {
+        const student = await prisma.student.findFirst({ where: { userId, schoolId }, select: { classId: true, class: { select: { courseId: true } } } })
+        const isGlobal = !announcement.classId && !announcement.courseId && !announcement.targetUserId
+        const isTargetedToClass = Boolean(student?.classId && announcement.classId === student.classId)
+        const isTargetedToCourse = Boolean(student?.class?.courseId && announcement.courseId === student.class.courseId)
+        const isTargetedToUser = announcement.targetUserId === userId
+
+        if (!isGlobal && !isTargetedToClass && !isTargetedToCourse && !isTargetedToUser) {
+          return NextResponse.json({ error: "Aviso não encontrado" }, { status: 404 })
+        }
+      } else if (role === "parent") {
+        const parent = await prisma.parent.findFirst({
+          where: { userId, schoolId },
+          select: {
+            students: {
+              select: {
+                userId: true,
+                classId: true,
+                class: { select: { courseId: true } },
+              },
+            },
+          },
+        })
+        const childrenClassIds = parent?.students.map((s) => s.classId).filter(Boolean) as string[] ?? []
+        const childrenCourseIds = parent?.students.map((s) => s.class?.courseId).filter(Boolean) as string[] ?? []
+        const childrenUserIds = parent?.students.map((s) => s.userId).filter(Boolean) as string[] ?? []
+
+        const isGlobal = !announcement.classId && !announcement.courseId && !announcement.targetUserId
+        const isTargetedToClass = Boolean(announcement.classId && childrenClassIds.includes(announcement.classId))
+        const isTargetedToCourse = Boolean(announcement.courseId && childrenCourseIds.includes(announcement.courseId))
+        const isTargetedToUser = Boolean(announcement.targetUserId && (childrenUserIds.includes(announcement.targetUserId) || announcement.targetUserId === userId))
+
+        if (!isGlobal && !isTargetedToClass && !isTargetedToCourse && !isTargetedToUser) {
+          return NextResponse.json({ error: "Aviso não encontrado" }, { status: 404 })
+        }
+      }
+    }
+
     return NextResponse.json({
       ...announcement,
       readCount: announcement._count.reads,

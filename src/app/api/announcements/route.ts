@@ -35,7 +35,7 @@ export async function GET(req: Request) {
     if (priority) where.priority = priority
     if (classId) where.classId = classId
 
-    // For students: also filter by visibility scope
+    // For students and parents: filter by visibility scope
     if (role === "student") {
       const student = await prisma.student.findFirst({ where: { userId, schoolId }, select: { classId: true, class: { select: { courseId: true } } } })
       where.AND = [
@@ -44,6 +44,34 @@ export async function GET(req: Request) {
             { classId: null, courseId: null, targetUserId: null },
             ...(student?.classId ? [{ classId: student.classId }] : []),
             ...(student?.class?.courseId ? [{ courseId: student.class.courseId }] : []),
+            { targetUserId: userId },
+          ],
+        },
+      ]
+    } else if (role === "parent") {
+      const parent = await prisma.parent.findFirst({
+        where: { userId, schoolId },
+        select: {
+          students: {
+            select: {
+              userId: true,
+              classId: true,
+              class: { select: { courseId: true } },
+            },
+          },
+        },
+      })
+      const childrenClassIds = parent?.students.map((s) => s.classId).filter(Boolean) as string[] ?? []
+      const childrenCourseIds = parent?.students.map((s) => s.class?.courseId).filter(Boolean) as string[] ?? []
+      const childrenUserIds = parent?.students.map((s) => s.userId).filter(Boolean) as string[] ?? []
+
+      where.AND = [
+        {
+          OR: [
+            { classId: null, courseId: null, targetUserId: null },
+            ...(childrenClassIds.length > 0 ? [{ classId: { in: childrenClassIds } }] : []),
+            ...(childrenCourseIds.length > 0 ? [{ courseId: { in: childrenCourseIds } }] : []),
+            ...(childrenUserIds.length > 0 ? [{ targetUserId: { in: childrenUserIds } }] : []),
             { targetUserId: userId },
           ],
         },
