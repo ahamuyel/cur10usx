@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { requireRole, getSchoolId } from "@/lib/api-auth"
 import { revalidateSchoolData } from "@/lib/revalidate"
+import { logAudit, auditUser } from "@/lib/audit"
 
 const SETTINGS_SELECT = {
   name: true,
@@ -101,6 +102,16 @@ export async function PUT(req: Request) {
 
     // Revalidate school data after update
     revalidateSchoolData(schoolId)
+
+    logAudit({
+      ...auditUser(session!),
+      action: "UPDATE",
+      entity: "SchoolSettings",
+      entityId: schoolId,
+      schoolId,
+      description: "Atualização das configurações e personalização da escola",
+      newValue: data,
+    })
 
     return NextResponse.json(school)
   } catch (error) {
