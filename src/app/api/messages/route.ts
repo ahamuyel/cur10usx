@@ -56,13 +56,29 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: parsed.error.issues[0].message }, { status: 400 })
     }
 
+    const { toId, toAll, subject, body: msgBody } = parsed.data
+    const role = session!.user.role
+
+    if (toAll && role !== "school_admin" && role !== "teacher") {
+      return NextResponse.json({ error: "Apenas administradores ou professores podem enviar mensagens gerais" }, { status: 403 })
+    }
+
+    if (toId) {
+      const recipient = await prisma.user.findFirst({
+        where: { id: toId, schoolId },
+      })
+      if (!recipient) {
+        return NextResponse.json({ error: "Destinatário não encontrado nesta escola" }, { status: 404 })
+      }
+    }
+
     const created = await prisma.message.create({
       data: {
-        subject: parsed.data.subject,
-        body: parsed.data.body,
+        subject,
+        body: msgBody,
         fromId: session!.user.id,
-        toId: parsed.data.toId || null,
-        toAll: parsed.data.toAll || false,
+        toId: toId || null,
+        toAll: toAll || false,
         schoolId,
       },
     })

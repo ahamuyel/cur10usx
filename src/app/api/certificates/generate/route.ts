@@ -78,7 +78,7 @@ export async function GET(req: Request) {
       }),
     ])
 
-    if (!student || !school) {
+    if (!student || student.schoolId !== schoolId || !school) {
       return NextResponse.json({ error: "Aluno ou escola não encontrados" }, { status: 404 })
     }
 

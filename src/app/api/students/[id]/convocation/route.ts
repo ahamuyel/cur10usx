@@ -24,22 +24,34 @@ export async function POST(
 
     const student = await prisma.student.findFirst({
       where: { id, schoolId },
-      include: { user: { select: { id: true } } },
+      include: {
+        parents: { select: { userId: true } },
+      },
     })
 
     if (!student) {
       return NextResponse.json({ error: "Aluno não encontrado" }, { status: 404 })
     }
 
-    await prisma.notification.create({
-      data: {
-        userId: student.user?.id ?? "",
+    const recipientUserIds: string[] = []
+    if (student.userId) recipientUserIds.push(student.userId)
+    for (const p of student.parents) {
+      if (p.userId) recipientUserIds.push(p.userId)
+    }
+
+    if (recipientUserIds.length === 0) {
+      return NextResponse.json({ error: "Aluno e encarregados não possuem contas de utilizador associadas" }, { status: 400 })
+    }
+
+    await prisma.notification.createMany({
+      data: recipientUserIds.map((uId) => ({
+        userId: uId,
         title: "Convocatória",
         message: note.trim(),
         type: "convocation",
         schoolId,
         link: `/dashboard/${student.id}`,
-      },
+      })),
     })
 
     return NextResponse.json({ success: true })

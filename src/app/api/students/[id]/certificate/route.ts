@@ -24,6 +24,33 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
     })
     if (!student) return NextResponse.json({ error: "Aluno não encontrado" }, { status: 404 })
 
+    const role = session!.user.role
+
+    if (role === "student" && student.userId !== session!.user.id) {
+      return NextResponse.json({ error: "Sem permissão" }, { status: 403 })
+    }
+
+    if (role === "parent") {
+      const parent = await prisma.parent.findFirst({
+        where: { userId: session!.user.id, schoolId },
+        select: { students: { select: { id: true } } },
+      })
+      if (!parent || !parent.students.some((s) => s.id === studentId)) {
+        return NextResponse.json({ error: "Sem permissão" }, { status: 403 })
+      }
+    }
+
+    if (role === "teacher") {
+      const teacher = await prisma.teacher.findFirst({
+        where: { userId: session!.user.id, schoolId },
+        include: { teacherClasses: true },
+      })
+      const hasClass = teacher?.teacherClasses.some((tc) => tc.classId === student.classId)
+      if (!teacher || !hasClass) {
+        return NextResponse.json({ error: "Sem permissão" }, { status: 403 })
+      }
+    }
+
     const school = await prisma.school.findUnique({
       where: { id: schoolId },
       select: { name: true, city: true, logo: true },

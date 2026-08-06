@@ -33,7 +33,10 @@ export async function GET(req: Request) {
         where: { userId: session!.user.id, schoolId },
         select: { id: true },
       })
-      if (teacher) where.teacherId = teacher.id
+      if (!teacher) {
+        return NextResponse.json({ data: [], total: 0, page, totalPages: 0 })
+      }
+      where.teacherId = teacher.id
     } else if (teacherId) {
       where.teacherId = teacherId
     }
