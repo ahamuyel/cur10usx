@@ -1,12 +1,20 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { auth } from "@/lib/auth"
+import { rateLimit } from "@/lib/rate-limit"
+
+const searchLimiter = rateLimit({ maxRequests: 30, windowMs: 60 * 1000, key: "user-search" })
 
 export async function GET(req: Request) {
   try {
     const session = await auth()
     if (!session?.user?.id) {
       return NextResponse.json({ error: "Não autenticado" }, { status: 401 })
+    }
+
+    const { success } = await searchLimiter(session.user.id)
+    if (!success) {
+      return NextResponse.json({ error: "Muitas pesquisas num curto período. Por favor aguarde." }, { status: 429 })
     }
 
     const { searchParams } = new URL(req.url)

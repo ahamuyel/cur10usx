@@ -2,6 +2,9 @@ import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { requirePermission, getSchoolId } from "@/lib/api-auth"
 import { createMessageSchema } from "@/lib/validations/academic"
+import { rateLimit } from "@/lib/rate-limit"
+
+const messagePostLimiter = rateLimit({ maxRequests: 15, windowMs: 60 * 1000, key: "messages-post" })
 
 export async function GET(req: Request) {
   try {
@@ -47,6 +50,11 @@ export async function POST(req: Request) {
   try {
     const { error: authError, session } = await requirePermission(["school_admin", "teacher", "student", "parent"], "canManageMessages", { requireSchool: true })
     if (authError) return authError
+
+    const { success: rateLimitOk } = await messagePostLimiter(session!.user.id)
+    if (!rateLimitOk) {
+      return NextResponse.json({ error: "Limite de envio de mensagens atingido. Por favor aguarde um momento." }, { status: 429 })
+    }
 
     const schoolId = getSchoolId(session!)
     const body = await req.json()
