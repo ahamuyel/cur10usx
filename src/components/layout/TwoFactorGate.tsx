@@ -18,5 +18,9 @@ export default function TwoFactorGate({ children }: { children: React.ReactNode 
     }
   }, [session, router])
 
+  if (session?.user?.twoFactorEnabled && !session?.user?.twoFactorVerifiedAt) {
+    return null
+  }
+
   return <>{children}</>
 }

@@ -5,7 +5,8 @@ import { rateLimit } from "@/lib/rate-limit"
 import { logAudit } from "@/lib/audit"
 import speakeasy from "speakeasy"
 
-const verifyLimiter = rateLimit({ maxRequests: 5, windowMs: 5 * 60 * 1000, key: "2fa-verify-signin" })
+const verifyIpLimiter = rateLimit({ maxRequests: 5, windowMs: 5 * 60 * 1000, key: "2fa-verify-ip" })
+const verifyUserLimiter = rateLimit({ maxRequests: 5, windowMs: 5 * 60 * 1000, key: "2fa-verify-user" })
 
 function getIp(req: Request): string {
   return (
@@ -30,11 +31,15 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "2FA já verificado" }, { status: 400 })
     }
 
-    // Rate limiting by IP
+    // Rate limiting by IP and by User ID
     const ip = getIp(req)
-    const limit = await verifyLimiter(ip)
-    if (!limit.success) {
+    const ipLimit = await verifyIpLimiter(ip)
+    if (!ipLimit.success) {
       return NextResponse.json({ error: "Demasiadas tentativas. Tente novamente mais tarde." }, { status: 429 })
+    }
+    const userLimit = await verifyUserLimiter(session.user.id)
+    if (!userLimit.success) {
+      return NextResponse.json({ error: "Demasiadas tentativas nesta conta. Tente novamente mais tarde." }, { status: 429 })
     }
 
     const { token } = await req.json()

@@ -3,17 +3,9 @@ import { prisma } from "@/lib/prisma"
 
 export async function GET() {
   try {
-    const userCount = await prisma.user.count()
-    return NextResponse.json({
-      status: "ok",
-      database: "connected",
-      users: userCount,
-    })
-  } catch (error) {
-    return NextResponse.json({
-      status: "error",
-      database: "disconnected",
-      error: String(error),
-    }, { status: 500 })
+    await prisma.$queryRaw`SELECT 1`
+    return NextResponse.json({ status: "ok" })
+  } catch {
+    return NextResponse.json({ status: "error" }, { status: 500 })
   }
 }

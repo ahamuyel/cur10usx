@@ -6,7 +6,8 @@ import { prisma } from "@/lib/prisma";
 import { rateLimit } from "@/lib/rate-limit";
 import { authConfig, PERMISSION_KEYS } from "./auth.config";
 
-const loginLimiter = rateLimit({ maxRequests: 10, windowMs: 5 * 60 * 1000, key: "login" }) // 10 per 5 min
+const loginIpLimiter = rateLimit({ maxRequests: 10, windowMs: 5 * 60 * 1000, key: "login-ip" }) // 10 per 5 min per IP
+const loginAccountLimiter = rateLimit({ maxRequests: 5, windowMs: 5 * 60 * 1000, key: "login-account" }) // 5 per 5 min per email
 
 function getIp(req: Request): string {
   return (
@@ -46,10 +47,18 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
           // Rate limiting by IP
           const ip = getIp(request!)
-          const limit = await loginLimiter(ip)
-          if (!limit.success) {
-            const resetSec = Math.ceil((limit.resetAt.getTime() - Date.now()) / 1000)
+          const ipLimit = await loginIpLimiter(ip)
+          if (!ipLimit.success) {
+            const resetSec = Math.ceil((ipLimit.resetAt.getTime() - Date.now()) / 1000)
             console.warn(`[RateLimit] Login blocked for IP ${ip} — retry in ${resetSec}s`)
+            return null
+          }
+
+          // Rate limiting by Account (email)
+          const accountLimit = await loginAccountLimiter(email.toLowerCase())
+          if (!accountLimit.success) {
+            const resetSec = Math.ceil((accountLimit.resetAt.getTime() - Date.now()) / 1000)
+            console.warn(`[RateLimit] Login blocked for account ${email} — retry in ${resetSec}s`)
             return null
           }
 
@@ -93,8 +102,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   ],
   callbacks: {
     ...authConfig.callbacks,
-    async signIn({ user, account }) {
+    async signIn({ user, account, profile }) {
       if (account?.provider === "google") {
+        // Enforce email_verified check on Google OAuth profile
+        if (profile && "email_verified" in profile && profile.email_verified === false) {
+          console.warn(`[Security] Rejeitado login Google OAuth: e-mail não verificado na Google para ${user.email}`)
+          return false
+        }
+
         const email = user.email!;
 
         const existing = await prisma.user.findUnique({
