@@ -29,11 +29,11 @@ export async function PATCH(
     const record = await prisma.lessonRecord.findUnique({
       where: { id: recordId },
       include: {
-        lesson: true,
+        scheduleSlot: true,
       },
     })
 
-    if (!record || record.lesson.schoolId !== schoolId) {
+    if (!record || record.scheduleSlot.schoolId !== schoolId) {
       return NextResponse.json({ error: "Registo de aula não encontrado" }, { status: 404 })
     }
 

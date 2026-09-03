@@ -13,7 +13,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     const schoolId = getSchoolId(session!)
     const { id } = await params
 
-    const lesson = await prisma.lesson.findUnique({
+    const lesson = await prisma.scheduleSlot.findUnique({
       where: { id },
       include: {
         subject: { select: { id: true, name: true } },
@@ -41,7 +41,7 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
     const schoolId = getSchoolId(session!)
     const { id } = await params
 
-    const existing = await prisma.lesson.findUnique({ where: { id } })
+    const existing = await prisma.scheduleSlot.findUnique({ where: { id } })
     if (!existing || existing.schoolId !== schoolId) {
       return NextResponse.json({ error: "Aula não encontrada" }, { status: 404 })
     }
@@ -69,7 +69,7 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
       return NextResponse.json({ error: conflict }, { status: 409 })
     }
 
-    const updated = await prisma.lesson.update({
+    const updated = await prisma.scheduleSlot.update({
       where: { id },
       data: {
         ...rest,
@@ -94,12 +94,12 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
     const schoolId = getSchoolId(session!)
     const { id } = await params
 
-    const existing = await prisma.lesson.findUnique({ where: { id } })
+    const existing = await prisma.scheduleSlot.findUnique({ where: { id } })
     if (!existing || existing.schoolId !== schoolId) {
       return NextResponse.json({ error: "Aula não encontrada" }, { status: 404 })
     }
 
-    await prisma.lesson.delete({ where: { id } })
+    await prisma.scheduleSlot.delete({ where: { id } })
     return NextResponse.json({ success: true })
   } catch (error) {
     console.error(`[API Error] ${error}`)

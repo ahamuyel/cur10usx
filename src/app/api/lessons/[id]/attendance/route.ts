@@ -12,7 +12,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     const schoolId = getSchoolId(session!)
     const { id } = await params
 
-    const lesson = await prisma.lesson.findUnique({ where: { id } })
+    const lesson = await prisma.scheduleSlot.findUnique({ where: { id } })
     if (!lesson || lesson.schoolId !== schoolId) {
       return NextResponse.json({ error: "Aula não encontrada" }, { status: 404 })
     }
@@ -40,7 +40,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     const schoolId = getSchoolId(session!)
     const { id } = await params
 
-    const lesson = await prisma.lesson.findUnique({ where: { id } })
+    const lesson = await prisma.scheduleSlot.findUnique({ where: { id } })
     if (!lesson || lesson.schoolId !== schoolId) {
       return NextResponse.json({ error: "Aula não encontrada" }, { status: 404 })
     }

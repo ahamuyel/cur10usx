@@ -145,3 +145,83 @@ export const createAnnouncementSchema = z.object({
   scheduledAt: z.string().optional().nullable(),
 })
 export const updateAnnouncementSchema = createAnnouncementSchema.partial()
+
+// ─── Learning Engine Schemas ──────────────────────────────────────
+
+// Curriculum
+export const createCurriculumSchema = z.object({
+  name: z.string().min(2, "Nome deve ter pelo menos 2 caracteres").max(200),
+  country: z.string().min(2).max(5).optional(),
+  version: z.string().min(1, "Versão é obrigatória").max(20),
+})
+export const updateCurriculumSchema = createCurriculumSchema.partial()
+
+// CurriculumCourse
+export const createCurriculumCourseSchema = z.object({
+  curriculumId: z.string().min(1, "Currículo é obrigatório"),
+  name: z.string().min(2).max(200),
+  grade: z.number().int().min(1).max(13),
+  cycleLevel: z.enum(["primario", "primeiro_ciclo", "segundo_ciclo"]),
+})
+export const updateCurriculumCourseSchema = createCurriculumCourseSchema.partial().omit({ curriculumId: true })
+
+// CurriculumUnit
+export const createCurriculumUnitSchema = z.object({
+  curriculumCourseId: z.string().min(1, "Curso curricular é obrigatório"),
+  title: z.string().min(2).max(200),
+  description: z.string().optional().or(z.literal("")),
+  order: z.number().int().min(1),
+  weight: z.number().min(0).max(10).optional(),
+})
+export const updateCurriculumUnitSchema = createCurriculumUnitSchema.partial().omit({ curriculumCourseId: true })
+
+// CurriculumTopic
+export const createCurriculumTopicSchema = z.object({
+  curriculumUnitId: z.string().min(1, "Unidade curricular é obrigatória"),
+  title: z.string().min(2).max(200),
+  description: z.string().optional().or(z.literal("")),
+  order: z.number().int().min(1),
+})
+export const updateCurriculumTopicSchema = createCurriculumTopicSchema.partial().omit({ curriculumUnitId: true })
+
+// Lesson (educational content)
+export const createLearningLessonSchema = z.object({
+  curriculumTopicId: z.string().min(1, "Tópico curricular é obrigatório"),
+  title: z.string().min(2).max(200),
+  content: z.string().min(1, "Conteúdo é obrigatório"),
+  contentType: z.enum(["teorico", "pratico", "video", "misto"]).optional(),
+  estimatedMinutes: z.number().int().min(1).max(240).optional().nullable(),
+  order: z.number().int().min(1),
+  isPublished: z.boolean().optional(),
+})
+export const updateLearningLessonSchema = createLearningLessonSchema.partial().omit({ curriculumTopicId: true })
+
+// Exercise
+export const createExerciseSchema = z.object({
+  lessonId: z.string().min(1, "Lição é obrigatória"),
+  type: z.enum(["multiple_choice", "fill_in", "step_by_step", "true_false", "drag_and_drop", "short_answer", "listening"]),
+  question: z.string().min(1, "Pergunta é obrigatória"),
+  options: z.array(z.object({ key: z.string(), text: z.string() })).optional().nullable(),
+  correctAnswer: z.string().min(1, "Resposta correta é obrigatória"),
+  explanation: z.string().optional().or(z.literal("")),
+  points: z.number().int().min(1).max(100).optional(),
+  difficulty: z.number().int().min(1).max(3).optional(),
+  order: z.number().int().min(1),
+  isPublished: z.boolean().optional(),
+})
+export const updateExerciseSchema = createExerciseSchema.partial().omit({ lessonId: true })
+
+// Submit Answer
+export const submitAnswerSchema = z.object({
+  answer: z.string().min(1, "Resposta é obrigatória"),
+  timeSpentMs: z.number().int().min(0).optional(),
+})
+
+// LessonContent (auxiliary content)
+export const createLessonContentSchema = z.object({
+  lessonId: z.string().min(1, "Lição é obrigatória"),
+  title: z.string().min(1).max(200),
+  url: z.string().url("URL inválida").optional().or(z.literal("")),
+  type: z.string().min(1, "Tipo é obrigatório"),
+  order: z.number().int().min(1),
+})

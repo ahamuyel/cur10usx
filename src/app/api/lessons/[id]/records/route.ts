@@ -44,7 +44,7 @@ export async function POST(
     }
 
     // Verify lesson exists, belongs to school and the teacher
-    const lesson = await prisma.lesson.findUnique({
+    const lesson = await prisma.scheduleSlot.findUnique({
       where: { id: lessonId },
     })
     if (!lesson || lesson.schoolId !== schoolId) {

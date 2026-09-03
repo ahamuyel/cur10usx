@@ -45,7 +45,7 @@ export async function GET(req: Request) {
     }
 
     if (subjectId || teacherId) {
-      where.lesson = {
+      where.scheduleSlot = {
         ...(subjectId ? { subjectId } : {}),
         ...(teacherId ? { teacherId } : {}),
       }

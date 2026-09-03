@@ -59,7 +59,7 @@ export async function GET(req: Request) {
     const orderBy = buildOrderBy(searchParams, ["day", "startTime", "createdAt"], { day: "asc" })
 
     const [data, total] = await Promise.all([
-      prisma.lesson.findMany({
+      prisma.scheduleSlot.findMany({
         where,
         skip: (page - 1) * limit,
         take: limit,
@@ -70,7 +70,7 @@ export async function GET(req: Request) {
           teacher: { select: { id: true, name: true } },
         },
       }),
-      prisma.lesson.count({ where }),
+      prisma.scheduleSlot.count({ where }),
     ])
 
     return NextResponse.json({ data, total, page, totalPages: Math.ceil(total / limit) })
@@ -109,7 +109,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: conflict }, { status: 409 })
     }
 
-    const created = await prisma.lesson.create({
+    const created = await prisma.scheduleSlot.create({
       data: {
         ...rest,
         materials: materials || undefined,

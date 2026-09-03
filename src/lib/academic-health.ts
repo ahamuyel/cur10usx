@@ -72,7 +72,7 @@ export async function computeAcademicHealth(schoolId: string): Promise<AcademicH
       _count: true,
     }),
 
-    prisma.lesson.count({
+    prisma.scheduleSlot.count({
       where: { schoolId, ...simpleYearFilter },
     }),
 

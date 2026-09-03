@@ -64,7 +64,7 @@ export async function GET(req: Request) {
           },
         },
       }),
-      prisma.lesson.count({
+      prisma.scheduleSlot.count({
         where: {
           schoolId,
           ...(whereTeacherId && typeof whereTeacherId === "string" ? { teacherId: whereTeacherId } : {}),

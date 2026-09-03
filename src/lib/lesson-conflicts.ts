@@ -40,7 +40,7 @@ export async function checkTeacherScheduleConflict(
     where.id = { not: excludeLessonId }
   }
 
-  const conflicting = await prisma.lesson.findFirst({
+  const conflicting = await prisma.scheduleSlot.findFirst({
     where: where as any,
     include: {
       subject: { select: { name: true } },

@@ -47,7 +47,7 @@ export async function GET(
 
     const [lessons, exams, assignments, students, attendances, results, announcements, lessonRecords] =
       await Promise.all([
-        prisma.lesson.findMany({
+        prisma.scheduleSlot.findMany({
           where: {
             teacherId: id,
             schoolId: teacher.schoolId,
@@ -147,7 +147,7 @@ export async function GET(
 
         prisma.lessonRecord.findMany({
           where: {
-            lesson: {
+            scheduleSlot: {
               teacherId: id,
               schoolId: teacher.schoolId,
             },

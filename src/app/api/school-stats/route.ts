@@ -33,7 +33,7 @@ export async function GET() {
       prisma.student.count({ where: { schoolId, gender: "masculino" } }),
       prisma.student.count({ where: { schoolId, gender: "feminino" } }),
       prisma.assignment.count({ where: { schoolId, dueDate: { gte: today } } }),
-      prisma.lesson.count({ where: { schoolId, day: todayDay } }),
+      prisma.scheduleSlot.count({ where: { schoolId, day: todayDay } }),
       prisma.application.count({ where: { schoolId, status: "pendente" } }),
       prisma.announcement.count({ where: { schoolId, createdAt: { gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) } } }),
       prisma.result.aggregate({ where: { schoolId }, _avg: { score: true } }),

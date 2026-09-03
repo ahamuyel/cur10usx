@@ -82,7 +82,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
         select: { id: true, name: true, startDate: true, endDate: true },
         orderBy: { startDate: "desc" },
       }),
-      prisma.lesson.findMany({
+      prisma.scheduleSlot.findMany({
         where: {
           classId: studentRecord?.classId || undefined,
           schoolId,

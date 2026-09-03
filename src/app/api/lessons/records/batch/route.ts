@@ -27,7 +27,7 @@ export async function POST(req: Request) {
 
     const records = await prisma.lessonRecord.findMany({
       where: { id: { in: recordIds } },
-      include: { lesson: { select: { schoolId: true } } },
+      include: { scheduleSlot: { select: { schoolId: true } } },
     })
 
     if (records.length !== recordIds.length) {
@@ -35,7 +35,7 @@ export async function POST(req: Request) {
     }
 
     for (const record of records) {
-      if (record.lesson.schoolId !== schoolId) {
+      if (record.scheduleSlot.schoolId !== schoolId) {
         return NextResponse.json({ error: "Registo não pertence a esta escola" }, { status: 403 })
       }
       if (record.status !== "PENDING") {

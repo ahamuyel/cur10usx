@@ -62,7 +62,8 @@ model School {
   gradingConfigs          GradingConfig[]
   importJobs              ImportJob[]
   justifications          Justification[]
-  lessons                 Lesson[]
+  learningLessons         Lesson[]
+  scheduleSlots           ScheduleSlot[]
   messages                Message[]
   notifications           Notification[]
   parents                 Parent[]
@@ -180,7 +181,7 @@ model Teacher {
   updatedAt          DateTime            @updatedAt
   assignments        Assignment[]
   exams              Exam[]
-  lessons            Lesson[]
+  scheduleSlots       ScheduleSlot[]
   school             School              @relation(fields: [schoolId], references: [id], onDelete: Cascade)
   user               User?               @relation(fields: [userId], references: [id])
   teacherAttendances TeacherAttendance[]
@@ -212,6 +213,13 @@ model Student {
   enrollments       Enrollment[]
   justifications    Justification[]
   results           Result[]
+  answers           Answer[]
+  masteryScores     MasteryScore[]
+  lessonProgresses  StudentLessonProgress[]
+  xpEvents          XPEvent[]
+  learningPaths     LearningPath[]
+  studentXP         StudentXP?
+  studentStreak     StudentStreak?
   class             Class?                 @relation(fields: [classId], references: [id])
   school            School                 @relation(fields: [schoolId], references: [id], onDelete: Cascade)
   user              User?                  @relation(fields: [userId], references: [id])
@@ -242,8 +250,10 @@ model Subject {
   assignments     Assignment[]
   courseSubjects  CourseSubject[]
   exams           Exam[]
-  lessons         Lesson[]
+  masteryScores   MasteryScore[]
+  scheduleSlots   ScheduleSlot[]
   results         Result[]
+  curriculumCourses CurriculumCourse[]
   globalSubject   GlobalSubject?   @relation(fields: [globalSubjectId], references: [id])
   school          School           @relation(fields: [schoolId], references: [id], onDelete: Cascade)
   teacherSubjects TeacherSubject[]
@@ -296,7 +306,7 @@ model Class {
   school         School         @relation(fields: [schoolId], references: [id], onDelete: Cascade)
   enrollments    Enrollment[]
   exams          Exam[]
-  lessons        Lesson[]
+  scheduleSlots  ScheduleSlot[]
   students       Student[]
   teacherClasses TeacherClass[]
 
@@ -323,7 +333,7 @@ model TeacherClass {
   @@unique([teacherId, classId])
 }
 
-model Lesson {
+model ScheduleSlot {
   id             String         @id @default(cuid())
   day            String
   startTime      String
@@ -343,7 +353,7 @@ model Lesson {
   school         School         @relation(fields: [schoolId], references: [id], onDelete: Cascade)
   subject        Subject        @relation(fields: [subjectId], references: [id], onDelete: Cascade)
   teacher        Teacher        @relation(fields: [teacherId], references: [id], onDelete: Cascade)
-  lessonRecords  LessonRecord[]
+  scheduleSlotRecords ScheduleSlotRecord[]
 }
 
 model Exam {
@@ -423,7 +433,7 @@ model Attendance {
   academicYear    AcademicYear?    @relation(fields: [academicYearId], references: [id])
   class           Class            @relation(fields: [classId], references: [id], onDelete: Cascade)
   justification   Justification?   @relation("JustificationAttendances", fields: [justificationId], references: [id])
-  lesson          Lesson?          @relation(fields: [lessonId], references: [id])
+  lesson          ScheduleSlot?    @relation(fields: [lessonId], references: [id])
   school          School           @relation(fields: [schoolId], references: [id], onDelete: Cascade)
   student         Student          @relation(fields: [studentId], references: [id], onDelete: Cascade)
 
@@ -601,7 +611,7 @@ model AcademicYear {
   enrollments             Enrollment[]
   exams                   Exam[]
   gradingConfigs          GradingConfig[]
-  lessons                 Lesson[]
+  scheduleSlots           ScheduleSlot[]
   results                 Result[]
   teacherAttendances      TeacherAttendance[]
 
@@ -1026,7 +1036,7 @@ model DocumentVerification {
   @@index([code])
 }
 
-model LessonRecord {
+model ScheduleSlotRecord {
   id          String             @id @default(cuid())
   lessonId    String
   date        DateTime
@@ -1037,7 +1047,7 @@ model LessonRecord {
   validatedBy String?
   recordedAt  DateTime           @default(now())
   validatedAt DateTime?
-  lesson      Lesson             @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  scheduleSlot ScheduleSlot      @relation(fields: [lessonId], references: [id], onDelete: Cascade)
 
   @@unique([lessonId, date])
 }
@@ -1203,4 +1213,237 @@ enum LessonRecordStatus {
   SUBSTITUIDA
   AGENDADA
   REJEITADA
+}
+
+enum ContentType {
+  teorico
+  pratico
+  video
+  misto
+}
+
+enum ExerciseType {
+  multiple_choice
+  fill_in
+  step_by_step
+  true_false
+  drag_and_drop
+  short_answer
+  listening
+}
+
+model Curriculum {
+  id        String             @id @default(cuid())
+  name      String
+  country   String             @default("AO")
+  version   String
+  active    Boolean            @default(true)
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
+  courses   CurriculumCourse[]
+}
+
+model CurriculumCourse {
+  id             String            @id @default(cuid())
+  curriculumId   String
+  subjectId      String?
+  name           String
+  grade          Int
+  cycleLevel     EducationLevel
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+  curriculum     Curriculum        @relation(fields: [curriculumId], references: [id], onDelete: Cascade)
+  subject        Subject?          @relation(fields: [subjectId], references: [id])
+  units          CurriculumUnit[]
+  learningPaths  LearningPath[]
+
+  @@unique([curriculumId, name])
+}
+
+model CurriculumUnit {
+  id                 String           @id @default(cuid())
+  curriculumCourseId String
+  title              String
+  description        String?
+  order              Int
+  weight             Float            @default(1.0)
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  curriculumCourse   CurriculumCourse @relation(fields: [curriculumCourseId], references: [id], onDelete: Cascade)
+  topics             CurriculumTopic[]
+  learningPaths      LearningPath[]
+
+  @@unique([curriculumCourseId, order])
+}
+
+model CurriculumTopic {
+  id               String          @id @default(cuid())
+  curriculumUnitId String
+  title            String
+  description      String?
+  order            Int
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  curriculumUnit   CurriculumUnit  @relation(fields: [curriculumUnitId], references: [id], onDelete: Cascade)
+  lessons          Lesson[]
+  masteryScores    MasteryScore[]
+
+  @@unique([curriculumUnitId, order])
+}
+
+model Lesson {
+  id                String          @id @default(cuid())
+  curriculumTopicId String
+  title             String
+  content           String
+  contentType       ContentType     @default(teorico)
+  estimatedMinutes  Int?
+  order             Int
+  isPublished       Boolean         @default(false)
+  schoolId          String
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+  curriculumTopic   CurriculumTopic @relation(fields: [curriculumTopicId], references: [id], onDelete: Cascade)
+  school            School          @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  exercises         Exercise[]
+  lessonContents    LessonContent[]
+  masteryScores     MasteryScore[]
+  lessonProgresses  StudentLessonProgress[]
+
+  @@unique([curriculumTopicId, order])
+}
+
+model LessonContent {
+  id        String  @id @default(cuid())
+  lessonId  String
+  title     String
+  url       String?
+  type      String
+  order     Int
+  lesson    Lesson  @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+}
+
+model Exercise {
+  id            String        @id @default(cuid())
+  lessonId      String
+  type          ExerciseType
+  question      String
+  options       Json?
+  correctAnswer String
+  explanation   String?
+  points        Int           @default(10)
+  difficulty    Int           @default(1)
+  order         Int
+  isPublished   Boolean       @default(false)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  lesson        Lesson        @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  answers       Answer[]
+  masteryScores MasteryScore[]
+
+  @@unique([lessonId, order])
+}
+
+model Answer {
+  id           String   @id @default(cuid())
+  exerciseId   String
+  studentId    String
+  attempt      Int      @default(1)
+  answer       String
+  isCorrect    Boolean
+  pointsEarned Int
+  timeSpentMs  Int?
+  answeredAt   DateTime @default(now())
+  exercise     Exercise @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
+  student      Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@index([studentId, exerciseId])
+  @@index([studentId, answeredAt])
+}
+
+model MasteryScore {
+  id           String           @id @default(cuid())
+  studentId    String
+  subjectId    String
+  topicId      String?
+  lessonId     String?
+  exerciseId   String?
+  score        Float
+  attempts     Int              @default(1)
+  calculatedAt DateTime         @default(now())
+  student      Student          @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  subject      Subject          @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  topic        CurriculumTopic? @relation(fields: [topicId], references: [id])
+  lesson       Lesson?          @relation(fields: [lessonId], references: [id])
+  exercise     Exercise?        @relation(fields: [exerciseId], references: [id])
+
+  @@unique([studentId, topicId])
+  @@index([studentId, subjectId])
+  @@index([topicId])
+}
+
+enum LessonProgressStatus {
+  in_progress
+  completed
+}
+
+model StudentLessonProgress {
+  id          String                @id @default(cuid())
+  studentId   String
+  lessonId    String
+  status      LessonProgressStatus  @default(in_progress)
+  startedAt   DateTime              @default(now())
+  completedAt DateTime?
+  updatedAt   DateTime              @updatedAt
+  student     Student               @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  lesson      Lesson                @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, lessonId])
+  @@index([studentId])
+}
+
+model StudentXP {
+  id        String   @id @default(cuid())
+  studentId String   @unique
+  totalXP   Int      @default(0)
+  level     Int      @default(1)
+  updatedAt DateTime @updatedAt
+  student   Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+}
+
+model XPEvent {
+  id         String   @id @default(cuid())
+  studentId  String
+  amount     Int
+  source     String
+  referenceId String?
+  createdAt  DateTime @default(now())
+  student    Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@index([studentId, createdAt])
+}
+
+model StudentStreak {
+  id            String    @id @default(cuid())
+  studentId     String    @unique
+  currentStreak Int       @default(0)
+  longestStreak Int       @default(0)
+  lastActiveDate DateTime?
+  updatedAt     DateTime  @updatedAt
+  student       Student   @relation(fields: [studentId], references: [id], onDelete: Cascade)
+}
+
+model LearningPath {
+  id                 String           @id @default(cuid())
+  studentId          String
+  curriculumCourseId String
+  curriculumUnitId   String?
+  startedAt          DateTime         @default(now())
+  completedAt        DateTime?
+  status             String           @default("in_progress")
+  student            Student          @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  curriculumCourse   CurriculumCourse @relation(fields: [curriculumCourseId], references: [id], onDelete: Cascade)
+  curriculumUnit     CurriculumUnit?  @relation(fields: [curriculumUnitId], references: [id])
+
+  @@unique([studentId, curriculumCourseId])
 }

@@ -36,6 +36,7 @@ export const ALL_FEATURES = [
   "yearTransition",
   "globalCatalog",
   "academicHistory",
+  "learning",
 ] as const
 
 export type FeatureKey = (typeof ALL_FEATURES)[number]
@@ -62,6 +63,7 @@ export const featureLabels: Record<FeatureKey, string> = {
   yearTransition: "Transição de Ano",
   globalCatalog: "Catálogo Global",
   academicHistory: "Histórico Académico",
+  learning: "Plataforma de Aprendizagem",
 }
 
 // Default features for new schools
@@ -112,6 +114,7 @@ export const featureDescriptions: Record<FeatureKey, string> = {
   yearTransition: "Transição de ano letivo",
   globalCatalog: "Catálogo global de disciplinas/cursos",
   academicHistory: "Histórico académico e portabilidade",
+  learning: "Experiência de aprendizagem do estudante (Lessons, Exercícios, Mastery)",
 }
 
 // Reverse map: feature → affected menu items

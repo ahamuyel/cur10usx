@@ -21,7 +21,7 @@ export async function GET(req: Request) {
     // Build filter criteria
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const where: any = {
-      lesson: {
+      scheduleSlot: {
         schoolId,
       },
     }
@@ -39,10 +39,10 @@ export async function GET(req: Request) {
       if (!teacher) {
         return NextResponse.json({ error: "Professor não encontrado" }, { status: 404 })
       }
-      where.lesson.teacherId = teacher.id
+      where.scheduleSlot.teacherId = teacher.id
     } else if (teacherId) {
       // Admins can filter by specific teacherId
-      where.lesson.teacherId = teacherId
+      where.scheduleSlot.teacherId = teacherId
     }
 
     if (from || to) {
@@ -58,7 +58,7 @@ export async function GET(req: Request) {
     const records = await prisma.lessonRecord.findMany({
       where,
       include: {
-        lesson: {
+        scheduleSlot: {
           include: {
             subject: { select: { name: true } },
             class: { select: { name: true } },
