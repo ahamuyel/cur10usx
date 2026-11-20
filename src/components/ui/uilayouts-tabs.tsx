@@ -14,7 +14,6 @@ import { cn } from "@/lib/utils"
 interface TabContextType {
   activeTab: string
   setActiveTab: (value: string) => void
-  wobbly: boolean
   defaultValue: string
   prevIndex: number
   setPrevIndex: (value: number) => void
@@ -32,14 +31,14 @@ export const useUITabs = () => {
 }
 
 /**
- * Adapted from UI Layouts `tabs` (https://www.ui-layouts.com/components/tabs).
- * Features the signature wobbly dual-layer spring layoutId indicator and directional y-slide content.
+ * Clean, distortion-free spring tabs adapted from UI Layouts `tabs`.
+ * Uses a single shared-element layoutId spring pill (outside AnimatePresence so it never distorts)
+ * and smooth directional crossfades with zero layout jumps.
  */
 export function TabsProvider({
   children,
   defaultValue,
   tabsOrder,
-  wobbly = true,
 }: {
   children: ReactNode
   defaultValue: string
@@ -53,13 +52,12 @@ export function TabsProvider({
     () => ({
       activeTab,
       setActiveTab,
-      wobbly,
       defaultValue,
       prevIndex,
       setPrevIndex,
       tabsOrder,
     }),
-    [activeTab, wobbly, defaultValue, prevIndex, tabsOrder]
+    [activeTab, defaultValue, prevIndex, tabsOrder]
   )
 
   return <TabContext.Provider value={value}>{children}</TabContext.Provider>
@@ -74,12 +72,13 @@ export function TabsBtn({
   value: string
   className?: string
 }) {
-  const { activeTab, setActiveTab, setPrevIndex, defaultValue, wobbly, tabsOrder } =
+  const { activeTab, setActiveTab, setPrevIndex, defaultValue, tabsOrder } =
     useUITabs()
   const prefersReducedMotion = useReducedMotion()
   const isActive = activeTab === value
 
   const handleClick = useCallback(() => {
+    if (value === activeTab) return
     setPrevIndex(tabsOrder.indexOf(activeTab))
     setActiveTab(value)
   }, [activeTab, setActiveTab, setPrevIndex, tabsOrder, value])
@@ -91,40 +90,77 @@ export function TabsBtn({
       aria-selected={isActive}
       onClick={handleClick}
       className={cn(
-        "relative cursor-pointer px-4 h-9 rounded-lg text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--landing-accent)]",
+        "relative cursor-pointer px-4 h-9 rounded-lg text-xs font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--landing-accent)]",
         isActive
           ? "text-[var(--landing-bg)]"
           : "text-[var(--landing-text-secondary)] hover:text-[var(--landing-text-primary)]",
         className
       )}
     >
+      {isActive && (
+        <motion.span
+          layoutId={prefersReducedMotion ? undefined : `${defaultValue}-active-pill`}
+          transition={{
+            type: "spring",
+            stiffness: 380,
+            damping: 32,
+            mass: 0.85,
+          }}
+          className="absolute inset-0 rounded-lg bg-[var(--landing-text-primary)] z-0"
+        />
+      )}
       <span className="relative z-10 inline-flex items-center gap-1.5">
         {children}
       </span>
+    </button>
+  )
+}
 
-      <AnimatePresence mode="wait">
-        {isActive && (
-          <>
-            <motion.span
-              layoutId={prefersReducedMotion ? undefined : `${defaultValue}-pill`}
-              transition={{
-                layout: { duration: 0.24, ease: [0.22, 1, 0.36, 1] },
-              }}
-              className="absolute inset-0 rounded-lg bg-[var(--landing-text-primary)] z-0"
-            />
-            {wobbly && !prefersReducedMotion && (
-              <motion.span
-                layoutId={`${defaultValue}-pill-trail`}
-                transition={{
-                  layout: { duration: 0.38, ease: [0.22, 1, 0.36, 1], delay: 0.04 },
-                }}
-                className="absolute inset-0 rounded-lg bg-[var(--landing-accent)]/25 blur-[2px] -z-10"
-              />
-            )}
-          </>
+/**
+ * Single AnimatePresence container so exiting and entering panels never stack or distort height.
+ */
+export function TabsPanels({
+  children,
+  className,
+}: {
+  children: ReactNode
+  className?: string
+}) {
+  const { activeTab, tabsOrder, prevIndex } = useUITabs()
+  const prefersReducedMotion = useReducedMotion()
+  const isForward = tabsOrder.indexOf(activeTab) >= prevIndex
+
+  const activeChild = React.Children.toArray(children).find(
+    (child) =>
+      React.isValidElement<{ value?: string }>(child) &&
+      child.props.value === activeTab
+  )
+
+  return (
+    <div className={cn("relative", className)}>
+      <AnimatePresence mode="wait" initial={false}>
+        {activeChild && (
+          <motion.div
+            key={activeTab}
+            role="tabpanel"
+            initial={
+              prefersReducedMotion
+                ? false
+                : { opacity: 0, x: isForward ? 10 : -10 }
+            }
+            animate={{ opacity: 1, x: 0 }}
+            exit={
+              prefersReducedMotion
+                ? undefined
+                : { opacity: 0, x: isForward ? -10 : 10 }
+            }
+            transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+          >
+            {activeChild}
+          </motion.div>
         )}
       </AnimatePresence>
-    </button>
+    </div>
   )
 }
 
@@ -132,40 +168,13 @@ export function TabsContent({
   children,
   value,
   className,
-  yValue = true,
 }: {
   children: ReactNode
   value: string
   className?: string
   yValue?: boolean
 }) {
-  const { activeTab, tabsOrder, prevIndex } = useUITabs()
-  const prefersReducedMotion = useReducedMotion()
-  const isForward = tabsOrder.indexOf(activeTab) >= prevIndex
-
-  return (
-    <AnimatePresence mode="wait" initial={false}>
-      {activeTab === value && (
-        <motion.div
-          key={value}
-          role="tabpanel"
-          initial={
-            prefersReducedMotion
-              ? false
-              : { opacity: 0, y: yValue ? (isForward ? 12 : -12) : 0, filter: "blur(4px)" }
-          }
-          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-          exit={
-            prefersReducedMotion
-              ? undefined
-              : { opacity: 0, y: yValue ? (isForward ? -12 : 12) : 0, filter: "blur(4px)" }
-          }
-          transition={{ duration: 0.26, ease: [0.22, 1, 0.36, 1] }}
-          className={cn(className)}
-        >
-          {children}
-        </motion.div>
-      )}
-    </AnimatePresence>
-  )
+  const { activeTab } = useUITabs()
+  if (activeTab !== value) return null
+  return <div className={cn(className)}>{children}</div>
 }

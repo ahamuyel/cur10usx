@@ -11,7 +11,7 @@ import {
   ArrowRight,
 } from "lucide-react"
 import { useTranslation } from "@/lib/i18n"
-import { TabsProvider, TabsBtn, TabsContent } from "@/components/ui/uilayouts-tabs"
+import { TabsProvider, TabsBtn, TabsPanels, TabsContent } from "@/components/ui/uilayouts-tabs"
 import { ScrollText, MotionReveal } from "@/components/ui/scroll-text"
 
 type RoleData = {
@@ -31,10 +31,6 @@ const roleIcons: Record<string, typeof Building2> = {
 
 const roleOrder = ["institutions", "teachers", "students", "parents"]
 
-/**
- * Clean, human, everyday-moment list rendered alongside each role tab.
- * Zero developer jargon, zero heavy card grids.
- */
 function RoleEverydayFlow({ roleId, highlights }: { roleId: string; highlights: string[] }) {
   const prefersReducedMotion = useReducedMotion()
 
@@ -52,18 +48,18 @@ function RoleEverydayFlow({ roleId, highlights }: { roleId: string; highlights: 
       {highlights.map((item, idx) => (
         <motion.div
           key={item}
-          initial={prefersReducedMotion ? false : { opacity: 0, x: 16 }}
-          animate={{ opacity: 1, x: 0 }}
+          initial={prefersReducedMotion ? false : { opacity: 0, y: 6 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{
-            duration: 0.42,
-            delay: idx * 0.08,
+            duration: 0.3,
+            delay: idx * 0.055,
             ease: [0.22, 1, 0.36, 1],
           }}
           className="relative"
         >
           <span
             aria-hidden="true"
-            className="absolute -left-[29px] top-1.5 w-2.5 h-2.5 rounded-full bg-[var(--landing-bg)] border-2 border-[var(--landing-accent)]"
+            className="absolute -left-[29px] top-1.5 w-2.5 h-2.5 rounded-full bg-[var(--landing-bg-secondary)] border-2 border-[var(--landing-accent)]"
           />
           <span className="block text-[11px] font-medium uppercase tracking-wider text-[var(--landing-accent)] mb-1">
             {tags[idx] || `0${idx + 1}`}
@@ -110,13 +106,9 @@ export default function EcosystemSection() {
           </MotionReveal>
         </div>
 
-        {/* UI Layouts Wobbly Spring Tabs — Zero card grid clutter */}
-        <MotionReveal delay={0.16} y={18}>
-          <TabsProvider
-            defaultValue={roles[0].id}
-            tabsOrder={roles.map((r) => r.id)}
-            wobbly={true}
-          >
+        {/* Distortion-free, feather-light spring tabs */}
+        <MotionReveal delay={0.14} y={16}>
+          <TabsProvider defaultValue={roles[0].id} tabsOrder={roles.map((r) => r.id)}>
             <div
               role="tablist"
               aria-label={t("landing.ecosystem.tag")}
@@ -137,54 +129,63 @@ export default function EcosystemSection() {
               })}
             </div>
 
-            {roles.map((role) => {
-              const isSchool = role.id === "institutions"
-              return (
-                <TabsContent key={role.id} value={role.id} className="pt-8 sm:pt-10">
-                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
-                    {/* Left: Clear editorial explanation + CTA */}
-                    <div className="lg:col-span-6 space-y-5">
-                      <h3 className="text-xl sm:text-2xl font-medium tracking-[-0.02em] text-[var(--landing-text-primary)] leading-snug">
-                        {role.title}
-                      </h3>
-                      <p className="text-sm sm:text-[15px] font-light text-[var(--landing-text-secondary)] leading-relaxed">
-                        {role.description}
-                      </p>
+            <TabsPanels className="pt-8 sm:pt-10 min-h-[280px]">
+              {roles.map((role) => {
+                const isSchool = role.id === "institutions"
+                return (
+                  <TabsContent key={role.id} value={role.id}>
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
+                      {/* Left: Clear editorial explanation + CTA */}
+                      <div className="lg:col-span-6 space-y-5">
+                        <h3 className="text-xl sm:text-2xl font-medium tracking-[-0.02em] text-[var(--landing-text-primary)] leading-snug">
+                          {role.title}
+                        </h3>
+                        <p className="text-sm sm:text-[15px] font-light text-[var(--landing-text-secondary)] leading-relaxed">
+                          {role.description}
+                        </p>
 
-                      <div className="pt-2">
-                        <Link
-                          href={isSchool ? "/registar-escola" : "/aplicacao"}
-                          className="group inline-flex items-center gap-2 px-5 h-11 rounded-xl bg-[var(--landing-text-primary)] text-[var(--landing-bg)] text-sm font-medium hover:opacity-90 transition-all active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--landing-accent)]"
-                        >
+                        <div className="pt-2 flex flex-wrap items-center gap-4">
+                          <Link
+                            href={isSchool ? "/registar-escola" : "/aplicacao"}
+                            className="group inline-flex items-center gap-2 px-5 h-11 rounded-full bg-[var(--landing-text-primary)] text-[var(--landing-bg)] text-sm font-medium hover:opacity-90 transition-all active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--landing-accent)]"
+                          >
+                            <span>
+                              {isSchool
+                                ? t("landing.ecosystem.cta_institution")
+                                : t("landing.ecosystem.cta_member")}
+                            </span>
+                            <ArrowRight
+                              className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5"
+                              aria-hidden="true"
+                            />
+                          </Link>
+
+                          <Link
+                            href={isSchool || role.id === "teachers" ? "/para-escolas" : "/para-estudantes"}
+                            className="text-xs sm:text-sm font-normal text-[var(--landing-text-secondary)] hover:text-[var(--landing-accent)] transition-colors"
+                          >
+                            {t("landing.nav.features")} →
+                          </Link>
+                        </div>
+                      </div>
+
+                      {/* Right: Clean open timeline of everyday benefits */}
+                      <div className="lg:col-span-6">
+                        <RoleEverydayFlow roleId={role.id} highlights={role.highlights} />
+                        <div className="mt-6 pt-4 border-t border-[var(--landing-border-subtle)] flex items-center gap-2 text-xs font-light text-[var(--landing-text-muted)]">
+                          <Check className="w-3.5 h-3.5 text-[var(--landing-accent)] shrink-0" aria-hidden="true" />
                           <span>
                             {isSchool
-                              ? t("landing.ecosystem.cta_institution")
-                              : t("landing.ecosystem.cta_member")}
+                              ? t("landing.nav.demo")
+                              : `${role.role} · ${t("landing.nav.signin")}`}
                           </span>
-                          <ArrowRight
-                            className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5"
-                            aria-hidden="true"
-                          />
-                        </Link>
+                        </div>
                       </div>
                     </div>
-
-                    {/* Right: Clean open timeline of everyday benefits (no box clutter) */}
-                    <div className="lg:col-span-6">
-                      <RoleEverydayFlow roleId={role.id} highlights={role.highlights} />
-                      <div className="mt-6 pt-4 border-t border-[var(--landing-border-subtle)] flex items-center gap-2 text-xs font-light text-[var(--landing-text-muted)]">
-                        <Check className="w-3.5 h-3.5 text-[var(--landing-accent)] shrink-0" aria-hidden="true" />
-                        <span>
-                          {isSchool
-                            ? t("landing.nav.demo")
-                            : `${role.role} · ${t("landing.nav.signin")}`}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </TabsContent>
-              )
-            })}
+                  </TabsContent>
+                )
+              })}
+            </TabsPanels>
           </TabsProvider>
         </MotionReveal>
       </div>

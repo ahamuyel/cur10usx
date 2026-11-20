@@ -4,6 +4,7 @@ import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 import { useTranslation } from "@/lib/i18n"
 import { ScrollText, MotionReveal } from "@/components/ui/scroll-text"
+import HeroBackdrop from "@/components/landing/HeroBackdrop"
 import CTASection from "@/components/landing/CTASection"
 
 type SchoolPillar = {
@@ -37,10 +38,7 @@ export default function SchoolsPageContent() {
     <>
       {/* Editorial Hero Band */}
       <section className="relative pt-16 overflow-hidden bg-[var(--landing-bg)] border-b border-[var(--landing-border)]">
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-[min(720px,95vw)] h-[240px] rounded-full bg-[var(--landing-accent-subtle)] blur-3xl opacity-65"
-        />
+        <HeroBackdrop />
 
         <div className="relative z-10 px-4 sm:px-6 lg:px-8">
           <div className="max-w-6xl mx-auto border-x border-[var(--landing-border)] px-5 sm:px-10 pt-14 pb-14 sm:pt-20 sm:pb-20 text-center">

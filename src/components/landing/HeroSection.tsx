@@ -14,6 +14,7 @@ import {
 } from "lucide-react"
 import { useTranslation } from "@/lib/i18n"
 import { ScrollText, MotionReveal } from "@/components/ui/scroll-text"
+import HeroBackdrop from "@/components/landing/HeroBackdrop"
 
 type RoleId = "institutions" | "teachers" | "students" | "parents"
 
@@ -91,11 +92,8 @@ export default function HeroSection() {
       id="produto"
       className="relative pt-16 overflow-hidden bg-[var(--landing-bg)]"
     >
-      {/* Subtle top ambient glow */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-[min(760px,95vw)] h-[260px] rounded-full bg-[var(--landing-accent-subtle)] blur-3xl opacity-65"
-      />
+      {/* Shared architectural grid + drifting primary-color light aura */}
+      <HeroBackdrop />
 
       {/* Band 1: Headline inside UI Layouts architectural rail */}
       <div className="relative z-10 border-b border-[var(--landing-border)] px-4 sm:px-6 lg:px-8">

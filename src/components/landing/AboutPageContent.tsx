@@ -4,6 +4,7 @@ import Link from "next/link"
 import { ChevronDown, Sparkles, HeartHandshake, TrendingUp, ArrowRight } from "lucide-react"
 import { useTranslation } from "@/lib/i18n"
 import { ScrollText, MotionReveal } from "@/components/ui/scroll-text"
+import HeroBackdrop from "@/components/landing/HeroBackdrop"
 
 type AboutValue = {
   title: string
@@ -22,12 +23,9 @@ export default function AboutPageContent() {
 
   return (
     <div className="bg-[var(--landing-bg)]">
-      {/* UI Layouts `about-mission` Centered Hero with Masked Grid */}
+      {/* UI Layouts `about-mission` Centered Hero with Masked Grid + Drifting Primary Light */}
       <section className="relative pt-32 pb-20 sm:pt-40 sm:pb-28 overflow-hidden bg-gradient-to-b from-[var(--landing-bg-secondary)] to-[var(--landing-bg)] border-b border-[var(--landing-border)]">
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 grid-bg opacity-65 [mask-image:radial-gradient(ellipse_45%_55%_at_50%_45%,#000_45%,transparent_100%)]"
-        />
+        <HeroBackdrop />
 
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center gap-7">
           <MotionReveal immediate y={10}>

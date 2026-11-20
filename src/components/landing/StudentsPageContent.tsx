@@ -3,8 +3,9 @@
 import Link from "next/link"
 import { ArrowRight, GraduationCap, Users, CheckCircle2 } from "lucide-react"
 import { useTranslation } from "@/lib/i18n"
-import { TabsProvider, TabsBtn, TabsContent } from "@/components/ui/uilayouts-tabs"
+import { TabsProvider, TabsBtn, TabsPanels, TabsContent } from "@/components/ui/uilayouts-tabs"
 import { ScrollText, MotionReveal } from "@/components/ui/scroll-text"
+import HeroBackdrop from "@/components/landing/HeroBackdrop"
 import EvolutionaryProfileSection from "@/components/landing/EvolutionaryProfileSection"
 
 type PointItem = {
@@ -25,10 +26,7 @@ export default function StudentsPageContent() {
     <>
       {/* Editorial Hero Band */}
       <section className="relative pt-16 overflow-hidden bg-[var(--landing-bg)] border-b border-[var(--landing-border)]">
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-[min(720px,95vw)] h-[240px] rounded-full bg-[var(--landing-accent-subtle)] blur-3xl opacity-65"
-        />
+        <HeroBackdrop />
 
         <div className="relative z-10 px-4 sm:px-6 lg:px-8">
           <div className="max-w-6xl mx-auto border-x border-[var(--landing-border)] px-5 sm:px-10 pt-14 pb-14 sm:pt-20 sm:pb-20 text-center">
@@ -99,69 +97,71 @@ export default function StudentsPageContent() {
               </TabsBtn>
             </div>
 
-            <TabsContent value="student">
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
-                <div className="lg:col-span-5 space-y-4">
-                  <h2 className="text-2xl sm:text-3xl font-medium tracking-[-0.025em] text-[var(--landing-text-primary)] leading-snug">
-                    {t("landing.pages.students.student_title")}
-                  </h2>
-                  <p className="text-sm sm:text-[15px] font-light text-[var(--landing-text-secondary)] leading-relaxed">
-                    {t("landing.pages.students.student_desc")}
-                  </p>
-                </div>
+            <TabsPanels>
+              <TabsContent value="student">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
+                  <div className="lg:col-span-5 space-y-4">
+                    <h2 className="text-2xl sm:text-3xl font-medium tracking-[-0.025em] text-[var(--landing-text-primary)] leading-snug">
+                      {t("landing.pages.students.student_title")}
+                    </h2>
+                    <p className="text-sm sm:text-[15px] font-light text-[var(--landing-text-secondary)] leading-relaxed">
+                      {t("landing.pages.students.student_desc")}
+                    </p>
+                  </div>
 
-                <div className="lg:col-span-7 divide-y divide-[var(--landing-border)] border-y border-[var(--landing-border)]">
-                  {studentPoints.map((pt) => (
-                    <div key={pt.title} className="py-6 flex items-start gap-3.5">
-                      <CheckCircle2
-                        className="w-5 h-5 text-[var(--landing-accent)] shrink-0 mt-0.5"
-                        aria-hidden="true"
-                      />
-                      <div>
-                        <h3 className="text-base font-medium text-[var(--landing-text-primary)]">
-                          {pt.title}
-                        </h3>
-                        <p className="mt-1 text-sm font-light text-[var(--landing-text-secondary)] leading-relaxed">
-                          {pt.desc}
-                        </p>
+                  <div className="lg:col-span-7 divide-y divide-[var(--landing-border)] border-y border-[var(--landing-border)]">
+                    {studentPoints.map((pt) => (
+                      <div key={pt.title} className="py-6 flex items-start gap-3.5">
+                        <CheckCircle2
+                          className="w-5 h-5 text-[var(--landing-accent)] shrink-0 mt-0.5"
+                          aria-hidden="true"
+                        />
+                        <div>
+                          <h3 className="text-base font-medium text-[var(--landing-text-primary)]">
+                            {pt.title}
+                          </h3>
+                          <p className="mt-1 text-sm font-light text-[var(--landing-text-secondary)] leading-relaxed">
+                            {pt.desc}
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
-              </div>
-            </TabsContent>
+              </TabsContent>
 
-            <TabsContent value="parent">
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
-                <div className="lg:col-span-5 space-y-4">
-                  <h2 className="text-2xl sm:text-3xl font-medium tracking-[-0.025em] text-[var(--landing-text-primary)] leading-snug">
-                    {t("landing.pages.students.parent_title")}
-                  </h2>
-                  <p className="text-sm sm:text-[15px] font-light text-[var(--landing-text-secondary)] leading-relaxed">
-                    {t("landing.pages.students.parent_desc")}
-                  </p>
-                </div>
+              <TabsContent value="parent">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
+                  <div className="lg:col-span-5 space-y-4">
+                    <h2 className="text-2xl sm:text-3xl font-medium tracking-[-0.025em] text-[var(--landing-text-primary)] leading-snug">
+                      {t("landing.pages.students.parent_title")}
+                    </h2>
+                    <p className="text-sm sm:text-[15px] font-light text-[var(--landing-text-secondary)] leading-relaxed">
+                      {t("landing.pages.students.parent_desc")}
+                    </p>
+                  </div>
 
-                <div className="lg:col-span-7 divide-y divide-[var(--landing-border)] border-y border-[var(--landing-border)]">
-                  {parentPoints.map((pt) => (
-                    <div key={pt.title} className="py-6 flex items-start gap-3.5">
-                      <CheckCircle2
-                        className="w-5 h-5 text-[var(--landing-accent)] shrink-0 mt-0.5"
-                        aria-hidden="true"
-                      />
-                      <div>
-                        <h3 className="text-base font-medium text-[var(--landing-text-primary)]">
-                          {pt.title}
-                        </h3>
-                        <p className="mt-1 text-sm font-light text-[var(--landing-text-secondary)] leading-relaxed">
-                          {pt.desc}
-                        </p>
+                  <div className="lg:col-span-7 divide-y divide-[var(--landing-border)] border-y border-[var(--landing-border)]">
+                    {parentPoints.map((pt) => (
+                      <div key={pt.title} className="py-6 flex items-start gap-3.5">
+                        <CheckCircle2
+                          className="w-5 h-5 text-[var(--landing-accent)] shrink-0 mt-0.5"
+                          aria-hidden="true"
+                        />
+                        <div>
+                          <h3 className="text-base font-medium text-[var(--landing-text-primary)]">
+                            {pt.title}
+                          </h3>
+                          <p className="mt-1 text-sm font-light text-[var(--landing-text-secondary)] leading-relaxed">
+                            {pt.desc}
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
-              </div>
-            </TabsContent>
+              </TabsContent>
+            </TabsPanels>
           </TabsProvider>
         </div>
       </section>
