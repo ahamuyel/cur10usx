@@ -14,9 +14,9 @@ interface ScrollTextProps {
 }
 
 /**
- * Adapted from UI Layouts `scroll-text` / `text-animation`
- * (https://www.ui-layouts.com/components/scroll-text).
- * Observes the outer heading container so masked inner words always reveal reliably on scroll.
+ * Smooth, GPU-only masked word reveal adapted from UI Layouts `scroll-text`.
+ * Observes the outer container with `amount: "some"` so headings always animate
+ * reliably across every page and viewport height without blur flicker.
  */
 export function ScrollText({
   text,
@@ -28,7 +28,11 @@ export function ScrollText({
 }: ScrollTextProps) {
   const prefersReducedMotion = useReducedMotion()
   const containerRef = useRef<HTMLDivElement>(null)
-  const isInView = useInView(containerRef, { once: true, amount: 0.15 })
+  const isInView = useInView(containerRef, {
+    once: true,
+    amount: "some",
+    margin: "0px 0px -32px 0px",
+  })
   const visible = immediate || isInView
   const lines = text.split("\n")
 
@@ -67,22 +71,22 @@ export function ScrollText({
             >
               {words.map((word, wIdx) => {
                 const idx = wordCounter++
-                const itemDelay = delay + idx * 0.04
+                const itemDelay = delay + idx * 0.032
                 return (
                   <span
                     key={`${lineIdx}-${wIdx}`}
-                    className="inline-block overflow-hidden align-bottom py-[0.05em]"
+                    className="inline-block overflow-hidden align-bottom py-[0.04em]"
                   >
                     <motion.span
                       className="inline-block"
-                      initial={{ y: "100%", opacity: 0, filter: "blur(5px)" }}
+                      initial={{ y: "105%", opacity: 0 }}
                       animate={
                         visible
-                          ? { y: "0%", opacity: 1, filter: "blur(0px)" }
-                          : { y: "100%", opacity: 0, filter: "blur(5px)" }
+                          ? { y: "0%", opacity: 1 }
+                          : { y: "105%", opacity: 0 }
                       }
                       transition={{
-                        duration: 0.52,
+                        duration: 0.46,
                         delay: itemDelay,
                         ease: [0.22, 1, 0.36, 1],
                       }}
@@ -105,7 +109,7 @@ export function MotionReveal({
   children,
   className,
   delay = 0,
-  y = 24,
+  y = 18,
   immediate = false,
 }: {
   children: ReactNode
@@ -116,7 +120,11 @@ export function MotionReveal({
 }) {
   const prefersReducedMotion = useReducedMotion()
   const ref = useRef<HTMLDivElement>(null)
-  const isInView = useInView(ref, { once: true, amount: 0.12 })
+  const isInView = useInView(ref, {
+    once: true,
+    amount: "some",
+    margin: "0px 0px -28px 0px",
+  })
   const visible = immediate || isInView
 
   if (prefersReducedMotion) {
@@ -127,14 +135,10 @@ export function MotionReveal({
     <motion.div
       ref={ref}
       className={className}
-      initial={{ opacity: 0, y, filter: "blur(4px)" }}
-      animate={
-        visible
-          ? { opacity: 1, y: 0, filter: "blur(0px)" }
-          : { opacity: 0, y, filter: "blur(4px)" }
-      }
+      initial={{ opacity: 0, y }}
+      animate={visible ? { opacity: 1, y: 0 } : { opacity: 0, y }}
       transition={{
-        duration: 0.55,
+        duration: 0.48,
         delay,
         ease: [0.22, 1, 0.36, 1],
       }}

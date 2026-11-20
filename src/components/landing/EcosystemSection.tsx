@@ -147,7 +147,7 @@ export default function EcosystemSection() {
                         <div className="pt-2 flex flex-wrap items-center gap-4">
                           <Link
                             href={isSchool ? "/registar-escola" : "/aplicacao"}
-                            className="group inline-flex items-center gap-2 px-5 h-11 rounded-full bg-[var(--landing-text-primary)] text-[var(--landing-bg)] text-sm font-medium hover:opacity-90 transition-all active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--landing-accent)]"
+                            className="group inline-flex items-center gap-2 px-5 h-10 rounded-full bg-[var(--landing-text-primary)] text-[var(--landing-bg)] text-[13px] font-medium hover:opacity-90 transition-all active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--landing-accent)]"
                           >
                             <span>
                               {isSchool
@@ -155,7 +155,7 @@ export default function EcosystemSection() {
                                 : t("landing.ecosystem.cta_member")}
                             </span>
                             <ArrowRight
-                              className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5"
+                              className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5"
                               aria-hidden="true"
                             />
                           </Link>

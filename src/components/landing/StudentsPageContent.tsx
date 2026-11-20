@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import { motion, useReducedMotion } from "motion/react"
 import { ArrowRight, GraduationCap, Users, CheckCircle2 } from "lucide-react"
 import { useTranslation } from "@/lib/i18n"
 import { TabsProvider, TabsBtn, TabsPanels, TabsContent } from "@/components/ui/uilayouts-tabs"
@@ -11,6 +12,37 @@ import EvolutionaryProfileSection from "@/components/landing/EvolutionaryProfile
 type PointItem = {
   title: string
   desc: string
+}
+
+function StaggeredPointsList({ points }: { points: PointItem[] }) {
+  const prefersReducedMotion = useReducedMotion()
+
+  return (
+    <div className="lg:col-span-7 divide-y divide-[var(--landing-border)] border-y border-[var(--landing-border)]">
+      {points.map((pt, idx) => (
+        <motion.div
+          key={pt.title}
+          initial={prefersReducedMotion ? false : { opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: idx * 0.06, ease: [0.22, 1, 0.36, 1] }}
+          className="py-5 flex items-start gap-3.5"
+        >
+          <CheckCircle2
+            className="w-4 h-4 text-[var(--landing-accent)] shrink-0 mt-1"
+            aria-hidden="true"
+          />
+          <div>
+            <h3 className="text-sm sm:text-base font-medium text-[var(--landing-text-primary)]">
+              {pt.title}
+            </h3>
+            <p className="mt-1 text-xs sm:text-sm font-light text-[var(--landing-text-secondary)] leading-relaxed">
+              {pt.desc}
+            </p>
+          </div>
+        </motion.div>
+      ))}
+    </div>
+  )
 }
 
 /**
@@ -53,23 +85,23 @@ export default function StudentsPageContent() {
 
             <MotionReveal
               immediate
-              delay={0.3}
-              y={14}
-              className="mt-9 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3"
+              delay={0.26}
+              y={12}
+              className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2.5"
             >
               <Link
                 href="/aplicacao"
-                className="group inline-flex items-center justify-center gap-2 px-7 h-12 rounded-full bg-[var(--landing-text-primary)] text-[var(--landing-bg)] text-sm font-medium hover:opacity-90 transition-all active:scale-[0.98]"
+                className="group inline-flex items-center justify-center gap-2 px-5 h-10 rounded-full bg-[var(--landing-text-primary)] text-[var(--landing-bg)] text-[13px] font-medium hover:opacity-90 transition-all active:scale-[0.98]"
               >
                 <span>{t("landing.pages.students.cta_primary")}</span>
                 <ArrowRight
-                  className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5"
+                  className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5"
                   aria-hidden="true"
                 />
               </Link>
               <Link
                 href="/signin"
-                className="inline-flex items-center justify-center px-7 h-12 rounded-full border border-[var(--landing-border)] bg-[var(--landing-surface)] text-[var(--landing-text-primary)] text-sm font-normal hover:bg-[var(--landing-bg-tertiary)] transition-colors"
+                className="inline-flex items-center justify-center px-5 h-10 rounded-full border border-[var(--landing-border)] bg-[var(--landing-surface)] text-[var(--landing-text-primary)] text-[13px] font-normal hover:bg-[var(--landing-bg-tertiary)] transition-colors"
               >
                 {t("landing.pages.students.cta_secondary")}
               </Link>
@@ -78,91 +110,57 @@ export default function StudentsPageContent() {
         </div>
       </section>
 
-      {/* Interactive Student vs Parent Switcher (UI Layouts Wobbly Tabs, Zero cards) */}
+      {/* Interactive Student vs Parent Switcher (Smooth, distortion-free tabs) */}
       <section className="py-20 sm:py-24 bg-[var(--landing-bg)]">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <TabsProvider defaultValue="student" tabsOrder={["student", "parent"]} wobbly={true}>
-            <div
-              role="tablist"
-              aria-label={t("landing.pages.students.tag")}
-              className="inline-flex p-1 rounded-xl border border-[var(--landing-border)] bg-[var(--landing-bg-secondary)] mb-10"
-            >
-              <TabsBtn value="student" className="px-5 h-10 text-xs sm:text-sm">
-                <GraduationCap className="w-4 h-4" aria-hidden="true" />
-                <span>{t("landing.pages.students.tab_student")}</span>
-              </TabsBtn>
-              <TabsBtn value="parent" className="px-5 h-10 text-xs sm:text-sm">
-                <Users className="w-4 h-4" aria-hidden="true" />
-                <span>{t("landing.pages.students.tab_parent")}</span>
-              </TabsBtn>
-            </div>
+          <MotionReveal y={14}>
+            <TabsProvider defaultValue="student" tabsOrder={["student", "parent"]}>
+              <div
+                role="tablist"
+                aria-label={t("landing.pages.students.tag")}
+                className="inline-flex p-1 rounded-xl border border-[var(--landing-border)] bg-[var(--landing-bg-secondary)] mb-10"
+              >
+                <TabsBtn value="student" className="px-4 h-9 text-xs sm:text-[13px]">
+                  <GraduationCap className="w-3.5 h-3.5" aria-hidden="true" />
+                  <span>{t("landing.pages.students.tab_student")}</span>
+                </TabsBtn>
+                <TabsBtn value="parent" className="px-4 h-9 text-xs sm:text-[13px]">
+                  <Users className="w-3.5 h-3.5" aria-hidden="true" />
+                  <span>{t("landing.pages.students.tab_parent")}</span>
+                </TabsBtn>
+              </div>
 
-            <TabsPanels>
-              <TabsContent value="student">
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
-                  <div className="lg:col-span-5 space-y-4">
-                    <h2 className="text-2xl sm:text-3xl font-medium tracking-[-0.025em] text-[var(--landing-text-primary)] leading-snug">
-                      {t("landing.pages.students.student_title")}
-                    </h2>
-                    <p className="text-sm sm:text-[15px] font-light text-[var(--landing-text-secondary)] leading-relaxed">
-                      {t("landing.pages.students.student_desc")}
-                    </p>
+              <TabsPanels className="min-h-[260px]">
+                <TabsContent value="student">
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
+                    <div className="lg:col-span-5 space-y-4">
+                      <h2 className="text-2xl sm:text-3xl font-medium tracking-[-0.025em] text-[var(--landing-text-primary)] leading-snug">
+                        {t("landing.pages.students.student_title")}
+                      </h2>
+                      <p className="text-sm sm:text-[15px] font-light text-[var(--landing-text-secondary)] leading-relaxed">
+                        {t("landing.pages.students.student_desc")}
+                      </p>
+                    </div>
+                    <StaggeredPointsList points={studentPoints} />
                   </div>
+                </TabsContent>
 
-                  <div className="lg:col-span-7 divide-y divide-[var(--landing-border)] border-y border-[var(--landing-border)]">
-                    {studentPoints.map((pt) => (
-                      <div key={pt.title} className="py-6 flex items-start gap-3.5">
-                        <CheckCircle2
-                          className="w-5 h-5 text-[var(--landing-accent)] shrink-0 mt-0.5"
-                          aria-hidden="true"
-                        />
-                        <div>
-                          <h3 className="text-base font-medium text-[var(--landing-text-primary)]">
-                            {pt.title}
-                          </h3>
-                          <p className="mt-1 text-sm font-light text-[var(--landing-text-secondary)] leading-relaxed">
-                            {pt.desc}
-                          </p>
-                        </div>
-                      </div>
-                    ))}
+                <TabsContent value="parent">
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
+                    <div className="lg:col-span-5 space-y-4">
+                      <h2 className="text-2xl sm:text-3xl font-medium tracking-[-0.025em] text-[var(--landing-text-primary)] leading-snug">
+                        {t("landing.pages.students.parent_title")}
+                      </h2>
+                      <p className="text-sm sm:text-[15px] font-light text-[var(--landing-text-secondary)] leading-relaxed">
+                        {t("landing.pages.students.parent_desc")}
+                      </p>
+                    </div>
+                    <StaggeredPointsList points={parentPoints} />
                   </div>
-                </div>
-              </TabsContent>
-
-              <TabsContent value="parent">
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
-                  <div className="lg:col-span-5 space-y-4">
-                    <h2 className="text-2xl sm:text-3xl font-medium tracking-[-0.025em] text-[var(--landing-text-primary)] leading-snug">
-                      {t("landing.pages.students.parent_title")}
-                    </h2>
-                    <p className="text-sm sm:text-[15px] font-light text-[var(--landing-text-secondary)] leading-relaxed">
-                      {t("landing.pages.students.parent_desc")}
-                    </p>
-                  </div>
-
-                  <div className="lg:col-span-7 divide-y divide-[var(--landing-border)] border-y border-[var(--landing-border)]">
-                    {parentPoints.map((pt) => (
-                      <div key={pt.title} className="py-6 flex items-start gap-3.5">
-                        <CheckCircle2
-                          className="w-5 h-5 text-[var(--landing-accent)] shrink-0 mt-0.5"
-                          aria-hidden="true"
-                        />
-                        <div>
-                          <h3 className="text-base font-medium text-[var(--landing-text-primary)]">
-                            {pt.title}
-                          </h3>
-                          <p className="mt-1 text-sm font-light text-[var(--landing-text-secondary)] leading-relaxed">
-                            {pt.desc}
-                          </p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </TabsContent>
-            </TabsPanels>
-          </TabsProvider>
+                </TabsContent>
+              </TabsPanels>
+            </TabsProvider>
+          </MotionReveal>
         </div>
       </section>
 
@@ -176,17 +174,17 @@ export default function StudentsPageContent() {
             text={t("landing.pages.students.cta_primary")}
             className="text-2xl sm:text-3xl font-medium tracking-[-0.025em] text-[var(--landing-text-primary)]"
           />
-          <MotionReveal delay={0.12} y={14} className="mt-7 flex flex-col sm:flex-row justify-center gap-3">
+          <MotionReveal delay={0.12} y={12} className="mt-7 flex flex-col sm:flex-row justify-center gap-2.5">
             <Link
               href="/aplicacao"
-              className="group inline-flex items-center justify-center gap-2 px-7 h-12 rounded-full bg-[var(--landing-text-primary)] text-[var(--landing-bg)] text-sm font-medium hover:opacity-90 transition-all"
+              className="group inline-flex items-center justify-center gap-2 px-5 h-10 rounded-full bg-[var(--landing-text-primary)] text-[var(--landing-bg)] text-[13px] font-medium hover:opacity-90 transition-all"
             >
               <span>{t("landing.pages.students.cta_primary")}</span>
-              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+              <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
             </Link>
             <Link
               href="/signin"
-              className="inline-flex items-center justify-center px-7 h-12 rounded-full border border-[var(--landing-border)] bg-[var(--landing-surface)] text-[var(--landing-text-primary)] text-sm font-normal hover:bg-[var(--landing-bg-tertiary)] transition-colors"
+              className="inline-flex items-center justify-center px-5 h-10 rounded-full border border-[var(--landing-border)] bg-[var(--landing-surface)] text-[var(--landing-text-primary)] text-[13px] font-normal hover:bg-[var(--landing-bg-tertiary)] transition-colors"
             >
               {t("landing.pages.students.cta_secondary")}
             </Link>

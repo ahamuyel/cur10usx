@@ -42,10 +42,20 @@ export default function AboutPageContent() {
             className="text-3xl sm:text-5xl lg:text-[3.5rem] font-medium tracking-[-0.03em] leading-[1.1] text-[var(--landing-text-primary)] text-balance"
           />
 
-          <MotionReveal immediate delay={0.25} y={12}>
+          <MotionReveal immediate delay={0.22} y={10}>
             <a
               href="#missao"
-              className="inline-flex items-center gap-2 px-5 h-10 rounded-full border border-[var(--landing-border-strong)] bg-[var(--landing-surface)]/80 backdrop-blur-md text-xs font-medium text-[var(--landing-text-primary)] hover:border-[var(--landing-accent)] transition-colors"
+              onClick={(e) => {
+                e.preventDefault()
+                const el = document.getElementById("missao")
+                if (!el) return
+                const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+                window.scrollTo({
+                  top: el.getBoundingClientRect().top + window.scrollY - 64,
+                  behavior: reduced ? "auto" : "smooth",
+                })
+              }}
+              className="inline-flex items-center gap-2 px-4 h-9 rounded-full border border-[var(--landing-border-strong)] bg-[var(--landing-surface)]/80 backdrop-blur-md text-xs font-medium text-[var(--landing-text-primary)] hover:border-[var(--landing-accent)] transition-colors"
             >
               <span>{t("landing.pages.about.scroll_label")}</span>
               <ChevronDown className="w-3.5 h-3.5" aria-hidden="true" />
@@ -104,19 +114,19 @@ export default function AboutPageContent() {
 
           <MotionReveal
             delay={0.14}
-            y={14}
-            className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3"
+            y={12}
+            className="mt-7 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2.5"
           >
             <Link
               href="/para-escolas"
-              className="group inline-flex items-center justify-center gap-2 px-7 h-12 rounded-full bg-[var(--landing-text-primary)] text-[var(--landing-bg)] text-sm font-medium hover:opacity-90 transition-all"
+              className="group inline-flex items-center justify-center gap-2 px-5 h-10 rounded-full bg-[var(--landing-text-primary)] text-[var(--landing-bg)] text-[13px] font-medium hover:opacity-90 transition-all"
             >
               <span>{t("landing.pages.about.explore_school")}</span>
-              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+              <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
             </Link>
             <Link
               href="/para-estudantes"
-              className="inline-flex items-center justify-center gap-2 px-7 h-12 rounded-full border border-[var(--landing-border)] bg-[var(--landing-surface)] text-[var(--landing-text-primary)] text-sm font-normal hover:bg-[var(--landing-bg-tertiary)] transition-colors"
+              className="inline-flex items-center justify-center gap-2 px-5 h-10 rounded-full border border-[var(--landing-border)] bg-[var(--landing-surface)] text-[var(--landing-text-primary)] text-[13px] font-normal hover:bg-[var(--landing-bg-tertiary)] transition-colors"
             >
               <span>{t("landing.pages.about.explore_student")}</span>
             </Link>

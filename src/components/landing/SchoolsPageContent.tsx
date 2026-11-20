@@ -65,23 +65,23 @@ export default function SchoolsPageContent() {
 
             <MotionReveal
               immediate
-              delay={0.3}
-              y={14}
-              className="mt-9 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3"
+              delay={0.26}
+              y={12}
+              className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2.5"
             >
               <Link
                 href="/registar-escola"
-                className="group inline-flex items-center justify-center gap-2 px-7 h-12 rounded-full bg-[var(--landing-text-primary)] text-[var(--landing-bg)] text-sm font-medium hover:opacity-90 transition-all active:scale-[0.98]"
+                className="group inline-flex items-center justify-center gap-2 px-5 h-10 rounded-full bg-[var(--landing-text-primary)] text-[var(--landing-bg)] text-[13px] font-medium hover:opacity-90 transition-all active:scale-[0.98]"
               >
                 <span>{t("landing.pages.schools.cta_primary")}</span>
                 <ArrowRight
-                  className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5"
+                  className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5"
                   aria-hidden="true"
                 />
               </Link>
               <Link
                 href="/signin"
-                className="inline-flex items-center justify-center px-7 h-12 rounded-full border border-[var(--landing-border)] bg-[var(--landing-surface)] text-[var(--landing-text-primary)] text-sm font-normal hover:bg-[var(--landing-bg-tertiary)] transition-colors"
+                className="inline-flex items-center justify-center px-5 h-10 rounded-full border border-[var(--landing-border)] bg-[var(--landing-surface)] text-[var(--landing-text-primary)] text-[13px] font-normal hover:bg-[var(--landing-bg-tertiary)] transition-colors"
               >
                 {t("landing.pages.schools.cta_secondary")}
               </Link>
