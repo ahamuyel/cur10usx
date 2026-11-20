@@ -40,21 +40,37 @@ export async function GET(req: Request) {
       ...(subjectId ? { subjectId } : {}),
     }
 
-    const scores = await prisma.masteryScore.groupBy({
-      by: ["topicTitle", "subjectId"],
+    // MasteryScore has no `topicTitle` column: group by topicId and resolve the
+    // title through the relation, keeping the original response shape.
+    const scores = await prisma.masteryScore.findMany({
       where,
-      _avg: { score: true },
-      _count: { id: true },
-      orderBy: { topicTitle: "asc" },
-      take: limit,
+      select: {
+        topicId: true,
+        subjectId: true,
+        score: true,
+        topic: { select: { title: true } },
+      },
     })
 
-    const data = scores.map((s) => ({
-      topicTitle: s.topicTitle,
-      averageScore: s._avg.score ?? 0,
-      totalExercises: s._count.id,
-      subjectId: s.subjectId,
-    }))
+    const grouped = new Map<string, { topicTitle: string; subjectId: string; total: number; sum: number }>()
+    for (const s of scores) {
+      if (!s.topic) continue
+      const key = `${s.topicId}|${s.subjectId}`
+      const entry = grouped.get(key) ?? { topicTitle: s.topic.title, subjectId: s.subjectId, total: 0, sum: 0 }
+      entry.total += 1
+      entry.sum += s.score
+      grouped.set(key, entry)
+    }
+
+    const data = Array.from(grouped.values())
+      .sort((a, b) => a.topicTitle.localeCompare(b.topicTitle))
+      .slice(0, limit)
+      .map((g) => ({
+        topicTitle: g.topicTitle,
+        averageScore: g.total > 0 ? g.sum / g.total : 0,
+        totalExercises: g.total,
+        subjectId: g.subjectId,
+      }))
 
     return NextResponse.json(data)
   } catch (error) {

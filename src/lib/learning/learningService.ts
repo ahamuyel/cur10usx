@@ -129,7 +129,7 @@ export async function submitExerciseAttempt(
   // Lesson progress: a lesson is completed when every exercise has been attempted
   const answeredCount = await db.answer.groupBy({
     by: ["exerciseId"],
-    where: { studentId, lesson: { id: lesson.id } },
+    where: { studentId, exercise: { lessonId: lesson.id } },
   })
   const allExercises = lesson.exercises.filter((e) => e.isPublished)
   const attemptedExerciseIds = new Set(answeredCount.map((a) => a.exerciseId))
