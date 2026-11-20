@@ -2,18 +2,15 @@ import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 import NextAuth from "next-auth"
 import { authConfig } from "@/lib/auth.config"
+import { authPages, isAlwaysAccessible, isPublicPath } from "@/lib/public-routes"
 
 const { auth } = NextAuth(authConfig)
-
-const authPages = ["/signin", "/signup", "/forgot-password", "/registar-escola"]
-const alwaysAccessible = ["/reset-password", "/verify-email", "/signin/verify-2fa"]
-const publicPaths = ["/", "/aplicacao", "/aplicacao/status", "/maintenance", "/termos", "/privacidade"]
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl
 
   // Public paths — always accessible
-  if (publicPaths.includes(pathname)) {
+  if (isPublicPath(pathname)) {
     return NextResponse.next()
   }
 
@@ -45,7 +42,7 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next()
   }
 
-  if (alwaysAccessible.some((p) => pathname.startsWith(p))) {
+  if (isAlwaysAccessible(pathname)) {
     return NextResponse.next()
   }
 
