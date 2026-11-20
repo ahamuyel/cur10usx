@@ -126,7 +126,7 @@ export default async function PrivacyPage() {
 
         <h2>1. Introduction</h2>
         <p>
-          Cur10usX (&ldquo;nous&rdquo;, &ldquo;notre&rdquo; ou &ldquo;Plateforme&rdquo;) s'engage à protéger
+          Cur10usX (&ldquo;nous&rdquo;, &ldquo;notre&rdquo; ou &ldquo;Plateforme&rdquo;) s&apos;engage à protéger
           la confidentialité de ses utilisateurs. Cette Politique de confidentialité explique comment
           nous collectons, utilisons, partageons et protégeons vos données personnelles lorsque
           vous utilisez notre plateforme de gestion scolaire.
@@ -135,11 +135,11 @@ export default async function PrivacyPage() {
         <h2>2. Données que nous collectons</h2>
         <p>Nous pouvons collecter les types de données personnelles suivants :</p>
         <ul>
-          <li><strong>Données d'identification :</strong> nom complet, e-mail, numéro de téléphone, adresse</li>
+          <li><strong>Données d&apos;identification :</strong> nom complet, e-mail, numéro de téléphone, adresse</li>
           <li><strong>Données académiques :</strong> notes, évaluations, présences, classe, matière</li>
           <li><strong>Données démographiques :</strong> genre, date de naissance</li>
-          <li><strong>Données d'accès :</strong> adresse IP, type de navigateur, journaux d'activité</li>
-          <li><strong>Documents :</strong> photo de profil, documents d'identification scolaire</li>
+          <li><strong>Données d&apos;accès :</strong> adresse IP, type de navigateur, journaux d&apos;activité</li>
+          <li><strong>Documents :</strong> photo de profil, documents d&apos;identification scolaire</li>
         </ul>
 
         <h2>3. Finalité du traitement</h2>
@@ -158,7 +158,7 @@ export default async function PrivacyPage() {
           <li><strong>Consentement :</strong> lorsque vous fournissez vos données volontairement</li>
           <li><strong>Obligation légale :</strong> pour se conformer aux exigences légales applicables</li>
           <li><strong>Intérêt légitime :</strong> pour améliorer et gérer la Plateforme</li>
-          <li><strong>Exécution d'un contrat :</strong> pour fournir les services contractés</li>
+          <li><strong>Exécution d&apos;un contrat :</strong> pour fournir les services contractés</li>
         </ul>
 
         <h2>5. Partage des données</h2>
@@ -166,9 +166,9 @@ export default async function PrivacyPage() {
           Nous ne vendons pas vos données personnelles à des tiers. Nous pouvons partager des données avec :
         </p>
         <ul>
-          <li><strong>Écoles :</strong> les données sont partagées avec l'école à laquelle vous êtes associé</li>
-          <li><strong>Prestataires de services :</strong> services d'hébergement, d'envoi d'e-mails et de stockage</li>
-          <li><strong>Autorités légales :</strong> lorsque la loi l'exige</li>
+          <li><strong>Écoles :</strong> les données sont partagées avec l&apos;école à laquelle vous êtes associé</li>
+          <li><strong>Prestataires de services :</strong> services d&apos;hébergement, d&apos;envoi d&apos;e-mails et de stockage</li>
+          <li><strong>Autorités légales :</strong> lorsque la loi l&apos;exige</li>
         </ul>
 
         <h2>6. Sécurité des données</h2>
@@ -176,15 +176,15 @@ export default async function PrivacyPage() {
           Nous mettons en œuvre des mesures de sécurité techniques et organisationnelles appropriées pour
           protéger vos données contre tout accès non autorisé, altération, divulgation ou
           destruction, y compris le cryptage des mots de passe, le HTTPS dans toutes les communications,
-          et le contrôle d'accès basé sur les rôles.
+          et le contrôle d&apos;accès basé sur les rôles.
         </p>
 
         <h2>7. Rétention des données</h2>
         <p>
           Nous conservons vos données personnelles pendant la période nécessaire pour remplir les
-          finalités décrites dans cette politique, à moins qu'une période de rétention plus longue
+          finalités décrites dans cette politique, à moins qu&apos;une période de rétention plus longue
           ne soit requise ou autorisée par la loi. Les données académiques sont conservées pendant la période
-          de fonctionnement de l'école sur la Plateforme.
+          de fonctionnement de l&apos;école sur la Plateforme.
         </p>
 
         <h2>8. Vos droits</h2>
@@ -192,29 +192,29 @@ export default async function PrivacyPage() {
         <ul>
           <li><strong>Accès :</strong> demander une copie de vos données personnelles</li>
           <li><strong>Rectification :</strong> demander la correction de données inexactes</li>
-          <li><strong>Suppression :</strong> demander la suppression de vos données (&ldquo;droit à l'oubli&rdquo;)</li>
+          <li><strong>Suppression :</strong> demander la suppression de vos données (&ldquo;droit à l&apos;oubli&rdquo;)</li>
           <li><strong>Portabilité :</strong> demander le transfert de vos données vers une autre entité</li>
-          <li><strong>Opposition :</strong> s'opposer au traitement de vos données à des fins spécifiques</li>
+          <li><strong>Opposition :</strong> s&apos;opposer au traitement de vos données à des fins spécifiques</li>
         </ul>
 
         <h2>9. Cookies</h2>
         <p>
           Nous utilisons des cookies essentiels au fonctionnement de la Plateforme, y compris
-          des cookies d'authentification (jetons de session) et des cookies de sécurité (jetons CSRF).
-          Nous n'utilisons pas de cookies de suivi ou publicitaires.
+          des cookies d&apos;authentification (jetons de session) et des cookies de sécurité (jetons CSRF).
+          Nous n&apos;utilisons pas de cookies de suivi ou publicitaires.
         </p>
 
         <h2>10. Données des mineurs</h2>
         <p>
           La Plateforme peut contenir des données de mineurs (élèves) fournies par les écoles et
-          par leurs tuteurs légaux. Le traitement est effectué dans le cadre de l'activité
+          par leurs tuteurs légaux. Le traitement est effectué dans le cadre de l&apos;activité
           éducative et avec le consentement des tuteurs légaux.
         </p>
 
         <h2>11. Transferts internationaux</h2>
         <p>
-          Vos données peuvent être stockées et traitées sur des serveurs situés en dehors de l'Angola,
-          notamment dans l'Union européenne. Nous veillons à ce que tous les transferts soient effectués
+          Vos données peuvent être stockées et traitées sur des serveurs situés en dehors de l&apos;Angola,
+          notamment dans l&apos;Union européenne. Nous veillons à ce que tous les transferts soient effectués
           conformément à la loi applicable.
         </p>
 

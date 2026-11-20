@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports -- CommonJS entrypoint: started with `node ws-server.js` (no "type": "module" in package.json) */
 const { WebSocketServer } = require("ws")
 const http = require("http")
 const Redis = require("ioredis")
