@@ -11,7 +11,6 @@ const eslintConfig = defineConfig([
     "build/**",
     "next-env.d.ts",
     "prisma/**",
-    "cur10us/**",
   ]),
   {
     rules: {
