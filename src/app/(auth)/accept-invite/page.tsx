@@ -1,0 +1,228 @@
+"use client"
+
+import Link from "next/link"
+import { useSearchParams } from "next/navigation"
+import { CheckCircle2, ArrowLeft, AlertCircle, UserPlus } from "lucide-react"
+import { useState, Suspense, useMemo } from "react"
+import { csrfPost } from "@/lib/csrf-client"
+import { acceptInviteSchema } from "@/lib/validations/auth"
+import { useTranslation } from "@/lib/i18n"
+import {
+  AuthCard,
+  AuthHeader,
+  PasswordInput,
+  SubmitButton,
+  AlertBanner,
+  AuthSuccess,
+} from "@/components/auth"
+
+function PasswordRequirements({ password }: { password: string }) {
+  const { tUI } = useTranslation()
+  const checks = useMemo(
+    () => [
+      { label: "Mínimo 8 caracteres", met: password.length >= 8 },
+      { label: "Uma letra maiúscula", met: /[A-Z]/.test(password) },
+      { label: "Uma letra minúscula", met: /[a-z]/.test(password) },
+      { label: "Um número", met: /[0-9]/.test(password) },
+    ],
+    [password]
+  )
+
+  if (!password) return null
+
+  return (
+    <div className="mt-2 space-y-1">
+      {checks.map((check) => (
+        <div
+          key={check.label}
+          className={`flex items-center gap-1.5 text-xs transition-colors ${
+            check.met
+              ? "text-emerald-600 dark:text-emerald-400"
+              : "text-zinc-400 dark:text-zinc-500"
+          }`}
+        >
+          <svg
+            className="w-3 h-3 shrink-0"
+            viewBox="0 0 12 12"
+            fill="none"
+            aria-hidden="true"
+          >
+            {check.met ? (
+              <path
+                d="M3 6l2 2 4-4"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            ) : (
+              <circle cx="6" cy="6" r="4.5" stroke="currentColor" strokeWidth="1" />
+            )}
+          </svg>
+          <span>{tUI(check.label)}</span>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function AcceptInviteForm() {
+  const searchParams = useSearchParams()
+  const token = searchParams.get("token")
+  const { tUI } = useTranslation()
+
+  const [password, setPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
+  const [loading, setLoading] = useState(false)
+  const [errors, setErrors] = useState<Record<string, string>>({})
+  const [success, setSuccess] = useState(false)
+
+  if (!token) {
+    return (
+      <div className="w-full max-w-sm mx-auto">
+        <AuthCard>
+          <div className="p-8 text-center">
+            <div className="w-14 h-14 rounded-full bg-red-100 dark:bg-red-950/40 flex items-center justify-center mx-auto mb-5">
+              <AlertCircle className="w-7 h-7 text-red-600 dark:text-red-400" />
+            </div>
+            <h1 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 mb-3">
+              {tUI("Convite inválido")}
+            </h1>
+            <p className="text-sm text-zinc-500 dark:text-zinc-400 mb-6">
+              {tUI("Este link não contém um convite válido. Solicite um novo convite à escola.")}
+            </p>
+            <Link
+              href="/signin"
+              className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-lg bg-neutral-900 dark:bg-white hover:bg-neutral-800 dark:hover:bg-zinc-200 text-white dark:text-zinc-900 text-sm font-medium transition"
+            >
+              {tUI("Ir para o login")}
+              <ArrowLeft className="w-4 h-4" />
+            </Link>
+          </div>
+        </AuthCard>
+      </div>
+    )
+  }
+
+  if (success) {
+    return (
+      <AuthSuccess
+        icon={CheckCircle2}
+        title={tUI("Conta ativada")}
+        actionLabel={tUI("Ir para o login")}
+        actionHref="/signin"
+      >
+        <p>{tUI("A sua palavra-passe foi definida com sucesso.")}</p>
+        <p>{tUI("Pode agora aceder à plataforma com a sua conta.")}</p>
+      </AuthSuccess>
+    )
+  }
+
+  function validate() {
+    const e: Record<string, string> = {}
+    if (password !== confirmPassword) {
+      e.confirmPassword = tUI("As palavras-passe não coincidem")
+    }
+    const parsed = acceptInviteSchema.safeParse({ token, password })
+    if (!parsed.success) {
+      parsed.error.issues.forEach((issue) => {
+        const field = issue.path[0] as string
+        if (field === "password") e.password = issue.message
+      })
+    }
+    setErrors(e)
+    return Object.keys(e).length === 0
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    setErrors({})
+    if (!validate()) return
+    setLoading(true)
+    try {
+      const res = await csrfPost("/api/auth/accept-invite", { token, password })
+      const data = await res.json()
+      if (!res.ok) {
+        setErrors({ general: data.error || tUI("Erro ao ativar a conta") })
+        return
+      }
+      setSuccess(true)
+    } catch {
+      setErrors({
+        general: tUI("Erro de conexão. Verifique a sua internet e tente novamente."),
+      })
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <div className="w-full max-w-sm mx-auto">
+      <AuthCard>
+        <div className="p-6 sm:p-8">
+          <AuthHeader
+            icon={UserPlus}
+            title={tUI("Ativar a minha conta")}
+            subtitle={tUI("Escolha uma palavra-passe para aceder ao Cur10usX.")}
+          />
+
+          <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+            {errors.general && (
+              <AlertBanner variant="error">{errors.general}</AlertBanner>
+            )}
+
+            <div>
+              <PasswordInput
+                id="password"
+                label={tUI("Palavra-passe")}
+                placeholder={tUI("Mín. 8 caracteres")}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                error={errors.password}
+                disabled={loading}
+              />
+              <PasswordRequirements password={password} />
+            </div>
+
+            <PasswordInput
+              id="confirmPassword"
+              label={tUI("Confirmar palavra-passe")}
+              placeholder={tUI("Repita a palavra-passe")}
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              error={errors.confirmPassword}
+              disabled={loading}
+            />
+
+            <SubmitButton loading={loading} loadingText={tUI("A ativar...")}>
+              <CheckCircle2 className="w-4 h-4" />
+              {tUI("Ativar conta")}
+            </SubmitButton>
+          </form>
+        </div>
+      </AuthCard>
+
+      <p className="text-center text-sm text-zinc-500 dark:text-zinc-400 mt-6">
+        <Link
+          href="/signin"
+          className="inline-flex items-center gap-1.5 text-primary font-medium hover:underline"
+        >
+          <ArrowLeft className="w-3.5 h-3.5" />
+          {tUI("Voltar para o login")}
+        </Link>
+      </p>
+    </div>
+  )
+}
+
+export default function AcceptInvitePage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="w-full max-w-sm mx-auto flex items-center justify-center min-h-[200px]" />
+      }
+    >
+      <AcceptInviteForm />
+    </Suspense>
+  )
+}
