@@ -1,23 +1,45 @@
 import { describe, it, expect } from "vitest"
+import {
+  alwaysAccessible,
+  authPages,
+  isAlwaysAccessible,
+  isPublicPath,
+  publicPathPrefixes,
+  publicPaths,
+} from "@/lib/public-routes"
 
 describe("Middleware - Route Protection", () => {
-  const authPages = ["/signin", "/signup", "/forgot-password", "/registar-escola"]
-  const alwaysAccessible = ["/reset-password", "/verify-email"]
-  const publicPaths = ["/", "/aplicacao", "/aplicacao/status", "/maintenance"]
   const protectedPaths = ["/dashboard", "/admin", "/minha-area", "/list/students"]
 
   it("should allow access to public paths", () => {
     for (const path of publicPaths) {
-      expect(publicPaths.includes(path)).toBe(true)
-      expect(authPages.includes(path)).toBe(false)
+      expect(isPublicPath(path)).toBe(true)
+      expect(authPages.includes(path as (typeof authPages)[number])).toBe(false)
+    }
+  })
+
+  it("should keep the landing pages public", () => {
+    for (const path of ["/", "/para-escolas", "/para-estudantes", "/sobre"]) {
+      expect(isPublicPath(path)).toBe(true)
+    }
+  })
+
+  it("should keep dynamic public verification pages accessible", () => {
+    for (const prefix of publicPathPrefixes) {
+      expect(isPublicPath(`${prefix}ABC123`)).toBe(true)
     }
   })
 
   it("should allow access to always accessible pages", () => {
     for (const path of alwaysAccessible) {
-      expect(alwaysAccessible.includes(path)).toBe(true)
-      expect(authPages.includes(path)).toBe(false)
+      expect(isAlwaysAccessible(path)).toBe(true)
+      expect(authPages.includes(path as (typeof authPages)[number])).toBe(false)
     }
+  })
+
+  it("should allow the account invite flow without a session", () => {
+    expect(isAlwaysAccessible("/accept-invite")).toBe(true)
+    expect(isAlwaysAccessible("/accept-invite?token=abc")).toBe(true)
   })
 
   it("should identify auth pages", () => {
@@ -28,9 +50,9 @@ describe("Middleware - Route Protection", () => {
 
   it("should protect private pages", () => {
     for (const path of protectedPaths) {
-      expect(publicPaths.includes(path)).toBe(false)
-      expect(authPages.includes(path)).toBe(false)
-      expect(alwaysAccessible.includes(path)).toBe(false)
+      expect(isPublicPath(path)).toBe(false)
+      expect(authPages.includes(path as (typeof authPages)[number])).toBe(false)
+      expect(isAlwaysAccessible(path)).toBe(false)
     }
   })
 
