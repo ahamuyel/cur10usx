@@ -49,17 +49,32 @@ jobs:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
     needs: quality
+    env:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
     steps:
       - uses: actions/checkout@v4
 
+      - name: Verificar credenciais do Docker Hub
+        id: docker_secrets
+        run: |
+          if [ -n "$DOCKER_USERNAME" ] && [ -n "$DOCKER_PASSWORD" ]; then
+            echo "available=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "available=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::DOCKER_USERNAME/DOCKER_PASSWORD nao configurados; publicacao Docker ignorada."
+          fi
+
       - name: Login to Docker Hub
+        if: steps.docker_secrets.outputs.available == 'true'
         uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+          username: ${{ env.DOCKER_USERNAME }}
+          password: ${{ env.DOCKER_PASSWORD }}
 
       - name: Build & Push
+        if: steps.docker_secrets.outputs.available == 'true'
         uses: docker/build-push-action@v6
         with:
           context: .
@@ -68,8 +83,8 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           tags: |
-            ${{ secrets.DOCKER_USERNAME }}/cur10usx:latest
-            ${{ secrets.DOCKER_USERNAME }}/cur10usx:${{ github.sha }}
+            ${{ env.DOCKER_USERNAME }}/cur10usx:latest
+            ${{ env.DOCKER_USERNAME }}/cur10usx:${{ github.sha }}
 
   # ── 3. DEPLOY (main only) ────────────────────────────────────
   deploy:
@@ -77,26 +92,41 @@ jobs:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
     needs: docker
+    env:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
 
     steps:
       - uses: actions/checkout@v4
 
+      - name: Verificar credenciais de deploy
+        id: deploy_secrets
+        run: |
+          if [ -n "$DOCKER_USERNAME" ] && [ -n "$KUBE_CONFIG" ]; then
+            echo "available=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "available=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::DOCKER_USERNAME/KUBE_CONFIG nao configurados; deploy Kubernetes ignorado."
+          fi
+
       - name: Set up kubectl
+        if: steps.deploy_secrets.outputs.available == 'true'
         uses: azure/setup-kubectl@v4
         with:
           version: latest
 
       - name: Configure kubeconfig
+        if: steps.deploy_secrets.outputs.available == 'true'
         run: |
           mkdir -p $HOME/.kube
-          echo "${{ secrets.KUBE_CONFIG }}" > $HOME/.kube/config
+          echo "$KUBE_CONFIG" > $HOME/.kube/config
           chmod 600 $HOME/.kube/config
-        env:
-          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
 
       - name: Update image tag in deployment
+        if: steps.deploy_secrets.outputs.available == 'true'
         run: |
-          sed -i "s|image: .*|image: ${{ secrets.DOCKER_USERNAME }}/cur10usx:${{ github.sha }}|" k8s/deployment-app.yaml
+          sed -i "s|image: .*|image: $DOCKER_USERNAME/cur10usx:${{ github.sha }}|" k8s/deployment-app.yaml
 
       - name: Deploy to cluster
+        if: steps.deploy_secrets.outputs.available == 'true'
         run: kubectl apply -f k8s/
