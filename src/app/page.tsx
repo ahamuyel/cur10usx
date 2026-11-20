@@ -2,11 +2,9 @@ import { prisma } from "@/lib/prisma"
 import LandingNavbar from "@/components/landing/LandingNavbar"
 import HeroSection from "@/components/landing/HeroSection"
 import TrustStatsSection from "@/components/landing/TrustStatsSection"
-import ProblemTransformationSection from "@/components/landing/ProblemTransformationSection"
 import EcosystemSection from "@/components/landing/EcosystemSection"
-import FeaturesBentoSection from "@/components/landing/FeaturesBentoSection"
-import EvolutionaryProfileSection from "@/components/landing/EvolutionaryProfileSection"
 import PlatformExperienceSection from "@/components/landing/PlatformExperienceSection"
+import EvolutionaryProfileSection from "@/components/landing/EvolutionaryProfileSection"
 import FAQSection from "@/components/landing/FAQSection"
 import CTASection from "@/components/landing/CTASection"
 import Footer from "@/components/landing/Footer"
@@ -110,11 +108,9 @@ export default async function Home() {
       <main>
         <HeroSection />
         <TrustStatsSection stats={stats} schools={schools} />
-        <ProblemTransformationSection />
         <EcosystemSection />
-        <FeaturesBentoSection />
-        <EvolutionaryProfileSection />
         <PlatformExperienceSection />
+        <EvolutionaryProfileSection />
         <FAQSection />
         <CTASection />
       </main>

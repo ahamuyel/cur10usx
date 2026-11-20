@@ -1,17 +1,17 @@
 const pt = {
   landing: {
     nav: {
-      product: "Produto",
-      features: "Funcionalidades",
-      institutions: "Para instituições",
-      students: "Para estudantes",
-      experience: "Plataforma",
-      faq: "FAQ",
+      product: "Início",
+      features: "Como funciona",
+      institutions: "Para quem é",
+      students: "Jornada do aluno",
+      experience: "Na prática",
+      faq: "Dúvidas",
       problems: "Problema",
       transformation: "Transformação",
-      ecosystem: "Ecossistema",
+      ecosystem: "Para quem é",
       benefits: "Benefícios",
-      trust: "Infraestrutura",
+      trust: "Confiança",
       vision: "Visão",
       explore: "Criar conta",
       demo: "Registar escola",
@@ -23,13 +23,13 @@ const pt = {
     },
 
     hero: {
-      badge: "Infraestrutura Digital Educacional",
-      headline: "A infraestrutura digital que\nconecta gestão e evolução\nacadémica.",
+      badge: "Para escolas, professores, alunos e famílias",
+      headline: "A escola organizada.\nO aluno no centro.",
       subheadline:
-        "Cur10usX une instituições de ensino, estudantes, professores e encarregados de educação num único ecossistema — combinando gestão inteligente, Perfil Evolutivo, portfólio e aprendizagem assistida.",
-      cta: "Registar instituição",
-      explore: "Explorar a plataforma",
-      preview_label: "Visão institucional em tempo real",
+        "A sua escola gere matrículas, turmas e pautas sem papelada — e alunos, professores e pais acompanham notas, presenças e evolução no mesmo lugar.",
+      cta: "Sou uma escola · Registar",
+      explore: "Sou aluno ou encarregado",
+      preview_label: "Escolha um lado para ver como funciona no dia a dia",
     },
 
     stats: {
@@ -122,69 +122,69 @@ const pt = {
     },
 
     ecosystem: {
-      tag: "Ecossistema Conectado",
-      headline: "Desenhado para cada papel na comunidade educativa.",
+      tag: "Para quem é",
+      headline: "Uma plataforma. Quatro formas simples de usar.",
       description:
-        "Cada utilizador encontra um ambiente focado nas suas responsabilidades, ligado à mesma fonte de verdade com controlo rigoroso de permissões.",
-      cta_institution: "Registar escola",
-      cta_member: "Solicitar vinculação",
+        "A escola adopta o Cur10usX e toda a comunidade ganha acesso — cada pessoa vê apenas o que precisa no seu dia a dia.",
+      cta_institution: "Registar a minha escola",
+      cta_member: "Candidatar-me ou entrar",
       items: [
-        { title: "Alunos", description: "Perfis completos com histórico, documentos e evolução académica." },
-        { title: "Professores", description: "Gestão de turmas, disciplinas, avaliações e comunicação." },
-        { title: "Turmas", description: "Organização, horários e alocação de recursos." },
-        { title: "Presenças", description: "Registo rápido com alertas automáticos para encarregados." },
-        { title: "Avaliações", description: "Notas, médias, pautas e relatórios num fluxo contínuo." },
-        { title: "Relatórios", description: "Documentos institucionais gerados automaticamente." },
-        { title: "Comunicação", description: "Mensagens e notificações entre escola e famílias." },
-        { title: "Pais", description: "Acompanhamento em tempo real da vida escolar." },
+        { title: "Alunos", description: "Notas, horários, tarefas e progresso sempre à mão." },
+        { title: "Professores", description: "Chamada rápida, notas e comunicação com turmas." },
+        { title: "Turmas", description: "Organização, horários e professores alinhados." },
+        { title: "Presenças", description: "Registo rápido com aviso imediato aos pais." },
+        { title: "Avaliações", description: "Notas, médias e pautas sem erros manuais." },
+        { title: "Documentos", description: "Declarações e certificados emitidos em minutos." },
+        { title: "Comunicação", description: "Avisos e mensagens directos entre escola e família." },
+        { title: "Pais", description: "Acompanhar o educando sem esperar pelo fim do trimestre." },
       ],
       roles: [
         {
           id: "institutions",
-          role: "Instituições",
-          title: "Gestão inteligente e visão executiva",
+          role: "Escolas",
+          title: "Menos papelada, mais controlo sobre a escola",
           description:
-            "Centralize matrículas, equipas, anos lectivos, regras de avaliação e saúde académica num ambiente multi-tenant isolado e personalizável.",
+            "Organize matrículas, turmas, horários, professores e pautas num único lugar — sem perder horas em folhas soltas ou planilhas.",
           highlights: [
-            "Saúde académica e indicadores institucionais",
-            "Gestão de turmas, cursos, funcionários e permissões",
-            "Identidade visual própria e relatórios oficiais",
+            "Matrículas online e organização de turmas sem filas",
+            "Pautas, médias e declarações geradas automaticamente",
+            "Avisos para toda a escola entregues no telemóvel",
           ],
         },
         {
           id: "students",
           role: "Estudantes",
-          title: "Protagonismo na própria jornada",
+          title: "Tudo o que precisas para estudar e evoluir",
           description:
-            "Acompanhe o seu Perfil Evolutivo, construa o portfólio académico e avance ao seu ritmo com trilhas de aprendizagem assistida.",
+            "Vê o teu horário, tarefas e notas sempre actualizados, pratica conteúdos nas disciplinas mais difíceis e guarda o teu portfólio oficial.",
           highlights: [
-            "Perfil Evolutivo com progresso por disciplina",
-            "Trilhas curriculares, exercícios e domínio por tópico",
-            "Horário, tarefas, notas e certificados verificáveis",
+            "Notas, tarefas e horários num único ecrã simples",
+            "Exercícios guiados para melhorar ao teu ritmo",
+            "Histórico escolar e certificados sempre guardados",
           ],
         },
         {
           id: "teachers",
           role: "Professores",
-          title: "Menos burocracia, mais foco pedagógico",
+          title: "Mais tempo para ensinar, menos burocracia",
           description:
-            "Registe aulas, presenças, tarefas e avaliações num painel pensado para o ritmo da sala de aula, com alertas sobre alunos que precisam de apoio.",
+            "Faça a chamada em segundos, lance notas sem cálculos repetidos e saiba cedo quais os alunos que precisam de uma ajuda extra.",
           highlights: [
-            "Lançamento ágil de notas, provas e tarefas",
-            "Sinais precoces de risco académico por turma",
-            "Comunicação directa com alunos e encarregados",
+            "Chamada digital rápida na sala de aula",
+            "Lançamento simples de provas, tarefas e médias",
+            "Contacto directo com alunos e encarregados",
           ],
         },
         {
           id: "parents",
-          role: "Encarregados de educação",
-          title: "Presença activa sem fricção",
+          role: "Encarregados",
+          title: "Acompanhe o seu educando em tempo real",
           description:
-            "Acompanhe a assiduidade, avaliações, avisos e evolução dos seus educandos com clareza, transparência e comunicação directa com a escola.",
+            "Receba avisos quando há faltas ou novas notas, envie justificações pelo telemóvel e fale com a escola sem precisar de se deslocar.",
           highlights: [
-            "Visão consolidada do desempenho do educando",
-            "Submissão e acompanhamento de justificações",
-            "Avisos institucionais e mensagens centralizadas",
+            "Saber na hora se o educando esteve presente",
+            "Ver notas e evolução ao longo de todo o trimestre",
+            "Enviar justificações e receber comunicados oficiais",
           ],
         },
       ],
@@ -240,72 +240,72 @@ const pt = {
     },
 
     evolution: {
-      tag: "Perfil Evolutivo",
-      headline: "Cada estudante é uma trajetória, não apenas uma pauta.",
+      tag: "Jornada do Aluno",
+      headline: "Mais do que notas no fim do trimestre.",
       description:
-        "O coração do Cur10usX é o Perfil Evolutivo: uma camada contínua que une assiduidade, avaliações, domínio de conteúdos e conquistas num registo vivo da evolução do estudante.",
-      preview_badge: "Estrutura do Perfil Evolutivo",
-      preview_title: "Visão longitudinal do percurso académico",
-      preview_caption: "Representação ilustrativa das dimensões acompanhadas na plataforma.",
+        "Com o Perfil Evolutivo, cada aluno constrói um registo vivo da sua caminhada escolar — da matrícula aos certificados, sem perder nada pelo caminho.",
+      preview_badge: "Acompanhamento contínuo",
+      preview_title: "Evolução clara ano após ano",
+      preview_caption: "Cada etapa liga a gestão da escola ao crescimento real do estudante.",
       stages: [
         {
           step: "01",
-          title: "Ingresso e contexto",
-          description: "A candidatura, matrícula e alocação de turma iniciam o registo estruturado do aluno desde o primeiro dia.",
+          title: "Entrada sem filas",
+          description: "A candidatura e a matrícula são feitas de forma organizada, com a turma e os horários definidos desde o primeiro dia.",
         },
         {
           step: "02",
-          title: "Acompanhamento contínuo",
-          description: "Assiduidade, tarefas, provas e participação alimentam uma leitura actualizada em cada trimestre.",
+          title: "Rotina sempre visível",
+          description: "Presenças, tarefas e avaliações ficam actualizados no mesmo lugar para o aluno e para os encarregados.",
         },
         {
           step: "03",
-          title: "Domínio e aprendizagem assistida",
-          description: "Trilhas curriculares e exercícios identificam competências consolidadas e tópicos que exigem reforço.",
+          title: "Estudo com apoio",
+          description: "Exercícios guiados ajudam o aluno a reforçar exatamente as matérias em que tem mais dificuldade.",
         },
         {
           step: "04",
-          title: "Portfólio e certificação",
-          description: "O percurso consolida-se em histórico multi-ano e documentos oficiais prontos para verificação pública.",
+          title: "Conquistas para a vida",
+          description: "Todo o percurso transforma-se num portfólio e em certificados oficiais prontos a apresentar.",
         },
       ],
       dimensions: [
-        { label: "Percurso Académico", detail: "Histórico contínuo por ano lectivo, classe e curso" },
-        { label: "Domínio Curricular", detail: "Progresso por unidade, tópico e exercícios resolvidos" },
-        { label: "Assiduidade & Compromisso", detail: "Presenças, justificações e consistência de estudo" },
-        { label: "Portfólio Verificável", detail: "Declarações, certificados e evidências académicas" },
+        { label: "Percurso Escolar", detail: "Todos os anos lectivos organizados num só registo" },
+        { label: "Progresso no Estudo", detail: "Temas já dominados e pontos que precisam de reforço" },
+        { label: "Assiduidade", detail: "Presenças e justificações claras para escola e família" },
+        { label: "Certificados Oficiais", detail: "Declarações e histórico escolar prontos quando precisar" },
       ],
     },
 
     experience: {
-      tag: "Experiência da Plataforma",
-      headline: "Interfaces desenhadas para clareza diária.",
+      tag: "Na Prática",
+      headline: "Simples de aprender. Leve de usar todos os dias.",
       description:
-        "Sem menus labirínticos nem sobrecarga visual. Cada ecrã do Cur10usX privilegia legibilidade, velocidade operacional e contexto imediato.",
+        "Sem ecrãs confusos nem menus escondidos. Tudo está organizado para resolver as tarefas do dia em poucos cliques.",
       views: [
         {
           id: "overview",
-          label: "Painel Institucional",
-          url: "cur10usx.com/dashboard",
-          title: "Visão consolidada da escola em tempo real",
+          label: "Gestão da Escola",
+          url: "Painel da Direcção",
+          title: "Matrículas, turmas e pautas num só lugar",
           description:
-            "Acompanhe saúde académica por turma, assiduidade, matrículas activas e permissões num painel limpo orientado à decisão.",
-        },
-        {
-          id: "evolution",
-          label: "Perfil Evolutivo",
-          url: "cur10usx.com/aprender",
-          title: "Trajectória, domínio por tópico e portfólio verificável",
-          description:
-            "Trilhas curriculares, progresso longitudinal e emissão de certificados com código público integrados no mesmo percurso.",
+            "Veja rapidamente o estado de cada turma, aprove matrículas e emita pautas ou declarações sem refazer trabalho.",
         },
         {
           id: "classroom",
-          label: "Docentes & Famílias",
-          url: "cur10usx.com/list/lessons",
-          title: "Aulas, presenças digitais e comunicação em sincronia",
+          label: "Aulas & Famílias",
+          url: "Sala de Aula e Encarregados",
+          title: "Presenças e avisos que chegam na hora",
           description:
-            "Chamada rápida em sala, justificações de faltas e notificações estruturadas que mantêm encarregados sempre informados.",
+            "O professor regista a chamada em segundos e os pais recebem a actualização no telemóvel, podendo enviar justificações ali mesmo.",
+        },
+        {
+          id: "evolution",
+          label: "Estudo & Evolução",
+          url: "Espaço do Estudante",
+          title: "Cada aluno acompanha o seu crescimento",
+          description:
+            "Notas, exercícios práticos para estudar melhor e o portfólio de certificados sempre disponíveis.",
         },
       ],
     },
@@ -378,45 +378,45 @@ const pt = {
     },
 
     faq: {
-      tag: "Perguntas Frequentes",
-      headline: "Respostas diretas antes de começar.",
-      description: "Os detalhes essenciais sobre adopção, segurança e funcionamento da plataforma.",
+      tag: "Dúvidas Comuns",
+      headline: "Respostas simples antes de começar.",
+      description: "Tudo o que escolas, pais e alunos costumam perguntar.",
       items: [
         {
-          q: "O que diferencia o Cur10usX de um software escolar tradicional?",
-          a: "Além de cobrir a gestão administrativa e académica (matrículas, turmas, pautas, assiduidade e certificados), o Cur10usX integra o Perfil Evolutivo do estudante, indicadores de risco académico e um módulo de aprendizagem assistida — ligando operação e aprendizagem num único sistema.",
+          q: "O Cur10usX é para escolas ou para alunos?",
+          a: "Para os dois. A escola usa o Cur10usX para organizar matrículas, turmas, horários e notas — e a partir daí alunos, professores e encarregados recebem acesso para acompanhar tudo, estudar e comunicar no mesmo lugar.",
         },
         {
-          q: "Como funciona o isolamento de dados entre escolas?",
-          a: "O Cur10usX utiliza uma arquitetura multi-tenant com validação por instituição em todas as consultas e rotas, além de controlo de acesso por perfil (RBAC), autenticação de dois factores (2FA) e registo de auditoria.",
-        },
-        {
-          q: "Quem pode utilizar a plataforma dentro da instituição?",
-          a: "A plataforma oferece experiências dedicadas para administradores escolares, professores, estudantes e encarregados de educação — cada um com acesso apenas às informações e acções da sua competência.",
+          q: "Sou aluno ou encarregado. Como faço para entrar?",
+          a: "Se a sua escola já usa o Cur10usX, basta clicar em «Entrar» com o convite recebido ou fazer o pedido de vinculação. Se a sua escola ainda não usa, pode recomendá-la à direcção.",
         },
         {
           q: "Como posso registar a minha escola?",
-          a: "Clique em «Registar instituição», preencha os dados da escola e do administrador principal. Após aprovação e activação, a instituição pode configurar o seu tema visual, anos lectivos, cursos, turmas e equipa.",
+          a: "Clique em «Sou uma escola · Registar» e preencha os dados básicos da instituição. Depois da activação, já pode criar o ano lectivo, turmas e convidar professores, alunos e pais.",
         },
         {
-          q: "A plataforma funciona em telemóvel e em modo escuro?",
-          a: "Sim. Tanto a página pública como os painéis internos foram construídos com design responsivo para telemóvel, tablet e desktop, com suporte completo a Light Mode e Dark Mode.",
+          q: "Os dados da minha escola ficam misturados com os de outras escolas?",
+          a: "Nunca. Cada escola tem o seu próprio espaço privado e protegido — só as pessoas autorizadas da sua instituição vêem as informações dos seus alunos e turmas.",
+        },
+        {
+          q: "Funciona no telemóvel sem precisar de instalar nada?",
+          a: "Sim. O Cur10usX abre directamente no navegador do telemóvel, tablet ou computador, tanto em modo claro como em modo escuro.",
         },
       ],
     },
 
     cta: {
-      tag: "Comece hoje",
-      headline: "Eleve a gestão e a jornada educativa da sua instituição.",
+      tag: "Pronto para simplificar?",
+      headline: "Leve o Cur10usX para a sua escola.",
       description:
-        "Registe a sua escola na plataforma ou aceda à sua conta para começar a conectar direcção, docentes, estudantes e famílias.",
-      button: "Registar instituição",
-      explore: "Entrar na plataforma",
+        "Menos tempo em papelada, mais tempo para acompanhar cada aluno. Registe a sua instituição ou entre na sua conta.",
+      button: "Registar a minha escola",
+      explore: "Entrar na minha conta",
     },
 
     footer: {
       description:
-        "Infraestrutura digital educacional que une gestão inteligente, Perfil Evolutivo e aprendizagem assistida.",
+        "A plataforma simples que organiza a escola e acompanha a evolução de cada aluno.",
       product: "Produto",
       resources: "Navegação",
       company: "Acesso & Legal",

@@ -1,17 +1,17 @@
 const fr = {
   landing: {
     nav: {
-      product: "Produit",
-      features: "Fonctionnalités",
-      institutions: "Pour les écoles",
-      students: "Pour les élèves",
-      experience: "Plateforme",
-      faq: "FAQ",
+      product: "Accueil",
+      features: "Comment ça marche",
+      institutions: "Pour qui",
+      students: "Parcours élève",
+      experience: "En pratique",
+      faq: "Questions",
       problems: "Problème",
       transformation: "Transformation",
-      ecosystem: "Écosystème",
+      ecosystem: "Pour qui",
       benefits: "Avantages",
-      trust: "Infrastructure",
+      trust: "Confiance",
       vision: "Vision",
       explore: "Créer un compte",
       demo: "Inscrire une école",
@@ -23,13 +23,13 @@ const fr = {
     },
 
     hero: {
-      badge: "Infrastructure Numérique Éducative",
-      headline: "L'infrastructure numérique qui\nrelie gestion et évolution\nacadémique.",
+      badge: "Pour les écoles, enseignants, élèves et familles",
+      headline: "L'école bien organisée.\nL'élève au centre.",
       subheadline:
-        "Cur10usX réunit établissements, élèves, enseignants et parents dans un même écosystème — combinant gestion intelligente, Profil Évolutif, portfolio et apprentissage assisté.",
-      cta: "Inscrire un établissement",
-      explore: "Découvrir la plateforme",
-      preview_label: "Vue institutionnelle en temps réel",
+        "Votre école gère inscriptions, classes et notes sans paperasse — et élèves, enseignants et parents suivent présence, devoirs et progrès au même endroit.",
+      cta: "Je suis une école · Inscrire",
+      explore: "Je suis élève ou parent",
+      preview_label: "Choisissez un côté pour voir comment ça fonctionne",
     },
 
     stats: {
@@ -122,69 +122,69 @@ const fr = {
     },
 
     ecosystem: {
-      tag: "Écosystème Connecté",
-      headline: "Conçu pour chaque rôle de la communauté éducative.",
+      tag: "Pour qui",
+      headline: "Une plateforme. Quatre usages simples.",
       description:
-        "Chaque utilisateur dispose d'un espace clair relié à la même source de vérité, protégé par des permissions granulaires.",
-      cta_institution: "Inscrire une école",
-      cta_member: "Demander une inscription",
+        "L'école adopte Cur10usX et toute la communauté y accède — chacun voit uniquement ce dont il a besoin au quotidien.",
+      cta_institution: "Inscrire mon école",
+      cta_member: "Postuler ou se connecter",
       items: [
-        { title: "Élèves", description: "Profils complets avec historique, documents et évolution académique." },
-        { title: "Enseignants", description: "Gestion des classes, matières, évaluations et communication." },
-        { title: "Classes", description: "Organisation, emplois du temps et allocation des ressources." },
-        { title: "Présences", description: "Enregistrement rapide avec alertes automatiques pour les parents." },
-        { title: "Évaluations", description: "Notes, moyennes, bulletins et rapports dans un flux continu." },
-        { title: "Rapports", description: "Documents institutionnels générés automatiquement." },
-        { title: "Communication", description: "Messages et notifications entre l'école et les familles." },
-        { title: "Parents", description: "Suivi en temps réel de la vie scolaire." },
+        { title: "Élèves", description: "Notes, emploi du temps, devoirs et progrès réunis." },
+        { title: "Enseignants", description: "Appel rapide, notes et lien direct avec la classe." },
+        { title: "Classes", description: "Horaires, matières et enseignants bien coordonnés." },
+        { title: "Présences", description: "Saisie rapide avec alerte immédiate aux parents." },
+        { title: "Évaluations", description: "Notes, moyennes et bulletins sans erreurs manuelles." },
+        { title: "Documents", description: "Attestations et certificats prêts en quelques minutes." },
+        { title: "Communication", description: "Annonces et messages directs entre école et famille." },
+        { title: "Parents", description: "Suivre son enfant sans attendre la fin du trimestre." },
       ],
       roles: [
         {
           id: "institutions",
-          role: "Établissements",
-          title: "Gestion intelligente et vision exécutive",
+          role: "Écoles",
+          title: "Moins de paperasse, une école mieux organisée",
           description:
-            "Centralisez inscriptions, équipes, années académiques, règles d'évaluation et santé académique dans un espace multi-tenant isolé et personnalisable.",
+            "Rassemblez inscriptions, classes, horaires, enseignants et bulletins au même endroit — sans perdre des heures dans des fichiers dispersés.",
           highlights: [
-            "Santé académique et indicateurs institutionnels",
-            "Classes, cours, personnel et permissions granulaires",
-            "Identité visuelle propre et rapports officiels",
+            "Inscriptions en ligne et répartition des classes sans files",
+            "Bulletins, moyennes et attestations générés automatiquement",
+            "Annonces scolaires livrées directement sur le téléphone des familles",
           ],
         },
         {
           id: "students",
           role: "Élèves",
-          title: "Acteur de sa propre progression",
+          title: "Tout ce qu'il faut pour apprendre et progresser",
           description:
-            "Suivez votre Profil Évolutif, construisez votre portfolio académique et progressez grâce aux parcours d'apprentissage assisté.",
+            "Consulte ton emploi du temps, tes devoirs et tes notes à tout moment, entraîne-toi sur les sujets difficiles et conserve ton portfolio officiel.",
           highlights: [
-            "Profil Évolutif avec progression par matière",
-            "Parcours curriculaires, exercices et maîtrise par sujet",
-            "Emploi du temps, devoirs, notes et certificats vérifiables",
+            "Notes, devoirs et horaires sur un seul écran clair",
+            "Exercices guidés pour avancer à ton rythme",
+            "Parcours scolaire et certificats officiels toujours accessibles",
           ],
         },
         {
           id: "teachers",
           role: "Enseignants",
-          title: "Moins d'administratif, plus de pédagogie",
+          title: "Plus de temps pour enseigner, moins d'administratif",
           description:
-            "Enregistrez cours, présences, devoirs et évaluations dans une interface fluide, avec des signaux précoces sur les élèves à accompagner.",
+            "Faites l'appel en quelques secondes, saisissez les notes simplement et repérez tôt les élèves qui ont besoin d'accompagnement.",
           highlights: [
-            "Saisie rapide des notes, examens et devoirs",
-            "Alertes précoces de risque académique par classe",
-            "Communication directe avec élèves et parents",
+            "Appel numérique rapide directement en classe",
+            "Saisie simple des examens, devoirs et moyennes",
+            "Lien direct avec les élèves et leurs parents",
           ],
         },
         {
           id: "parents",
-          role: "Parents & Tuteurs",
-          title: "Suivi actif sans friction",
+          role: "Parents",
+          title: "Suivez la scolarité de votre enfant en temps réel",
           description:
-            "Consultez présences, évaluations, annonces et évolution de vos enfants en toute transparence et restez en lien direct avec l'école.",
+            "Recevez une alerte en cas d'absence ou de nouvelle note, envoyez vos justificatifs par téléphone et échangez facilement avec l'école.",
           highlights: [
-            "Vue consolidée des résultats et de l'assiduité",
-            "Envoi numérique des justificatifs d'absence",
-            "Annonces institutionnelles et messagerie centralisées",
+            "Savoir immédiatement si votre enfant était en cours",
+            "Suivre notes et progrès tout au long du trimestre",
+            "Envoyer un justificatif et lire les annonces officielles",
           ],
         },
       ],
@@ -240,72 +240,72 @@ const fr = {
     },
 
     evolution: {
-      tag: "Profil Évolutif",
-      headline: "Chaque élève est une trajectoire, pas seulement un bulletin.",
+      tag: "Parcours de l'Élève",
+      headline: "Bien plus que des notes en fin de trimestre.",
       description:
-        "Au cœur de Cur10usX se trouve le Profil Évolutif : un dossier vivant qui relie assiduité, évaluations, maîtrise des notions et étapes clés tout au long du parcours scolaire.",
-      preview_badge: "Architecture du Profil Évolutif",
-      preview_title: "Vue longitudinale de la progression",
-      preview_caption: "Représentation illustrative des dimensions suivies dans la plateforme.",
+        "Avec le Profil Évolutif, chaque élève construit un suivi vivant de sa scolarité — de la rentrée jusqu'aux certificats officiels.",
+      preview_badge: "Suivi continu",
+      preview_title: "Une progression claire année après année",
+      preview_caption: "Chaque étape relie l'organisation de l'école aux progrès réels de l'élève.",
       stages: [
         {
           step: "01",
-          title: "Admission et contexte",
-          description: "Candidature, inscription et affectation en classe créent un dossier structuré dès le premier jour.",
+          title: "Inscription sans files",
+          description: "La candidature et la répartition en classe se font simplement, avec les horaires prêts dès le premier jour.",
         },
         {
           step: "02",
-          title: "Suivi continu",
-          description: "Présences, devoirs, examens et engagement maintiennent une vision claire à chaque trimestre.",
+          title: "Quotidien toujours clair",
+          description: "Présences, devoirs et notes restent à jour au même endroit pour l'élève et ses parents.",
         },
         {
           step: "03",
-          title: "Maîtrise et apprentissage assisté",
-          description: "Parcours curriculaires et exercices identifient les acquis et les points à renforcer.",
+          title: "Révisions accompagnées",
+          description: "Des exercices guidés aident l'élève à renforcer exactement les matières où il a besoin d'aide.",
         },
         {
           step: "04",
-          title: "Portfolio et certification",
-          description: "Le parcours se consolide en historique pluriannuel et documents officiels vérifiables.",
+          title: "Réussites conservées",
+          description: "Tout le parcours devient un portfolio et des certificats officiels prêts à présenter.",
         },
       ],
       dimensions: [
-        { label: "Parcours Académique", detail: "Historique continu par année, niveau et filière" },
-        { label: "Maîtrise Curriculaire", detail: "Progression par unité, thème et exercices résolus" },
-        { label: "Assiduité & Régularité", detail: "Présences, justificatifs et constance d'étude" },
-        { label: "Portfolio Vérifiable", detail: "Attestations, certificats et preuves académiques" },
+        { label: "Parcours Scolaire", detail: "Toutes les années réunies dans un seul dossier clair" },
+        { label: "Progrès d'Étude", detail: "Notions acquises et points à retravailler" },
+        { label: "Assiduité", detail: "Présences et justificatifs clairs pour l'école et la famille" },
+        { label: "Certificats Officiels", detail: "Attestations et relevés prêts dès que besoin" },
       ],
     },
 
     experience: {
-      tag: "Expérience de la Plateforme",
-      headline: "Des interfaces conçues pour la clarté quotidienne.",
+      tag: "En Pratique",
+      headline: "Simple à prendre en main. Agréable chaque jour.",
       description:
-        "Sans menus complexes ni surcharge visuelle. Chaque écran de Cur10usX privilégie la lisibilité, la rapidité et le contexte immédiat.",
+        "Pas d'écrans compliqués ni de menus cachés. Tout est pensé pour accomplir les tâches du quotidien en quelques clics.",
       views: [
         {
           id: "overview",
-          label: "Tableau de bord",
-          url: "cur10usx.com/dashboard",
-          title: "Vision consolidée de votre établissement en temps réel",
+          label: "Gestion de l'École",
+          url: "Espace Direction",
+          title: "Inscriptions, classes et bulletins au même endroit",
           description:
-            "Suivez la santé académique des classes, l'assiduité, les inscriptions actives et les autorisations depuis un espace clair.",
-        },
-        {
-          id: "evolution",
-          label: "Profil Évolutif",
-          url: "cur10usx.com/aprender",
-          title: "Trajectoire, maîtrise par notion et portfolio vérifiable",
-          description:
-            "Parcours curriculaires, progression longitudinale et certificats à code public réunis dans un seul dossier continu.",
+            "Visualisez l'état de chaque classe, validez les inscriptions et éditez les relevés sans double saisie.",
         },
         {
           id: "classroom",
-          label: "Enseignants & Familles",
-          url: "cur10usx.com/list/lessons",
-          title: "Cours, présences numériques et suivi synchronisé",
+          label: "Cours & Familles",
+          url: "Salle de Classe et Parents",
+          title: "Présences et annonces livrées aussitôt",
           description:
-            "Appel rapide en classe, justificatifs d'absence et notifications structurées qui gardent les familles informées.",
+            "L'enseignant fait l'appel en quelques secondes et les parents sont informés sur leur téléphone, avec justificatifs simples.",
+        },
+        {
+          id: "evolution",
+          label: "Études & Progrès",
+          url: "Espace Élève",
+          title: "Chaque élève suit son évolution",
+          description:
+            "Notes, exercices pratiques pour progresser dans chaque matière et portfolio officiel toujours disponible.",
         },
       ],
     },
@@ -379,44 +379,44 @@ const fr = {
 
     faq: {
       tag: "Questions Fréquentes",
-      headline: "Des réponses claires avant de commencer.",
-      description: "L'essentiel sur l'adoption, la sécurité et le fonctionnement de la plateforme.",
+      headline: "Des réponses simples avant de commencer.",
+      description: "Ce que les écoles, parents et élèves demandent le plus souvent.",
       items: [
         {
-          q: "Qu'est-ce qui distingue Cur10usX d'un logiciel scolaire classique ?",
-          a: "En plus de la gestion administrative et académique (inscriptions, classes, notes, présences et certificats), Cur10usX intègre le Profil Évolutif de l'élève, les indicateurs de risque académique et l'apprentissage assisté dans une même plateforme.",
+          q: "Cur10usX est-il destiné aux écoles ou aux élèves ?",
+          a: "Aux deux. L'école utilise Cur10usX pour organiser inscriptions, classes, horaires et notes — et à partir de là, élèves, enseignants et parents accèdent au même espace pour suivre, réviser et communiquer.",
         },
         {
-          q: "Comment l'isolation des données entre établissements est-elle garantie ?",
-          a: "Cur10usX repose sur une architecture multi-tenant avec cloisonnement par établissement sur chaque requête, contrôle d'accès par rôle (RBAC), authentification à deux facteurs (2FA) et journal d'audit.",
+          q: "Je suis élève ou parent. Comment puis-je accéder ?",
+          a: "Si votre école utilise déjà Cur10usX, cliquez sur « Connexion » avec votre invitation ou envoyez une demande d'inscription. Sinon, parlez-en à la direction de votre école.",
         },
         {
-          q: "Qui peut utiliser la plateforme au sein de l'école ?",
-          a: "La plateforme propose des espaces dédiés aux administrateurs scolaires, enseignants, élèves et parents — chacun accédant uniquement aux données et actions de son rôle.",
+          q: "Comment inscrire mon école ?",
+          a: "Cliquez sur « Je suis une école · Inscrire » et indiquez les informations de base. Après activation, vous pourrez créer l'année scolaire, les classes et inviter enseignants, élèves et parents.",
         },
         {
-          q: "Comment inscrire mon établissement ?",
-          a: "Cliquez sur « Inscrire un établissement » et renseignez les informations de votre école et de l'administrateur principal. Après validation et activation, vous pouvez personnaliser votre espace et configurer vos classes.",
+          q: "Les données de notre école restent-elles privées ?",
+          a: "Toujours. Chaque école dispose de son propre espace privé et protégé — seules les personnes autorisées de votre établissement voient vos élèves et vos classes.",
         },
         {
-          q: "La plateforme fonctionne-t-elle sur mobile et en mode sombre ?",
-          a: "Oui. Le site public comme les tableaux de bord internes sont entièrement responsives sur mobile, tablette et ordinateur, avec support complet des thèmes clair et sombre.",
+          q: "Est-ce que cela fonctionne sur téléphone sans rien installer ?",
+          a: "Oui. Cur10usX s'ouvre directement dans le navigateur sur téléphone, tablette et ordinateur, en mode clair comme en mode sombre.",
         },
       ],
     },
 
     cta: {
-      tag: "Démarrer",
-      headline: "Faites évoluer la gestion et le suivi éducatif de votre école.",
+      tag: "Prêt à simplifier ?",
+      headline: "Adoptez Cur10usX dans votre école.",
       description:
-        "Inscrivez votre établissement ou connectez-vous pour relier direction, enseignants, élèves et familles.",
-      button: "Inscrire un établissement",
-      explore: "Accéder à la plateforme",
+        "Moins de temps sur la paperasse, plus de temps pour accompagner chaque élève. Inscrivez votre école ou connectez-vous.",
+      button: "Inscrire mon école",
+      explore: "Me connecter",
     },
 
     footer: {
       description:
-        "Infrastructure numérique éducative combinant gestion intelligente, Profil Évolutif et apprentissage assisté.",
+        "La plateforme simple qui organise l'école et accompagne la progression de chaque élève.",
       product: "Produit",
       resources: "Navigation",
       company: "Accès & Légal",

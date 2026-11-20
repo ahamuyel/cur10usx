@@ -27,10 +27,12 @@ export function Accordion({
   children,
   multiple = false,
   defaultValue,
+  className,
 }: {
   children: ReactNode
   multiple?: boolean
   defaultValue?: string | string[]
+  className?: string
 }) {
   const [activeIndex, setActiveIndex] = useState<string | string[] | null>(
     multiple ? (Array.isArray(defaultValue) ? defaultValue : []) : defaultValue || null
@@ -54,7 +56,7 @@ export function Accordion({
   )
 
   return (
-    <div className="space-y-2.5">
+    <div className={cn("space-y-2.5", className)}>
       {React.Children.map(children, (child) => {
         if (!React.isValidElement(child)) return null
         const value = (child.props as { value?: string }).value || ""

@@ -77,7 +77,7 @@ export default function Footer({ branding }: FooterProps) {
               </li>
               <li>
                 <a
-                  href="#funcionalidades"
+                  href="#experiencia"
                   className="text-xs sm:text-[13px] font-light text-[var(--landing-text-secondary)] hover:text-[var(--landing-text-primary)] transition-colors"
                 >
                   {t("landing.footer.link_features")}

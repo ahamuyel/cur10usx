@@ -17,8 +17,8 @@ const LOCALES = [
 
 const NAV_ITEMS = [
   { key: "product", href: "#produto" },
-  { key: "features", href: "#funcionalidades" },
   { key: "institutions", href: "#ecossistema" },
+  { key: "features", href: "#experiencia" },
   { key: "students", href: "#perfil-evolutivo" },
 ] as const
 

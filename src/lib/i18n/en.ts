@@ -1,17 +1,17 @@
 const en = {
   landing: {
     nav: {
-      product: "Product",
-      features: "Features",
-      institutions: "For institutions",
-      students: "For students",
-      experience: "Platform",
+      product: "Home",
+      features: "How it works",
+      institutions: "Who it's for",
+      students: "Student journey",
+      experience: "In practice",
       faq: "FAQ",
       problems: "Problem",
       transformation: "Transformation",
-      ecosystem: "Ecosystem",
+      ecosystem: "Who it's for",
       benefits: "Benefits",
-      trust: "Infrastructure",
+      trust: "Trust",
       vision: "Vision",
       explore: "Create account",
       demo: "Register school",
@@ -23,13 +23,13 @@ const en = {
     },
 
     hero: {
-      badge: "Digital Educational Infrastructure",
-      headline: "The digital infrastructure\nconnecting management and\nstudent growth.",
+      badge: "For schools, teachers, students and families",
+      headline: "An organized school.\nEvery student supported.",
       subheadline:
-        "Cur10usX brings schools, students, teachers and parents into a single ecosystem — combining intelligent school management, the Evolutionary Profile, academic portfolios and assisted learning.",
-      cta: "Register institution",
-      explore: "Explore the platform",
-      preview_label: "Real-time institutional overview",
+        "Your school manages enrollments, classes and grades without paperwork — while students, teachers and parents follow progress, attendance and updates in one simple place.",
+      cta: "I'm a school · Register",
+      explore: "I'm a student or parent",
+      preview_label: "Select a side to see how it works every day",
     },
 
     stats: {
@@ -122,69 +122,69 @@ const en = {
     },
 
     ecosystem: {
-      tag: "Connected Ecosystem",
-      headline: "Purpose-built for every role in the school community.",
+      tag: "Who it's for",
+      headline: "One platform. Four simple ways to use it.",
       description:
-        "Each member works in a focused space connected to the same source of truth, governed by strict role-based permissions.",
-      cta_institution: "Register school",
-      cta_member: "Request enrollment",
+        "The school adopts Cur10usX and the entire community joins in — everyone sees only what matters for their day.",
+      cta_institution: "Register my school",
+      cta_member: "Apply or sign in",
       items: [
-        { title: "Students", description: "Complete profiles with history, documents and academic growth." },
-        { title: "Teachers", description: "Manage classes, subjects, assessments and communication." },
-        { title: "Classes", description: "Organization, timetables and resource allocation." },
-        { title: "Attendance", description: "Fast tracking with automatic alerts for parents." },
-        { title: "Assessments", description: "Grades, averages, transcripts and reports in one continuous flow." },
-        { title: "Reports", description: "Institutional documents generated automatically." },
-        { title: "Communication", description: "Messages and notifications between school and families." },
-        { title: "Parents", description: "Real-time visibility into school life." },
+        { title: "Students", description: "Grades, timetable, homework and progress in one place." },
+        { title: "Teachers", description: "Fast roll call, grades and class communication." },
+        { title: "Classes", description: "Schedules, subjects and teachers always aligned." },
+        { title: "Attendance", description: "Quick check-in with instant parent updates." },
+        { title: "Assessments", description: "Grades and term reports without manual errors." },
+        { title: "Documents", description: "Statements and certificates issued in minutes." },
+        { title: "Communication", description: "Direct notices between school and home." },
+        { title: "Parents", description: "Stay close to your child's progress every week." },
       ],
       roles: [
         {
           id: "institutions",
-          role: "Institutions",
-          title: "Intelligent management and executive visibility",
+          role: "Schools",
+          title: "Less paperwork, clear visibility over your school",
           description:
-            "Centralize enrollments, staff, academic years, grading policies and academic health inside an isolated, customizable multi-tenant workspace.",
+            "Organize enrollments, classes, schedules, teachers and grades in one place — without wasting hours on spreadsheets and paper folders.",
           highlights: [
-            "Academic health and institutional indicators",
-            "Classes, courses, staff and granular permissions",
-            "Custom school branding and official reports",
+            "Online enrollments and class setup without queues",
+            "Term grades, averages and statements generated automatically",
+            "School-wide notices delivered straight to parents' phones",
           ],
         },
         {
           id: "students",
           role: "Students",
-          title: "Ownership of the learning journey",
+          title: "Everything you need to study and grow",
           description:
-            "Follow your Evolutionary Profile, build your academic portfolio and advance steadily with assisted learning paths.",
+            "Check your timetable, homework and grades anytime, practice challenging topics at your own pace and keep your official school portfolio.",
           highlights: [
-            "Evolutionary Profile with subject-level progress",
-            "Curriculum paths, exercises and topic mastery",
-            "Timetable, assignments, grades and verifiable certificates",
+            "Grades, assignments and schedule in one simple screen",
+            "Guided exercises to improve step by step",
+            "School history and official certificates always saved",
           ],
         },
         {
           id: "teachers",
           role: "Teachers",
-          title: "Less paperwork, more pedagogical focus",
+          title: "More time to teach, less admin work",
           description:
-            "Record lessons, attendance, assignments and assessments in an interface designed for daily teaching, with early signals on students needing support.",
+            "Take attendance in seconds, enter grades without manual recalculations and spot early which students need extra support.",
           highlights: [
-            "Streamlined grading, exams and assignments",
-            "Early academic risk signals per class",
-            "Direct communication with students and families",
+            "Fast digital roll call right from the classroom",
+            "Simple recording of exams, homework and averages",
+            "Direct communication with students and parents",
           ],
         },
         {
           id: "parents",
-          role: "Parents & Guardians",
-          title: "Active involvement without friction",
+          role: "Parents",
+          title: "Follow your child's school life in real time",
           description:
-            "Stay informed about attendance, assessments, announcements and your child's academic trajectory with clarity and direct school communication.",
+            "Get notified about absences or new grades, send justifications from your phone and message the school without waiting in line.",
           highlights: [
-            "Consolidated view of student performance",
-            "Digital absence justification submission",
-            "Centralized institutional announcements and chat",
+            "Know right away when your child attended class",
+            "Follow grades and progress throughout the whole term",
+            "Send absence notes and read official school updates",
           ],
         },
       ],
@@ -240,72 +240,72 @@ const en = {
     },
 
     evolution: {
-      tag: "Evolutionary Profile",
-      headline: "Every student is a trajectory, not just a grade sheet.",
+      tag: "Student Journey",
+      headline: "More than just grades at the end of term.",
       description:
-        "At the heart of Cur10usX is the Evolutionary Profile: a living record that combines attendance, assessments, content mastery and milestones across a student's entire school journey.",
-      preview_badge: "Evolutionary Profile Architecture",
-      preview_title: "Longitudinal view of student growth",
-      preview_caption: "Illustrative representation of the dimensions tracked inside the platform.",
+        "With the Evolutionary Profile, every student builds a living record of their school life — from day one to official certificates.",
+      preview_badge: "Continuous support",
+      preview_title: "Clear growth year after year",
+      preview_caption: "Every step connects school organization to real student progress.",
       stages: [
         {
           step: "01",
-          title: "Admission & context",
-          description: "Application, enrollment and class placement establish a structured student record from day one.",
+          title: "Simple admission",
+          description: "Enrollment and class placement happen smoothly, with schedules ready from day one.",
         },
         {
           step: "02",
-          title: "Continuous tracking",
-          description: "Attendance, assignments, exams and engagement keep progress visible every term.",
+          title: "Everyday visibility",
+          description: "Attendance, homework and grades stay updated in one place for both students and parents.",
         },
         {
           step: "03",
-          title: "Mastery & assisted learning",
-          description: "Curriculum paths and exercises highlight mastered skills and topics that need reinforcement.",
+          title: "Guided study support",
+          description: "Practice exercises help each student strengthen the exact subjects they need most.",
         },
         {
           step: "04",
-          title: "Portfolio & certification",
-          description: "The journey consolidates into multi-year transcripts and verifiable official documents.",
+          title: "Achievements saved",
+          description: "The entire journey comes together as a portfolio and official certificates ready to share.",
         },
       ],
       dimensions: [
-        { label: "Academic Journey", detail: "Continuous history across academic years, grades and courses" },
-        { label: "Curriculum Mastery", detail: "Progress across units, topics and completed exercises" },
-        { label: "Attendance & Consistency", detail: "Presence, justifications and sustained study habits" },
-        { label: "Verifiable Portfolio", detail: "Statements, certificates and documented achievements" },
+        { label: "School History", detail: "Every school year organized in one clean record" },
+        { label: "Study Progress", detail: "Topics mastered and areas that need extra practice" },
+        { label: "Attendance", detail: "Clear presence and absence notes for school and home" },
+        { label: "Official Certificates", detail: "Transcripts and statements ready whenever needed" },
       ],
     },
 
     experience: {
-      tag: "Platform Experience",
-      headline: "Interfaces crafted for everyday clarity.",
+      tag: "In Practice",
+      headline: "Easy to learn. Effortless to use every day.",
       description:
-        "No labyrinthine menus or visual clutter. Every Cur10usX workspace prioritizes legibility, speed and immediate context.",
+        "No cluttered screens or hidden menus. Everything is laid out to finish daily tasks in just a few clicks.",
       views: [
         {
           id: "overview",
-          label: "Institutional Dashboard",
-          url: "cur10usx.com/dashboard",
-          title: "Consolidated visibility of your school in real time",
+          label: "School Management",
+          url: "Leadership Workspace",
+          title: "Enrollments, classes and grades in one place",
           description:
-            "Monitor class academic health, attendance, active enrollments and role permissions from a clean decision-ready workspace.",
-        },
-        {
-          id: "evolution",
-          label: "Evolutionary Profile",
-          url: "cur10usx.com/aprender",
-          title: "Trajectory, topic mastery and verifiable portfolio",
-          description:
-            "Curriculum paths, longitudinal growth and public-code certificate issuance unified in one continuous record.",
+            "See how every class is doing at a glance, approve enrollments and issue reports without rework.",
         },
         {
           id: "classroom",
-          label: "Teachers & Families",
-          url: "cur10usx.com/list/lessons",
-          title: "Lessons, digital attendance and synchronized updates",
+          label: "Classes & Families",
+          url: "Classroom & Parents",
+          title: "Attendance and notices delivered right away",
           description:
-            "Fast classroom roll call, absence justifications and structured notifications that keep parents informed in real time.",
+            "Teachers take attendance in seconds and parents receive instant updates on their phone, with easy absence notes.",
+        },
+        {
+          id: "evolution",
+          label: "Study & Growth",
+          url: "Student Space",
+          title: "Every student sees how far they've come",
+          description:
+            "Grades, guided exercises to improve in each subject and an official portfolio always at hand.",
         },
       ],
     },
@@ -378,45 +378,45 @@ const en = {
     },
 
     faq: {
-      tag: "Frequently Asked Questions",
-      headline: "Clear answers before you begin.",
-      description: "Key details about onboarding, security and how the platform works.",
+      tag: "Common Questions",
+      headline: "Simple answers before you start.",
+      description: "Everything schools, parents and students usually ask.",
       items: [
         {
-          q: "What sets Cur10usX apart from traditional school management software?",
-          a: "Beyond covering administrative and academic operations (enrollments, classes, grading, attendance and certificates), Cur10usX integrates the Student Evolutionary Profile, academic risk indicators and assisted learning paths in one unified platform.",
+          q: "Is Cur10usX for schools or for students?",
+          a: "Both. Schools use Cur10usX to organize enrollments, classes, schedules and grades — and from there, students, teachers and parents get access to follow everything, study and communicate in one place.",
         },
         {
-          q: "How is data isolation handled between institutions?",
-          a: "Cur10usX uses a multi-tenant architecture with strict school-level scoping on queries and API routes, alongside role-based access control (RBAC), two-factor authentication (2FA) and audit logging.",
+          q: "I'm a student or parent. How do I join?",
+          a: "If your school already uses Cur10usX, click 'Sign in' using your school invite or submit an enrollment request. If not yet, feel free to share it with your school leadership.",
         },
         {
-          q: "Who can use the platform within a school?",
-          a: "Cur10usX provides dedicated experiences for school administrators, teachers, students and parents/guardians — each accessing only the data and actions relevant to their role.",
+          q: "How do I register my school?",
+          a: "Click 'I'm a school · Register' and fill in your school's basic details. Once activated, you can set up the school year, classes and invite teachers, students and parents.",
         },
         {
-          q: "How can we register our school?",
-          a: "Click 'Register institution', enter your school and primary administrator details. Once approved and activated, you can customize your branding and configure academic years, courses, classes and staff.",
+          q: "Are our school's records kept private from other schools?",
+          a: "Always. Every school has its own private, protected space — only authorized people from your institution can view your students and classes.",
         },
         {
-          q: "Does the platform work on mobile and support dark mode?",
-          a: "Yes. Both the public site and internal workspaces are responsive across mobile, tablet and desktop with full light and dark mode support.",
+          q: "Does it work on mobile phones without installing an app?",
+          a: "Yes. Cur10usX runs straight in the browser on phones, tablets and computers, with both light and dark themes.",
         },
       ],
     },
 
     cta: {
-      tag: "Get started",
-      headline: "Elevate how your institution manages and guides learning.",
+      tag: "Ready to simplify?",
+      headline: "Bring Cur10usX to your school.",
       description:
-        "Register your school on the platform or sign in to connect leadership, teachers, students and families.",
-      button: "Register institution",
-      explore: "Sign in to platform",
+        "Less time on paperwork, more time supporting every student. Register your school or sign in to your account.",
+      button: "Register my school",
+      explore: "Sign in to my account",
     },
 
     footer: {
       description:
-        "Digital educational infrastructure combining intelligent management, the Evolutionary Profile and assisted learning.",
+        "The simple platform that organizes your school and supports every student's growth.",
       product: "Product",
       resources: "Navigation",
       company: "Access & Legal",
