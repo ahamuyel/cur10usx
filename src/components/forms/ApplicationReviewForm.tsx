@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Loader2, CheckCircle2, XCircle, UserPlus } from "lucide-react"
+import { Loader2, CheckCircle2, XCircle, UserPlus, Mail } from "lucide-react"
 import StatusBadge from "@/components/ui/StatusBadge"
 
 interface Application {
@@ -18,6 +18,9 @@ interface Application {
   dateOfBirth?: string | null
   desiredGrade?: number | null
   desiredCourseId?: string | null
+  inviteSentAt?: string | null
+  inviteTokenExpiresAt?: string | null
+  inviteTokenUsedAt?: string | null
   createdAt: string
 }
 
@@ -49,6 +52,10 @@ export default function ApplicationReviewForm({ application, onClose, onRefresh 
   const [selectedClassId, setSelectedClassId] = useState("")
 
   const isApproved = application.status === "aprovada"
+  const isHired = application.status === "contratada"
+  const isEnrolled = application.status === "matriculada"
+  const isHiredStaff = application.role === "teacher" || application.role === "school_admin"
+  const inviteUsed = !!application.inviteTokenUsedAt
 
   // Fetch classes when the application is approved (for enrollment)
   useEffect(() => {
@@ -62,7 +69,7 @@ export default function ApplicationReviewForm({ application, onClose, onRefresh 
     }
   }, [isApproved])
 
-  async function handleAction(action: "approve" | "reject" | "enroll") {
+  async function handleAction(action: "approve" | "reject" | "enroll" | "hire" | "resend-invite") {
     setLoading(action)
     try {
       const url = `/api/applications/${application.id}/${action}`
@@ -167,12 +174,45 @@ export default function ApplicationReviewForm({ application, onClose, onRefresh 
               <p className="text-red-600 dark:text-red-400 mt-1">{application.rejectReason}</p>
             </div>
           )}
+          {(isHired || isEnrolled || application.inviteSentAt) && (
+            <div className="p-3 rounded-xl bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-700 space-y-1">
+              <span className="text-zinc-600 dark:text-zinc-300 font-medium text-xs uppercase tracking-wide">
+                Convite de conta
+              </span>
+              {application.inviteSentAt ? (
+                <>
+                  <div>
+                    <span className="text-zinc-500">Enviado em:</span>{" "}
+                    <span className="font-medium text-zinc-900 dark:text-zinc-100">
+                      {new Date(application.inviteSentAt).toLocaleString("pt")}
+                    </span>
+                  </div>
+                  {application.inviteTokenExpiresAt && (
+                    <div>
+                      <span className="text-zinc-500">Válido até:</span>{" "}
+                      <span className="font-medium text-zinc-900 dark:text-zinc-100">
+                        {new Date(application.inviteTokenExpiresAt).toLocaleString("pt")}
+                      </span>
+                    </div>
+                  )}
+                  <div>
+                    <span className="text-zinc-500">Estado:</span>{" "}
+                    <span className={inviteUsed ? "text-emerald-600 dark:text-emerald-400 font-medium" : "text-amber-600 dark:text-amber-400 font-medium"}>
+                      {inviteUsed ? "Aceite" : "Pendente de aceitação"}
+                    </span>
+                  </div>
+                </>
+              ) : (
+                <p className="text-zinc-500">Ainda não foi enviado nenhum convite.</p>
+              )}
+            </div>
+          )}
           <div className="text-zinc-400 text-xs">
             Enviada em {new Date(application.createdAt).toLocaleDateString("pt")}
           </div>
         </div>
 
-        {isApproved && (
+        {isApproved && isStudent && (
           <div className="mt-4">
             <label htmlFor="classSelect" className="block text-sm font-medium mb-1.5 text-zinc-700 dark:text-zinc-300">
               Turma para matrícula
@@ -254,7 +294,7 @@ export default function ApplicationReviewForm({ application, onClose, onRefresh 
             </>
           )}
 
-          {isApproved && (
+          {isApproved && !isHiredStaff && (
             <button
               onClick={() => handleAction("enroll")}
               disabled={!!loading}
@@ -262,6 +302,28 @@ export default function ApplicationReviewForm({ application, onClose, onRefresh 
             >
               {loading === "enroll" ? <Loader2 className="w-4 h-4 animate-spin" /> : <UserPlus className="w-4 h-4" />}
               Matricular
+            </button>
+          )}
+
+          {isApproved && isHiredStaff && (
+            <button
+              onClick={() => handleAction("hire")}
+              disabled={!!loading}
+              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 transition disabled:opacity-50"
+            >
+              {loading === "hire" ? <Loader2 className="w-4 h-4 animate-spin" /> : <UserPlus className="w-4 h-4" />}
+              Contratar
+            </button>
+          )}
+
+          {!inviteUsed && (isApproved || isHired || isEnrolled) && (
+            <button
+              onClick={() => handleAction("resend-invite")}
+              disabled={!!loading}
+              className="flex items-center gap-2 px-4 py-2 rounded-xl border border-zinc-300 dark:border-zinc-700 text-sm font-medium text-zinc-700 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition disabled:opacity-50"
+            >
+              {loading === "resend-invite" ? <Loader2 className="w-4 h-4 animate-spin" /> : <Mail className="w-4 h-4" />}
+              Reenviar convite
             </button>
           )}
 
