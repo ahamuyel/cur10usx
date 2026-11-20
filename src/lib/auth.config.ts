@@ -58,7 +58,7 @@ export const authConfig = {
   },
   providers: [], // Configured in auth.ts
   callbacks: {
-    async jwt({ token, user, trigger, session }) {
+    async jwt({ token, user }) {
       if (user) {
         token.id = user.id!;
         token.role = (user as any).role;
@@ -75,11 +75,13 @@ export const authConfig = {
         token.hasPassword = (user as any).hasPassword ?? false;
         token.twoFactorEnabled = (user as any).twoFactorEnabled ?? false;
         token.twoFactorVerifiedAt = null;
+        // Login time, used to check that a 2FA verification belongs to this session.
+        token.authTime = Date.now();
       }
 
-      if (trigger === "update" && session?.twoFactorVerifiedAt) {
-        token.twoFactorVerifiedAt = session.twoFactorVerifiedAt;
-      }
+      // NOTE: a client-supplied `twoFactorVerifiedAt` from `update()` is never
+      // trusted here. The Node-side callback in auth.ts confirms it against the
+      // database (set only by the TOTP verification routes).
 
       return token;
     },

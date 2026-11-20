@@ -16,9 +16,8 @@
     "db:studio": "npx prisma studio",
     "validate:i18n": "tsx scripts/validate-translations.ts"
   },
-
   "dependencies": {
-    "@auth/prisma-adapter": "^2.11.1",
+    "@auth/prisma-adapter": "^2.11.3",
     "@popperjs/core": "^2.11.8",
     "@prisma/client": "^6.19.2",
     "@radix-ui/react-avatar": "^1.1.11",
@@ -42,8 +41,8 @@
     "lucide-react": "^0.563.0",
     "moment": "^2.30.1",
     "motion": "^12.40.0",
-    "next": "^16.1.6",
-    "next-auth": "^5.0.0-beta.30",
+    "next": "^16.4.6",
+    "next-auth": "^5.0.0-beta.32",
     "qrcode": "^1.5.4",
     "react": "19.2.3",
     "react-big-calendar": "^1.19.4",
@@ -57,7 +56,7 @@
     "tailwind-merge": "^3.6.0",
     "ws": "^8.20.0",
     "xlsx": "^0.18.5",
-    "zod": "^4.3.6"
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
@@ -72,7 +71,7 @@
     "@types/ws": "^8.18.1",
     "babel-plugin-react-compiler": "1.0.0",
     "eslint": "^9",
-    "eslint-config-next": "^16.1.6",
+    "eslint-config-next": "^16.4.6",
     "jest": "^30.4.2",
     "prisma": "^6.19.2",
     "tailwindcss": "^4",

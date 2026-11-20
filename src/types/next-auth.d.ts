@@ -62,5 +62,7 @@ declare module "next-auth/jwt" {
     hasPassword?: boolean
     twoFactorEnabled?: boolean
     twoFactorVerifiedAt?: string | null
+    /** Login time (ms since epoch); binds 2FA verification to this session. */
+    authTime?: number
   }
 }
