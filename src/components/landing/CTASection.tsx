@@ -1,43 +1,55 @@
 "use client"
 
-import { useRouter } from "next/navigation"
-import { useTranslation } from "@/lib/i18n"
+import Link from "next/link"
 import { ArrowRight } from "lucide-react"
+import { useTranslation } from "@/lib/i18n"
 
 export default function CTASection() {
-  const router = useRouter()
   const { t } = useTranslation()
 
   return (
-    <section className="py-20 md:py-32 bg-[var(--landing-bg-dark)] relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent pointer-events-none" />
+    <section className="py-20 sm:py-24 lg:py-28 bg-[var(--landing-bg)]">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="relative overflow-hidden rounded-3xl border border-[var(--landing-border)] bg-[var(--landing-bg-secondary)] px-6 py-14 sm:px-12 sm:py-16 lg:py-20 text-center">
+          {/* Subtle grid & top glow that adapt to both Light and Dark Mode */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 grid-bg opacity-60 [mask-image:radial-gradient(ellipse_70%_70%_at_50%_50%,#000_20%,transparent_100%)]"
+          />
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2 w-[520px] h-[220px] rounded-full bg-[var(--landing-accent-subtle)] blur-3xl"
+          />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="max-w-3xl mx-auto text-center">
-          <span className="text-[10px] md:text-xs text-[var(--landing-text-dark-secondary)] uppercase tracking-widest block mb-3 font-semibold">
-            {t("landing.cta.tag")}
-          </span>
-          <h2 className="text-[clamp(1.75rem,5vw,3rem)] md:text-5xl font-extrabold tracking-tight text-[var(--landing-text-dark-primary)] leading-[1.05] mb-5">
-            {t("landing.cta.headline")}
-          </h2>
-          <p className="text-[var(--landing-text-dark-secondary)] text-sm md:text-base leading-relaxed max-w-xl mx-auto mb-8 md:mb-10">
-            {t("landing.cta.description")}
-          </p>
+          <div className="relative z-10 max-w-2xl mx-auto">
+            <span className="text-xs font-medium tracking-wider uppercase text-[var(--landing-accent)] block mb-3">
+              {t("landing.cta.tag")}
+            </span>
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-medium tracking-[-0.025em] leading-[1.15] text-[var(--landing-text-primary)] text-balance">
+              {t("landing.cta.headline")}
+            </h2>
+            <p className="mt-4 text-sm sm:text-[15px] font-light text-[var(--landing-text-secondary)] leading-relaxed max-w-xl mx-auto">
+              {t("landing.cta.description")}
+            </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-4">
-            <button
-              onClick={() => router.push("/registar-escola")}
-              className="group inline-flex items-center gap-2 px-6 md:px-8 py-3.5 rounded-xl bg-white text-zinc-900 font-semibold text-sm hover:bg-zinc-100 transition-all active:scale-[0.98] shadow-lg min-h-[48px]"
-            >
-              {t("landing.cta.button")}
-              <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
-            </button>
-            <button
-              onClick={() => router.push("/signup")}
-              className="inline-flex items-center gap-2 px-6 md:px-8 py-3.5 rounded-xl border border-zinc-700 text-zinc-300 font-semibold text-sm hover:bg-zinc-900 transition-all min-h-[48px]"
-            >
-              {t("landing.cta.explore")}
-            </button>
+            <div className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3">
+              <Link
+                href="/registar-escola"
+                className="group inline-flex items-center justify-center gap-2 px-6 h-11 rounded-xl bg-[var(--landing-text-primary)] text-[var(--landing-bg)] text-sm font-medium hover:opacity-90 transition-all active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--landing-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--landing-bg-secondary)]"
+              >
+                <span>{t("landing.cta.button")}</span>
+                <ArrowRight
+                  className="w-4 h-4 transition-transform duration-150 group-hover:translate-x-0.5"
+                  aria-hidden="true"
+                />
+              </Link>
+              <Link
+                href="/signin"
+                className="inline-flex items-center justify-center px-6 h-11 rounded-xl border border-[var(--landing-border)] bg-[var(--landing-surface)] text-[var(--landing-text-primary)] text-sm font-normal hover:bg-[var(--landing-bg-tertiary)] hover:border-[var(--landing-border-strong)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--landing-accent)]"
+              >
+                {t("landing.cta.explore")}
+              </Link>
+            </div>
           </div>
         </div>
       </div>

@@ -1,14 +1,20 @@
 const fr = {
   landing: {
     nav: {
+      product: "Produit",
+      features: "Fonctionnalités",
+      institutions: "Pour les écoles",
+      students: "Pour les élèves",
+      experience: "Plateforme",
+      faq: "FAQ",
       problems: "Problème",
       transformation: "Transformation",
       ecosystem: "Écosystème",
       benefits: "Avantages",
       trust: "Infrastructure",
       vision: "Vision",
-      explore: "Explorer",
-      demo: "Demander une démo",
+      explore: "Créer un compte",
+      demo: "Inscrire une école",
       signin: "Connexion",
       account: "Compte",
       theme_toggle: "Changer thème",
@@ -17,131 +23,349 @@ const fr = {
     },
 
     hero: {
-      headline: "Le Système d'Exploitation\ndes Écoles Modernes.",
+      badge: "Infrastructure Numérique Éducative",
+      headline: "L'infrastructure numérique qui\nrelie gestion et évolution\nacadémique.",
       subheadline:
-        "Cur10usX est l'infrastructure numérique qui connecte chaque processus de votre établissement — élèves, enseignants, parents et direction — en un seul écosystème en temps réel.",
-      cta: "Demander une démo",
-      explore: "Voir la plateforme",
+        "Cur10usX réunit établissements, élèves, enseignants et parents dans un même écosystème — combinant gestion intelligente, Profil Évolutif, portfolio et apprentissage assisté.",
+      cta: "Inscrire un établissement",
+      explore: "Découvrir la plateforme",
+      preview_label: "Vue institutionnelle en temps réel",
+    },
+
+    stats: {
+      partner_label: "Établissements actifs sur la plateforme",
+      schools: "Établissements actifs",
+      students: "Élèves",
+      teachers: "Enseignants",
+      classes: "Classes",
     },
 
     problem: {
-      tag: "Le Problème",
-      headline: "Informations dispersées. Décisions retardées. Élèves défavorisés.",
+      tag: "Problème & Solution",
+      headline: "D'une gestion fragmentée à la clarté pédagogique.",
       description:
-        "Les écoles accumulent des données dans des tableurs, du papier et des messages. Le problème n'est pas le manque de technologie — c'est le manque d'un système unifié.",
+        "Les écoles ne manquent pas d'engagement — elles sont freinées par des outils isolés. Cur10usX remplace tableurs, papier et silos par un flux continu au service de l'apprentissage.",
       items: [
         {
           title: "Données Fragmentées",
-          description: "Notes, présences, dossiers et communications éparpillés dans des outils qui ne communiquent pas entre eux.",
+          description: "Notes, présences, inscriptions et avis dispersés dans des outils non connectés.",
         },
         {
-          title: "Complexité Administrative",
-          description: "Directeurs et enseignants passent des heures sur des tâches manuelles qui pourraient être résolues en secondes.",
+          title: "Charge Administrative",
+          description: "Directions et enseignants consacrent des heures à des tâches manuelles répétitives.",
         },
         {
-          title: "Décisions Lentes",
-          description: "Sans visibilité en temps réel, les problèmes académiques sont détectés trop tard pour une intervention efficace.",
+          title: "Visibilité Tardive",
+          description: "Sans suivi longitudinal, les difficultés académiques n'apparaissent qu'en fin de trimestre.",
         },
         {
-          title: "Croissance Bloquée",
-          description: "Étendre les opérations sans système centralisé devient insoutenable. Le chaos administratif limite la croissance.",
+          title: "Parcours Discontinu",
+          description: "L'évolution et les compétences de l'élève se perdent d'une année scolaire à l'autre.",
         },
       ],
     },
 
     transformation: {
-      tag: "Transformation",
-      headline: "Du chaos dispersé à l'écosystème connecté.",
-      description: "Cur10usX unifie tous les processus scolaires. L'information circule. Les décisions s'accélèrent. L'école se transforme.",
-      tab_legacy: "Avant",
+      tag: "Avant & Après",
+      headline: "Un changement concret dans le quotidien scolaire.",
+      description:
+        "Comparez les pratiques traditionnelles avec une infrastructure conçue pour les écoles modernes.",
+      tab_legacy: "Modèle traditionnel",
       tab_platform: "Avec Cur10usX",
       steps: [
         {
-          title: "Gestion des élèves",
-          legacy_title: "Dossiers fragmentés",
-          legacy_items: ["Classeurs papier et archives physiques", "Erreurs fréquentes d'inscription manuelle", "Historique scolaire difficile d'accès"],
-          platform_title: "Intelligence centralisée",
-          platform_items: ["Profil unique et complet par élève", "Inscription numérique en secondes", "Historique complet en un clic"],
+          title: "Gestion & Inscriptions",
+          legacy_title: "Dossiers dispersés",
+          legacy_items: [
+            "Dossiers papier et tableurs parallèles",
+            "Reprise manuelle à chaque rentrée",
+            "Historique académique difficile à consolider",
+          ],
+          platform_title: "Opération centralisée",
+          platform_items: [
+            "Admissions, inscriptions et classes dans un flux unique",
+            "Transition d'année académique structurée",
+            "Dossier complet accessible à tout moment",
+          ],
         },
         {
-          title: "Présences et communication",
-          legacy_title: "Processus aveugles",
-          legacy_items: ["Appel manuel qui prend du temps de cours", "Parents informés des absences des jours après", "Annonces perdues dans les groupes"],
-          platform_title: "Flux en temps réel",
-          platform_items: ["Pointage mobile en secondes", "Parents notifiés automatiquement", "Communication institutionnelle unifiée"],
+          title: "Assiduité & Familles",
+          legacy_title: "Communication réactive",
+          legacy_items: [
+            "Absences signalées avec plusieurs jours de retard",
+            "Annonces perdues dans des groupes informels",
+            "Parents sans visibilité claire sur le parcours",
+          ],
+          platform_title: "Suivi continu",
+          platform_items: [
+            "Saisie numérique des présences et justificatifs",
+            "Communications institutionnelles structurées",
+            "Accès transparent en temps réel pour les familles",
+          ],
         },
         {
-          title: "Évaluations et résultats",
-          legacy_title: "Clôtures douloureuses",
-          legacy_items: ["Notes dispersées dans plusieurs fichiers", "Calculs manuels sujets aux erreurs", "Rapports qui prennent des semaines"],
-          platform_title: "Précision instantanée",
-          platform_items: ["Notes centralisées et sécurisées", "Calcul automatique des moyennes", "Rapports institutionnels en temps réel"],
+          title: "Évaluation & Apprentissage",
+          legacy_title: "Uniquement des moyennes finales",
+          legacy_items: [
+            "Clôtures trimestrielles longues et manuelles",
+            "Peu de visibilité sur la maîtrise par notion",
+            "Certificats émis sans vérification numérique",
+          ],
+          platform_title: "Intelligence éducative",
+          platform_items: [
+            "Moteur d'évaluation configurable avec calculs automatiques",
+            "Profil Évolutif et parcours d'apprentissage assisté",
+            "Documents officiels vérifiables par code public",
+          ],
         },
       ],
     },
 
     ecosystem: {
-      tag: "Écosystème",
-      headline: "Une plateforme. Toutes les connexions.",
-      description: "Cur10usX n'est pas un ensemble de modules isolés. C'est un écosystème où chaque personne, donnée et processus est connecté.",
+      tag: "Écosystème Connecté",
+      headline: "Conçu pour chaque rôle de la communauté éducative.",
+      description:
+        "Chaque utilisateur dispose d'un espace clair relié à la même source de vérité, protégé par des permissions granulaires.",
+      cta_institution: "Inscrire une école",
+      cta_member: "Demander une inscription",
       items: [
         { title: "Élèves", description: "Profils complets avec historique, documents et évolution académique." },
         { title: "Enseignants", description: "Gestion des classes, matières, évaluations et communication." },
-        { title: "Classes", description: "Organisation, horaires et allocation des ressources." },
-        { title: "Présences", description: "Pointage rapide avec alertes automatiques aux parents." },
-        { title: "Évaluations", description: "Notes, moyennes, bulletins et rapports en flux continu." },
+        { title: "Classes", description: "Organisation, emplois du temps et allocation des ressources." },
+        { title: "Présences", description: "Enregistrement rapide avec alertes automatiques pour les parents." },
+        { title: "Évaluations", description: "Notes, moyennes, bulletins et rapports dans un flux continu." },
         { title: "Rapports", description: "Documents institutionnels générés automatiquement." },
         { title: "Communication", description: "Messages et notifications entre l'école et les familles." },
         { title: "Parents", description: "Suivi en temps réel de la vie scolaire." },
       ],
+      roles: [
+        {
+          id: "institutions",
+          role: "Établissements",
+          title: "Gestion intelligente et vision exécutive",
+          description:
+            "Centralisez inscriptions, équipes, années académiques, règles d'évaluation et santé académique dans un espace multi-tenant isolé et personnalisable.",
+          highlights: [
+            "Santé académique et indicateurs institutionnels",
+            "Classes, cours, personnel et permissions granulaires",
+            "Identité visuelle propre et rapports officiels",
+          ],
+        },
+        {
+          id: "students",
+          role: "Élèves",
+          title: "Acteur de sa propre progression",
+          description:
+            "Suivez votre Profil Évolutif, construisez votre portfolio académique et progressez grâce aux parcours d'apprentissage assisté.",
+          highlights: [
+            "Profil Évolutif avec progression par matière",
+            "Parcours curriculaires, exercices et maîtrise par sujet",
+            "Emploi du temps, devoirs, notes et certificats vérifiables",
+          ],
+        },
+        {
+          id: "teachers",
+          role: "Enseignants",
+          title: "Moins d'administratif, plus de pédagogie",
+          description:
+            "Enregistrez cours, présences, devoirs et évaluations dans une interface fluide, avec des signaux précoces sur les élèves à accompagner.",
+          highlights: [
+            "Saisie rapide des notes, examens et devoirs",
+            "Alertes précoces de risque académique par classe",
+            "Communication directe avec élèves et parents",
+          ],
+        },
+        {
+          id: "parents",
+          role: "Parents & Tuteurs",
+          title: "Suivi actif sans friction",
+          description:
+            "Consultez présences, évaluations, annonces et évolution de vos enfants en toute transparence et restez en lien direct avec l'école.",
+          highlights: [
+            "Vue consolidée des résultats et de l'assiduité",
+            "Envoi numérique des justificatifs d'absence",
+            "Annonces institutionnelles et messagerie centralisées",
+          ],
+        },
+      ],
+    },
+
+    features: {
+      tag: "Fonctionnalités",
+      headline: "Cinq piliers pour élever l'expérience éducative.",
+      description:
+        "Au-delà de la numérisation administrative : Cur10usX relie directement la gestion institutionnelle au développement continu de l'élève.",
+      items: [
+        {
+          id: "institutional",
+          eyebrow: "Opérations",
+          title: "Gestion Institutionnelle Intelligente",
+          description:
+            "Admissions, inscriptions, classes, cours, matières, emplois du temps, personnel, évaluations et transitions annuelles réunis dans une seule architecture.",
+          bullets: ["Multi-tenant isolé par établissement", "Moteur d'évaluation configurable", "Importations et rapports"],
+        },
+        {
+          id: "evolutionary",
+          eyebrow: "Différenciateur",
+          title: "Profil Évolutif de l'Élève",
+          description:
+            "Une trajectoire continue qui suit la progression trimestre après trimestre et année après année, bien au-delà d'un bulletin statique.",
+          bullets: ["Historique longitudinal multi-années", "Évolution des moyennes et présences", "Objectifs académiques clairs"],
+        },
+        {
+          id: "portfolio",
+          eyebrow: "Certifications",
+          title: "Portfolio & Compétences",
+          description:
+            "Consolidez preuves académiques, relevés, attestations et certificats de fin de cycle dotés d'un code de vérification publique.",
+          bullets: ["Portfolio académique structuré", "Certificats et attestations officiels", "Vérification publique par code"],
+        },
+        {
+          id: "tracking",
+          eyebrow: "Continuité",
+          title: "Suivi Académique en Temps Réel",
+          description:
+            "Présences, justificatifs, devoirs, examens et communication structurée entre école, enseignants et familles.",
+          bullets: ["Présences et justificatifs numériques", "Annonces et messagerie intégrées", "Notifications contextuelles"],
+        },
+        {
+          id: "intelligence",
+          eyebrow: "Apprentissage",
+          title: "Intelligence Éducative & Apprentissage Assisté",
+          description:
+            "Détection précoce du risque académique, analyse de la santé des classes et espace d'apprentissage avec parcours, exercices et maîtrise par notion.",
+          bullets: ["Alertes d'absentéisme et de baisse de résultats", "Parcours curriculaires et score de maîtrise", "Recommandations pédagogiques concrètes"],
+        },
+      ],
+    },
+
+    evolution: {
+      tag: "Profil Évolutif",
+      headline: "Chaque élève est une trajectoire, pas seulement un bulletin.",
+      description:
+        "Au cœur de Cur10usX se trouve le Profil Évolutif : un dossier vivant qui relie assiduité, évaluations, maîtrise des notions et étapes clés tout au long du parcours scolaire.",
+      preview_badge: "Architecture du Profil Évolutif",
+      preview_title: "Vue longitudinale de la progression",
+      preview_caption: "Représentation illustrative des dimensions suivies dans la plateforme.",
+      stages: [
+        {
+          step: "01",
+          title: "Admission et contexte",
+          description: "Candidature, inscription et affectation en classe créent un dossier structuré dès le premier jour.",
+        },
+        {
+          step: "02",
+          title: "Suivi continu",
+          description: "Présences, devoirs, examens et engagement maintiennent une vision claire à chaque trimestre.",
+        },
+        {
+          step: "03",
+          title: "Maîtrise et apprentissage assisté",
+          description: "Parcours curriculaires et exercices identifient les acquis et les points à renforcer.",
+        },
+        {
+          step: "04",
+          title: "Portfolio et certification",
+          description: "Le parcours se consolide en historique pluriannuel et documents officiels vérifiables.",
+        },
+      ],
+      dimensions: [
+        { label: "Parcours Académique", detail: "Historique continu par année, niveau et filière" },
+        { label: "Maîtrise Curriculaire", detail: "Progression par unité, thème et exercices résolus" },
+        { label: "Assiduité & Régularité", detail: "Présences, justificatifs et constance d'étude" },
+        { label: "Portfolio Vérifiable", detail: "Attestations, certificats et preuves académiques" },
+      ],
+    },
+
+    experience: {
+      tag: "Expérience de la Plateforme",
+      headline: "Des interfaces réelles, conçues pour la clarté quotidienne.",
+      description:
+        "Sans menus complexes ni surcharge visuelle. Chaque écran de Cur10usX privilégie la lisibilité, la rapidité et le contexte immédiat.",
+      views: [
+        {
+          id: "overview",
+          label: "Tableau de bord",
+          url: "cur10usx.com/dashboard",
+          image: "/screenshots/dashboard-1.png",
+          alt: "Interface réelle du tableau de bord institutionnel Cur10usX",
+          title: "Vision consolidée de votre établissement en temps réel",
+          description:
+            "Suivez indicateurs académiques, assiduité, annonces et état des classes depuis un espace clair orienté décision.",
+        },
+        {
+          id: "management",
+          label: "Gestion Académique",
+          url: "cur10usx.com/list/teachers",
+          image: "/screenshots/dashboard-2.png",
+          alt: "Interface réelle de gestion des enseignants et des classes dans Cur10usX",
+          title: "Équipes, élèves et classes organisés avec précision",
+          description:
+            "Listes rapides avec recherche, filtres, vues tableau ou cartes et actions sécurisées par rôle.",
+        },
+      ],
     },
 
     benefits: {
-      tag: "Transformation par profil",
+      tag: "Transformation par Profil",
       headline: "Avant et après Cur10usX.",
-      description: "Chaque personne dans la communauté scolaire vit une transformation différente.",
+      description: "Chaque membre de la communauté scolaire vit une transformation concrète.",
       journey: "Avant",
       outcome: "Après",
       items: [
         {
           role: "Directeurs",
-          before: "Tableurs, rapports manuels, aucune vue consolidée.",
+          before: "Tableurs, rapports manuels, aucune vision consolidée.",
           after: "Tableau de bord complet en temps réel. Décisions stratégiques en minutes, pas en semaines.",
         },
         {
           role: "Enseignants",
-          before: "Bureaucratie, papier, appel manuel, notes dispersées.",
-          after: "Saisie rapide, communication intégrée, plus de temps pour enseigner.",
+          before: "Paperasse, appel manuel, notes dispersées.",
+          after: "Enregistrement rapide, communication intégrée, plus de temps pour enseigner.",
         },
         {
           role: "Parents",
-          before: "Aucune visibilité, dépendance aux appels téléphoniques.",
-          after: "Notifications en temps réel. Présences, notes et infos sur votre téléphone.",
+          before: "Aucune visibilité,\ndépendant des appels téléphoniques.",
+          after: "Notifications en temps réel. Présences, notes et annonces sur mobile.",
         },
         {
           role: "Élèves",
-          before: "Retour tardif, aucun suivi continu.",
-          after: "Progrès visible, intervention précoce, soutien personnalisé.",
+          before: "Retour tardif,\naucun suivi continu.",
+          after: "Progrès visible, intervention précoce, accompagnement personnalisé.",
         },
       ],
     },
 
     trust: {
-      tag: "Infrastructure",
-      headline: "Conçu pour les institutions. Évolutif à toute taille.",
-      description: "La confiance ne se gagne pas avec du marketing. Elle se gagne avec de l'ingénierie.",
+      tag: "Architecture & Confiance",
+      headline: "Une ingénierie solide pour des écoles exigeantes.",
+      description:
+        "Sécurité, isolation des données et traçabilité sont intégrées dès la fondation de Cur10usX.",
       points: [
-        { title: "Architecture Cloud-Native", desc: "Infrastructure moderne et évolutive dès le premier jour." },
-        { title: "Authentification Sécurisée", desc: "Authentification multifacteur et contrôle d'accès basé sur les rôles." },
-        { title: "Multi-Tenant", desc: "Chaque école isolée et sécurisée sur la même infrastructure." },
-        { title: "Sauvegardes Automatiques", desc: "Données protégées avec sauvegardes quotidiennes et récupération rapide." },
+        {
+          title: "Isolation Multi-Tenant",
+          desc: "Chaque école dispose de son propre périmètre isolé avec cloisonnement strict des données.",
+        },
+        {
+          title: "RBAC & Authentification 2FA",
+          desc: "Contrôle d'accès par rôle (direction, enseignants, élèves et parents) avec support 2FA.",
+        },
+        {
+          title: "Audit & Intégrité",
+          desc: "Journalisation des actions critiques, limitation de débit et vérification publique des documents.",
+        },
+        {
+          title: "Web Moderne & Responsive",
+          desc: "Expérience fluide sur ordinateur, tablette et mobile, en mode clair comme en mode sombre.",
+        },
       ],
     },
 
     vision: {
       tag: "Vision",
       headline: "De meilleurs systèmes créent de meilleures écoles.",
-      description: "La technologie n'est pas l'objectif. C'est le moyen d'avoir des décisions plus rapides, des interventions plus précoces et des apprentissages plus profonds.",
+      description:
+        "La technologie n'est pas l'objectif. C'est le moyen d'avoir des décisions plus rapides, des interventions plus précoces et des apprentissages plus profonds.",
       points: [
         { title: "Décisions Éclairées", description: "Direction et enseignants avec des données en temps réel pour agir avec confiance." },
         { title: "Intervention Précoce", description: "Problèmes d'apprentissage détectés avant qu'ils ne deviennent critiques." },
@@ -149,23 +373,64 @@ const fr = {
       ],
     },
 
+    faq: {
+      tag: "Questions Fréquentes",
+      headline: "Des réponses claires avant de commencer.",
+      description: "L'essentiel sur l'adoption, la sécurité et le fonctionnement de la plateforme.",
+      items: [
+        {
+          q: "Qu'est-ce qui distingue Cur10usX d'un logiciel scolaire classique ?",
+          a: "En plus de la gestion administrative et académique (inscriptions, classes, notes, présences et certificats), Cur10usX intègre le Profil Évolutif de l'élève, les indicateurs de risque académique et l'apprentissage assisté dans une même plateforme.",
+        },
+        {
+          q: "Comment l'isolation des données entre établissements est-elle garantie ?",
+          a: "Cur10usX repose sur une architecture multi-tenant avec cloisonnement par établissement sur chaque requête, contrôle d'accès par rôle (RBAC), authentification à deux facteurs (2FA) et journal d'audit.",
+        },
+        {
+          q: "Qui peut utiliser la plateforme au sein de l'école ?",
+          a: "La plateforme propose des espaces dédiés aux administrateurs scolaires, enseignants, élèves et parents — chacun accédant uniquement aux données et actions de son rôle.",
+        },
+        {
+          q: "Comment inscrire mon établissement ?",
+          a: "Cliquez sur « Inscrire un établissement » et renseignez les informations de votre école et de l'administrateur principal. Après validation et activation, vous pouvez personnaliser votre espace et configurer vos classes.",
+        },
+        {
+          q: "La plateforme fonctionne-t-elle sur mobile et en mode sombre ?",
+          a: "Oui. Le site public comme les tableaux de bord internes sont entièrement responsives sur mobile, tablette et ordinateur, avec support complet des thèmes clair et sombre.",
+        },
+      ],
+    },
+
     cta: {
-      tag: "Avenir de l'éducation",
-      headline: "C'est ainsi que les écoles devraient fonctionner.",
-      description: "Une plateforme. Tous les processus connectés. Des décisions en temps réel.",
-      button: "Demander une démo",
-      explore: "Créer un compte gratuit",
+      tag: "Démarrer",
+      headline: "Faites évoluer la gestion et le suivi éducatif de votre école.",
+      description:
+        "Inscrivez votre établissement ou connectez-vous pour relier direction, enseignants, élèves et familles.",
+      button: "Inscrire un établissement",
+      explore: "Accéder à la plateforme",
     },
 
     footer: {
-      description: "Le système d'exploitation qui transforme les écoles en institutions connectées et intelligentes.",
-      product: "PLATEFORME",
-      resources: "RESSOURCES",
-      company: "INSTITUTION",
-      status: "Opérationnel",
+      description:
+        "Infrastructure numérique éducative combinant gestion intelligente, Profil Évolutif et apprentissage assisté.",
+      product: "Produit",
+      resources: "Navigation",
+      company: "Accès & Légal",
+      link_product: "Vue d'ensemble",
+      link_features: "Fonctionnalités",
+      link_evolution: "Profil Évolutif",
+      link_experience: "Expérience",
+      link_institutions: "Pour les écoles",
+      link_students: "Pour les élèves",
+      link_trust: "Architecture",
+      link_faq: "FAQ",
+      link_register: "Inscrire un établissement",
+      link_apply: "Candidature / Inscription",
+      link_signin: "Se connecter",
+      status: "Plateforme opérationnelle",
       copyright: "Cur10usX. Tous droits réservés.",
-      tos: "Conditions",
-      privacy: "Confidentialité",
+      tos: "Conditions d'utilisation",
+      privacy: "Politique de confidentialité",
       contact: "suporte@cur10usx.com",
     },
   },

@@ -1,7 +1,7 @@
 "use client"
 
 import { cn } from "@/lib/utils"
-import { useMotionValue, animate, motion } from "motion/react"
+import { useMotionValue, animate, motion, useReducedMotion } from "motion/react"
 import { useState, useEffect } from "react"
 import useMeasure from "react-use-measure"
 
@@ -29,8 +29,10 @@ export function InfiniteSlider({
   const translation = useMotionValue(0)
   const [isTransitioning, setIsTransitioning] = useState(false)
   const [key, setKey] = useState(0)
+  const prefersReducedMotion = useReducedMotion()
 
   useEffect(() => {
+    if (prefersReducedMotion) return
     let controls: { stop: () => void }
     const size = direction === "horizontal" ? width : height
     const contentSize = size + gap
@@ -71,7 +73,21 @@ export function InfiniteSlider({
     isTransitioning,
     direction,
     reverse,
+    prefersReducedMotion,
   ])
+
+  if (prefersReducedMotion) {
+    return (
+      <div className={cn("overflow-hidden", className)}>
+        <div
+          className="flex flex-wrap items-center justify-center"
+          style={{ gap: `${gap}px` }}
+        >
+          {children}
+        </div>
+      </div>
+    )
+  }
 
   const hoverProps = durationOnHover
     ? {

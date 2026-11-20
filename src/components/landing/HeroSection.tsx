@@ -1,103 +1,153 @@
-"use client";
+"use client"
 
-import { useRouter } from "next/navigation";
-import { useTranslation } from "@/lib/i18n";
-import { TheInfiniteGrid } from "@/components/ui/the-infinite-grid";
-import { ProgressiveBlur } from "@/components/ui/progressive-blur";
-import { Play } from "lucide-react";
-import type {
-  PlatformBranding,
-  SchoolLogo,
-  LandingStats,
-} from "@/types/landing";
+import Link from "next/link"
+import Image from "next/image"
+import { ArrowRight, ChevronDown } from "lucide-react"
+import { motion, useReducedMotion } from "motion/react"
+import { useTranslation } from "@/lib/i18n"
 
-type Props = {
-  branding?: PlatformBranding;
-  schools?: SchoolLogo[];
-  stats: LandingStats;
-};
+export default function HeroSection() {
+  const { t } = useTranslation()
+  const prefersReducedMotion = useReducedMotion()
 
-export default function HeroSection({
-  schools: rawSchools = [],
-  stats,
-}: Props) {
-  const router = useRouter();
-  const { t } = useTranslation();
+  const headlineLines = t("landing.hero.headline").split("\n")
 
-  const schools = Array.isArray(rawSchools) ? rawSchools : [];
+  const fadeUp = prefersReducedMotion
+    ? {}
+    : {
+        initial: { opacity: 0, y: 14 },
+        animate: { opacity: 1, y: 0 },
+      }
 
   return (
-    <TheInfiniteGrid className="min-h-[90dvh] md:min-h-screen pt-20 md:pt-28 pb-16 md:pb-24 overflow-hidden relative">
-      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] md:w-[800px] h-[300px] md:h-[400px] bg-primary/8 dark:bg-primary/12 blur-[120px] rounded-full pointer-events-none" />
+    <section
+      id="produto"
+      className="relative pt-28 pb-16 sm:pt-32 sm:pb-20 lg:pt-36 lg:pb-24 overflow-hidden bg-[var(--landing-bg)]"
+    >
+      {/* Subtle architectural grid background (pure CSS, zero JS frame loop) */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 grid-bg [mask-image:radial-gradient(ellipse_70%_55%_at_50%_15%,#000_25%,transparent_100%)]"
+      />
+      {/* Restrained top accent wash */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-[min(760px,95vw)] h-[280px] rounded-full bg-[var(--landing-accent-subtle)] blur-3xl opacity-70"
+      />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
-        <div className="flex flex-col items-center text-center max-w-4xl mx-auto">
-          <div className="flex flex-col items-center text-center w-full">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-3xl mx-auto text-center">
+          {/* Eyebrow Pill */}
+          <motion.div
+            {...fadeUp}
+            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+            className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[var(--landing-border)] bg-[var(--landing-surface)] text-xs font-normal text-[var(--landing-text-secondary)] mb-6 sm:mb-7"
+          >
+            <span
+              className="w-1.5 h-1.5 rounded-full bg-[var(--landing-accent)]"
+              aria-hidden="true"
+            />
+            <span>{t("landing.hero.badge")}</span>
+          </motion.div>
 
-            <h1 className="text-[clamp(2.25rem,8vw,5rem)] md:text-7xl lg:text-8xl tracking-tight leading-[0.95] text-zinc-900 dark:text-zinc-50 font-black max-w-4xl">
-              {t("landing.hero.headline").split('\n').map((part, i, arr) => (
-                <span key={i} className={`block ${i > 0 ? 'mt-1 md:mt-2' : ''} ${i === arr.length - 1 ? 'text-primary' : ''}`}>
-                  {part}
-                </span>
-              ))}
-            </h1>
+          {/* Headline — refined scale & Medium weight */}
+          <motion.h1
+            {...fadeUp}
+            transition={{ duration: 0.48, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
+            className="text-[2rem] sm:text-5xl lg:text-[3.5rem] font-medium tracking-[-0.03em] leading-[1.08] text-[var(--landing-text-primary)] text-balance"
+          >
+            {headlineLines.map((line, i) => (
+              <span key={i} className="block">
+                {i === headlineLines.length - 1 ? (
+                  <span className="text-[var(--landing-accent)]">{line}</span>
+                ) : (
+                  line
+                )}
+              </span>
+            ))}
+          </motion.h1>
 
-            <p className="mt-5 md:mt-6 max-w-xl md:max-w-2xl text-base md:text-lg text-zinc-500 dark:text-zinc-400 leading-relaxed px-2">
-              {t("landing.hero.subheadline")}
-            </p>
+          {/* Subheadline — Light/Regular readability */}
+          <motion.p
+            {...fadeUp}
+            transition={{ duration: 0.48, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+            className="mt-5 sm:mt-6 max-w-2xl mx-auto text-[15px] sm:text-base lg:text-[17px] font-light text-[var(--landing-text-secondary)] leading-relaxed"
+          >
+            {t("landing.hero.subheadline")}
+          </motion.p>
 
-            <div className="mt-8 md:mt-10 flex flex-col sm:flex-row gap-3 md:gap-4 w-full sm:w-auto px-4 sm:px-0">
-              <button
-                onClick={() => router.push("/registar-escola")}
-                className="group inline-flex items-center justify-center gap-2 px-6 md:px-8 py-3.5 md:py-4 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-semibold text-sm md:text-base hover:scale-[1.02] active:scale-[0.98] transition-all shadow-lg min-h-[48px]"
-              >
-                {t("landing.hero.cta")}
-              </button>
+          {/* CTAs */}
+          <motion.div
+            {...fadeUp}
+            transition={{ duration: 0.48, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+            className="mt-8 sm:mt-9 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3"
+          >
+            <Link
+              href="/registar-escola"
+              className="group inline-flex items-center justify-center gap-2 px-6 h-11 rounded-xl bg-[var(--landing-text-primary)] text-[var(--landing-bg)] text-sm font-medium hover:opacity-90 transition-all active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--landing-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--landing-bg)]"
+            >
+              <span>{t("landing.hero.cta")}</span>
+              <ArrowRight
+                className="w-4 h-4 transition-transform duration-150 group-hover:translate-x-0.5"
+                aria-hidden="true"
+              />
+            </Link>
 
-              <button
-                onClick={() => router.push("/signup")}
-                className="inline-flex items-center justify-center gap-2 px-6 md:px-8 py-3.5 md:py-4 rounded-xl border border-zinc-200 dark:border-zinc-800 font-semibold text-sm md:text-base hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-all min-h-[48px]"
-              >
-                <Play size={14} className="fill-current shrink-0" />
-                {t("landing.hero.explore")}
-              </button>
-            </div>
-
-            {/* Dashboard preview */}
-            {schools.length > 0 && (
-              <div className="mt-12 md:mt-16 w-full max-w-5xl mx-auto px-0">
-                <div className="relative">
-                  <div className="absolute -inset-1 bg-gradient-to-b from-primary/5 via-transparent to-transparent rounded-2xl blur-xl" />
-                  <div className="relative border border-[var(--landing-border)] bg-[var(--landing-bg-elevated)] rounded-xl overflow-hidden shadow-lg">
-                    <div className="flex items-center gap-1.5 px-4 py-3 border-b border-[var(--landing-border)] bg-[var(--landing-bg-secondary)]">
-                      <span className="w-2.5 h-2.5 rounded-full bg-rose-400" />
-                      <span className="w-2.5 h-2.5 rounded-full bg-amber-400" />
-                      <span className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
-                      <span className="ml-3 text-[10px] text-[var(--landing-text-dim)] font-mono">cur10usx.com/dashboard</span>
-                    </div>
-                    <div className="grid grid-cols-3 md:grid-cols-6 gap-px bg-[var(--landing-border)]">
-                      {[
-                        { label: "Alunos", value: stats.students, change: "+12%" },
-                        { label: "Professores", value: stats.teachers, change: "+5%" },
-                        { label: "Turmas", value: stats.classes, change: "+8%" },
-                        { label: "Presenças", value: "94%", change: "+2%" },
-                        { label: "Média", value: "14.2", change: "+0.4" },
-                        { label: "Notificações", value: stats.applications || "0", change: "+3" },
-                      ].map((item) => (
-                        <div key={item.label} className="bg-[var(--landing-bg)] p-3 md:p-4">
-                          <p className="text-[10px] md:text-xs text-[var(--landing-text-dim)] mb-1 truncate">{item.label}</p>
-                          <p className="text-base md:text-lg font-bold text-[var(--landing-text-primary)]">{item.value.toLocaleString()}</p>
-                          <p className="text-[10px] text-emerald-500">{item.change}</p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
+            <a
+              href="#experiencia"
+              className="inline-flex items-center justify-center gap-2 px-6 h-11 rounded-xl border border-[var(--landing-border)] bg-[var(--landing-surface)] text-[var(--landing-text-primary)] text-sm font-normal hover:bg-[var(--landing-bg-tertiary)] hover:border-[var(--landing-border-strong)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--landing-accent)]"
+            >
+              <span>{t("landing.hero.explore")}</span>
+              <ChevronDown className="w-4 h-4 text-[var(--landing-text-muted)]" aria-hidden="true" />
+            </a>
+          </motion.div>
         </div>
+
+        {/* Real Platform Visual Showcase */}
+        <motion.div
+          {...(prefersReducedMotion
+            ? {}
+            : {
+                initial: { opacity: 0, y: 20 },
+                animate: { opacity: 1, y: 0 },
+              })}
+          transition={{ duration: 0.6, delay: 0.22, ease: [0.22, 1, 0.36, 1] }}
+          className="mt-12 sm:mt-16 max-w-5xl mx-auto"
+        >
+          <div className="rounded-2xl border border-[var(--landing-border)] bg-[var(--landing-surface)] p-1.5 sm:p-2 shadow-[0_24px_70px_-32px_rgba(9,9,11,0.22)] dark:shadow-[0_24px_70px_-32px_rgba(0,0,0,0.85)]">
+            <div className="rounded-xl border border-[var(--landing-border-subtle)] bg-[var(--landing-bg-secondary)] overflow-hidden">
+              {/* Minimal browser top chrome */}
+              <div className="flex items-center justify-between px-3.5 sm:px-4 h-10 border-b border-[var(--landing-border)] bg-[var(--landing-bg-secondary)]">
+                <div className="flex items-center gap-1.5" aria-hidden="true">
+                  <span className="w-2.5 h-2.5 rounded-full bg-[var(--landing-border-strong)]" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-[var(--landing-border-strong)]" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-[var(--landing-border-strong)]" />
+                </div>
+                <span className="text-[11px] font-mono text-[var(--landing-text-muted)] truncate max-w-[200px] sm:max-w-none">
+                  cur10usx.com/dashboard
+                </span>
+                <span className="hidden sm:inline-flex items-center gap-1.5 text-[11px] text-[var(--landing-text-muted)]">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" aria-hidden="true" />
+                  {t("landing.hero.preview_label")}
+                </span>
+              </div>
+
+              {/* Real Cur10usX screenshot */}
+              <div className="relative bg-[var(--landing-bg)]">
+                <Image
+                  src="/screenshots/dashboard-1.png"
+                  alt={t("landing.hero.preview_label")}
+                  width={1101}
+                  height={842}
+                  priority
+                  sizes="(max-width: 768px) 100vw, (max-width: 1280px) 90vw, 1024px"
+                  className="w-full h-auto block"
+                />
+              </div>
+            </div>
+          </div>
+        </motion.div>
       </div>
-    </TheInfiniteGrid>
-  );
+    </section>
+  )
 }

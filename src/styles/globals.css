@@ -420,20 +420,25 @@ html, body {
 
 :root {
   --landing-bg: #ffffff;
-  --landing-bg-secondary: #f8f8fa;
-  --landing-bg-tertiary: #f2f2f5;
+  --landing-bg-secondary: #fafafa;
+  --landing-bg-tertiary: #f4f4f5;
   --landing-bg-elevated: #ffffff;
-  --landing-text-primary: #0a0a0f;
+  --landing-surface: #ffffff;
+  --landing-surface-hover: #fafafa;
+  --landing-text-primary: #09090b;
   --landing-text-secondary: #52525b;
   --landing-text-muted: #71717a;
   --landing-text-dim: #a1a1aa;
   --landing-border: #e4e4e7;
   --landing-border-subtle: #f4f4f5;
   --landing-border-strong: #d4d4d8;
+  --landing-accent: #4f46e5;
+  --landing-accent-subtle: rgba(79, 70, 229, 0.08);
+  --landing-spotlight: rgba(79, 70, 229, 0.08);
   --landing-orb-accent: #575098;
   --landing-orb-green: #059669;
-  --landing-grid: rgba(0, 0, 0, 0.04);
-  --landing-grid-fine: rgba(0, 0, 0, 0.02);
+  --landing-grid: rgba(9, 9, 11, 0.045);
+  --landing-grid-fine: rgba(9, 9, 11, 0.02);
   --landing-overlay: rgba(49, 46, 129, 0.04);
   --landing-status-dot: #22c55e;
   --landing-bg-dark: #0a0a0f;
@@ -444,21 +449,26 @@ html, body {
 }
 
 .dark {
-  --landing-bg: #000000;
-  --landing-bg-secondary: #050508;
-  --landing-bg-tertiary: #0a0a0f;
-  --landing-bg-elevated: #0a0a0f;
+  --landing-bg: #050507;
+  --landing-bg-secondary: #0a0a0e;
+  --landing-bg-tertiary: #111116;
+  --landing-bg-elevated: #0d0d12;
+  --landing-surface: #0c0c10;
+  --landing-surface-hover: #121218;
   --landing-text-primary: #fafafa;
   --landing-text-secondary: #a1a1aa;
-  --landing-text-muted: #71717a;
-  --landing-text-dim: #52525b;
-  --landing-border: #27272a;
-  --landing-border-subtle: #18181b;
-  --landing-border-strong: #3f3f46;
+  --landing-text-muted: #8a8a96;
+  --landing-text-dim: #63636e;
+  --landing-border: #22222a;
+  --landing-border-subtle: #16161c;
+  --landing-border-strong: #32323d;
+  --landing-accent: #818cf8;
+  --landing-accent-subtle: rgba(129, 140, 248, 0.12);
+  --landing-spotlight: rgba(129, 140, 248, 0.14);
   --landing-orb-accent: #575098;
   --landing-orb-green: #059669;
-  --landing-grid: rgba(255, 255, 255, 0.03);
-  --landing-grid-fine: rgba(255, 255, 255, 0.015);
+  --landing-grid: rgba(255, 255, 255, 0.04);
+  --landing-grid-fine: rgba(255, 255, 255, 0.018);
   --landing-overlay: rgba(87, 80, 152, 0.08);
   --landing-status-dot: #22c55e;
   --landing-bg-dark: #0a0a0f;
@@ -466,6 +476,19 @@ html, body {
   --landing-text-dark-primary: #fafafa;
   --landing-text-dark-secondary: #a1a1aa;
   --landing-border-dark: #27272a;
+}
+
+.landing-root {
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-root *,
+  .landing-root *::before,
+  .landing-root *::after {
+    scroll-behavior: auto !important;
+  }
 }
 
 .landing-scrollbar::-webkit-scrollbar {
