@@ -145,7 +145,7 @@ export async function GET(
           take: 10,
         }),
 
-        prisma.lessonRecord.findMany({
+        prisma.scheduleSlotRecord.findMany({
           where: {
             scheduleSlot: {
               teacherId: id,

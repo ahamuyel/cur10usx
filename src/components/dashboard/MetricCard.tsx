@@ -15,7 +15,7 @@ export const MetricCard: React.FC<MetricCardProps> = ({
   href,
   className,
 }) => {
-  const TrendIcon = () => {
+  const renderTrendIcon = () => {
     if (!trend) return null
     switch (trend.type) {
       case "up":
@@ -55,7 +55,7 @@ export const MetricCard: React.FC<MetricCardProps> = ({
         </span>
         {trend && (
           <div className="flex items-center gap-1 mt-1 text-xs">
-            <TrendIcon />
+            {renderTrendIcon()}
             <span className={cn("font-semibold", trendColorClass())}>
               {trend.value}%
             </span>

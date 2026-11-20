@@ -26,7 +26,7 @@ export async function PATCH(
     }
 
     // Fetch the lesson record and make sure it belongs to the school
-    const record = await prisma.lessonRecord.findUnique({
+    const record = await prisma.scheduleSlotRecord.findUnique({
       where: { id: recordId },
       include: {
         scheduleSlot: true,
@@ -41,7 +41,7 @@ export async function PATCH(
       return NextResponse.json({ error: "Apenas registos com estado PENDENTE podem ser atualizados" }, { status: 400 })
     }
 
-    const updated = await prisma.lessonRecord.update({
+    const updated = await prisma.scheduleSlotRecord.update({
       where: { id: recordId },
       data: {
         status: parsed.data.status,

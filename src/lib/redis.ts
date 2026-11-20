@@ -1,9 +1,10 @@
+import Redis from "ioredis"
+
 let redis: any = null
 
 // ioredis is not compatible with Edge Runtime
 if (process.env.NEXT_RUNTIME !== "edge") {
   try {
-    const Redis = require("ioredis")
     const redisUrl = process.env.REDIS_URL
 
     if (redisUrl) {

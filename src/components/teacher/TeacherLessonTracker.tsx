@@ -315,13 +315,13 @@ export default function TeacherLessonTracker() {
                               
                               {record?.notes && (
                                 <p className="text-[11px] text-zinc-500 mt-2 bg-zinc-50 dark:bg-zinc-900 p-2 rounded border border-zinc-100 dark:border-zinc-800 w-fit max-w-full break-words italic">
-                                  Obs: "{record.notes}"
+                                  Obs: &quot;{record.notes}&quot;
                                 </p>
                               )}
                               {record?.adminNotes && (
                                 <p className="text-[11px] text-amber-600 dark:text-amber-400 mt-2 bg-amber-50/40 dark:bg-amber-950/10 p-2 rounded border border-amber-200/20 w-fit max-w-full break-words italic flex items-start gap-1">
                                   <Info size={12} className="mt-0.5 flex-shrink-0" />
-                                  <span>Feedback Admin: "{record.adminNotes}"</span>
+                                  <span>Feedback Admin: &quot;{record.adminNotes}&quot;</span>
                                 </p>
                               )}
                             </div>
