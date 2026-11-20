@@ -41,7 +41,6 @@
     "prisma/seed.ts",
     "jest.config.ts",
     "vitest.config.ts",
-    "tests",
-    "cur10us/**"
+    "tests"
   ]
 }
