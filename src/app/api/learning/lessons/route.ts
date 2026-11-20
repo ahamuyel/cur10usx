@@ -69,12 +69,21 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: parsed.error.issues[0].message }, { status: 400 })
     }
 
+    // Curricula are global; the school scope comes from the mapped Subject on the
+    // curriculum course (a topic without a mapped Subject is usable by any school).
     const topic = await prisma.curriculumTopic.findUnique({
       where: { id: parsed.data.curriculumTopicId },
-      select: { curriculumUnit: { select: { curriculum: { select: { schoolId: true } } } } },
+      select: {
+        curriculumUnit: {
+          select: {
+            curriculumCourse: { select: { subject: { select: { schoolId: true } } } },
+          },
+        },
+      },
     })
 
-    if (!topic || topic.curriculumUnit.curriculum.schoolId !== schoolId) {
+    const topicSchoolId = topic?.curriculumUnit.curriculumCourse.subject?.schoolId
+    if (!topic || (topicSchoolId !== undefined && topicSchoolId !== schoolId)) {
       return NextResponse.json({ error: "Tópico curricular não encontrado" }, { status: 404 })
     }
 

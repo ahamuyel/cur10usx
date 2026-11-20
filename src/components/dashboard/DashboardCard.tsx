@@ -41,7 +41,7 @@ export const DashboardCard: React.FC<DashboardCardProps> = ({
     className
   )
 
-  const CardContent = () => (
+  const renderCardContent = () => (
     <>
       <div className="flex items-start justify-between gap-4">
         <div className="space-y-1">
@@ -76,7 +76,7 @@ export const DashboardCard: React.FC<DashboardCardProps> = ({
   if (href) {
     return (
       <Link href={href} className={baseClasses}>
-        <CardContent />
+        {renderCardContent()}
       </Link>
     )
   }
@@ -94,7 +94,7 @@ export const DashboardCard: React.FC<DashboardCardProps> = ({
         }
       }}
     >
-      <CardContent />
+      {renderCardContent()}
     </div>
   )
 }

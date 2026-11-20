@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server"
+import { Prisma } from "@prisma/client"
 import { prisma } from "@/lib/prisma"
 import { requirePermission, getSchoolId } from "@/lib/api-auth"
 import { createExerciseSchema } from "@/lib/validations/academic"
@@ -54,8 +55,15 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       return NextResponse.json({ error: parsed.error.issues[0].message }, { status: 400 })
     }
 
+    // Prisma JSON columns reject a bare `null`; map the API's explicit null to JsonNull.
+    const { options, ...exerciseFields } = parsed.data
+    const data = {
+      ...exerciseFields,
+      ...(options !== undefined ? { options: options === null ? Prisma.JsonNull : options } : {}),
+    }
+
     const created = await prisma.exercise.create({
-      data: parsed.data,
+      data,
     })
     return NextResponse.json(created, { status: 201 })
   } catch (error) {

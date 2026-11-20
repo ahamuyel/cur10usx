@@ -32,12 +32,15 @@ export async function GET(req: Request) {
     }
 
     const [masteryScores, studentXP, streak, recentAnswers] = await Promise.all([
-      prisma.masteryScore.groupBy({
-        by: ["topicTitle"],
+      // `topicTitle` is not a MasteryScore column: aggregate by topicId and map
+      // the title from the related topic below.
+      prisma.masteryScore.findMany({
         where: { studentId, student: { schoolId } },
-        _avg: { score: true },
-        _count: { id: true },
-        orderBy: { topicTitle: "asc" },
+        select: {
+          topicId: true,
+          score: true,
+          topic: { select: { title: true } },
+        },
       }),
       prisma.studentXP.findUnique({ where: { studentId } }),
       prisma.studentStreak.findUnique({ where: { studentId } }),
@@ -53,11 +56,23 @@ export async function GET(req: Request) {
       }),
     ])
 
-    const topics = masteryScores.map((s) => ({
-      topicTitle: s.topicTitle,
-      averageScore: s._avg.score ?? 0,
-      totalExercises: s._count.id,
-    }))
+    const groupedTopics = new Map<string, { topicTitle: string; total: number; sum: number }>()
+    for (const s of masteryScores) {
+      if (!s.topic || !s.topicId) continue
+      const key = s.topicId
+      const entry = groupedTopics.get(key) ?? { topicTitle: s.topic.title, total: 0, sum: 0 }
+      entry.total += 1
+      entry.sum += s.score
+      groupedTopics.set(key, entry)
+    }
+
+    const topics = Array.from(groupedTopics.values())
+      .sort((a, b) => a.topicTitle.localeCompare(b.topicTitle))
+      .map((g) => ({
+        topicTitle: g.topicTitle,
+        averageScore: g.total > 0 ? g.sum / g.total : 0,
+        totalExercises: g.total,
+      }))
 
     const overallAverage =
       topics.length > 0

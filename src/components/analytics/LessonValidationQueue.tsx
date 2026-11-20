@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useCallback } from "react"
 import {
   Check, X, AlertTriangle, Clock, BookOpen, Users, User, ArrowRight, CornerDownRight, RotateCcw
 } from "lucide-react"
@@ -67,6 +67,34 @@ export default function LessonValidationQueue() {
     undoStateRef.current = undoState
   }, [undoState])
 
+  // Actually commit the update to the server
+  // Stable identity so the unmount cleanup below can safely reference it.
+  const commitValidation = useCallback(async (
+    recordId: string,
+    status: "REALIZADA" | "FALTOU" | "SUBSTITUIDA",
+    notesText?: string
+  ) => {
+    try {
+      const res = await fetch(`/api/lessons/records/${recordId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status, adminNotes: notesText }),
+      })
+      const data = await res.json()
+      if (!res.ok) {
+        throw new Error(data.error || "Erro ao salvar validação no servidor")
+      }
+      // Remove from visible record state completely
+      setRecords((prev) => prev.filter((r) => r.id !== recordId))
+      setHiddenIds((prev) => prev.filter((id) => id !== recordId))
+    } catch (err: any) {
+      console.error(err)
+      setApiToast({ message: err.message || "Erro ao validar aula.", type: "error" })
+      // Put back in list on failure
+      setHiddenIds((prev) => prev.filter((id) => id !== recordId))
+    }
+  }, [])
+
   // Clear timers on unmount and commit outstanding undo operations
   useEffect(() => {
     return () => {
@@ -80,7 +108,7 @@ export default function LessonValidationQueue() {
         )
       }
     }
-  }, [])
+  }, [commitValidation])
 
   useEffect(() => {
     if (apiToast) {
@@ -108,33 +136,6 @@ export default function LessonValidationQueue() {
   useEffect(() => {
     fetchPending()
   }, [])
-
-  // Actually commit the update to the server
-  const commitValidation = async (
-    recordId: string,
-    status: "REALIZADA" | "FALTOU" | "SUBSTITUIDA",
-    notesText?: string
-  ) => {
-    try {
-      const res = await fetch(`/api/lessons/records/${recordId}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status, adminNotes: notesText }),
-      })
-      const data = await res.json()
-      if (!res.ok) {
-        throw new Error(data.error || "Erro ao salvar validação no servidor")
-      }
-      // Remove from visible record state completely
-      setRecords((prev) => prev.filter((r) => r.id !== recordId))
-      setHiddenIds((prev) => prev.filter((id) => id !== recordId))
-    } catch (err: any) {
-      console.error(err)
-      setApiToast({ message: err.message || "Erro ao validar aula.", type: "error" })
-      // Put back in list on failure
-      setHiddenIds((prev) => prev.filter((id) => id !== recordId))
-    }
-  }
 
   // Handle Validate / Reject actions with optimistic hide and Undo support
   const queueAction = (
@@ -308,7 +309,7 @@ export default function LessonValidationQueue() {
                     <div className="flex items-start gap-1 bg-white dark:bg-zinc-950 p-2 rounded-lg border border-zinc-100 dark:border-zinc-900/50 mt-1">
                       <CornerDownRight size={11} className="text-zinc-400 shrink-0 mt-0.5" />
                       <p className="text-[10px] text-zinc-600 dark:text-zinc-400 italic">
-                        "{record.notes}"
+                        &quot;{record.notes}&quot;
                       </p>
                     </div>
                   )}

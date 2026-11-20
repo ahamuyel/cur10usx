@@ -29,6 +29,7 @@ const statusFilters = [
   { value: "pendente", label: "Pendentes" },
   { value: "em_analise", label: "Em análise" },
   { value: "aprovada", label: "Aprovadas" },
+  { value: "contratada", label: "Contratadas" },
   { value: "matriculada", label: "Matriculadas" },
   { value: "rejeitada", label: "Rejeitadas" },
 ]

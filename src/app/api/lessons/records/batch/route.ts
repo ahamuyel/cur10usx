@@ -25,7 +25,7 @@ export async function POST(req: Request) {
 
     const { recordIds, status, adminNotes } = parsed.data
 
-    const records = await prisma.lessonRecord.findMany({
+    const records = await prisma.scheduleSlotRecord.findMany({
       where: { id: { in: recordIds } },
       include: { scheduleSlot: { select: { schoolId: true } } },
     })
@@ -43,7 +43,7 @@ export async function POST(req: Request) {
       }
     }
 
-    const updated = await prisma.lessonRecord.updateMany({
+    const updated = await prisma.scheduleSlotRecord.updateMany({
       where: { id: { in: recordIds } },
       data: {
         status,

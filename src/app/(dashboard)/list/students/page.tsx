@@ -14,6 +14,7 @@ import Link from "next/link"
 import FilterPanel from "@/components/ui/FilterPanel"
 import SortButton from "@/components/ui/SortButton"
 import AppAvatar from "@/components/ui/AppAvatar"
+import { deleteStudentById } from "@/lib/student-actions"
 import { Pencil, Trash2, UserPlus, UserX, ArrowRightLeft, Loader2, List, LayoutGrid, Phone, Mail, MapPin } from "lucide-react"
 
 type Student = {
@@ -46,6 +47,7 @@ const StudentListPage = () => {
   const [createOpen, setCreateOpen] = useState(false)
   const [editItem, setEditItem] = useState<Student | null>(null)
   const [deleteItem, setDeleteItem] = useState<Student | null>(null)
+  const [deleteError, setDeleteError] = useState("")
   const [deactivateItem, setDeactivateItem] = useState<Student | null>(null)
   const [transferItem, setTransferItem] = useState<Student | null>(null)
   const [transferClassId, setTransferClassId] = useState("")
@@ -105,10 +107,13 @@ const StudentListPage = () => {
 
   const handleDelete = async () => {
     if (!deleteItem) return
-    const res = await fetch(`/api/classes/${deleteItem.id}`, { method: "DELETE" }) // Corrigido endpoint de fallback se necessário
-    if (res.ok) {
+    setDeleteError("")
+    const result = await deleteStudentById(deleteItem.id)
+    if (result.ok) {
       setDeleteItem(null)
       refetch()
+    } else {
+      setDeleteError(result.error || "Erro ao eliminar aluno")
     }
   }
 
@@ -366,7 +371,13 @@ const StudentListPage = () => {
         )}
       </FormModal>
 
-      <DeleteConfirmModal open={!!deleteItem} onClose={() => setDeleteItem(null)} onConfirm={handleDelete} itemName={deleteItem?.name || ""} />
+      <DeleteConfirmModal
+        open={!!deleteItem}
+        onClose={() => { setDeleteItem(null); setDeleteError("") }}
+        onConfirm={handleDelete}
+        itemName={deleteItem?.name || ""}
+        error={deleteError}
+      />
 
       <DeleteConfirmModal
         open={!!deactivateItem}

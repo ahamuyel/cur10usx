@@ -140,6 +140,7 @@ export const featureMenuItems: Record<FeatureKey, string[]> = {
   yearTransition: [],
   globalCatalog: [],
   academicHistory: [],
+  learning: ["Aprender"],
 }
 
 // Map menu paths to features

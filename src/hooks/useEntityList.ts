@@ -63,7 +63,8 @@ export function useEntityList<T>({
   storageKey,
 }: UseEntityListOptions): EntityListResult<T> {
   const key = storageKey || endpoint;
-  const saved = useRef(loadFromSession(key));
+  // Read persisted filters/sort once on mount (not a ref, so it is safe during render).
+  const [saved] = useState(() => loadFromSession(key));
 
   const [data, setData] = useState<T[]>([]);
   const [total, setTotal] = useState(0);
@@ -72,10 +73,10 @@ export function useEntityList<T>({
   const [search, setSearchState] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [filters, setFiltersState] = useState<Record<string, string>>(
-    () => saved.current.filters || {},
+    () => saved.filters || {},
   );
   const [sort, setSortState] = useState<SortConfig | null>(
-    () => saved.current.sort || null,
+    () => saved.sort || null,
   );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
