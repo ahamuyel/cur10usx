@@ -8,6 +8,7 @@ import SessionGuard from "@/components/layout/SessionGuard";
 import { getPlatformConfig } from "@/lib/platform-config";
 import { getServerLocale } from "@/lib/i18n/server";
 import { LocaleProvider } from "@/provider/locale";
+import { getSiteUrl } from "@/lib/site-url";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,6 +28,7 @@ export async function generateMetadata(): Promise<Metadata> {
     config = { name: "Cur10usX", description: "Plataforma de gestão escolar" }
   }
   return {
+    metadataBase: getSiteUrl(),
     title: config.name,
     description: config.description || "Plataforma de gestão escolar",
     icons: { icon: "/blacklogo.png" },

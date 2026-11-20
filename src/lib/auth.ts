@@ -5,6 +5,7 @@ import { comparePassword } from "@/lib/password";
 import { prisma } from "@/lib/prisma";
 import { rateLimit } from "@/lib/rate-limit";
 import { authConfig, PERMISSION_KEYS } from "./auth.config";
+import { isTwoFactorVerifiedForSession } from "./two-factor-session";
 
 const loginIpLimiter = rateLimit({ maxRequests: 10, windowMs: 5 * 60 * 1000, key: "login-ip" }) // 10 per 5 min per IP
 const loginAccountLimiter = rateLimit({ maxRequests: 5, windowMs: 5 * 60 * 1000, key: "login-account" }) // 5 per 5 min per email
@@ -220,6 +221,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           updatedToken.sessionVersion = dbUser.sessionVersion;
           updatedToken.hasPassword = !!dbUser.hashedPassword;
           updatedToken.twoFactorEnabled = dbUser.twoFactorEnabled;
+
+          // 2FA: only mark the session verified when the server recorded a
+          // successful TOTP check (verify / verify-signin routes) after this login.
+          if (params.trigger === "update" && params.session?.twoFactorVerifiedAt) {
+            updatedToken.twoFactorVerifiedAt = isTwoFactorVerifiedForSession(
+              dbUser.twoFactorVerifiedAt,
+              updatedToken.authTime,
+            )
+              ? dbUser.twoFactorVerifiedAt!.toISOString()
+              : null;
+          }
         }
       }
 
