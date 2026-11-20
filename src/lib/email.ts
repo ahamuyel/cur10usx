@@ -92,6 +92,22 @@ export async function sendApplicationApproved(to: string, name: string, schoolNa
   })
 }
 
+export async function sendAccountInvite(to: string, name: string, schoolName: string, token: string) {
+  const inviteUrl = `${baseUrl}/accept-invite?token=${encodeURIComponent(token)}`
+  await sendEmail({
+    to,
+    subject: "Convite para aceder ao Cur10usX",
+    html: wrap(
+      "Está convidado a aceder ao Cur10usX",
+      `<p>Olá ${escapeHtml(name)},</p>
+       <p>A sua solicitação na <strong>${escapeHtml(schoolName)}</strong> foi concluída.</p>
+       <p>Para activar a sua conta e escolher a sua palavra-passe, clique no link abaixo:</p>
+       <p><a href="${inviteUrl}" style="display:inline-block;padding:12px 24px;background:#6366f1;color:#fff;text-decoration:none;border-radius:8px;font-weight:600;">Activar a minha conta</a></p>
+       <p style="color:#71717a;font-size:13px;">Este convite é válido por 48 horas e só pode ser utilizado uma vez. Se não o solicitou, ignore este e-mail.</p>`
+    ),
+  })
+}
+
 export async function sendApplicationRejected(to: string, name: string, reason: string) {
   await sendEmail({
     to,
