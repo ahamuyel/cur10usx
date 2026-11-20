@@ -279,7 +279,7 @@ const en = {
 
     experience: {
       tag: "Platform Experience",
-      headline: "Real interfaces, built for everyday clarity.",
+      headline: "Interfaces crafted for everyday clarity.",
       description:
         "No labyrinthine menus or visual clutter. Every Cur10usX workspace prioritizes legibility, speed and immediate context.",
       views: [
@@ -287,21 +287,25 @@ const en = {
           id: "overview",
           label: "Institutional Dashboard",
           url: "cur10usx.com/dashboard",
-          image: "/screenshots/dashboard-1.png",
-          alt: "Cur10usX real institutional dashboard interface",
           title: "Consolidated visibility of your school in real time",
           description:
-            "Monitor academic indicators, attendance, announcements and class status from a clean decision-ready workspace.",
+            "Monitor class academic health, attendance, active enrollments and role permissions from a clean decision-ready workspace.",
         },
         {
-          id: "management",
-          label: "Academic Management",
-          url: "cur10usx.com/list/teachers",
-          image: "/screenshots/dashboard-2.png",
-          alt: "Cur10usX real teacher and class management interface",
-          title: "Staff, students and classes organized with precision",
+          id: "evolution",
+          label: "Evolutionary Profile",
+          url: "cur10usx.com/aprender",
+          title: "Trajectory, topic mastery and verifiable portfolio",
           description:
-            "Fast lists with search, filters, table or card views and role-protected actions.",
+            "Curriculum paths, longitudinal growth and public-code certificate issuance unified in one continuous record.",
+        },
+        {
+          id: "classroom",
+          label: "Teachers & Families",
+          url: "cur10usx.com/list/lessons",
+          title: "Lessons, digital attendance and synchronized updates",
+          description:
+            "Fast classroom roll call, absence justifications and structured notifications that keep parents informed in real time.",
         },
       ],
     },

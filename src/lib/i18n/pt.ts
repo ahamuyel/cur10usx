@@ -279,7 +279,7 @@ const pt = {
 
     experience: {
       tag: "Experiência da Plataforma",
-      headline: "Interfaces reais, construídas para clareza diária.",
+      headline: "Interfaces desenhadas para clareza diária.",
       description:
         "Sem menus labirínticos nem sobrecarga visual. Cada ecrã do Cur10usX privilegia legibilidade, velocidade operacional e contexto imediato.",
       views: [
@@ -287,21 +287,25 @@ const pt = {
           id: "overview",
           label: "Painel Institucional",
           url: "cur10usx.com/dashboard",
-          image: "/screenshots/dashboard-1.png",
-          alt: "Interface real do painel institucional Cur10usX",
           title: "Visão consolidada da escola em tempo real",
           description:
-            "Acompanhe indicadores académicos, assiduidade, avisos e estado das turmas num painel limpo e orientado à decisão.",
+            "Acompanhe saúde académica por turma, assiduidade, matrículas activas e permissões num painel limpo orientado à decisão.",
         },
         {
-          id: "management",
-          label: "Gestão Académica",
-          url: "cur10usx.com/list/teachers",
-          image: "/screenshots/dashboard-2.png",
-          alt: "Interface real de gestão de professores e turmas no Cur10usX",
-          title: "Equipas, alunos e turmas organizados com precisão",
+          id: "evolution",
+          label: "Perfil Evolutivo",
+          url: "cur10usx.com/aprender",
+          title: "Trajectória, domínio por tópico e portfólio verificável",
           description:
-            "Listagens rápidas com pesquisa, filtros, vistas em tabela ou cartão e acções seguras protegidas por perfil.",
+            "Trilhas curriculares, progresso longitudinal e emissão de certificados com código público integrados no mesmo percurso.",
+        },
+        {
+          id: "classroom",
+          label: "Docentes & Famílias",
+          url: "cur10usx.com/list/lessons",
+          title: "Aulas, presenças digitais e comunicação em sincronia",
+          description:
+            "Chamada rápida em sala, justificações de faltas e notificações estruturadas que mantêm encarregados sempre informados.",
         },
       ],
     },

@@ -279,7 +279,7 @@ const fr = {
 
     experience: {
       tag: "Expérience de la Plateforme",
-      headline: "Des interfaces réelles, conçues pour la clarté quotidienne.",
+      headline: "Des interfaces conçues pour la clarté quotidienne.",
       description:
         "Sans menus complexes ni surcharge visuelle. Chaque écran de Cur10usX privilégie la lisibilité, la rapidité et le contexte immédiat.",
       views: [
@@ -287,21 +287,25 @@ const fr = {
           id: "overview",
           label: "Tableau de bord",
           url: "cur10usx.com/dashboard",
-          image: "/screenshots/dashboard-1.png",
-          alt: "Interface réelle du tableau de bord institutionnel Cur10usX",
           title: "Vision consolidée de votre établissement en temps réel",
           description:
-            "Suivez indicateurs académiques, assiduité, annonces et état des classes depuis un espace clair orienté décision.",
+            "Suivez la santé académique des classes, l'assiduité, les inscriptions actives et les autorisations depuis un espace clair.",
         },
         {
-          id: "management",
-          label: "Gestion Académique",
-          url: "cur10usx.com/list/teachers",
-          image: "/screenshots/dashboard-2.png",
-          alt: "Interface réelle de gestion des enseignants et des classes dans Cur10usX",
-          title: "Équipes, élèves et classes organisés avec précision",
+          id: "evolution",
+          label: "Profil Évolutif",
+          url: "cur10usx.com/aprender",
+          title: "Trajectoire, maîtrise par notion et portfolio vérifiable",
           description:
-            "Listes rapides avec recherche, filtres, vues tableau ou cartes et actions sécurisées par rôle.",
+            "Parcours curriculaires, progression longitudinale et certificats à code public réunis dans un seul dossier continu.",
+        },
+        {
+          id: "classroom",
+          label: "Enseignants & Familles",
+          url: "cur10usx.com/list/lessons",
+          title: "Cours, présences numériques et suivi synchronisé",
+          description:
+            "Appel rapide en classe, justificatifs d'absence et notifications structurées qui gardent les familles informées.",
         },
       ],
     },

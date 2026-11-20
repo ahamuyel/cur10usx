@@ -1,10 +1,12 @@
 "use client"
 
+import { useRef } from "react"
 import Image from "next/image"
 import { Cloud, ShieldCheck, Lock, Layers } from "lucide-react"
 import { useTranslation } from "@/lib/i18n"
 import { InfiniteSlider } from "@/components/ui/infinite-slider"
-import { TimelineReveal } from "@/components/ui/timeline-reveal"
+import { Spotlight, SpotLightItem } from "@/components/ui/spotlight"
+import { TimelineAnimation } from "@/components/ui/timeline-animation"
 import type { LandingStats, SchoolLogo } from "@/types/landing"
 
 const pillarIcons = [Layers, ShieldCheck, Lock, Cloud]
@@ -19,9 +21,10 @@ export default function TrustStatsSection({
   schools = [],
 }: TrustStatsSectionProps) {
   const { t, tv } = useTranslation()
+  const sectionRef = useRef<HTMLElement>(null)
   const points = (tv("landing.trust.points") as { title: string; desc: string }[]) || []
 
-  // Strictly real database counters — only render metrics that exist (> 0)
+  // Strictly real database counters — only render metrics > 0
   const realMetrics = [
     { key: "schools", label: t("landing.stats.schools"), value: stats.schools },
     { key: "students", label: t("landing.stats.students"), value: stats.students },
@@ -36,10 +39,11 @@ export default function TrustStatsSection({
   return (
     <section
       id="trust"
+      ref={sectionRef}
       className="py-16 sm:py-20 lg:py-24 bg-[var(--landing-bg-secondary)] border-y border-[var(--landing-border)]"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 sm:space-y-16">
-        {/* Real Partner Schools Marquee — rendered ONLY when real school logos exist */}
+        {/* Real Partner Schools Marquee — ONLY when real logos exist */}
         {validSchools.length > 0 && (
           <div className="space-y-5">
             <p className="text-center text-xs font-normal tracking-wide uppercase text-[var(--landing-text-muted)]">
@@ -70,7 +74,7 @@ export default function TrustStatsSection({
           </div>
         )}
 
-        {/* Real Platform Metrics — rendered ONLY when real counts > 0 */}
+        {/* Real Platform Metrics — ONLY when real counts > 0 */}
         {realMetrics.length > 0 && (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-px rounded-2xl border border-[var(--landing-border)] bg-[var(--landing-border)] overflow-hidden">
             {realMetrics.map((metric) => (
@@ -89,9 +93,13 @@ export default function TrustStatsSection({
           </div>
         )}
 
-        {/* Architectural Credibility & Trust Pillars */}
+        {/* Engineering & Architecture Pillars using UI Layouts Proximity Spotlight */}
         <div>
-          <div className="max-w-2xl mb-10 sm:mb-12">
+          <TimelineAnimation
+            timelineRef={sectionRef}
+            animationNum={0}
+            className="max-w-2xl mb-10 sm:mb-12"
+          >
             <span className="text-xs font-medium tracking-wider uppercase text-[var(--landing-accent)] block mb-2.5">
               {t("landing.trust.tag")}
             </span>
@@ -101,16 +109,29 @@ export default function TrustStatsSection({
             <p className="mt-3 text-sm sm:text-[15px] font-light text-[var(--landing-text-secondary)] leading-relaxed">
               {t("landing.trust.description")}
             </p>
-          </div>
+          </TimelineAnimation>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <Spotlight
+            ProximitySpotlight
+            CursorFlowGradient
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
+          >
             {points.map((point, idx) => {
               const Icon = pillarIcons[idx] || ShieldCheck
               return (
-                <TimelineReveal key={point.title} index={idx}>
-                  <div className="h-full rounded-2xl border border-[var(--landing-border)] bg-[var(--landing-surface)] p-5 sm:p-6 transition-colors duration-200 hover:border-[var(--landing-border-strong)]">
-                    <div className="w-9 h-9 rounded-xl bg-[var(--landing-accent-subtle)] text-[var(--landing-accent)] flex items-center justify-center mb-4">
-                      <Icon className="w-4 h-4" aria-hidden="true" />
+                <TimelineAnimation
+                  key={point.title}
+                  timelineRef={sectionRef}
+                  animationNum={idx + 1}
+                >
+                  <SpotLightItem className="h-full" innerClassName="p-5 sm:p-6">
+                    <div className="flex items-center justify-between mb-5">
+                      <div className="w-9 h-9 rounded-xl bg-[var(--landing-accent-subtle)] text-[var(--landing-accent)] flex items-center justify-center">
+                        <Icon className="w-4 h-4" aria-hidden="true" />
+                      </div>
+                      <span className="font-mono text-[10px] text-[var(--landing-text-dim)]">
+                        0{idx + 1}
+                      </span>
                     </div>
                     <h3 className="text-sm font-medium text-[var(--landing-text-primary)] mb-1.5">
                       {point.title}
@@ -118,11 +139,11 @@ export default function TrustStatsSection({
                     <p className="text-xs sm:text-[13px] font-light text-[var(--landing-text-secondary)] leading-relaxed">
                       {point.desc}
                     </p>
-                  </div>
-                </TimelineReveal>
+                  </SpotLightItem>
+                </TimelineAnimation>
               )
             })}
-          </div>
+          </Spotlight>
         </div>
       </div>
     </section>
