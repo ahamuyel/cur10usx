@@ -1,0 +1,141 @@
+/* ==========================================================================
+   DESIGN SYSTEM ALIGNMENT — CUR10USX PREMIUM OVERRIDES
+   ========================================================================== */
+
+.rbc-calendar {
+  font-family: inherit;
+  border: none !important;
+}
+
+.rbc-time-view, .rbc-month-view, .rbc-time-header, .rbc-time-content {
+  border: none !important;
+}
+
+/* Remoção total das linhas internas da grade de horas */
+.rbc-time-slot, 
+.rbc-slot-hour, 
+.rbc-slot-half, 
+.rbc-day-slot .rbc-time-slot {
+  border-top: none !important;
+}
+
+/* Remove divisórias verticais agressivas entre os dias */
+.rbc-day-slot {
+  border-left: none !important;
+  border-right: none !important;
+}
+
+.rbc-weekend-cell {
+  background-color: transparent !important;
+}
+
+/* Linha horizontal sutil abaixo do cabeçalho dos dias */
+.rbc-time-header-content {
+  border-left: none !important;
+  border-bottom: 1px solid var(--border, rgba(228, 228, 231, 0.6)) !important;
+}
+.dark .rbc-time-header-content {
+  border-bottom: 1px solid rgba(63, 63, 70, 0.15) !important; /* Quase invisível, sem competição */
+}
+
+/* Cabeçalhos dos Dias (Seg, Ter...) — Normalizado */
+.rbc-header {
+  border-bottom: none !important;
+  border-left: none !important;
+  padding: 12px 4px !important;
+  font-size: 0.75rem !important;
+  font-weight: 600 !important; /* Alinhado com o design system */
+  text-transform: none !important; /* Sem gritar uppercase */
+  color: #71717a !important; /* zinc-500 */
+}
+.dark .rbc-header {
+  color: #a1a1aa !important; /* zinc-400 */
+}
+
+/* Dia Atual em Destaque Discreto */
+.rbc-header.rbc-today {
+  color: #8b5cf6 !important;
+  font-weight: 700 !important;
+}
+.dark .rbc-header.rbc-today {
+  color: #c084fc !important;
+}
+
+.rbc-day-slot.rbc-today {
+  background-color: rgba(139, 92, 246, 0.01) !important;
+}
+
+/* Coluna das Horas (Gutter) */
+.rbc-time-gutter .rbc-time-slot {
+  border: none !important;
+  color: #a1a1aa !important; /* zinc-400 */
+  font-size: 0.7rem !important;
+  font-weight: 600;
+  padding-right: 12px !important;
+  text-align: right;
+}
+.dark .rbc-time-gutter .rbc-time-slot {
+  color: #52525b !important; /* zinc-600 sutil ao fundo */
+}
+
+/* Cards de Eventos (Pílulas Integradas) */
+.rbc-event {
+  border: none !important;
+  padding: 0 !important;
+  margin-left: 2px !important;
+  margin-right: 2px !important;
+  transition: all 0.2s ease !important;
+}
+
+.rbc-event:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.03);
+}
+
+.rbc-event-label {
+  display: none !important;
+}
+
+/* Indicador de Tempo Atual (Live Needle) */
+.rbc-current-time-indicator {
+  background-color: #f43f5e !important;
+  height: 2px !important;
+  z-index: 10 !important;
+}
+.dark .rbc-current-time-indicator {
+  background-color: #fb7185 !important;
+}
+
+.rbc-current-time-indicator::before {
+  content: "";
+  position: absolute;
+  left: -4px;
+  top: -3px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #f43f5e !important;
+}
+.dark .rbc-current-time-indicator::before {
+  background-color: #fb7185 !important;
+}
+
+/* Visão Mensal Unificada */
+.rbc-month-row, .rbc-day-bg {
+  border-left: none !important;
+  border-right: none !important;
+  border-color: rgba(228, 228, 231, 0.4) !important;
+}
+.dark .rbc-month-row, .dark .rbc-day-bg {
+  border-color: rgba(63, 63, 70, 0.12) !important;
+}
+
+.rbc-date-cell {
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
+  padding: 6px !important;
+  color: #4b5563 !important;
+}
+.dark .rbc-date-cell {
+  color: #a1a1aa !important;
+}

@@ -1,0 +1,233 @@
+"use client"
+
+import Link from "next/link"
+import { GraduationCap, UserPlus } from "lucide-react"
+import { useState, useMemo } from "react"
+import { signUpSchema } from "@/lib/validations/auth"
+import { csrfPost } from "@/lib/csrf-client"
+import { useTranslation } from "@/lib/i18n"
+import {
+  AuthCard,
+  AuthHeader,
+  AuthSuccess,
+  FormInput,
+  PasswordInput,
+  SubmitButton,
+  OAuthDivider,
+  GoogleOAuthButton,
+  TrustBadge,
+  AlertBanner,
+} from "@/components/auth"
+
+function PasswordRequirements({ password }: { password: string }) {
+  const { tUI } = useTranslation()
+  const checks = useMemo(
+    () => [
+      { label: "Mínimo 8 caracteres", met: password.length >= 8 },
+      { label: "Uma letra maiúscula", met: /[A-Z]/.test(password) },
+      { label: "Uma letra minúscula", met: /[a-z]/.test(password) },
+      { label: "Um número", met: /[0-9]/.test(password) },
+    ],
+    [password],
+  )
+
+  if (!password) return null
+
+  return (
+    <div className="mt-2 space-y-1">
+      {checks.map((check) => (
+        <div
+          key={check.label}
+          className={`flex items-center gap-1.5 text-xs transition-colors ${
+            check.met
+              ? "text-emerald-600 dark:text-emerald-400"
+              : "text-zinc-400 dark:text-zinc-500"
+          }`}
+        >
+          <svg
+            className="w-3 h-3 shrink-0"
+            viewBox="0 0 12 12"
+            fill="none"
+            aria-hidden="true"
+          >
+            {check.met ? (
+              <path
+                d="M3 6l2 2 4-4"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            ) : (
+              <circle cx="6" cy="6" r="4.5" stroke="currentColor" strokeWidth="1" />
+            )}
+          </svg>
+          <span>{tUI(check.label)}</span>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+export default function SignUpPage() {
+  const { tUI } = useTranslation()
+  const [name, setName] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [acceptedTerms, setAcceptedTerms] = useState(false)
+  const [errors, setErrors] = useState<Record<string, string>>({})
+  const [loading, setLoading] = useState(false)
+  const [success, setSuccess] = useState(false)
+  const [successEmail, setSuccessEmail] = useState("")
+
+  function validate() {
+    const e: Record<string, string> = {}
+    const parsed = signUpSchema.safeParse({ name, email, password })
+    if (!parsed.success) {
+      parsed.error.issues.forEach((i) => {
+        e[i.path[0] as string] = i.message
+      })
+    }
+    if (!acceptedTerms) e.terms = tUI("Deve aceitar os Termos de Serviço e a Política de Privacidade")
+    setErrors(e)
+    return Object.keys(e).length === 0
+  }
+
+  async function handleSubmit(ev: React.FormEvent) {
+    ev.preventDefault()
+    if (!validate()) return
+    setLoading(true)
+    setErrors({})
+
+    try {
+      const res = await csrfPost("/api/auth/signup", { name, email, password, role: "student" })
+      const data = await res.json()
+      if (!res.ok) {
+        setErrors({ general: data.error || tUI("Erro ao criar conta") })
+        return
+      }
+      setSuccess(true)
+      setSuccessEmail(email)
+    } catch {
+      setErrors({ general: tUI("Erro de conexão. Verifique a sua internet e tente novamente.") })
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  if (success) {
+    return (
+      <AuthSuccess
+        icon={GraduationCap}
+        title={tUI("Conta criada com sucesso!")}
+        actionLabel={tUI("Ir para o login")}
+        actionHref="/signin"
+        secondaryAction={
+          <Link href="/verify-email" className="text-xs text-primary hover:underline font-medium">
+            {tUI("Não recebeu o e-mail? Reenviar verificação")}
+          </Link>
+        }
+      >
+        <p>{tUI("Enviámos um e-mail de verificação para")} <span className="font-medium text-zinc-700 dark:text-zinc-300">{successEmail}</span>.</p>
+        <p>{tUI("Clique no link para activar a sua conta antes de fazer login.")}</p>
+      </AuthSuccess>
+    )
+  }
+
+  return (
+    <div className="w-full max-w-sm mx-auto">
+      <AuthCard>
+        <div className="p-6 sm:p-8">
+          <AuthHeader
+            // icon={UserPlus}
+            title={tUI("Criar conta")}
+            subtitle={tUI("Junte-se à plataforma de gestão escolar Cur10usX")}
+          />
+
+          <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+            {errors.general && <AlertBanner variant="error">{errors.general}</AlertBanner>}
+
+            <FormInput
+              id="name" label={tUI("Nome completo")} type="text"
+              placeholder={tUI("O seu nome")} value={name}
+              onChange={(e) => setName(e.target.value)} error={errors.name}
+              disabled={loading} autoFocus
+            />
+
+            <FormInput
+              id="signup-email" label={tUI("E-mail")} type="email"
+              autoComplete="email" placeholder="seu@email.com" value={email}
+              onChange={(e) => setEmail(e.target.value)} error={errors.email}
+              disabled={loading}
+            />
+
+            <div>
+              <PasswordInput
+                id="signup-password" label={tUI("Palavra-passe")}
+                autoComplete="new-password" placeholder={tUI("Mínimo 8 caracteres")}
+                value={password} onChange={(e) => setPassword(e.target.value)}
+                error={errors.password} disabled={loading}
+              />
+              <PasswordRequirements password={password} />
+            </div>
+
+            {/* Terms */}
+            <div className="flex items-start gap-3 pt-1">
+              <input
+                id="terms"
+                type="checkbox"
+                checked={acceptedTerms}
+                onChange={(e) => setAcceptedTerms(e.target.checked)}
+                className="mt-0.5 h-4 w-4 rounded border-zinc-300 dark:border-zinc-600 text-primary focus:ring-primary focus:ring-offset-0"
+              />
+              <label
+                htmlFor="terms"
+                className="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed"
+              >
+                {tUI("Li e aceito os")}{" "}
+                <Link
+                  href="/termos"
+                  className="text-primary hover:underline font-medium"
+                  target="_blank"
+                >
+                  {tUI("Termos de Serviço")}
+                </Link>{" "}
+                {tUI("e a")}{" "}
+                <Link
+                  href="/privacidade"
+                  className="text-primary hover:underline font-medium"
+                  target="_blank"
+                >
+                  {tUI("Política de Privacidade")}
+                </Link>
+                .
+              </label>
+            </div>
+            {errors.terms && (
+              <p className="text-xs text-red-600 dark:text-red-400 -mt-2" role="alert">
+                {errors.terms}
+              </p>
+            )}
+
+            <SubmitButton loading={loading} loadingText={tUI("Criando conta...")}>
+              {tUI("Criar conta")}
+            </SubmitButton>
+          </form>
+
+          <OAuthDivider label={tUI("ou registe-se com")} />
+
+          <GoogleOAuthButton disabled={loading} />
+
+          <TrustBadge />
+        </div>
+      </AuthCard>
+
+      <p className="text-center text-sm text-zinc-500 dark:text-zinc-400 mt-6">
+        {tUI("Já tem uma conta?")}{" "}
+        <Link href="/signin" className="text-primary font-medium hover:underline">
+          {tUI("Entrar")}
+        </Link>
+      </p>
+    </div>
+  )
+}

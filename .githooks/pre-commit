@@ -1,0 +1,14 @@
+#!/bin/sh
+# Pre-commit hook para verificar se há segredos commitados via Gitleaks
+
+if command -v gitleaks >/dev/null 2>&1; then
+    echo "🔍 Executando verificação de segredos com Gitleaks..."
+    gitleaks protect --staged --verbose
+    if [ $? -ne 0 ]; then
+        echo "❌ Commit bloqueado! Segredos detetados nas alterações staged."
+        echo "Remova as credenciais/chaves antes de efetuar o commit."
+        exit 1
+    fi
+else
+    echo "⚠️  Gitleaks não está instalado no sistema. Recomendado instalar para proteção contra vazamento de segredos."
+fi
