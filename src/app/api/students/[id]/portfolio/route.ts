@@ -1,14 +1,18 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
-import { auth } from "@/lib/auth"
+import { requireRole, getSchoolId } from "@/lib/api-auth"
 
 export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return NextResponse.json({ error: "Não autenticado" }, { status: 401 })
-    }
+    const { error: authError, session } = await requireRole(
+      ["school_admin", "teacher", "student", "parent"],
+      { requireSchool: true }
+    )
+    if (authError) return authError
 
+    const schoolId = getSchoolId(session!)
+    const userRole = session!.user.role
+    const userId = session!.user.id
     const { id } = await params
 
     const student = await prisma.student.findUnique({
@@ -19,28 +23,31 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
       },
     })
 
-    if (!student) {
+    // Multi-tenant security: hide cross-tenant existence
+    if (!student || student.schoolId !== schoolId) {
       return NextResponse.json({ error: "Aluno não encontrado" }, { status: 404 })
     }
 
-    // Multi-tenant security: verify access
-    const userRole = session.user.role
-    const userSchoolId = session.user.schoolId
-
-    if (userSchoolId !== student.schoolId) {
-      return NextResponse.json({ error: "Sem permissão" }, { status: 403 })
-    }
-
-    // Role-based access: school_admin always, teacher if teaches the student, student if self, parent if linked
-    if (userRole === "student" && student.userId !== session.user.id) {
+    // Role-based access: school_admin always, teacher if teaches student's class, student if self, parent if linked
+    if (userRole === "student" && student.userId !== userId) {
       return NextResponse.json({ error: "Sem permissão" }, { status: 403 })
     }
     if (userRole === "parent") {
-      const parent = await prisma.parent.findUnique({
-        where: { userId: session.user.id },
+      const parent = await prisma.parent.findFirst({
+        where: { userId, schoolId },
         select: { students: { select: { id: true } } },
       })
       if (!parent || !parent.students.some((s) => s.id === id)) {
+        return NextResponse.json({ error: "Sem permissão" }, { status: 403 })
+      }
+    }
+    if (userRole === "teacher") {
+      const teacher = await prisma.teacher.findFirst({
+        where: { userId, schoolId },
+        select: { teacherClasses: { select: { classId: true } } },
+      })
+      const teacherClassIds = teacher?.teacherClasses.map((tc) => tc.classId) || []
+      if (!student.classId || !teacherClassIds.includes(student.classId)) {
         return NextResponse.json({ error: "Sem permissão" }, { status: 403 })
       }
     }

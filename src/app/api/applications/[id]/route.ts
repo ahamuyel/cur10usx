@@ -34,16 +34,18 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
     }
 
     const body = await req.json()
-    const validStatuses = ["pendente", "em_analise", "aprovada", "matriculada", "rejeitada"]
+    const validStatuses = ["pendente", "em_analise", "aprovada", "contratada", "matriculada", "rejeitada"]
     if (!body.status || !validStatuses.includes(body.status)) {
       return NextResponse.json({ error: "Estado inválido" }, { status: 400 })
     }
 
-    // Enforce valid state transitions
+    // Aprovação, rejeição, matrícula e contratação usam rotas transacionais
+    // próprias; aqui só são permitidas transições de triagem.
     const allowedTransitions: Record<string, string[]> = {
-      pendente: ["em_analise", "rejeitada"],
-      em_analise: ["aprovada", "rejeitada", "pendente"],
-      aprovada: ["matriculada", "rejeitada"],
+      pendente: ["em_analise"],
+      em_analise: ["pendente"],
+      aprovada: [],
+      contratada: [],
       rejeitada: ["pendente", "em_analise"],
       matriculada: [],
     }
