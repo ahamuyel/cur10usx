@@ -68,36 +68,36 @@ export default function Footer({ branding }: FooterProps) {
             </span>
             <ul className="space-y-2.5">
               <li>
-                <a
-                  href="#produto"
+                <Link
+                  href="/"
                   className="text-xs sm:text-[13px] font-light text-[var(--landing-text-secondary)] hover:text-[var(--landing-text-primary)] transition-colors"
                 >
                   {t("landing.footer.link_product")}
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="#experiencia"
+                <Link
+                  href="/para-escolas"
                   className="text-xs sm:text-[13px] font-light text-[var(--landing-text-secondary)] hover:text-[var(--landing-text-primary)] transition-colors"
                 >
-                  {t("landing.footer.link_features")}
-                </a>
+                  {t("landing.nav.institutions")}
+                </Link>
               </li>
               <li>
-                <a
-                  href="#perfil-evolutivo"
+                <Link
+                  href="/para-estudantes"
                   className="text-xs sm:text-[13px] font-light text-[var(--landing-text-secondary)] hover:text-[var(--landing-text-primary)] transition-colors"
                 >
-                  {t("landing.footer.link_evolution")}
-                </a>
+                  {t("landing.nav.students")}
+                </Link>
               </li>
               <li>
-                <a
-                  href="#experiencia"
+                <Link
+                  href="/sobre"
                   className="text-xs sm:text-[13px] font-light text-[var(--landing-text-secondary)] hover:text-[var(--landing-text-primary)] transition-colors"
                 >
-                  {t("landing.footer.link_experience")}
-                </a>
+                  {t("landing.nav.about")}
+                </Link>
               </li>
             </ul>
           </div>
@@ -109,36 +109,36 @@ export default function Footer({ branding }: FooterProps) {
             </span>
             <ul className="space-y-2.5">
               <li>
-                <a
-                  href="#ecossistema"
+                <Link
+                  href="/#ecossistema"
                   className="text-xs sm:text-[13px] font-light text-[var(--landing-text-secondary)] hover:text-[var(--landing-text-primary)] transition-colors"
                 >
-                  {t("landing.footer.link_institutions")}
-                </a>
+                  {t("landing.ecosystem.tag")}
+                </Link>
               </li>
               <li>
-                <a
-                  href="#perfil-evolutivo"
+                <Link
+                  href="/#experiencia"
                   className="text-xs sm:text-[13px] font-light text-[var(--landing-text-secondary)] hover:text-[var(--landing-text-primary)] transition-colors"
                 >
-                  {t("landing.footer.link_students")}
-                </a>
+                  {t("landing.experience.tag")}
+                </Link>
               </li>
               <li>
-                <a
-                  href="#trust"
+                <Link
+                  href="/#perfil-evolutivo"
                   className="text-xs sm:text-[13px] font-light text-[var(--landing-text-secondary)] hover:text-[var(--landing-text-primary)] transition-colors"
                 >
-                  {t("landing.footer.link_trust")}
-                </a>
+                  {t("landing.evolution.tag")}
+                </Link>
               </li>
               <li>
-                <a
-                  href="#faq"
+                <Link
+                  href="/#faq"
                   className="text-xs sm:text-[13px] font-light text-[var(--landing-text-secondary)] hover:text-[var(--landing-text-primary)] transition-colors"
                 >
                   {t("landing.footer.link_faq")}
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

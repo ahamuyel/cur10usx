@@ -3,8 +3,9 @@ const pt = {
     nav: {
       product: "Início",
       features: "Como funciona",
-      institutions: "Para quem é",
-      students: "Jornada do aluno",
+      institutions: "Para Escolas",
+      students: "Para Estudantes",
+      about: "Sobre",
       experience: "Na prática",
       faq: "Dúvidas",
       problems: "Problema",
@@ -436,6 +437,119 @@ const pt = {
       tos: "Termos de serviço",
       privacy: "Política de privacidade",
       contact: "suporte@cur10usx.com",
+    },
+
+    pages: {
+      schools: {
+        tag: "Para Escolas",
+        headline: "Organize a sua escola.\nSimplifique o trabalho da equipa.",
+        description:
+          "Da matrícula ao fecho de pautas, o Cur10usX reúne direcção, secretaria e professores num espaço limpo, rápido e fácil de usar.",
+        cta_primary: "Registar a minha escola",
+        cta_secondary: "Já tenho conta · Entrar",
+        pillars: [
+          {
+            area: "Secretaria & Admissões",
+            tag: "Menos filas, menos papel",
+            period: "Dia 1",
+            meta_left: "Matrículas",
+            meta_left_val: "Online e organizadas",
+            meta_right: "Documentos",
+            meta_right_val: "Declarações prontas",
+            highlights: ["Candidaturas online", "Alocação de turmas", "Histórico guardado"],
+            paragraphs: [
+              "Receba inscrições, aprove matrículas e organize cada aluno na sua turma sem pilhas de pastas ou folhas soltas.",
+              "Quando um pai ou aluno precisa de uma declaração ou certificado, a secretaria emite o documento em poucos segundos.",
+            ],
+          },
+          {
+            area: "Direcção & Pedagógico",
+            tag: "Visão clara das turmas",
+            period: "Todos os dias",
+            meta_left: "Pautas",
+            meta_left_val: "Médias automáticas",
+            meta_right: "Alertas",
+            meta_right_val: "Apoio a tempo",
+            highlights: ["Anos lectivos", "Horários e professores", "Saúde das turmas"],
+            paragraphs: [
+              "Acompanhe a assiduidade e o rendimento de cada turma ao longo do trimestre, sem esperar pelo último dia de aulas para agir.",
+              "Professores lançam notas e chamadas de forma simples, eliminando cálculos manuais repetitivos.",
+            ],
+          },
+          {
+            area: "Famílias & Comunicação",
+            tag: "Escola próxima de casa",
+            period: "Tempo real",
+            meta_left: "Avisos",
+            meta_left_val: "Directo no telemóvel",
+            meta_right: "Faltas",
+            meta_right_val: "Justificação online",
+            highlights: ["Comunicados oficiais", "Mensagens organizadas", "Acesso seguro por perfil"],
+            paragraphs: [
+              "Envie avisos para toda a escola ou para uma turma específica com a certeza de que chegam aos encarregados.",
+              "Cada escola tem o seu espaço privado e protegido — só a sua comunidade escolar acede aos seus dados.",
+            ],
+          },
+        ],
+        steps_tag: "Como começar",
+        steps_headline: "A sua escola pronta em três passos.",
+        steps: [
+          { num: "01", title: "Registe a instituição", desc: "Preencha os dados básicos da escola e aguarde a activação rápida da sua conta." },
+          { num: "02", title: "Organize turmas e cursos", desc: "Crie o ano lectivo, turmas, disciplinas e adicione a equipa de professores." },
+          { num: "03", title: "Ligue alunos e famílias", desc: "Cada pessoa recebe o seu convite por email e começa logo a acompanhar tudo." },
+        ],
+      },
+      students: {
+        tag: "Para Estudantes & Famílias",
+        headline: "A tua vida escolar clara.\nDo primeiro dia ao certificado.",
+        description:
+          "Vê notas, tarefas e horários sem complicação — e permite aos encarregados acompanhar cada passo com tranquilidade.",
+        cta_primary: "Pedir vinculação à escola",
+        cta_secondary: "Já tenho conta · Entrar",
+        tab_student: "Sou Estudante",
+        tab_parent: "Sou Encarregado",
+        student_title: "Tudo o que precisas para estudar melhor",
+        student_desc:
+          "Chega de descobrir as notas só no fim do trimestre. Acompanha as tuas aulas, pratica matérias difíceis e guarda todas as tuas conquistas.",
+        student_points: [
+          { title: "Horários e tarefas num só lugar", desc: "Sabe sempre que aulas tens hoje, que trabalhos entregar e as datas das provas." },
+          { title: "Exercícios para reforçar o estudo", desc: "Pratica ao teu ritmo nas disciplinas em que precisas de melhorar." },
+          { title: "O teu Perfil Evolutivo e portfólio", desc: "O teu progresso fica guardado ano após ano, junto com declarações e certificados oficiais." },
+        ],
+        parent_title: "Tranquilidade para acompanhar o seu educando",
+        parent_desc:
+          "Sem precisar de esperar por reuniões ou telefonemas. Veja presenças, notas e avisos da escola directamente no telemóvel.",
+        parent_points: [
+          { title: "Presenças acompanhadas no dia", desc: "Saiba rapidamente se o educando esteve na escola e acompanhe a assiduidade." },
+          { title: "Justificações sem deslocações", desc: "Envie justificações de falta directamente pela plataforma em poucos segundos." },
+          { title: "Notas e avisos sempre claros", desc: "Receba comunicados oficiais e acompanhe a evolução em cada disciplina." },
+        ],
+      },
+      about: {
+        tag: "Sobre o Cur10usX",
+        headline: "Acreditamos que escolas simples formam alunos mais preparados.",
+        scroll_label: "A nossa missão",
+        mission_title: "A Nossa Missão",
+        mission_body:
+          "As escolas dedicam demasiado tempo à papelada e pouco tempo ao que realmente importa: acompanhar cada aluno. Criámos o Cur10usX para dar às instituições angolanas uma ferramenta moderna, leve e humana — que une direcção, professores, estudantes e famílias no mesmo propósito.",
+        values: [
+          {
+            title: "Simplicidade",
+            desc: "Tecnologia pensada para pessoas reais — fácil de aprender e prática no dia a dia.",
+          },
+          {
+            title: "Proximidade",
+            desc: "Aproximar escola, professores e famílias para que nenhum aluno fique para trás.",
+          },
+          {
+            title: "Evolução",
+            desc: "Olhar para cada estudante como uma jornada de crescimento, e não apenas um número numa pauta.",
+          },
+        ],
+        explore_title: "Escolha por onde começar",
+        explore_school: "Ver solução para escolas",
+        explore_student: "Ver espaço de estudantes e famílias",
+      },
     },
   },
 

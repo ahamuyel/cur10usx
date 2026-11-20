@@ -1,101 +1,141 @@
 "use client"
 
-import { useRef, useState } from "react"
+import { useState } from "react"
 import Link from "next/link"
-import Image from "next/image"
 import { motion, AnimatePresence, useReducedMotion } from "motion/react"
-import { ArrowRight, ChevronDown, Building2, GraduationCap } from "lucide-react"
+import {
+  ArrowRight,
+  Building2,
+  BookOpenCheck,
+  GraduationCap,
+  Users,
+  MousePointer2,
+  CheckCircle2,
+} from "lucide-react"
 import { useTranslation } from "@/lib/i18n"
 import { ScrollText, MotionReveal } from "@/components/ui/scroll-text"
-import { AnimatedBeam, BeamNode } from "@/components/ui/animated-beam"
 
-type SideKey = "school" | "family"
+type RoleId = "institutions" | "teachers" | "students" | "parents"
 
+type RoleData = {
+  id: RoleId
+  role: string
+  title: string
+  description: string
+  highlights: string[]
+}
+
+const roleMeta: Record<
+  RoleId,
+  {
+    icon: typeof Building2
+    pageHref: string
+    actionHref: string
+    progressWidth: string
+    progressLabel: string
+  }
+> = {
+  institutions: {
+    icon: Building2,
+    pageHref: "/para-escolas",
+    actionHref: "/registar-escola",
+    progressWidth: "84%",
+    progressLabel: "Ano lectivo organizado",
+  },
+  teachers: {
+    icon: BookOpenCheck,
+    pageHref: "/para-escolas",
+    actionHref: "/aplicacao",
+    progressWidth: "90%",
+    progressLabel: "Aulas e notas em dia",
+  },
+  students: {
+    icon: GraduationCap,
+    pageHref: "/para-estudantes",
+    actionHref: "/aplicacao",
+    progressWidth: "78%",
+    progressLabel: "Evolução do trimestre",
+  },
+  parents: {
+    icon: Users,
+    pageHref: "/para-estudantes",
+    actionHref: "/aplicacao",
+    progressWidth: "95%",
+    progressLabel: "Acompanhamento em tempo real",
+  },
+}
+
+const roleOrder: RoleId[] = ["institutions", "teachers", "students", "parents"]
+
+/**
+ * Adapted from UI Layouts `hero-ai-value-proposition` block
+ * (https://www.ui-layouts.com/blocks/hero-section).
+ * Features architectural rail framing, stacked 3-layer floating preview,
+ * and an interactive 2x2 audience selector so schools & students immediately see their space.
+ */
 export default function HeroSection() {
   const { t, tv } = useTranslation()
   const prefersReducedMotion = useReducedMotion()
-  const bridgeRef = useRef<HTMLDivElement>(null)
-  const schoolRef = useRef<HTMLDivElement>(null)
-  const coreRef = useRef<HTMLDivElement>(null)
-  const familyRef = useRef<HTMLDivElement>(null)
+  const [selectedRole, setSelectedRole] = useState<RoleId>("institutions")
 
-  const [activeSide, setActiveSide] = useState<SideKey>("school")
+  const rawRoles = (tv("landing.ecosystem.roles") as RoleData[]) || []
+  const roles = roleOrder
+    .map((id) => rawRoles.find((r) => r.id === id))
+    .filter((r): r is RoleData => Boolean(r))
 
-  const roles = (tv("landing.ecosystem.roles") as {
-    id: string
-    role: string
-    title: string
-    description: string
-  }[]) || []
-
-  const schoolRole = roles.find((r) => r.id === "institutions") || roles[0]
-  const studentRole = roles.find((r) => r.id === "students") || roles[1]
-
-  const sideContent: Record<SideKey, { label: string; summary: string; href: string; cta: string }> = {
-    school: {
-      label: schoolRole?.role || "Escolas",
-      summary: schoolRole?.title || "",
-      href: "/registar-escola",
-      cta: t("landing.ecosystem.cta_institution"),
-    },
-    family: {
-      label: `${studentRole?.role || "Estudantes"} & ${roles.find((r) => r.id === "parents")?.role || "Encarregados"}`,
-      summary: studentRole?.title || "",
-      href: "/aplicacao",
-      cta: t("landing.ecosystem.cta_member"),
-    },
-  }
-
-  const current = sideContent[activeSide]
+  const activeRole = roles.find((r) => r.id === selectedRole) || roles[0]
+  const activeMeta = roleMeta[selectedRole]
 
   return (
     <section
       id="produto"
-      className="relative pt-28 pb-20 sm:pt-36 sm:pb-24 lg:pt-40 lg:pb-28 overflow-hidden bg-[var(--landing-bg)]"
+      className="relative pt-16 overflow-hidden bg-[var(--landing-bg)]"
     >
-      {/* Subtle ambient glow only — clean & airy */}
+      {/* Subtle top ambient glow */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-[min(760px,95vw)] h-[280px] rounded-full bg-[var(--landing-accent-subtle)] blur-3xl opacity-70"
+        className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-[min(760px,95vw)] h-[260px] rounded-full bg-[var(--landing-accent-subtle)] blur-3xl opacity-65"
       />
 
-      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="max-w-3xl mx-auto text-center">
-          {/* Plain human audience pill */}
-          <MotionReveal immediate delay={0} y={12}>
-            <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-[var(--landing-border)] bg-[var(--landing-surface)]/80 text-xs font-normal text-[var(--landing-text-secondary)] mb-7">
+      {/* Band 1: Headline inside UI Layouts architectural rail */}
+      <div className="relative z-10 border-b border-[var(--landing-border)] px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto border-x border-[var(--landing-border)] px-5 sm:px-10 pt-14 pb-12 sm:pt-20 sm:pb-16 text-center">
+          <MotionReveal immediate delay={0} y={10}>
+            <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-[var(--landing-border)] bg-[var(--landing-surface)] text-xs font-normal text-[var(--landing-text-secondary)] mb-6">
               <span className="w-1.5 h-1.5 rounded-full bg-[var(--landing-accent)]" aria-hidden="true" />
               <span>{t("landing.hero.badge")}</span>
             </span>
           </MotionReveal>
 
-          {/* Animated Word-by-Word Headline */}
           <ScrollText
             as="h1"
             text={t("landing.hero.headline")}
             accentLastLine
             immediate
-            delay={0.05}
-            className="text-[2.25rem] sm:text-5xl lg:text-[3.75rem] font-medium tracking-[-0.035em] leading-[1.08] text-[var(--landing-text-primary)] text-balance"
+            delay={0.04}
+            className="text-[2.2rem] sm:text-5xl lg:text-[4rem] font-medium tracking-[-0.035em] leading-[1.06] text-[var(--landing-text-primary)] text-balance"
           />
 
-          {/* Clear, warm subheadline */}
-          <MotionReveal immediate delay={0.28} y={16}>
-            <p className="mt-6 max-w-xl mx-auto text-[15px] sm:text-base lg:text-[17px] font-light text-[var(--landing-text-secondary)] leading-relaxed">
+          <MotionReveal immediate delay={0.22} y={14}>
+            <p className="mt-5 max-w-2xl mx-auto text-[15px] sm:text-base lg:text-lg font-light text-[var(--landing-text-secondary)] leading-relaxed">
               {t("landing.hero.subheadline")}
             </p>
           </MotionReveal>
+        </div>
+      </div>
 
-          {/* Two unmistakable doors: School vs Student/Parent */}
+      {/* Band 2: Two Clear Doors CTA strip */}
+      <div className="relative z-10 border-b border-[var(--landing-border)] px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto border-x border-[var(--landing-border)] px-5 sm:px-10 py-7 sm:py-8">
           <MotionReveal
             immediate
-            delay={0.38}
-            y={16}
-            className="mt-9 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3"
+            delay={0.3}
+            y={12}
+            className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3"
           >
             <Link
               href="/registar-escola"
-              className="group inline-flex items-center justify-center gap-2 px-6 h-12 rounded-xl bg-[var(--landing-text-primary)] text-[var(--landing-bg)] text-sm font-medium hover:opacity-90 transition-all active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--landing-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--landing-bg)]"
+              className="group inline-flex items-center justify-center gap-2 px-7 h-12 rounded-full bg-[var(--landing-text-primary)] text-[var(--landing-bg)] text-sm font-medium shadow-sm hover:opacity-90 transition-all active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--landing-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--landing-bg)]"
             >
               <span>{t("landing.hero.cta")}</span>
               <ArrowRight
@@ -104,178 +144,178 @@ export default function HeroSection() {
               />
             </Link>
 
-            <a
-              href="#ecossistema"
-              className="inline-flex items-center justify-center gap-2 px-6 h-12 rounded-xl border border-[var(--landing-border)] bg-[var(--landing-surface)] text-[var(--landing-text-primary)] text-sm font-normal hover:bg-[var(--landing-bg-tertiary)] hover:border-[var(--landing-border-strong)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--landing-accent)]"
+            <Link
+              href="/para-estudantes"
+              className="inline-flex items-center justify-center gap-2 px-7 h-12 rounded-full border border-[var(--landing-border)] bg-[var(--landing-surface)] text-[var(--landing-text-primary)] text-sm font-normal hover:bg-[var(--landing-bg-tertiary)] hover:border-[var(--landing-border-strong)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--landing-accent)]"
             >
               <span>{t("landing.hero.explore")}</span>
-              <ChevronDown className="w-4 h-4 text-[var(--landing-text-muted)]" aria-hidden="true" />
-            </a>
+            </Link>
           </MotionReveal>
         </div>
-
-        {/* Light, Frameless Interactive Two-Sided Bridge (Zero card clutter, zero jargon) */}
-        <MotionReveal immediate delay={0.5} y={24} className="mt-16 sm:mt-20">
-          <div
-            ref={bridgeRef}
-            className="relative py-8 sm:py-10 px-2 sm:px-6"
-          >
-            <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 items-center gap-5 md:gap-8">
-              {/* Side A: A Escola */}
-              <button
-                type="button"
-                onClick={() => setActiveSide("school")}
-                onMouseEnter={() => setActiveSide("school")}
-                onFocus={() => setActiveSide("school")}
-                aria-pressed={activeSide === "school"}
-                className="text-left focus-visible:outline-none cursor-pointer"
-              >
-                <BeamNode
-                  ref={schoolRef}
-                  className={`w-full justify-start gap-3.5 px-4 py-3.5 rounded-2xl transition-all duration-300 ${
-                    activeSide === "school"
-                      ? "border-[var(--landing-accent)] bg-[var(--landing-surface)] shadow-[0_12px_36px_-18px_rgba(99,102,241,0.35)] scale-[1.01]"
-                      : "border-[var(--landing-border)] bg-[var(--landing-surface)]/70 hover:border-[var(--landing-border-strong)]"
-                  }`}
-                >
-                  <span
-                    className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-colors ${
-                      activeSide === "school"
-                        ? "bg-[var(--landing-accent)] text-white"
-                        : "bg-[var(--landing-accent-subtle)] text-[var(--landing-accent)]"
-                    }`}
-                  >
-                    <Building2 className="w-4 h-4" aria-hidden="true" />
-                  </span>
-                  <span className="min-w-0">
-                    <span className="block text-sm font-medium text-[var(--landing-text-primary)] truncate">
-                      {schoolRole?.role || "Escolas"}
-                    </span>
-                    <span className="block text-xs font-light text-[var(--landing-text-muted)] truncate">
-                      {roles.find((r) => r.id === "teachers")?.role || "Professores"} · Gestão
-                    </span>
-                  </span>
-                </BeamNode>
-              </button>
-
-              {/* Center Hub: Cur10usX */}
-              <div className="flex justify-center">
-                <BeamNode
-                  ref={coreRef}
-                  className="px-5 py-4 rounded-2xl border border-[var(--landing-border-strong)] bg-[var(--landing-surface)] gap-2.5 shadow-sm"
-                >
-                  <Image
-                    src="/blacklogo.png"
-                    alt="Cur10usX"
-                    width={28}
-                    height={28}
-                    className="h-7 w-auto rounded-lg dark:hidden"
-                    priority
-                  />
-                  <Image
-                    src="/whitelogo.png"
-                    alt="Cur10usX"
-                    width={28}
-                    height={28}
-                    className="h-7 w-auto rounded-lg hidden dark:block"
-                    priority
-                  />
-                  <span className="text-sm font-medium tracking-tight text-[var(--landing-text-primary)]">
-                    Cur10us<span className="text-[var(--landing-accent)]">X</span>
-                  </span>
-                </BeamNode>
-              </div>
-
-              {/* Side B: Alunos & Famílias */}
-              <button
-                type="button"
-                onClick={() => setActiveSide("family")}
-                onMouseEnter={() => setActiveSide("family")}
-                onFocus={() => setActiveSide("family")}
-                aria-pressed={activeSide === "family"}
-                className="text-left focus-visible:outline-none cursor-pointer"
-              >
-                <BeamNode
-                  ref={familyRef}
-                  className={`w-full justify-start gap-3.5 px-4 py-3.5 rounded-2xl transition-all duration-300 ${
-                    activeSide === "family"
-                      ? "border-[var(--landing-accent)] bg-[var(--landing-surface)] shadow-[0_12px_36px_-18px_rgba(99,102,241,0.35)] scale-[1.01]"
-                      : "border-[var(--landing-border)] bg-[var(--landing-surface)]/70 hover:border-[var(--landing-border-strong)]"
-                  }`}
-                >
-                  <span
-                    className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-colors ${
-                      activeSide === "family"
-                        ? "bg-[var(--landing-accent)] text-white"
-                        : "bg-[var(--landing-accent-subtle)] text-[var(--landing-accent)]"
-                    }`}
-                  >
-                    <GraduationCap className="w-4 h-4" aria-hidden="true" />
-                  </span>
-                  <span className="min-w-0">
-                    <span className="block text-sm font-medium text-[var(--landing-text-primary)] truncate">
-                      {studentRole?.role || "Estudantes"}
-                    </span>
-                    <span className="block text-xs font-light text-[var(--landing-text-muted)] truncate">
-                      {roles.find((r) => r.id === "parents")?.role || "Encarregados"}
-                    </span>
-                  </span>
-                </BeamNode>
-              </button>
-            </div>
-
-            {/* Smooth animated connecting beams on md+ */}
-            <div className="hidden md:block">
-              <AnimatedBeam
-                containerRef={bridgeRef}
-                fromRef={schoolRef}
-                toRef={coreRef}
-                curvature={-18}
-                duration={3.8}
-              />
-              <AnimatedBeam
-                containerRef={bridgeRef}
-                fromRef={coreRef}
-                toRef={familyRef}
-                curvature={18}
-                duration={3.8}
-                delay={0.4}
-              />
-            </div>
-          </div>
-
-          {/* Animated 1-line dynamic explanation */}
-          <div className="mt-2 pt-5 border-t border-[var(--landing-border-subtle)] min-h-[56px] flex items-center justify-center text-center">
-            <AnimatePresence mode="wait" initial={false}>
-              <motion.div
-                key={activeSide}
-                initial={prefersReducedMotion ? false : { opacity: 0, y: 8, filter: "blur(4px)" }}
-                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                exit={prefersReducedMotion ? undefined : { opacity: 0, y: -8, filter: "blur(4px)" }}
-                transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-                className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4"
-              >
-                <span className="text-xs sm:text-sm font-medium text-[var(--landing-accent)]">
-                  {current.label}
-                </span>
-                <span className="hidden sm:inline text-[var(--landing-border-strong)]" aria-hidden="true">
-                  ·
-                </span>
-                <span className="text-xs sm:text-sm font-light text-[var(--landing-text-secondary)]">
-                  {current.summary}
-                </span>
-                <Link
-                  href={current.href}
-                  className="inline-flex items-center gap-1 text-xs font-medium text-[var(--landing-text-primary)] hover:text-[var(--landing-accent)] transition-colors"
-                >
-                  <span>{current.cta}</span>
-                  <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
-                </Link>
-              </motion.div>
-            </AnimatePresence>
-          </div>
-        </MotionReveal>
       </div>
+
+      {/* Band 3: UI Layouts 3-Layer Stacked Interactive Workspace Preview */}
+      {activeRole && (
+        <div className="relative z-10 border-b border-[var(--landing-border)] px-4 sm:px-6 lg:px-8">
+          <div className="max-w-6xl mx-auto border-x border-[var(--landing-border)] p-4 sm:p-8 lg:p-10">
+            <MotionReveal immediate delay={0.38} y={24}>
+              <div className="relative rounded-3xl border border-[var(--landing-border)] bg-[var(--landing-surface)] p-2 shadow-[0_32px_90px_-34px_rgba(9,9,11,0.16)] dark:shadow-[0_32px_90px_-34px_rgba(0,0,0,0.85)]">
+                {/* Soft tinted backdrop stage */}
+                <div className="relative overflow-hidden rounded-[20px] bg-gradient-to-b from-[var(--landing-bg-secondary)] via-[var(--landing-bg-secondary)] to-[var(--landing-accent-subtle)] pt-12 sm:pt-16 px-3 sm:px-8 lg:px-12">
+                  <div className="relative z-10 max-w-4xl mx-auto">
+                    {/* Stacked background depth sheets (UI Layouts signature detail) */}
+                    <div
+                      aria-hidden="true"
+                      className="hidden sm:block absolute -top-7 left-1/2 -translate-x-1/2 w-[86%] h-full rounded-t-3xl border border-[var(--landing-border)] bg-[var(--landing-surface)]/55"
+                    />
+                    <div
+                      aria-hidden="true"
+                      className="hidden sm:block absolute -top-3.5 left-1/2 -translate-x-1/2 w-[93%] h-full rounded-t-3xl border border-[var(--landing-border)] bg-[var(--landing-surface)]/80"
+                    />
+
+                    {/* Main Interactive Front Sheet */}
+                    <div className="relative z-10 rounded-t-2xl sm:rounded-t-3xl border border-b-0 border-[var(--landing-border)] bg-[var(--landing-surface)] p-5 sm:p-8 lg:p-10">
+                      {/* Top Breadcrumb Bar */}
+                      <div className="flex items-center justify-between gap-3 pb-6 mb-6 border-b border-[var(--landing-border-subtle)]">
+                        <div className="flex items-center gap-2.5 min-w-0">
+                          <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0" aria-hidden="true" />
+                          <span className="text-xs text-[var(--landing-text-muted)]">Cur10usX /</span>
+                          <span className="text-xs sm:text-sm font-medium text-[var(--landing-text-primary)] truncate">
+                            {activeRole.role}
+                          </span>
+                        </div>
+                        <Link
+                          href={activeMeta.pageHref}
+                          className="text-xs font-medium text-[var(--landing-accent)] hover:underline whitespace-nowrap"
+                        >
+                          {t("landing.nav.features")} →
+                        </Link>
+                      </div>
+
+                      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
+                        {/* Left: Live human role summary */}
+                        <div className="lg:col-span-7 min-h-[250px] flex flex-col justify-between">
+                          <AnimatePresence mode="wait" initial={false}>
+                            <motion.div
+                              key={activeRole.id}
+                              initial={
+                                prefersReducedMotion
+                                  ? false
+                                  : { opacity: 0, y: 10, filter: "blur(4px)" }
+                              }
+                              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                              exit={
+                                prefersReducedMotion
+                                  ? undefined
+                                  : { opacity: 0, y: -8, filter: "blur(4px)" }
+                              }
+                              transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
+                              className="space-y-5"
+                            >
+                              <div>
+                                <h2 className="text-lg sm:text-xl font-medium tracking-[-0.02em] text-[var(--landing-text-primary)]">
+                                  {activeRole.title}
+                                </h2>
+                                <p className="mt-2 text-xs sm:text-sm font-light text-[var(--landing-text-secondary)] leading-relaxed">
+                                  {activeRole.description}
+                                </p>
+                              </div>
+
+                              {/* Clean progress indicator */}
+                              <div className="rounded-xl bg-[var(--landing-bg-secondary)] border border-[var(--landing-border-subtle)] p-4">
+                                <div className="flex items-center justify-between text-[11px] mb-2.5">
+                                  <span className="font-medium text-[var(--landing-text-primary)]">
+                                    {activeMeta.progressLabel}
+                                  </span>
+                                  <span className="text-[var(--landing-accent)] font-medium">
+                                    Cur10usX
+                                  </span>
+                                </div>
+                                <div className="h-1.5 w-full rounded-full bg-[var(--landing-bg-tertiary)] overflow-hidden">
+                                  <motion.div
+                                    initial={prefersReducedMotion ? false : { width: "20%" }}
+                                    animate={{ width: activeMeta.progressWidth }}
+                                    transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+                                    className="h-full rounded-full bg-[var(--landing-accent)]"
+                                  />
+                                </div>
+                              </div>
+
+                              {/* 3 plain everyday highlights */}
+                              <ul className="space-y-2">
+                                {activeRole.highlights.map((item) => (
+                                  <li
+                                    key={item}
+                                    className="flex items-start gap-2.5 text-xs sm:text-[13px] text-[var(--landing-text-secondary)]"
+                                  >
+                                    <CheckCircle2
+                                      className="w-4 h-4 text-[var(--landing-accent)] shrink-0 mt-0.5"
+                                      aria-hidden="true"
+                                    />
+                                    <span>{item}</span>
+                                  </li>
+                                ))}
+                              </ul>
+                            </motion.div>
+                          </AnimatePresence>
+                        </div>
+
+                        {/* Right: UI Layouts Interactive 2x2 Choice Panel */}
+                        <div className="lg:col-span-5">
+                          <div className="rounded-2xl bg-[var(--landing-bg-secondary)] border border-[var(--landing-border-subtle)] p-4 sm:p-5">
+                            <p className="text-[11px] font-medium uppercase tracking-wider text-[var(--landing-text-muted)] mb-4">
+                              {t("landing.ecosystem.tag")}
+                            </p>
+
+                            <div className="grid grid-cols-2 gap-2.5">
+                              {roles.map((role) => {
+                                const isSelected = role.id === selectedRole
+                                const Icon = roleMeta[role.id]?.icon || Building2
+                                return (
+                                  <button
+                                    key={role.id}
+                                    type="button"
+                                    onClick={() => setSelectedRole(role.id)}
+                                    aria-pressed={isSelected}
+                                    className={`relative text-left p-3.5 sm:p-4 rounded-xl border transition-all duration-200 cursor-pointer flex flex-col gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--landing-accent)] ${
+                                      isSelected
+                                        ? "bg-[var(--landing-surface)] border-[var(--landing-accent)] shadow-md"
+                                        : "bg-[var(--landing-surface)]/70 border-[var(--landing-border)] opacity-75 hover:opacity-100 hover:border-[var(--landing-border-strong)]"
+                                    }`}
+                                  >
+                                    <span
+                                      className={`w-9 h-9 rounded-lg flex items-center justify-center transition-colors ${
+                                        isSelected
+                                          ? "bg-[var(--landing-accent-subtle)] text-[var(--landing-accent)]"
+                                          : "bg-[var(--landing-bg-tertiary)] text-[var(--landing-text-muted)]"
+                                      }`}
+                                    >
+                                      <Icon className="w-4 h-4" aria-hidden="true" />
+                                    </span>
+                                    <span className="text-xs font-medium text-[var(--landing-text-primary)] leading-tight">
+                                      {role.role}
+                                    </span>
+                                    {isSelected && (
+                                      <MousePointer2
+                                        aria-hidden="true"
+                                        className="w-4 h-4 absolute top-3 right-3 text-[var(--landing-text-primary)] fill-[var(--landing-text-primary)]"
+                                      />
+                                    )}
+                                  </button>
+                                )
+                              })}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </MotionReveal>
+          </div>
+        </div>
+      )}
     </section>
   )
 }

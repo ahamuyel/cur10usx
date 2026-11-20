@@ -3,8 +3,9 @@ const en = {
     nav: {
       product: "Home",
       features: "How it works",
-      institutions: "Who it's for",
-      students: "Student journey",
+      institutions: "For Schools",
+      students: "For Students",
+      about: "About",
       experience: "In practice",
       faq: "FAQ",
       problems: "Problem",
@@ -436,6 +437,119 @@ const en = {
       tos: "Terms of service",
       privacy: "Privacy policy",
       contact: "suporte@cur10usx.com",
+    },
+
+    pages: {
+      schools: {
+        tag: "For Schools",
+        headline: "Organize your school.\nMake your team's day lighter.",
+        description:
+          "From admissions to term grades, Cur10usX brings leadership, administration and teachers together in one clean, easy-to-use space.",
+        cta_primary: "Register my school",
+        cta_secondary: "I have an account · Sign in",
+        pillars: [
+          {
+            area: "Admissions & Office",
+            tag: "Fewer queues, less paper",
+            period: "Day 1",
+            meta_left: "Enrollments",
+            meta_left_val: "Online & organized",
+            meta_right: "Documents",
+            meta_right_val: "Instant statements",
+            highlights: ["Online applications", "Class placement", "Saved records"],
+            paragraphs: [
+              "Receive applications, approve enrollments and place every student into their class without stacks of folders or scattered spreadsheets.",
+              "Whenever a parent or student requests a statement or certificate, your office can issue it in seconds.",
+            ],
+          },
+          {
+            area: "Leadership & Academics",
+            tag: "Clear view of every class",
+            period: "Every day",
+            meta_left: "Grades",
+            meta_left_val: "Automatic averages",
+            meta_right: "Support",
+            meta_right_val: "Early attention",
+            highlights: ["Academic years", "Timetables & teachers", "Class overview"],
+            paragraphs: [
+              "Follow attendance and progress across every class throughout the term instead of waiting until final exams.",
+              "Teachers record grades and attendance effortlessly, eliminating repetitive manual calculations.",
+            ],
+          },
+          {
+            area: "Families & Communication",
+            tag: "School connected to home",
+            period: "Real time",
+            meta_left: "Notices",
+            meta_left_val: "Straight to phones",
+            meta_right: "Absences",
+            meta_right_val: "Online notes",
+            highlights: ["Official updates", "Organized messages", "Private school space"],
+            paragraphs: [
+              "Send announcements to the whole school or to a single class knowing parents will actually see them.",
+              "Every school operates in its own private, protected space — only your school community sees your records.",
+            ],
+          },
+        ],
+        steps_tag: "How to start",
+        steps_headline: "Your school ready in three simple steps.",
+        steps: [
+          { num: "01", title: "Register your school", desc: "Enter your school's basic details and wait for quick activation." },
+          { num: "02", title: "Set up classes & courses", desc: "Create the school year, classes, subjects and add your teaching team." },
+          { num: "03", title: "Connect students & parents", desc: "Everyone receives their email invite and starts following school life right away." },
+        ],
+      },
+      students: {
+        tag: "For Students & Families",
+        headline: "Your school life, clear.\nFrom day one to graduation.",
+        description:
+          "Check grades, homework and schedules effortlessly — and give parents peace of mind every week.",
+        cta_primary: "Request school enrollment",
+        cta_secondary: "I have an account · Sign in",
+        tab_student: "I'm a Student",
+        tab_parent: "I'm a Parent",
+        student_title: "Everything you need to learn and stay ahead",
+        student_desc:
+          "No more waiting until the end of term to see how you're doing. Follow classes, practice tough topics and save your achievements.",
+        student_points: [
+          { title: "Schedule and tasks in one place", desc: "Always know today's classes, upcoming homework and exam dates." },
+          { title: "Guided exercises to boost learning", desc: "Practice at your own pace on the subjects that need extra attention." },
+          { title: "Your Evolutionary Profile & portfolio", desc: "Your growth stays saved year after year alongside official transcripts and certificates." },
+        ],
+        parent_title: "Peace of mind following your child's school life",
+        parent_desc:
+          "No need to wait for parent-teacher meetings or phone calls. View attendance, grades and school updates right on your phone.",
+        parent_points: [
+          { title: "Daily attendance updates", desc: "Know right away whether your child attended class and track consistency." },
+          { title: "Absence notes from your phone", desc: "Send justifications directly to the school in seconds without waiting in line." },
+          { title: "Clear grades and notices", desc: "Receive official announcements and watch progress across every subject." },
+        ],
+      },
+      about: {
+        tag: "About Cur10usX",
+        headline: "We believe well-organized schools help every student thrive.",
+        scroll_label: "Our mission",
+        mission_title: "Our Mission",
+        mission_body:
+          "Schools spend too much time on paperwork and too little time on what matters most: guiding each student. We built Cur10usX to offer institutions a modern, light and human platform — uniting leadership, teachers, students and families around the same goal.",
+        values: [
+          {
+            title: "Simplicity",
+            desc: "Technology built for real people — easy to learn and practical every single day.",
+          },
+          {
+            title: "Closeness",
+            desc: "Bringing school, teachers and families together so no student is left behind.",
+          },
+          {
+            title: "Growth",
+            desc: "Seeing every student as an evolving journey, not just a line on a report card.",
+          },
+        ],
+        explore_title: "Choose where to start",
+        explore_school: "Explore for schools",
+        explore_student: "Explore for students & families",
+      },
     },
   },
 

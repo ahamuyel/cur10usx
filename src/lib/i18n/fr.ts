@@ -3,8 +3,9 @@ const fr = {
     nav: {
       product: "Accueil",
       features: "Comment ça marche",
-      institutions: "Pour qui",
-      students: "Parcours élève",
+      institutions: "Pour les Écoles",
+      students: "Pour les Élèves",
+      about: "À propos",
       experience: "En pratique",
       faq: "Questions",
       problems: "Problème",
@@ -436,6 +437,119 @@ const fr = {
       tos: "Conditions d'utilisation",
       privacy: "Politique de confidentialité",
       contact: "suporte@cur10usx.com",
+    },
+
+    pages: {
+      schools: {
+        tag: "Pour les Écoles",
+        headline: "Organisez votre école.\nAllégez le quotidien de votre équipe.",
+        description:
+          "Des inscriptions aux bulletins, Cur10usX réunit direction, secrétariat et enseignants dans un espace clair et facile à utiliser.",
+        cta_primary: "Inscrire mon école",
+        cta_secondary: "J'ai déjà un compte · Connexion",
+        pillars: [
+          {
+            area: "Secrétariat & Admissions",
+            tag: "Moins de files, moins de papier",
+            period: "Jour 1",
+            meta_left: "Inscriptions",
+            meta_left_val: "En ligne et claires",
+            meta_right: "Documents",
+            meta_right_val: "Attestations rapides",
+            highlights: ["Candidatures en ligne", "Répartition des classes", "Dossiers conservés"],
+            paragraphs: [
+              "Recevez les demandes, validez les inscriptions et répartissez chaque élève dans sa classe sans dossiers papier ni tableurs dispersés.",
+              "Lorsqu'un parent ou un élève demande une attestation ou un certificat, le secrétariat le génère en quelques secondes.",
+            ],
+          },
+          {
+            area: "Direction & Pédagogie",
+            tag: "Vision claire de chaque classe",
+            period: "Au quotidien",
+            meta_left: "Bulletins",
+            meta_left_val: "Moyennes automatiques",
+            meta_right: "Suivi",
+            meta_right_val: "Soutien à temps",
+            highlights: ["Années scolaires", "Emplois du temps", "Santé des classes"],
+            paragraphs: [
+              "Suivez l'assiduité et les résultats de chaque classe tout au long du trimestre au lieu d'attendre la fin de l'année.",
+              "Les enseignants saisissent notes et présences simplement, sans calculs manuels répétitifs.",
+            ],
+          },
+          {
+            area: "Familles & Communication",
+            tag: "L'école proche de la maison",
+            period: "Temps réel",
+            meta_left: "Annonces",
+            meta_left_val: "Direct sur mobile",
+            meta_right: "Absences",
+            meta_right_val: "Justificatifs en ligne",
+            highlights: ["Communiqués officiels", "Messages clairs", "Espace privé par école"],
+            paragraphs: [
+              "Envoyez des annonces à toute l'école ou à une classe précise avec la certitude qu'elles arrivent aux parents.",
+              "Chaque école dispose de son propre espace privé et protégé — seule votre communauté y accède.",
+            ],
+          },
+        ],
+        steps_tag: "Comment démarrer",
+        steps_headline: "Votre école prête en trois étapes simples.",
+        steps: [
+          { num: "01", title: "Inscrivez l'établissement", desc: "Indiquez les informations de base de votre école pour activer votre espace." },
+          { num: "02", title: "Créez classes et cours", desc: "Définissez l'année scolaire, les classes, les matières et invitez vos enseignants." },
+          { num: "03", title: "Reliez élèves et familles", desc: "Chacun reçoit son invitation par email et commence à suivre le quotidien scolaire." },
+        ],
+      },
+      students: {
+        tag: "Pour les Élèves & Familles",
+        headline: "Ta vie scolaire, claire.\nDe la rentrée au certificat.",
+        description:
+          "Consulte tes notes, devoirs et horaires simplement — et permets aux parents de suivre chaque étape sereinement.",
+        cta_primary: "Demander mon inscription",
+        cta_secondary: "J'ai déjà un compte · Connexion",
+        tab_student: "Je suis Élève",
+        tab_parent: "Je suis Parent",
+        student_title: "Tout ce qu'il te faut pour progresser",
+        student_desc:
+          "Plus besoin d'attendre la fin du trimestre pour savoir où tu en es. Suis tes cours, révise les sujets difficiles et conserve tes réussites.",
+        student_points: [
+          { title: "Emploi du temps et devoirs réunis", desc: "Sache toujours quels cours tu as aujourd'hui, tes devoirs et les dates d'examens." },
+          { title: "Exercices guidés pour réviser", desc: "Entraîne-toi à ton rythme dans les matières où tu veux t'améliorer." },
+          { title: "Ton Profil Évolutif et portfolio", desc: "Ta progression reste enregistrée année après année avec tes certificats officiels." },
+        ],
+        parent_title: "La sérénité pour suivre la scolarité de votre enfant",
+        parent_desc:
+          "Sans attendre les réunions ou les appels téléphoniques. Consultez présences, notes et annonces directement sur votre téléphone.",
+        parent_points: [
+          { title: "Présences suivies au jour le jour", desc: "Sachez rapidement si votre enfant était en classe et suivez son assiduité." },
+          { title: "Justificatifs depuis votre téléphone", desc: "Envoyez un justificatif d'absence à l'école en quelques secondes, sans vous déplacer." },
+          { title: "Notes et annonces toujours claires", desc: "Recevez les communiqués officiels et suivez l'évolution dans chaque matière." },
+        ],
+      },
+      about: {
+        tag: "À propos de Cur10usX",
+        headline: "Nous croyons que des écoles simples préparent mieux chaque élève.",
+        scroll_label: "Notre mission",
+        mission_title: "Notre Mission",
+        mission_body:
+          "Les écoles consacrent trop de temps à la paperasse et pas assez à l'essentiel : accompagner chaque élève. Nous avons créé Cur10usX pour offrir aux établissements un outil moderne, léger et humain — qui rassemble direction, enseignants, élèves et familles.",
+        values: [
+          {
+            title: "Simplicité",
+            desc: "Une technologie pensée pour de vraies personnes — facile à apprendre et utile chaque jour.",
+          },
+          {
+            title: "Proximité",
+            desc: "Rapprocher l'école, les enseignants et les familles pour qu'aucun élève ne soit laissé de côté.",
+          },
+          {
+            title: "Évolution",
+            desc: "Considérer chaque élève comme un parcours en progression, pas seulement une ligne sur un bulletin.",
+          },
+        ],
+        explore_title: "Choisissez par où commencer",
+        explore_school: "Découvrir pour les écoles",
+        explore_student: "Découvrir pour élèves et familles",
+      },
     },
   },
 

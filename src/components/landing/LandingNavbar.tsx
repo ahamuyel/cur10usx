@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback, useMemo, memo } from "react"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import Image from "next/image"
 import { Menu, X, Sun, Moon, Globe, Check, ChevronDown, ArrowRight } from "lucide-react"
 import { useTheme } from "@/provider/theme"
@@ -16,10 +17,10 @@ const LOCALES = [
 ] as const
 
 const NAV_ITEMS = [
-  { key: "product", href: "#produto" },
-  { key: "institutions", href: "#ecossistema" },
-  { key: "features", href: "#experiencia" },
-  { key: "students", href: "#perfil-evolutivo" },
+  { key: "product", href: "/" },
+  { key: "institutions", href: "/para-escolas" },
+  { key: "students", href: "/para-estudantes" },
+  { key: "about", href: "/sobre" },
 ] as const
 
 export default memo(function LandingNavbar({
@@ -27,9 +28,9 @@ export default memo(function LandingNavbar({
 }: {
   branding: PlatformBranding
 }) {
+  const pathname = usePathname()
   const [mobileOpen, setMobileOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
-  const [activeSection, setActiveSection] = useState("")
   const [localeOpen, setLocaleOpen] = useState(false)
 
   const headerRef = useRef<HTMLElement>(null)
@@ -62,27 +63,6 @@ export default memo(function LandingNavbar({
     setLocaleOpen(false)
   }, [])
 
-  const scrollToSection = useCallback(
-    (href: string) => {
-      const id = href.replace("#", "")
-      const el = document.getElementById(id)
-      if (!el) return
-      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches
-      const top = el.getBoundingClientRect().top + window.scrollY - headerHeight - 8
-      window.scrollTo({ top, behavior: reduced ? "auto" : "smooth" })
-    },
-    [headerHeight]
-  )
-
-  const handleNavClick = useCallback(
-    (href: string) => (e: React.MouseEvent) => {
-      e.preventDefault()
-      closeMobile()
-      scrollToSection(href)
-    },
-    [closeMobile, scrollToSection]
-  )
-
   const handleLocaleSelect = useCallback(
     (code: string) => {
       setLocale(code)
@@ -109,24 +89,6 @@ export default memo(function LandingNavbar({
     window.addEventListener("resize", measure)
     return () => window.removeEventListener("resize", measure)
   }, [])
-
-  // Active section highlight
-  useEffect(() => {
-    const observers: IntersectionObserver[] = []
-    navLinks.forEach((link) => {
-      const el = document.getElementById(link.href.replace("#", ""))
-      if (!el) return
-      const observer = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting) setActiveSection(link.href)
-        },
-        { rootMargin: "-25% 0px -65% 0px" }
-      )
-      observer.observe(el)
-      observers.push(observer)
-    })
-    return () => observers.forEach((obs) => obs.disconnect())
-  }, [navLinks])
 
   // Close locale dropdown on outside click
   useEffect(() => {
@@ -238,13 +200,12 @@ export default memo(function LandingNavbar({
             aria-label="Main navigation"
           >
             {navLinks.map((link) => {
-              const isActive = activeSection === link.href
+              const isActive = pathname === link.href
               return (
-                <a
+                <Link
                   key={link.href}
                   href={link.href}
-                  onClick={handleNavClick(link.href)}
-                  aria-current={isActive ? "true" : undefined}
+                  aria-current={isActive ? "page" : undefined}
                   className={`px-3 py-1.5 text-[13px] font-normal rounded-lg transition-colors duration-150 whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--landing-accent)] ${
                     isActive
                       ? "text-[var(--landing-text-primary)] bg-[var(--landing-bg-tertiary)] font-medium"
@@ -252,7 +213,7 @@ export default memo(function LandingNavbar({
                   }`}
                 >
                   {link.label}
-                </a>
+                </Link>
               )
             })}
           </nav>
@@ -401,12 +362,13 @@ export default memo(function LandingNavbar({
           >
             <nav className="flex flex-col gap-1" aria-label="Mobile navigation links">
               {navLinks.map((link) => {
-                const isActive = activeSection === link.href
+                const isActive = pathname === link.href
                 return (
-                  <a
+                  <Link
                     key={link.href}
                     href={link.href}
-                    onClick={handleNavClick(link.href)}
+                    onClick={closeMobile}
+                    aria-current={isActive ? "page" : undefined}
                     className={`min-h-[44px] flex items-center px-3.5 rounded-xl text-sm transition-colors ${
                       isActive
                         ? "bg-[var(--landing-bg-tertiary)] text-[var(--landing-text-primary)] font-medium"
@@ -414,7 +376,7 @@ export default memo(function LandingNavbar({
                     }`}
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 )
               })}
             </nav>
