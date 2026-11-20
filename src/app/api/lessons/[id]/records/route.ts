@@ -66,7 +66,7 @@ export async function POST(
     }
 
     // Check unique constraint for [lessonId, date]
-    const existing = await prisma.lessonRecord.findUnique({
+    const existing = await prisma.scheduleSlotRecord.findUnique({
       where: {
         lessonId_date: {
           lessonId,
@@ -78,7 +78,7 @@ export async function POST(
       return NextResponse.json({ error: "Já existe um registo para esta aula nesta data" }, { status: 409 })
     }
 
-    const record = await prisma.lessonRecord.create({
+    const record = await prisma.scheduleSlotRecord.create({
       data: {
         lessonId,
         date: dateObj,

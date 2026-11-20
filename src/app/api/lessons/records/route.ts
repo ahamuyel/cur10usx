@@ -55,7 +55,7 @@ export async function GET(req: Request) {
       }
     }
 
-    const records = await prisma.lessonRecord.findMany({
+    const records = await prisma.scheduleSlotRecord.findMany({
       where,
       include: {
         scheduleSlot: {

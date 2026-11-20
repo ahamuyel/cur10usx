@@ -29,7 +29,8 @@ export async function GET(req: Request) {
         ],
       },
       include: {
-        lessons: {
+        // Legacy "lessons" are now modelled as timetable ScheduleSlots.
+        scheduleSlots: {
           include: {
             academicYear: true,
           },
@@ -39,9 +40,9 @@ export async function GET(req: Request) {
     })
 
     // Fetch all lesson records in the date range for the school
-    const records = await prisma.lessonRecord.findMany({
+    const records = await prisma.scheduleSlotRecord.findMany({
       where: {
-        lesson: {
+        scheduleSlot: {
           schoolId,
         },
         date: {
@@ -50,7 +51,7 @@ export async function GET(req: Request) {
         },
       },
       include: {
-        lesson: true,
+        scheduleSlot: { select: { teacherId: true } },
       },
     })
 
@@ -69,7 +70,7 @@ export async function GET(req: Request) {
 
       while (loopDate <= loopEnd) {
         const dayName = daysMap[loopDate.getDay()]
-        for (const lesson of teacher.lessons) {
+        for (const lesson of teacher.scheduleSlots) {
           if (lesson.day === dayName) {
             // Verify if the lesson falls within its academic year bounds
             if (lesson.academicYear) {
@@ -85,7 +86,7 @@ export async function GET(req: Request) {
         loopDate.setDate(loopDate.getDate() + 1)
       }
 
-      const teacherRecords = records.filter((r) => r.lesson.teacherId === teacher.id)
+      const teacherRecords = records.filter((r) => r.scheduleSlot.teacherId === teacher.id)
       const lessonsRecorded = teacherRecords.filter((r) => r.status === "REALIZADA").length
       const lessonsPending = teacherRecords.filter((r) => r.status === "PENDING").length
       const lessonsMissed = teacherRecords.filter((r) => r.status === "FALTOU").length

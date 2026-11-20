@@ -28,19 +28,17 @@ export function useDataFetch<T>(
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
   const mountedRef = useRef(true)
-  const keyRef = useRef(key)
-  keyRef.current = key
 
   const fetchData = useCallback(async () => {
-    const cached = cache.get(keyRef.current) as CacheEntry<T> | undefined
+    const cached = cache.get(key) as CacheEntry<T> | undefined
     if (cached && Date.now() - cached.timestamp < ttl) {
       setData(cached.data)
       setLoading(false)
       return cached.data
     }
 
-    if (pendingFetches.has(keyRef.current)) {
-      const result = await pendingFetches.get(keyRef.current)!
+    if (pendingFetches.has(key)) {
+      const result = await pendingFetches.get(key)!
       if (mountedRef.current) {
         setData(result as T)
         setLoading(false)
@@ -50,16 +48,16 @@ export function useDataFetch<T>(
 
     const promise = fetcher()
       .then((result) => {
-        cache.set(keyRef.current, { data: result, timestamp: Date.now() })
-        pendingFetches.delete(keyRef.current)
+        cache.set(key, { data: result, timestamp: Date.now() })
+        pendingFetches.delete(key)
         return result
       })
       .catch((err: Error) => {
-        pendingFetches.delete(keyRef.current)
+        pendingFetches.delete(key)
         throw err
       })
 
-    pendingFetches.set(keyRef.current, promise)
+    pendingFetches.set(key, promise)
 
     try {
       const result = await promise
@@ -91,20 +89,20 @@ export function useDataFetch<T>(
   }, [fetchData, enabled])
 
   const invalidate = useCallback(() => {
-    cache.delete(keyRef.current)
+    cache.delete(key)
     return fetchData()
-  }, [fetchData])
+  }, [fetchData, key])
 
   const mutate = useCallback(
     async (updater: (prev: T) => T) => {
-      const cached = cache.get(keyRef.current) as CacheEntry<T> | undefined
+      const cached = cache.get(key) as CacheEntry<T> | undefined
       if (cached) {
         const updated = updater(cached.data)
-        cache.set(keyRef.current, { data: updated, timestamp: Date.now() })
+        cache.set(key, { data: updated, timestamp: Date.now() })
         setData(updated)
       }
     },
-    [],
+    [key],
   )
 
   return { data, loading, error, invalidate, mutate, refetch: fetchData }

@@ -32,13 +32,17 @@ type FeedBack = {
   mastery: { topic: string; score: number; category: string } | null;
 };
 
+// The submit endpoint returns FeedBack fields at the top level; keep both the
+// selected value and those fields (plus the original response) in local state.
+type StoredAnswer = { value: string; feedback?: FeedBack } & Partial<FeedBack>;
+
 export default function LessonPage() {
   const params = useParams<{ id: string }>();
   const [lesson, setLesson] = useState<Lesson | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [answers, setAnswers] = useState<Record<string, { value: string; feedback: FeedBack }>>({});
+  const [answers, setAnswers] = useState<Record<string, StoredAnswer>>({});
   const [submitting, setSubmitting] = useState(false);
   const [typeError, setTypeError] = useState<string | null>(null);
 
@@ -92,7 +96,7 @@ export default function LessonPage() {
       });
       if (!res.ok) throw new Error("Falha ao enviar resposta");
       const feedback: FeedBack = await res.json();
-      setAnswers((prev) => ({ ...prev, [current.id]: { value: trimmed, feedback } }));
+      setAnswers((prev) => ({ ...prev, [current.id]: { value: trimmed, feedback, ...feedback } }));
     } catch (e) {
       setTypeError(e instanceof Error ? e.message : "Erro ao enviar");
     } finally {
