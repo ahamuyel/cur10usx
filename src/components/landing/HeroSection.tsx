@@ -1,103 +1,393 @@
-"use client";
+"use client"
 
-import { useRouter } from "next/navigation";
-import { useTranslation } from "@/lib/i18n";
-import { TheInfiniteGrid } from "@/components/ui/the-infinite-grid";
-import { ProgressiveBlur } from "@/components/ui/progressive-blur";
-import { Play } from "lucide-react";
-import type {
-  PlatformBranding,
-  SchoolLogo,
-  LandingStats,
-} from "@/types/landing";
+import { useEffect, useRef, useState, useCallback } from "react"
+import Link from "next/link"
+import { motion, AnimatePresence, useReducedMotion } from "motion/react"
+import {
+  ArrowRight,
+  Building2,
+  BookOpenCheck,
+  GraduationCap,
+  Users,
+  MousePointer2,
+  CheckCircle2,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react"
+import { useTranslation } from "@/lib/i18n"
+import { ScrollText, MotionReveal } from "@/components/ui/scroll-text"
+import HeroBackdrop from "@/components/landing/HeroBackdrop"
 
-type Props = {
-  branding?: PlatformBranding;
-  schools?: SchoolLogo[];
-  stats: LandingStats;
-};
+type RoleId = "institutions" | "teachers" | "students" | "parents"
 
-export default function HeroSection({
-  schools: rawSchools = [],
-  stats,
-}: Props) {
-  const router = useRouter();
-  const { t } = useTranslation();
+type RoleData = {
+  id: RoleId
+  role: string
+  title: string
+  description: string
+  highlights: string[]
+}
 
-  const schools = Array.isArray(rawSchools) ? rawSchools : [];
+const roleMeta: Record<
+  RoleId,
+  {
+    icon: typeof Building2
+    pageHref: string
+    progressWidth: string
+    progressLabel: string
+  }
+> = {
+  institutions: {
+    icon: Building2,
+    pageHref: "/para-escolas",
+    progressWidth: "84%",
+    progressLabel: "Ano lectivo organizado",
+  },
+  teachers: {
+    icon: BookOpenCheck,
+    pageHref: "/para-escolas",
+    progressWidth: "90%",
+    progressLabel: "Aulas e notas em dia",
+  },
+  students: {
+    icon: GraduationCap,
+    pageHref: "/para-estudantes",
+    progressWidth: "78%",
+    progressLabel: "Evolução do trimestre",
+  },
+  parents: {
+    icon: Users,
+    pageHref: "/para-estudantes",
+    progressWidth: "95%",
+    progressLabel: "Acompanhamento em tempo real",
+  },
+}
+
+const roleOrder: RoleId[] = ["institutions", "teachers", "students", "parents"]
+const CAROUSEL_DURATION = 5500
+
+/**
+ * Adapted from UI Layouts `hero-ai-value-proposition` block
+ * with an interactive auto-advancing user-role carousel inside the stacked preview.
+ */
+export default function HeroSection() {
+  const { t, tv } = useTranslation()
+  const prefersReducedMotion = useReducedMotion()
+
+  const rawRoles = (tv("landing.ecosystem.roles") as RoleData[]) || []
+  const roles = roleOrder
+    .map((id) => rawRoles.find((r) => r.id === id))
+    .filter((r): r is RoleData => Boolean(r))
+
+  const [activeIndex, setActiveIndex] = useState(0)
+  const [direction, setDirection] = useState(1)
+  const [paused, setPaused] = useState(false)
+  const [slideProgress, setSlideProgress] = useState(0)
+  const startRef = useRef<number>(0)
+
+  const total = roles.length
+
+  const selectIndex = useCallback(
+    (nextIdx: number) => {
+      if (!total) return
+      const normalized = ((nextIdx % total) + total) % total
+      setDirection(nextIdx >= activeIndex ? 1 : -1)
+      setActiveIndex(normalized)
+      setSlideProgress(0)
+      startRef.current = performance.now()
+    },
+    [activeIndex, total]
+  )
+
+  useEffect(() => {
+    if (prefersReducedMotion || paused || total <= 1) return
+
+    startRef.current = performance.now()
+    let rafId = 0
+
+    const tick = (now: number) => {
+      const elapsed = now - startRef.current
+      const pct = Math.min((elapsed / CAROUSEL_DURATION) * 100, 100)
+      setSlideProgress(pct)
+      if (elapsed >= CAROUSEL_DURATION) {
+        setDirection(1)
+        setActiveIndex((prev) => (prev + 1) % total)
+        setSlideProgress(0)
+        startRef.current = performance.now()
+      }
+      rafId = requestAnimationFrame(tick)
+    }
+
+    rafId = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(rafId)
+  }, [prefersReducedMotion, paused, total, activeIndex])
+
+  const activeRole = roles[activeIndex] || roles[0]
+  const activeMeta = activeRole ? roleMeta[activeRole.id] : roleMeta.institutions
 
   return (
-    <TheInfiniteGrid className="min-h-[90dvh] md:min-h-screen pt-20 md:pt-28 pb-16 md:pb-24 overflow-hidden relative">
-      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] md:w-[800px] h-[300px] md:h-[400px] bg-primary/8 dark:bg-primary/12 blur-[120px] rounded-full pointer-events-none" />
+    <section
+      id="produto"
+      className="relative pt-16 overflow-hidden bg-[var(--landing-bg)]"
+    >
+      {/* Architectural grid + drifting primary-color light aura */}
+      <HeroBackdrop />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
-        <div className="flex flex-col items-center text-center max-w-4xl mx-auto">
-          <div className="flex flex-col items-center text-center w-full">
+      {/* Band 1: Headline inside UI Layouts architectural rail */}
+      <div className="relative z-10 border-b border-[var(--landing-border)] px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto border-x border-[var(--landing-border)] px-5 sm:px-10 pt-14 pb-12 sm:pt-20 sm:pb-14 text-center">
+          <MotionReveal immediate delay={0} y={10}>
+            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[var(--landing-border)] bg-[var(--landing-surface)] text-xs font-normal text-[var(--landing-text-secondary)] mb-6">
+              <span className="w-1.5 h-1.5 rounded-full bg-[var(--landing-accent)]" aria-hidden="true" />
+              <span>{t("landing.hero.badge")}</span>
+            </span>
+          </MotionReveal>
 
-            <h1 className="text-[clamp(2.25rem,8vw,5rem)] md:text-7xl lg:text-8xl tracking-tight leading-[0.95] text-zinc-900 dark:text-zinc-50 font-black max-w-4xl">
-              {t("landing.hero.headline").split('\n').map((part, i, arr) => (
-                <span key={i} className={`block ${i > 0 ? 'mt-1 md:mt-2' : ''} ${i === arr.length - 1 ? 'text-primary' : ''}`}>
-                  {part}
-                </span>
-              ))}
-            </h1>
+          <ScrollText
+            as="h1"
+            text={t("landing.hero.headline")}
+            accentLastLine
+            immediate
+            delay={0.04}
+            className="text-[2.2rem] sm:text-5xl lg:text-[3.75rem] font-medium tracking-[-0.035em] leading-[1.06] text-[var(--landing-text-primary)] text-balance"
+          />
 
-            <p className="mt-5 md:mt-6 max-w-xl md:max-w-2xl text-base md:text-lg text-zinc-500 dark:text-zinc-400 leading-relaxed px-2">
+          <MotionReveal immediate delay={0.2} y={14}>
+            <p className="mt-5 max-w-2xl mx-auto text-[15px] sm:text-base font-light text-[var(--landing-text-secondary)] leading-relaxed">
               {t("landing.hero.subheadline")}
             </p>
+          </MotionReveal>
+        </div>
+      </div>
 
-            <div className="mt-8 md:mt-10 flex flex-col sm:flex-row gap-3 md:gap-4 w-full sm:w-auto px-4 sm:px-0">
-              <button
-                onClick={() => router.push("/registar-escola")}
-                className="group inline-flex items-center justify-center gap-2 px-6 md:px-8 py-3.5 md:py-4 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-semibold text-sm md:text-base hover:scale-[1.02] active:scale-[0.98] transition-all shadow-lg min-h-[48px]"
+      {/* Band 2: Compact, refined two-door CTAs */}
+      <div className="relative z-10 border-b border-[var(--landing-border)] px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto border-x border-[var(--landing-border)] px-5 sm:px-10 py-6">
+          <MotionReveal
+            immediate
+            delay={0.28}
+            y={10}
+            className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2.5"
+          >
+            <Link
+              href="/registar-escola"
+              className="group inline-flex items-center justify-center gap-2 px-5 h-10 rounded-full bg-[var(--landing-text-primary)] text-[var(--landing-bg)] text-[13px] font-medium shadow-xs hover:opacity-90 transition-all active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--landing-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--landing-bg)]"
+            >
+              <span>{t("landing.hero.cta")}</span>
+              <ArrowRight
+                className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5"
+                aria-hidden="true"
+              />
+            </Link>
+
+            <Link
+              href="/para-estudantes"
+              className="inline-flex items-center justify-center gap-2 px-5 h-10 rounded-full border border-[var(--landing-border)] bg-[var(--landing-surface)] text-[var(--landing-text-primary)] text-[13px] font-normal hover:bg-[var(--landing-bg-tertiary)] hover:border-[var(--landing-border-strong)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--landing-accent)]"
+            >
+              <span>{t("landing.hero.explore")}</span>
+            </Link>
+          </MotionReveal>
+        </div>
+      </div>
+
+      {/* Band 3: 3-Layer Stacked Interactive Role Carousel */}
+      {activeRole && (
+        <div className="relative z-10 border-b border-[var(--landing-border)] px-4 sm:px-6 lg:px-8">
+          <div className="max-w-6xl mx-auto border-x border-[var(--landing-border)] p-4 sm:p-8 lg:p-10">
+            <MotionReveal immediate delay={0.34} y={20}>
+              <div
+                onMouseEnter={() => setPaused(true)}
+                onMouseLeave={() => setPaused(false)}
+                className="relative rounded-3xl border border-[var(--landing-border)] bg-[var(--landing-surface)] p-2 shadow-[0_32px_90px_-34px_rgba(9,9,11,0.16)] dark:shadow-[0_32px_90px_-34px_rgba(0,0,0,0.85)]"
               >
-                {t("landing.hero.cta")}
-              </button>
+                <div className="relative overflow-hidden rounded-[20px] bg-gradient-to-b from-[var(--landing-bg-secondary)] via-[var(--landing-bg-secondary)] to-[var(--landing-accent-subtle)] pt-12 sm:pt-14 px-3 sm:px-8 lg:px-12">
+                  <div className="relative z-10 max-w-4xl mx-auto">
+                    {/* Stacked background depth sheets */}
+                    <div
+                      aria-hidden="true"
+                      className="hidden sm:block absolute -top-7 left-1/2 -translate-x-1/2 w-[86%] h-full rounded-t-3xl border border-[var(--landing-border)] bg-[var(--landing-surface)]/55"
+                    />
+                    <div
+                      aria-hidden="true"
+                      className="hidden sm:block absolute -top-3.5 left-1/2 -translate-x-1/2 w-[93%] h-full rounded-t-3xl border border-[var(--landing-border)] bg-[var(--landing-surface)]/80"
+                    />
 
-              <button
-                onClick={() => router.push("/signup")}
-                className="inline-flex items-center justify-center gap-2 px-6 md:px-8 py-3.5 md:py-4 rounded-xl border border-zinc-200 dark:border-zinc-800 font-semibold text-sm md:text-base hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-all min-h-[48px]"
-              >
-                <Play size={14} className="fill-current shrink-0" />
-                {t("landing.hero.explore")}
-              </button>
-            </div>
-
-            {/* Dashboard preview */}
-            {schools.length > 0 && (
-              <div className="mt-12 md:mt-16 w-full max-w-5xl mx-auto px-0">
-                <div className="relative">
-                  <div className="absolute -inset-1 bg-gradient-to-b from-primary/5 via-transparent to-transparent rounded-2xl blur-xl" />
-                  <div className="relative border border-[var(--landing-border)] bg-[var(--landing-bg-elevated)] rounded-xl overflow-hidden shadow-lg">
-                    <div className="flex items-center gap-1.5 px-4 py-3 border-b border-[var(--landing-border)] bg-[var(--landing-bg-secondary)]">
-                      <span className="w-2.5 h-2.5 rounded-full bg-rose-400" />
-                      <span className="w-2.5 h-2.5 rounded-full bg-amber-400" />
-                      <span className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
-                      <span className="ml-3 text-[10px] text-[var(--landing-text-dim)] font-mono">cur10usx.com/dashboard</span>
-                    </div>
-                    <div className="grid grid-cols-3 md:grid-cols-6 gap-px bg-[var(--landing-border)]">
-                      {[
-                        { label: "Alunos", value: stats.students, change: "+12%" },
-                        { label: "Professores", value: stats.teachers, change: "+5%" },
-                        { label: "Turmas", value: stats.classes, change: "+8%" },
-                        { label: "Presenças", value: "94%", change: "+2%" },
-                        { label: "Média", value: "14.2", change: "+0.4" },
-                        { label: "Notificações", value: stats.applications || "0", change: "+3" },
-                      ].map((item) => (
-                        <div key={item.label} className="bg-[var(--landing-bg)] p-3 md:p-4">
-                          <p className="text-[10px] md:text-xs text-[var(--landing-text-dim)] mb-1 truncate">{item.label}</p>
-                          <p className="text-base md:text-lg font-bold text-[var(--landing-text-primary)]">{item.value.toLocaleString()}</p>
-                          <p className="text-[10px] text-emerald-500">{item.change}</p>
+                    {/* Main Interactive Carousel Surface */}
+                    <div className="relative z-10 rounded-t-2xl sm:rounded-t-3xl border border-b-0 border-[var(--landing-border)] bg-[var(--landing-surface)] p-5 sm:p-8 lg:p-9">
+                      {/* Top Carousel Bar: Role Breadcrumb + Prev/Next Controls */}
+                      <div className="flex items-center justify-between gap-3 pb-5 mb-6 border-b border-[var(--landing-border-subtle)]">
+                        <div className="flex items-center gap-2.5 min-w-0">
+                          <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" aria-hidden="true" />
+                          <span className="text-xs text-[var(--landing-text-muted)]">Cur10usX /</span>
+                          <span className="text-xs sm:text-sm font-medium text-[var(--landing-text-primary)] truncate">
+                            {activeRole.role}
+                          </span>
                         </div>
-                      ))}
+
+                        <div className="flex items-center gap-2 shrink-0">
+                          <span className="font-mono text-[11px] text-[var(--landing-text-muted)] tabular-nums hidden sm:inline mr-1">
+                            0{activeIndex + 1} / 0{total}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => selectIndex(activeIndex - 1)}
+                            aria-label="Perfil anterior"
+                            className="w-7 h-7 rounded-full border border-[var(--landing-border)] bg-[var(--landing-bg-secondary)] flex items-center justify-center text-[var(--landing-text-secondary)] hover:text-[var(--landing-text-primary)] hover:border-[var(--landing-border-strong)] transition-colors cursor-pointer"
+                          >
+                            <ChevronLeft className="w-3.5 h-3.5" aria-hidden="true" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => selectIndex(activeIndex + 1)}
+                            aria-label="Próximo perfil"
+                            className="w-7 h-7 rounded-full border border-[var(--landing-border)] bg-[var(--landing-bg-secondary)] flex items-center justify-center text-[var(--landing-text-secondary)] hover:text-[var(--landing-text-primary)] hover:border-[var(--landing-border-strong)] transition-colors cursor-pointer"
+                          >
+                            <ChevronRight className="w-3.5 h-3.5" aria-hidden="true" />
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
+                        {/* Left: Directional Sliding Role Carousel Content */}
+                        <div className="lg:col-span-7 min-h-[255px] overflow-hidden flex flex-col justify-between">
+                          <AnimatePresence mode="wait" initial={false}>
+                            <motion.div
+                              key={activeRole.id}
+                              initial={
+                                prefersReducedMotion
+                                  ? false
+                                  : { opacity: 0, x: direction * 20 }
+                              }
+                              animate={{ opacity: 1, x: 0 }}
+                              exit={
+                                prefersReducedMotion
+                                  ? undefined
+                                  : { opacity: 0, x: direction * -20 }
+                              }
+                              transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+                              className="space-y-5"
+                            >
+                              <div>
+                                <h2 className="text-lg sm:text-xl font-medium tracking-[-0.02em] text-[var(--landing-text-primary)]">
+                                  {activeRole.title}
+                                </h2>
+                                <p className="mt-2 text-xs sm:text-sm font-light text-[var(--landing-text-secondary)] leading-relaxed">
+                                  {activeRole.description}
+                                </p>
+                              </div>
+
+                              {/* Clean progress indicator */}
+                              <div className="rounded-xl bg-[var(--landing-bg-secondary)] border border-[var(--landing-border-subtle)] p-4">
+                                <div className="flex items-center justify-between text-[11px] mb-2.5">
+                                  <span className="font-medium text-[var(--landing-text-primary)]">
+                                    {activeMeta.progressLabel}
+                                  </span>
+                                  <Link
+                                    href={activeMeta.pageHref}
+                                    className="text-[var(--landing-accent)] font-medium hover:underline"
+                                  >
+                                    {t("landing.nav.features")} →
+                                  </Link>
+                                </div>
+                                <div className="h-1.5 w-full rounded-full bg-[var(--landing-bg-tertiary)] overflow-hidden">
+                                  <motion.div
+                                    initial={prefersReducedMotion ? false : { width: "22%" }}
+                                    animate={{ width: activeMeta.progressWidth }}
+                                    transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                                    className="h-full rounded-full bg-[var(--landing-accent)]"
+                                  />
+                                </div>
+                              </div>
+
+                              {/* 3 plain everyday highlights */}
+                              <ul className="space-y-2">
+                                {activeRole.highlights.map((item) => (
+                                  <li
+                                    key={item}
+                                    className="flex items-start gap-2.5 text-xs sm:text-[13px] text-[var(--landing-text-secondary)]"
+                                  >
+                                    <CheckCircle2
+                                      className="w-4 h-4 text-[var(--landing-accent)] shrink-0 mt-0.5"
+                                      aria-hidden="true"
+                                    />
+                                    <span>{item}</span>
+                                  </li>
+                                ))}
+                              </ul>
+                            </motion.div>
+                          </AnimatePresence>
+                        </div>
+
+                        {/* Right: 2x2 Interactive Carousel Selector + Auto-Progress */}
+                        <div className="lg:col-span-5">
+                          <div className="rounded-2xl bg-[var(--landing-bg-secondary)] border border-[var(--landing-border-subtle)] p-4 sm:p-5">
+                            <p className="text-[11px] font-medium uppercase tracking-wider text-[var(--landing-text-muted)] mb-3.5">
+                              {t("landing.ecosystem.tag")}
+                            </p>
+
+                            <div className="grid grid-cols-2 gap-2.5">
+                              {roles.map((role, idx) => {
+                                const isSelected = idx === activeIndex
+                                const Icon = roleMeta[role.id]?.icon || Building2
+                                return (
+                                  <button
+                                    key={role.id}
+                                    type="button"
+                                    onClick={() => selectIndex(idx)}
+                                    aria-pressed={isSelected}
+                                    className={`relative overflow-hidden text-left p-3.5 rounded-xl border transition-all duration-200 cursor-pointer flex flex-col gap-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--landing-accent)] ${
+                                      isSelected
+                                        ? "bg-[var(--landing-surface)] border-[var(--landing-accent)] shadow-sm"
+                                        : "bg-[var(--landing-surface)]/70 border-[var(--landing-border)] opacity-75 hover:opacity-100 hover:border-[var(--landing-border-strong)]"
+                                    }`}
+                                  >
+                                    <span
+                                      className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${
+                                        isSelected
+                                          ? "bg-[var(--landing-accent-subtle)] text-[var(--landing-accent)]"
+                                          : "bg-[var(--landing-bg-tertiary)] text-[var(--landing-text-muted)]"
+                                      }`}
+                                    >
+                                      <Icon className="w-4 h-4" aria-hidden="true" />
+                                    </span>
+                                    <span className="text-xs font-medium text-[var(--landing-text-primary)] leading-tight">
+                                      {role.role}
+                                    </span>
+                                    {isSelected && (
+                                      <MousePointer2
+                                        aria-hidden="true"
+                                        className="w-3.5 h-3.5 absolute top-3 right-3 text-[var(--landing-text-primary)] fill-[var(--landing-text-primary)]"
+                                      />
+                                    )}
+                                    {/* Subtle carousel timer bar along bottom of active tile */}
+                                    <span
+                                      aria-hidden="true"
+                                      className="pointer-events-none absolute inset-x-0 bottom-0 h-[2px] bg-transparent overflow-hidden"
+                                    >
+                                      <span
+                                        className="block h-full bg-[var(--landing-accent)] transition-[width] duration-100 ease-linear"
+                                        style={{
+                                          width: isSelected
+                                            ? `${prefersReducedMotion ? 100 : slideProgress}%`
+                                            : "0%",
+                                        }}
+                                      />
+                                    </span>
+                                  </button>
+                                )
+                              })}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            )}
+            </MotionReveal>
           </div>
         </div>
-      </div>
-    </TheInfiniteGrid>
-  );
+      )}
+    </section>
+  )
 }
